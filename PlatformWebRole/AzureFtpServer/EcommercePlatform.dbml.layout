@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="EcommercePlatform">
+  <DataContextMoniker Name="/EcommercePlatformDataContext" />
+  <nestedChildShapes>
+    <classShape Id="6b728b16-2e5b-415f-9c91-03099d0ca881" absoluteBounds="1, 1.375, 2, 2.5401025390625">
+      <DataClassMoniker Name="/EcommercePlatformDataContext/Profile" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8599fa67-6726-43b2-bf91-87581ad29cdd" absoluteBounds="1.0150000000000001, 1.835, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b02f36ee-467a-4f46-9007-7c293fa29a46" absoluteBounds="3.875, 2, 2, 1.3862939453125">
+      <DataClassMoniker Name="/EcommercePlatformDataContext/ProfileModule" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d809a626-8cdb-4425-84da-e80f7466d9b9" absoluteBounds="3.8900000000000006, 2.46, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a6c25a5a-180d-409c-bddc-42ec51dc72d5" absoluteBounds="6.75, 1.625, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/EcommercePlatformDataContext/Module" />
+      <nestedChildShapes>
+        <elementListCompartment Id="4ffbdd5a-f336-4e3b-a42a-c03f207eb377" absoluteBounds="6.7650000000000006, 2.085, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(3 : 2.69314697265625); (3.875 : 2.69314697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/EcommercePlatformDataContext/Profile/Profile_ProfileModule" />
+      <nodes>
+        <classShapeMoniker Id="6b728b16-2e5b-415f-9c91-03099d0ca881" />
+        <classShapeMoniker Id="b02f36ee-467a-4f46-9007-7c293fa29a46" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.875 : 2.69314697265625); (6.75 : 2.69314697265625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/EcommercePlatformDataContext/ProfileModule/ProfileModule_Module" />
+      <nodes>
+        <classShapeMoniker Id="b02f36ee-467a-4f46-9007-7c293fa29a46" />
+        <classShapeMoniker Id="a6c25a5a-180d-409c-bddc-42ec51dc72d5" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

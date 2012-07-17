@@ -1,0 +1,30 @@
+﻿@{
+    
+    ViewBag.Title = "| Add Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="/Admin/Scripts/custom/add.order.js"></script>
+<link href="/Admin/Content/css/order.manager.add.css" rel="stylesheet" type="text/css" />
+<link href="/Admin/Content/css/admin_form.css" rel="stylesheet" type="text/css" />
+<span class="title">Add Order</span>
+<ul class="tabs">
+    <li>
+        Step 1: Customer
+    </li>
+    <li>
+        Step 2: Items
+    </li>
+    <li>
+        Step 3: Shipping
+    </li>
+    <li>
+        Step 4: Billing
+    </li>
+    <li>
+        Step 5: Payment
+    </li>
+</ul>
+<div class="admin_form" id="customer">
+    <h3>Order Placed Successfully</h3>
+    <p>Confirmation emails have been sent.  Click to view the <a href="/Admin/Orders/Items/@ViewBag.orderID">order details</a>.</p>
+</div>

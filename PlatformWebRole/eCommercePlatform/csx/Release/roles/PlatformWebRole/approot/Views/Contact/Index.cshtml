@@ -1,0 +1,82 @@
+﻿@{
+    List<EcommercePlatform.ContactType> types = ViewBag.types;
+    if(types == null){
+        types = new List<EcommercePlatform.ContactType>();   
+    }
+
+    EcommercePlatform.ContentPage page = ViewBag.page;
+    if(page == null){
+        page = new EcommercePlatform.ContentPage();   
+    }
+
+    EcommercePlatform.ContactInquiry inq = ViewBag.inquiry;
+    if(inq == null){
+        inq = new EcommercePlatform.ContactInquiry();
+    }
+
+    string message = ViewBag.message;
+    if (message == null) {
+        message = "";
+    }
+    
+    bool hide_layout = ViewBag.hide_layout;
+    if(hide_layout == null){
+        hide_layout = false;
+    }
+    
+    ViewBag.Title = "Index";
+    if(!hide_layout){
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+}
+
+<span class="heading">Contact Us</span>
+
+<form method="post" action="/Contact/Send" class="left simple-form" style="width:60%">
+    @if (message.Length > 0) {
+        <p class="error">@message</p>
+    }
+
+    <label for="name">
+        Name
+        <input type="text" name="name" id="name" class="placeholder" placeholder="Enter your full name" value="@inq.name" required="required" title="You must enter your name" />
+    </label>
+
+    <label for="phone">
+        Phone Number
+        <input type="tel" name="phone" id="phone" class="placeholder" placeholder="Enter your phone number" value="@inq.phone" />
+    </label>
+
+    <label for="email">
+        E-Mail Address
+        <input type="email" name="email" id="email" class="placeholder" placeholder="Enter your e-mail address" value="@inq.email" required="required" title="E-Mail address is required" />
+    </label>
+
+    <label for="contact_type">
+        Type of Inquiry
+        <select name="contact_type" id="contact_type" required="required" title="You must define the type of inquiry">
+            <option value="0">- Select Contact Type -</option>
+            @foreach (EcommercePlatform.ContactType type in types) {
+                <option value="@type.ID" @((type.ID == inq.contact_type)?"selected=selected":"")>@type.label</option>
+            }
+        </select>
+    </label>
+
+    <label for="message">
+        Question/Comment
+        <textarea rows="6" cols="50" name="message" id="message" class="placeholder" placeholder="Enter your question or comment..." required="required" title="You must enter a message">@inq.message</textarea>
+    </label>
+    
+    <div id="captchabox">
+        @Html.Raw(EcommercePlatform.Models.ReCaptcha.GenerateCaptcha())
+    </div>
+    
+    <div class="clearfix"></div>
+    <input type="submit" name="btnContact" id="btnContact" value="Submit" />
+</form>
+
+@if (!hide_layout) {
+    <div class="right" style="width:38%">
+        @Html.Raw(page.content)
+    </div>
+}

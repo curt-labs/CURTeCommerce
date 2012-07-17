@@ -1,0 +1,18 @@
+﻿@{
+    List<Admin.Models.GroupedModule> mods = ViewBag.modules;
+    if(mods == null){
+        mods = new List<Admin.Models.GroupedModule>();   
+    }
+    
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@foreach (Admin.Models.GroupedModule mod in mods.Where(x => x.hasAccess.Equals(1)).Where(x => x.inMenu.Equals(1)).ToList<Admin.Models.GroupedModule>()) {
+    <a class="big-module" href="@mod.path" title="@mod.name">
+        @if (mod.image != null && mod.image.Length > 0) {
+            <img src="@mod.image" alt="@mod.name" />
+        }
+        <span class="heading">@mod.name</span>
+    </a>
+}

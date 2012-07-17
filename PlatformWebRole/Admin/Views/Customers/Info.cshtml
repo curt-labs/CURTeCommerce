@@ -1,0 +1,184 @@
+﻿@{
+    Admin.Customer cust = ViewBag.customer;
+    if (cust == null) {
+        cust = new Admin.Customer();
+    }
+
+    List<Admin.Cart> orders = cust.Carts.Where(x => x.payment_id > 0).OrderByDescending(x => x.Payment.created).ToList<Admin.Cart>();
+    Admin.Cart cart = cust.Carts.Where(x => x.payment_id == 0).FirstOrDefault<Admin.Cart>();
+
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/customer.manager.css" rel="stylesheet" type="text/css" />
+<span class="title">@(cust.fname + " " + cust.lname)</span>
+<a class="button suspension" data-id="@cust.ID" href="/Admin/Customers/Suspension/@cust.ID">@((cust.isSuspended == 0) ? "Suspend" : "Reinstate")</a>
+<ul class="tabs">
+    <li>
+        <a href="#basic" title="Basic Information">Basic Info</a>
+    </li>
+    <li>
+        <a href="#billing" title="Billing Address">Billing</a>
+    </li>
+    <li>
+        <a href="#shipping" title="Shipping Address">Shipping</a>
+    </li>
+    @if (orders != null && orders.Count > 0) {
+        <li>
+            <a href="#orders" title="View Orders">Orders</a>
+        </li>    
+    }
+    @if (cart != null) {
+        <li>
+            <a href="#cart" title="View Current Cart">Cart</a>
+        </li>
+    }
+    
+</ul>
+<div class="tab_container">
+    <div class="tab_content" id="basic">
+        <form class="admin_form">
+            <label>
+                E-Mail Address
+                <input type="text" readonly="readonly" value="@cust.email" />
+            </label>
+            <label>
+                First Name
+                <input type="text" readonly="readonly" value="@cust.fname" />
+            </label>
+            <label>
+                Last Name
+                <input type="text" readonly="readonly" value="@cust.lname" />
+            </label>
+        </form>    
+    </div>
+    <div class="tab_content" id="billing">
+        <form class="admin_form">
+            <label>
+                Billing Name
+                <input type="text" readonly="readonly" value="@String.Format("{0:C}",cust.Address.first,cust.Address.last)" />
+            </label>
+            <label>
+                Address Type
+                <input type="text" readonly="readonly" value="@((cust.Address1.residential) ? "Residential" : "Commercial")" />
+            </label>
+            <label>
+                Street
+                <input type="text" readonly="readonly" value="@cust.Address.street1" />
+            </label>
+            <label>
+                Street 2
+                <input type="text" readonly="readonly" value="@cust.Address.street2" />
+            </label>
+            <label>
+                City
+                <input type="text" readonly="readonly" value="@cust.Address.city" />
+            </label>
+            <label>
+                State
+                <input type="text" readonly="readonly" value="@(cust.Address.State1.abbr + " " + cust.Address.State1.state1)" />
+            </label>
+            <label>
+                Country
+                <input type="text" readonly="readonly" value="@(cust.Address.State1.Country.abbr + " - " + cust.Address.State1.Country.name)" />
+            </label>
+            <label>
+                Postal Code
+                <input type="text" readonly="readonly" value="@cust.Address.postal_code" />
+            </label>
+        </form>
+    </div>
+    <div class="tab_content" id="shipping">
+        <form class="admin_form">
+            <label>
+                Shipping Name
+                <input type="text" readonly="readonly" value="@String.Format("{0:C}",cust.Address1.first,cust.Address1.last)" />
+            </label>
+            <label>
+                Address Type
+                <input type="text" readonly="readonly" value="@((cust.Address1.residential) ? "Residential" : "Commercial")" />
+            </label>
+            <label>
+                Street
+                <input type="text" readonly="readonly" value="@cust.Address1.street1" />
+            </label>
+            <label>
+                Street 2
+                <input type="text" readonly="readonly" value="@cust.Address1.street2" />
+            </label>
+            <label>
+                City
+                <input type="text" readonly="readonly" value="@cust.Address1.city" />
+            </label>
+            <label>
+                State
+                <input type="text" readonly="readonly" value="@(cust.Address1.State1.abbr + " - " + cust.Address1.State1.state1)" />
+            </label>
+            <label>
+                Country
+                <input type="text" readonly="readonly" value="@(cust.Address1.State1.Country.abbr + " - " + cust.Address1.State1.Country.name)" />
+            </label>
+            <label>
+                Postal Code
+                <input type="text" readonly="readonly" value="@cust.Address1.postal_code" />
+            </label>
+        </form>
+    </div>
+    @if (orders != null && orders.Count > 0) {
+        <div class="tab_content" id="orders">
+            @if(orders.Count > 0) {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Order #</th>
+                            <th>Number of Items</th>
+                            <th>Date Created</th>
+                            <th>Total</th>
+                            <th>Payment Type</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Admin.Cart order in orders) {
+                            <tr>
+                                <td>@order.ID</td>
+                                <td>@order.getCount()</td>
+                                <td>@String.Format("{0:M/d/yyyy at h:mm tt}",order.Payment.created)</td>
+                                <td>@String.Format("{0:C}",order.getTotal())</td>
+                                <td>@order.Payment.PaymentTypes.name</td>
+                                <td><a href="/Admin/Orders/Items/@order.ID" class="btn">View Items</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    }
+    @if (cart != null) {
+        <div class="tab_content" id="cart">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Part #</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Admin.CartItem item in cart.CartItems) {
+                        <tr>
+                            <td>
+                                <a href="/Part/@item.partID" target="_blank" title="View Part">@item.partID</a>
+                            </td>
+                            <td>@item.quantity</td>
+                            <td>@String.Format("{0:C}", item.price)</td>
+                            <td>@String.Format("{0:C}", (item.quantity * item.price))</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+<script defer src="/Admin/Scripts/custom/customer.manager.js"></script>

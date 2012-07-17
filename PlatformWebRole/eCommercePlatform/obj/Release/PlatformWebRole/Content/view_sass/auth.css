@@ -1,0 +1,49 @@
+﻿div.tab_content img.banner{
+    float:right;
+    position: relative;
+    right: -59px;
+}
+
+div.left{ width: 500px; }
+div.right{ width: 200px; }
+
+label[for=same], label[for=bresidential], label[for=sresidential], label[for=remember], label[for=receiveOffers], label[for=receiveNewsletter]{
+    margin-top: 15px;
+    margin-bottom: 10px;
+    min-height: 25px;
+}
+
+label[for=remember]{
+   min-height:15px;
+}
+
+label[for=same] input, label[for=bresidential] input, label[for=sresidential] input, label[for=remember] input, label[for=receiveOffers] input, label[for=receiveNewsletter] input{
+    display:inline;
+    vertical-align: middle;
+    margin-right: 10px;
+    width: auto;
+}
+label[for=receiveOffers] span, label[for=receiveNewsletter] span{
+    display:block;
+    float:left;
+    width: 300px;   
+}
+label[for=receiveOffers] input, label[for=receiveNewsletter] input{ float:right }
+
+#login input[type=submit],#forgot input[type=submit]{
+    float:left;
+}
+
+#login a.forgot,#forgot a.forgot{
+    float:left;
+    font-size: 12px;
+    color: #343434;
+    text-decoration:none;
+    line-height:80px;
+    margin-left:10px;
+}
+
+#login a.forgot:hover,#forgot a.forgot:hover{
+    text-decoration:underline;
+}
+    

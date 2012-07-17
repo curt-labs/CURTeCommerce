@@ -1,0 +1,79 @@
+﻿span.title{
+    font-size: 18px;
+    font-weight:600;
+    color: #bf3504;   
+}
+
+.admin_form label[for=p1],.admin_form label[for=p2]{
+    display:none;
+}
+
+a.change_pass,a.change_pass:visited{
+    font-size: 11px;
+    color: #bf3504;
+}
+
+span.change_pass_note{
+    font-size: 11px;
+    margin-left: 10px;
+}
+
+div.profile_image{
+    padding: 10px;
+    height:70px;
+    cursor:pointer;
+}
+
+div.profile_image img{
+    -moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+    -moz-box-shadow: 2px 2px 2px #2e2e30;
+	-webkit-box-shadow: 2px 2px 2px #2e2e30;
+	-o-box-shadow: 2px 2px 2px #2e2e30;
+	box-shadow: 2px 2px 2px #2e2e30;
+    display:block;
+}
+
+div.profile_image span{
+    display:none;
+    width: 70px;
+    text-align:right;
+    font-size: 10px;
+    color: #999;
+}
+
+div.profile_image:hover span{
+    display:block;
+}
+
+.module_box{
+    float:right;
+    width: 170px;
+    border: 1px solid #e8e8e8;
+    
+}
+
+.module_box ul{
+    list-style:none;
+}
+
+.module_box ul li{
+    font-size: 13px;
+}
+
+.module_box ul li input{
+    -moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+    margin-left:5px;
+    vertical-align:middle;
+}
+
+.module_box ul li ul{
+    margin-top: 0px;
+}
+
+.module_box ul li ul li{
+    font-size: 11px;
+}

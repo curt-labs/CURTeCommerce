@@ -1,0 +1,36 @@
+﻿@{
+    EcommercePlatform.ContentPage page = ViewBag.page;
+    if(page == null){
+        page = new EcommercePlatform.ContentPage();
+    }
+    
+    ViewBag.Title = page.Title;
+    List<EcommercePlatform.ContentPage> crumbs = ViewBag.crumbs;
+    List<EcommercePlatform.ContentPage> subpages = ViewBag.subpages;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (crumbs.Count > 0) {
+    <div class="breadcrumbs">
+        @foreach (EcommercePlatform.ContentPage crumb in crumbs.Reverse<EcommercePlatform.ContentPage>()) {
+            <a href="/page/@crumb.Title">@crumb.Title.Trim()</a> <span>&gt;</span>
+        }
+        @page.Title.Trim()
+    </div>
+}
+<span class="heading">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(page.Title)</span>
+
+<div class="content">
+    @if (subpages.Count > 0) {
+        <div class="contentpage-nav">
+            <span>Page Menu</span>
+            <ul>
+                @foreach (EcommercePlatform.ContentPage subpage in subpages) {
+                    <li><a href="/page/@subpage.Title">@subpage.Title</a></li>
+                }
+            </ul>
+        </div>
+    }
+    @Html.Raw(page.content)
+</div>
+<div class="clearfix"></div>

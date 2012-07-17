@@ -1,0 +1,45 @@
+﻿table tbody tr td:first-child a{
+    text-decoration:none;
+    color: #bf3504;
+}
+
+table tbody tr td:first-child img{
+    width: 24px;
+    vertical-align:middle;
+    margin-left: 5px;
+}
+
+table tbody tr td:first-child a span{
+    text-decoration:underline;
+}
+
+section h2{
+    float:left;
+    display:block;
+    line-height:10px;
+    margin-bottom: 40px;
+}
+
+section a.add_profile, section #deleteProfile{
+    float:right;
+    display:block;
+    width: 200px;
+    height: 45px;
+    background:#bf3504;
+    margin-right: 25px;
+    -moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+    text-align:center;
+    color: white;
+    text-decoration:none;
+    font-size: 24px;
+    font-weight:600;
+    line-height:45px;
+}
+
+section #deleteProfile{
+    display:inline-block;
+    float:none;
+    margin-left:25px;
+}

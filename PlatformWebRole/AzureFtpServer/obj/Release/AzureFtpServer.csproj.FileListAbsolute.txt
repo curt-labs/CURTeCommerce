@@ -1,0 +1,10 @@
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\AzureFtpServer\bin\Release\AzureFtpServer.dll
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\AzureFtpServer\bin\Release\AzureFtpServer.pdb
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\AzureFtpServer\bin\Release\Microsoft.WindowsAzure.StorageClient.dll
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\AzureFtpServer\bin\Release\Microsoft.WindowsAzure.StorageClient.xml
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\AzureFtpServer\obj\Release\ResolveAssemblyReference.cache
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\AzureFtpServer\obj\Release\AzureFtpServer.dll
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\AzureFtpServer\obj\Release\AzureFtpServer.pdb
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\AzureFtpServer\bin\Release\AzureFtpServer.dll.config
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\AzureFtpServer\bin\Release\EntityFramework.dll
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\AzureFtpServer\bin\Release\EntityFramework.xml

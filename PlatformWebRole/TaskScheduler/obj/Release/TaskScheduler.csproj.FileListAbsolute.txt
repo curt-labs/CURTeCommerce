@@ -1,0 +1,14 @@
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\TaskScheduler\bin\Release\TaskScheduler.dll.config
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\TaskScheduler\bin\Release\TaskScheduler.dll
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\TaskScheduler\bin\Release\TaskScheduler.pdb
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\TaskScheduler\bin\Release\AzureToolkit.dll
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\TaskScheduler\bin\Release\Microsoft.WindowsAzure.Diagnostics.dll
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\TaskScheduler\bin\Release\Microsoft.WindowsAzure.StorageClient.dll
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\TaskScheduler\bin\Release\Newtonsoft.Json.dll
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\TaskScheduler\bin\Release\AzureToolkit.xml
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\TaskScheduler\bin\Release\Microsoft.WindowsAzure.Diagnostics.xml
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\TaskScheduler\bin\Release\Microsoft.WindowsAzure.StorageClient.xml
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\TaskScheduler\bin\Release\Newtonsoft.Json.xml
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\TaskScheduler\obj\Release\ResolveAssemblyReference.cache
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\TaskScheduler\obj\Release\TaskScheduler.dll
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\TaskScheduler\obj\Release\TaskScheduler.pdb

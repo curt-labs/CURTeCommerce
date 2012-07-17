@@ -1,0 +1,205 @@
+﻿label[for=receiveOffers] span, label[for=receiveNewsletter] span{
+    display:block;
+    float:left;
+    width: 300px;   
+}
+label[for=receiveOffers] input, label[for=receiveNewsletter] input{ float:right }
+
+article.order-heading{
+    background: #343434;
+    height: 30px;
+    width: 95%;
+    padding: 0px 10px;
+    color: white;
+    line-height:30px;
+    margin-bottom: 15px;
+}
+
+article.order-heading span.title{
+    float:left;    
+}
+
+article.order-heading div.info{
+    float:right;
+    display:inline-block;
+    color: white;    
+    height: 50px;
+}
+
+article.order-heading div.info span{
+    display:inline-block;
+    width: 150px;
+    text-align:center;
+}
+
+article.order{
+    width: 95%;
+    min-height: 40px;
+    line-height:40px;
+    -webkit-transition: all 0.3s ease-in-out;
+    cursor:pointer;
+    padding: 5px 10px;
+}
+
+article.order:hover{
+    background:#e8e8e8;
+}
+
+article.order:nth-child(2){
+    border-top: 2px solid #e2e2e2;
+}
+
+article.order span.title{
+    font-size: 14px;
+    color:#FA241A;
+    float:left;
+}
+
+article.order div.info{
+    float:right;    
+}
+
+article.order div.info span{
+    display:inline-block;
+    width: 150px;    
+}
+
+article.order div.info span:last-child{
+    text-align:right;    
+}
+
+.address {
+    background-color: #F2F2F2;
+    padding: 14px 35px 10px;
+    margin-bottom: 20px;
+    display: block;
+    position: relative;
+}
+
+.address span {
+    position: absolute;
+    color: #E64D2D;
+    font-size: 11px;
+    font-weight: bold;
+    top: -5px;
+    left: 5px;
+}
+
+.address a {
+    position: absolute;
+    bottom: -10px;
+    right: 5px;
+}
+
+.main-address {
+    font-size: 18px;
+}
+
+#container #main #mid_col #items article.heading{
+    font-size: 14px;
+    font-weight:normal;
+    text-transform:none;
+    background:none;
+    color: #FA241A;;
+    border-bottom: 2px solid #343434;
+}
+
+#container #main #mid_col #items article.heading span.title{
+    float:left;    
+}
+
+#container #main #mid_col #items article.heading span.col-heading{
+    float:right;
+    display:block;
+    width: 70px;
+    margin-right:10px;
+}
+
+#container #main #mid_col #items article.item{
+    height: 100px;
+    padding: 10px;
+    border-bottom: 1px solid #e7e7e7;
+    overflow:hidden;
+}
+
+#container #main #mid_col #items article.item img{
+    float:left;
+    width: 100px;
+    margin-right:25px;
+}
+
+#container #main #mid_col #items article.item a.title{
+    display:block;
+    float:left;
+    width: 40%;
+    font-size: 14px;
+    line-height:60px;
+    color: #FA241A;
+}
+
+#container #main #mid_col #items article.item a.title:hover{
+    color: #343434;
+}
+
+#container #main #mid_col #items article.item div.info{
+    float:right;
+    width: 200px;
+    text-align: right;
+    font-size: 14px;
+}
+
+#container #main #mid_col #items article.item div.info span{
+    width: 70px;
+    display:block;
+    float:left;
+}
+
+#container #main #mid_col #items article.item div.info span:first-child{
+    margin-top:22px;
+}
+
+#container #main #mid_col #items article.item div.info span:last-child{
+    float:right;
+    border: 1px solid #e2e2e2;
+    padding: 4px;
+    width: 20px;
+    text-align:center;
+    margin-top:17px;
+}
+
+#container #main #mid_col #items article.totals{
+    float:right;
+    height: 100px;
+    display:block;
+    width: 170px;
+    margin-top:25px;
+}
+
+#container #main #mid_col #items article.totals span{
+    display:block;
+    padding: 3px 0px;
+}
+
+#container #main #mid_col #items article.totals span.label{
+    clear:left;
+    float:left;
+    font-weight:bold;
+    text-align:right;
+    width: 100px;
+}
+#container #main #mid_col #items article.totals span.value{
+    float:right;
+}
+
+#container #main #mid_col #items article.totals hr{
+    clear:both;
+}
+
+#container #main #mid_col #items article.totals span.label:last-child{
+    font-size: 14px;
+}
+
+#container #main #mid_col #items article.totals span.value:last-child{
+    color: #FA241A;
+    font-size: 14px;
+}

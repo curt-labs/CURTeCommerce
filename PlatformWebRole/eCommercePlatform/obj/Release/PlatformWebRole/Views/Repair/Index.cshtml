@@ -1,0 +1,10 @@
+﻿@{
+    EcommercePlatform.ContentPage page = ViewBag.page;
+    if(page == null){
+        page = new EcommercePlatform.ContentPage();    
+    }
+    
+    ViewBag.Title = "Trailer Repair";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    <text>@Html.Raw(page.content)</text>
+}

@@ -1,0 +1,100 @@
+3/30/2012 2:22:07.136 PM: Started Customer Serialization.
+3/30/2012 2:22:07.138 PM: New Customer created.
+3/30/2012 2:22:07.201 PM: Customer serialized to JSON.
+3/30/2012 2:22:07.203 PM: customer string added to session.
+3/30/2012 2:22:22.498 PM: Started Customer Serialization.
+3/30/2012 2:22:22.500 PM: New Customer created.
+3/30/2012 2:22:22.502 PM: Customer serialized to JSON.
+3/30/2012 2:22:22.505 PM: customer string added to session.
+3/30/2012 2:22:28.482 PM: Starting Login.
+3/30/2012 2:22:28.485 PM: Retreived from session.
+3/30/2012 2:22:28.670 PM: Attempted log in.
+3/30/2012 2:22:28.734 PM: Changed Carts.
+3/30/2012 2:22:28.737 PM: Set items in cart.
+3/30/2012 2:22:29.015 PM: bound addresses.
+3/30/2012 2:22:29.019 PM: cust.Cart set to the new cart.
+3/30/2012 2:22:29.023 PM: Started Customer Serialization.
+3/30/2012 2:22:29.027 PM: New Customer created.
+3/30/2012 2:22:39.960 PM: Customer serialized to JSON.
+3/30/2012 2:22:39.962 PM: customer string added to session.
+3/30/2012 2:22:39.965 PM: serialized to storage.
+3/30/2012 2:27:00.646 PM: Started Customer Serialization.
+3/30/2012 2:27:00.649 PM: New Customer created.
+3/30/2012 2:27:00.710 PM: Customer serialized to JSON.
+3/30/2012 2:27:00.713 PM: customer string added to session.
+3/30/2012 2:27:07.927 PM: Started Customer Serialization.
+3/30/2012 2:27:07.931 PM: New Customer created.
+3/30/2012 2:27:07.937 PM: Customer serialized to JSON.
+3/30/2012 2:27:07.941 PM: customer string added to session.
+3/30/2012 2:27:15.069 PM: Starting Login.
+3/30/2012 2:27:15.072 PM: Retreived from session.
+3/30/2012 2:27:15.267 PM: Attempted log in.
+3/30/2012 2:27:15.332 PM: Changed Carts.
+3/30/2012 2:27:15.333 PM: Set items in cart.
+3/30/2012 2:27:15.538 PM: bound addresses.
+3/30/2012 2:27:15.542 PM: cust.Cart set to the new cart.
+3/30/2012 2:27:15.545 PM: Started Customer Serialization.
+3/30/2012 2:27:15.548 PM: New Customer created.
+3/30/2012 2:27:27.143 PM: Customer serialized to JSON.
+3/30/2012 2:27:27.146 PM: customer string added to session.
+3/30/2012 2:27:27.150 PM: serialized to storage.
+3/30/2012 2:31:43.857 PM: Started Customer Serialization.
+3/30/2012 2:31:43.860 PM: New Customer created.
+3/30/2012 2:31:43.934 PM: Customer serialized to JSON.
+3/30/2012 2:31:43.938 PM: customer string added to session.
+3/30/2012 2:31:54.304 PM: Started Customer Serialization.
+3/30/2012 2:31:54.308 PM: New Customer created.
+3/30/2012 2:31:54.313 PM: Customer serialized to JSON.
+3/30/2012 2:31:54.316 PM: customer string added to session.
+3/30/2012 2:32:00.601 PM: Starting Login.
+3/30/2012 2:32:00.605 PM: Retreived from session.
+3/30/2012 2:32:00.814 PM: Attempted log in.
+3/30/2012 2:32:00.890 PM: Changed Carts.
+3/30/2012 2:32:00.894 PM: Set items in cart.
+3/30/2012 2:32:01.123 PM: bound addresses.
+3/30/2012 2:32:01.126 PM: cust.Cart set to the new cart.
+3/30/2012 2:32:01.130 PM: Started Customer Serialization.
+3/30/2012 2:32:01.133 PM: New Customer created.
+3/30/2012 2:32:08.530 PM: Customer serialized to JSON.
+3/30/2012 2:32:08.537 PM: customer string added to session.
+3/30/2012 2:32:08.545 PM: serialized to storage.
+3/30/2012 2:34:46.460 PM: Started Customer Serialization.
+3/30/2012 2:34:46.464 PM: New Customer created.
+3/30/2012 2:34:46.527 PM: Customer serialized to JSON.
+3/30/2012 2:34:46.531 PM: customer string added to session.
+3/30/2012 2:34:59.361 PM: Started Customer Serialization.
+3/30/2012 2:34:59.365 PM: New Customer created.
+3/30/2012 2:34:59.370 PM: Customer serialized to JSON.
+3/30/2012 2:34:59.374 PM: customer string added to session.
+3/30/2012 2:35:05.561 PM: Starting Login.
+3/30/2012 2:35:05.565 PM: Retreived from session.
+3/30/2012 2:35:05.756 PM: Attempted log in.
+3/30/2012 2:35:05.824 PM: Changed Carts.
+3/30/2012 2:35:05.830 PM: Set items in cart.
+3/30/2012 2:35:06.049 PM: bound addresses.
+3/30/2012 2:35:06.053 PM: cust.Cart set to the new cart.
+3/30/2012 2:35:06.057 PM: Started Customer Serialization.
+3/30/2012 2:35:06.061 PM: New Customer created.
+3/30/2012 2:35:06.400 PM: Customer serialized to JSON.
+3/30/2012 2:35:06.407 PM: customer string added to session.
+3/30/2012 2:35:06.414 PM: serialized to storage.
+3/30/2012 2:37:46.648 PM: Started Customer Serialization.
+3/30/2012 2:37:46.653 PM: New Customer created.
+3/30/2012 2:37:46.737 PM: Customer serialized to JSON.
+3/30/2012 2:37:46.742 PM: customer string added to session.
+3/30/2012 2:37:57.613 PM: Started Customer Serialization.
+3/30/2012 2:37:57.618 PM: New Customer created.
+3/30/2012 2:37:57.623 PM: Customer serialized to JSON.
+3/30/2012 2:37:57.627 PM: customer string added to session.
+3/30/2012 2:38:02.138 PM: Starting Login.
+3/30/2012 2:38:02.143 PM: Retreived from session.
+3/30/2012 2:38:02.373 PM: Attempted log in.
+3/30/2012 2:38:02.436 PM: Changed Carts.
+3/30/2012 2:38:02.441 PM: Set items in cart.
+3/30/2012 2:38:02.648 PM: bound addresses.
+3/30/2012 2:38:02.655 PM: cust.Cart set to the new cart.
+3/30/2012 2:38:02.663 PM: Started Customer Serialization.
+3/30/2012 2:38:02.670 PM: New Customer created.
+3/30/2012 2:38:02.874 PM: Customer serialized to JSON.
+3/30/2012 2:38:02.878 PM: customer string added to session.
+3/30/2012 2:38:02.883 PM: serialized to storage.

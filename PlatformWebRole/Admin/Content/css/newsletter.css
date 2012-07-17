@@ -1,0 +1,14 @@
+﻿span.title{
+    display:block;
+    color: #bf3514;
+    font-size: 18px;
+    margin-bottom:15px;
+}
+
+table tbody tr td:last-child{
+    text-align: center;
+}
+
+table tbody tr td:last-child a{
+    color: #bf3514;
+}

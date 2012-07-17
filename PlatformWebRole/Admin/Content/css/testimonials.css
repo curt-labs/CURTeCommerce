@@ -1,0 +1,36 @@
+﻿section span.title{
+    margin-bottom: 40px;
+    color: #bf3504;
+    font-size: 16px;
+    display:inline-block;
+}
+
+.starrating {
+    display: block;
+    height: 17px;
+    width: 80px;
+    background: url('/Content/img/review_stars/star_sprite.png') top left repeat-x;
+    overflow: hidden;
+    position: relative;
+}
+
+.starrating span {
+    display: block;
+    height: 17px;
+    background: url('/Content/img/review_stars/star_sprite.png') bottom left repeat-x;
+}
+
+table tbody tr td:last-child{
+    text-align:center;
+}
+
+table tbody tr td:last-child a{
+    color: #bf3504;
+    display: inline-block;
+}
+
+a.modalClose{
+    color: #2e2e30;
+    font-size: 12px;
+    margin-left: 10px;
+}

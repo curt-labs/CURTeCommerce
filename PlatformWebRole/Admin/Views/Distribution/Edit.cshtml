@@ -1,0 +1,122 @@
+﻿@{
+    Admin.DistributionCenter dc = ViewBag.dc;
+    if (dc == null) {
+        dc = new Admin.DistributionCenter();
+        dc.ID = 0;
+    }
+
+    List<Admin.Country> countries = ViewBag.countries;
+    if (countries == null) {
+        countries = new List<Admin.Country>();
+    }
+
+    List<string> errors = ViewBag.errors;
+    if (errors == null) {
+        errors = new List<string>();
+    }
+
+    bool failed = ViewBag.failed;
+    if (failed == null) {
+        failed = false;
+    }
+
+    List<Admin.Models.GroupedModule> modules = ViewBag.modules;
+    if (modules == null) {
+        modules = new List<Admin.Models.GroupedModule>();
+    }
+    
+    bool can_delete = false;
+    try {
+        if (modules.Where(x => x.path.ToUpper().Equals("/ADMIN/DISTRIBUTION")).FirstOrDefault<Admin.Models.GroupedModule>().subs.Where(x => x.name.ToUpper().Equals("DELETE")).Count() > 0) {
+            can_delete = true;
+        }
+    } catch (Exception) { }
+    
+    ViewBag.Title = "| Edit Distribution Center";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" media="all" href="/Admin/Content/css/admin_form.css" />
+<link rel="stylesheet" type="text/css" media="all" href="/Admin/Content/css/dc.css" />
+@if (dc.ID == 0) {
+    <span class="title">Add Distribution Center</span>
+    <div class="clearfix"></div>
+} else {
+    <span class="title">Edit Distribution Center</span>
+    if(can_delete) {
+        <a href="/Admin/Distribution/Delete/@dc.ID" title="Delete @dc.Name" class="delete">Delete DC</a>
+    }
+}
+<div class="clearfix"></div>
+@if (failed) { 
+    <span class="error">There was an error while saving the distribution center.</span>
+}
+
+<form action="/Admin/Distribution/Save/@dc.ID" method="post" class="admin_form left">
+    @if (errors != null && errors.Count > 0) {
+        <ul class="error_box">
+            @foreach (string e in errors) {
+                <li>@e</li>
+            }
+        </ul>
+    }
+
+    <label for="Name">
+        Name
+        <input type="text" name="Name" id="Name" placeholder="Enter the name of this DC" value="@dc.Name" required="required" title="DC name is required" />
+    </label>
+
+    <label for="Phone">
+        Phone Number
+        <input type="tel" name="Phone" id="Phone" placeholder="Enter the phone number of this DC" value="@dc.Phone" required="required" title="Phone number is required" />
+    </label>
+
+    <label for="Fax">
+        Fax Number
+        <input type="tel" name="Fax" id="Fax" placeholder="Enter the fax number of this DC" value="@dc.Fax" />
+    </label>
+
+    <label for="Street1">
+        Address
+        <input type="text" name="Street1" id="Street1" placeholder="Enter the address of this DC" value="@dc.Street1" required="required" title="Address is required" />
+    </label>
+
+    <label for="Street2">
+        Address 2
+        <input type="text" name="Street2" id="Street2" placeholder="Enter line 2 of the address of this DC" value="@dc.Street2" />
+    </label>
+
+    <label for="City">
+        City
+        <input type="text" name="City" id="City" placeholder="Enter the city of this DC" value="@dc.City" required="required" title="City is required" />
+    </label>
+
+    <label for="State">
+        State or Providence<br />
+        <select name="State" id="State" required="required" title="Select a State/Province">
+            <option value="0">- Select State/Province -</option>
+            @foreach (Admin.Country country in countries) {
+                <optgroup label="@country.name">
+                    @foreach (Admin.State state in country.getProvinces()) {
+                        <option value="@state.stateID" @((dc.State == state.stateID) ? "selected=selected" : "")>@(String.Format("{0} - {1}", state.abbr, state.state1))</option>
+                    }
+                </optgroup>
+            }
+        </select>
+    </label>
+
+    <label for="PostalCode">
+        Postal Code
+        <input type="text" name="PostalCode" id="PostalCode" placeholder="Enter the postal code" required="required" title="You must enter a postal code" value="@dc.PostalCode" />
+    </label>
+
+    @if (dc.Latitude != 0 && dc.Longitude != 0) {
+        <input type="hidden" id="Latitude" value="@dc.Latitude" />
+        <input type="hidden" id="Longitude" value="@dc.Longitude" />
+    }
+
+    <input type="submit" name="btnSubmit" id="btnSubmit" value="Save" />
+</form>
+
+<div id="map" class="right"></div>
+<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script src="/Admin/Scripts/custom/dc.js" type="text/javascript"></script>

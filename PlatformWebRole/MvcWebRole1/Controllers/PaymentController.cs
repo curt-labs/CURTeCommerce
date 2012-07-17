@@ -1,0 +1,299 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using GCheckout.Checkout;
+using GCheckout.Util;
+using AuthorizeNet;
+using AuthorizeNet.Helpers;
+using EcommercePlatform.Models;
+using System.Xml.Linq;
+
+namespace EcommercePlatform.Controllers {
+    public class PaymentController : BaseController {
+
+        protected GCheckoutButton gButton = new GCheckoutButton();
+
+        [RequireHttps]
+        public ActionResult Index() {
+            Customer customer = new Customer();
+
+            // Retrieve Customer from Sessions/Cookie
+            customer.GetFromStorage();
+            if (!customer.LoggedIn()) {
+                Response.Redirect("/Authenticate");
+            }
+
+            // Create Cart object from customer
+            customer.BindAddresses();
+            Cart cart = customer.Cart;
+
+            // Get the parts from this Cart
+            List<CartItem> parts = cart.GetParts();
+            cart.CartItems.Clear();
+            cart.CartItems.AddRange(parts);
+
+            ViewBag.showShipping = true;
+            ViewBag.cart = cart;
+            ViewBag.message = TempData["message"];
+            List<int> months = new List<int>();
+            for (int i = 1; i <= 12; i++) {
+                months.Add(i);
+            }
+            List<int> yearlist = new List<int>();
+            for (int i = DateTime.Now.Year; i <= (DateTime.Now.Year + 20); i++) {
+                yearlist.Add(i);
+            }
+            ViewBag.months = months;
+            ViewBag.yearlist = yearlist;
+
+            return View();
+        }
+
+        [AcceptVerbs(HttpVerbs.Post),RequireHttps]
+        public ActionResult Authorize() {
+            Customer customer = new Customer();
+            Settings settings = new Settings();
+            // Retrieve Customer from Sessions/Cookie
+            customer.GetFromStorage();
+            if (!customer.LoggedIn()) {
+                Response.Redirect("/Authenticate");
+            }
+
+            customer.BindAddresses();
+
+            decimal amount = customer.Cart.getTotal();
+            string cardnum = Request.Form["cardnumber"];
+            string month = Request.Form["expiremonth"];
+            string year = Request.Form["expireyear"];
+            string cvv = Request.Form["cvv"];
+            string first = Request.Form["first"];
+            string last = Request.Form["last"];
+
+            //step 1 - create the request
+            IGatewayRequest request = new AuthorizationRequest(cardnum, month + year, amount, "Transaction");
+
+            //These are optional calls to the API
+            request.AddCardCode(cvv);
+
+            //Customer info - this is used for Fraud Detection
+            request.AddCustomer(customer.ID.ToString(), first, last, customer.Cart.Billing.street1 + ((customer.Cart.Billing.street2 != "") ? " " + customer.Cart.Billing.street2 : ""), customer.Cart.Billing.State1.abbr, customer.Cart.Billing.postal_code);
+
+            //order number
+            //request.AddInvoice("invoiceNumber");
+
+            //Custom values that will be returned with the response
+            //request.AddMerchantValue("merchantValue", "value");
+
+            //Shipping Address
+            request.AddShipping(customer.ID.ToString(), customer.Cart.Shipping.first, customer.Cart.Shipping.last, customer.Cart.Shipping.street1 + ((customer.Cart.Shipping.street2 != "") ? " " + customer.Cart.Shipping.street2 : ""), customer.Cart.Shipping.State1.abbr, customer.Cart.Shipping.postal_code);
+
+
+            //step 2 - create the gateway, sending in your credentials and setting the Mode to Test (boolean flag)
+            //which is true by default
+            //this login and key are the shared dev account - you should get your own if you 
+            //want to do more testing
+            Gateway gate = new Gateway(settings.Get("AuthorizeNetLoginKey"), settings.Get("AuthorizeNetTransactionKey"), true);
+
+            //step 3 - make some money
+            IGatewayResponse response = gate.Send(request);
+            if (response.Approved) {
+                customer.Cart.AddPayment("credit card",response.AuthorizationCode,"Complete");
+                customer.Cart.SendConfirmation();
+                int cartid = customer.Cart.ID;
+                Cart new_cart = new Cart().Save(customer.ID);
+                customer.Cart = new_cart;
+                customer.Cart.BindAddresses();
+                customer.SerializeToStorage();
+
+                EDI edi = new EDI();
+                edi.CreatePurchaseOrder(cartid); 
+
+                return RedirectToAction("Complete", new { id = cartid });
+            } else {
+                TempData["message"] = response.Message;
+                return RedirectToAction("Index");
+            }
+        }
+
+        [RequireHttps]
+        public void Google() {
+
+            Customer customer = ViewBag.customer;
+            customer.GetFromStorage();
+            if (!customer.LoggedIn()) {
+                Response.Redirect("/Authenticate");
+            }
+
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Settings settings = new Settings();
+            CheckoutShoppingCartRequest req = gButton.CreateRequest();
+            if (Request.Url.Host.Contains("127.0.0") || Request.Url.Host.Contains("localhost") || settings.Get("GoogleCheckoutEnv") == "override") {
+                req.MerchantID = settings.Get("GoogleDevMerchantId");
+                req.MerchantKey = settings.Get("GoogleDevMerchantKey");
+                req.Environment = GCheckout.EnvironmentType.Sandbox;
+            } else {
+                req.MerchantID = settings.Get("GoogleMerchantId");
+                req.MerchantKey = settings.Get("GoogleMerchantKey");
+                req.Environment = GCheckout.EnvironmentType.Production;
+            }
+            req.ContinueShoppingUrl = Request.Url.Scheme + "://" + Request.Url.Host;
+            //req.EditCartUrl = Request.Url.Host + "/Cart";
+
+            foreach (CartItem item in customer.Cart.CartItems) {
+                ShoppingCartItem sitem = new ShoppingCartItem {
+                    Name = "CURT Part #" + item.partID,
+                    Description = item.shortDesc,
+                    Price = item.price,
+                    Quantity = item.quantity,
+                    Weight = Convert.ToDouble(item.weight)
+                };
+                req.AddItem(sitem);
+            }
+            System.Xml.XmlDocument tempDoc = new System.Xml.XmlDocument();
+            System.Xml.XmlNode tempNode = tempDoc.CreateElement("OrderNumber");
+            tempNode.InnerText = customer.Cart.ID.ToString();
+            req.AddMerchantPrivateDataNode(tempNode);
+
+            req.AddShippingPackage("0", customer.Cart.Shipping.city, customer.Cart.Shipping.State1.state1, customer.Cart.Shipping.postal_code);
+            req.AddFlatRateShippingMethod(customer.Cart.shipping_type, customer.Cart.shipping_price);
+            GCheckoutResponse resp = req.Send();
+            if (resp.IsGood) {
+                customer.Cart.AddPayment("Google Checkout", "", "Pending");
+                Cart new_cart = new Cart().Save(customer.ID);
+                customer.Cart = new_cart;
+                customer.Cart.BindAddresses();
+                customer.SerializeToStorage();
+
+                Response.Redirect(resp.RedirectUrl, true);
+            } else {
+                TempData["message"] = resp.ErrorMessage;
+                Response.Redirect("/Payment");
+            }
+        }
+        
+        [RequireHttps]
+        public void PayPal() {
+            Customer customer = ViewBag.customer;
+            customer.GetFromStorage();
+            if (!customer.LoggedIn()) {
+                Response.Redirect("/Authenticate");
+            }
+            decimal total = customer.Cart.shipping_price;
+            foreach (CartItem item in customer.Cart.CartItems) {
+                total += (item.price * item.quantity);
+            }
+            Paypal p = new Paypal();
+            string token = p.ECSetExpressCheckout(total.ToString(),customer.Cart.CartItems.ToList<CartItem>(),customer.Cart.shipping_price);
+            if (token != "Failure") {
+                customer.Cart.paypalToken = token;
+                customer.SerializeToStorage();
+                if (Request.Url.Host.Contains("127.0.0") || Request.Url.Host.Contains("localhost")) {
+                    Response.Redirect("https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=" + token);
+                } else {
+                    Response.Redirect("https://www.paypal.com/webscr?cmd=_express-checkout&token=" + token);
+                }
+            } else {
+                TempData["message"] = "There was a problem with your PayPal transaction.";
+                Response.Redirect("/Payment");
+            }
+        }
+        
+        [RequireHttps]
+        public ActionResult PayPalCheckout() {
+            Customer customer = ViewBag.customer;
+            // Retrieve Customer from Sessions/Cookie
+            customer.GetFromStorage();
+            if (!customer.LoggedIn()) {
+                Response.Redirect("/Authenticate");
+            }
+
+            // Create Cart object from customer
+            customer.BindAddresses();
+            Cart cart = customer.Cart;
+
+            // Get the parts from this Cart
+            List<CartItem> parts = cart.GetParts();
+            cart.CartItems.Clear();
+            cart.CartItems.AddRange(parts);
+
+            ViewBag.showShipping = true;
+            ViewBag.cart = cart;
+            ViewBag.message = TempData["message"];
+            string token = customer.Cart.paypalToken;
+            Paypal p = new Paypal();
+            PayPalResponse paypalResponse = p.ECGetExpressCheckout(token);
+            if (paypalResponse.acknowledgement == "Success") {
+                ViewBag.paypalResponse = paypalResponse;
+                return View();
+            }
+            return RedirectToAction("Index", new { message = "Your PayPal Transaction Could not be processed. Try Again." });
+        }
+
+        [RequireHttps]
+        public ActionResult CompletePayPalCheckout(string token = "", string payerID = "") {
+            Customer customer = ViewBag.customer;
+            customer.GetFromStorage();
+            if (!customer.LoggedIn()) {
+                Response.Redirect("/Authenticate");
+            }
+            decimal total = customer.Cart.shipping_price;
+            foreach (CartItem item in customer.Cart.CartItems) {
+                total += (item.price * item.quantity);
+            }
+            Paypal p = new Paypal();
+            string confirmationKey = p.ECDoExpressCheckout(token, payerID, total.ToString(), customer.Cart.CartItems.ToList<CartItem>(), customer.Cart.shipping_price);
+            if (confirmationKey == "Success") {
+                customer.Cart.AddPayment("PayPal", token, "Complete");
+                customer.Cart.SendConfirmation();
+                int cartid = customer.Cart.ID;
+                Cart new_cart = new Cart().Save(customer.ID);
+                customer.Cart = new_cart;
+                customer.Cart.BindAddresses();
+                customer.SerializeToStorage();
+
+                EDI edi = new EDI();
+                edi.CreatePurchaseOrder(cartid); 
+                return RedirectToAction("Complete", new { id = cartid });
+            } else {
+                TempData["message"] = "Your PayPal Transaction Could not be processed. Try Again.";
+                return RedirectToAction("Index");
+            }
+
+        }
+
+        [RequireHttps]
+        public ActionResult Complete(int id = 0) {
+            Customer customer = new Customer();
+
+            // Retrieve Customer from Sessions/Cookie
+            customer.GetFromStorage();
+            Cart order = new Cart().Get(id);
+
+            if (!customer.LoggedIn() || order.cust_id != customer.ID) {
+                Response.Redirect("/Authenticate");
+            }
+
+            order.BindAddresses();
+            Payment payment = order.getPayment();
+
+
+            ViewBag.order = order;
+            ViewBag.payment = payment;
+
+            return View();
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public void GoogleNotification() {
+            string serial = Request.Form["serial-number"] ?? "";
+            
+            string resp = "<notification-acknowledgment xmlns=\"http://checkout.google.com/schema/2\" serial-number=\"" + serial + "\" />";
+            Response.Write(resp);
+            Response.End();
+            GoogleCheckout.getNotification(serial);
+        }
+
+    }
+}

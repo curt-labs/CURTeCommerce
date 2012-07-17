@@ -1,0 +1,19 @@
+﻿@{
+    Admin.Models.CommentWithPost comment = ViewBag.comment;
+    Admin.BlogPost post = comment.post;
+    string errors = Request.QueryString.Get("err");
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>View Comment</h2>
+@if (errors != null && errors.Length > 0) {
+    <p>@errors</p>
+}
+
+<h3>Comment for Post: <a href="/Blog/Post/@(String.Format("{0:M-dd-yyyy}",post.publishedDate))/@(Server.UrlEncode(@post.slug))">@post.post_title</a></h3>
+<p><strong>Name:</strong> @comment.name</p>
+@if (!String.IsNullOrEmpty(comment.email)) {
+    <p><strong>Email:</strong> @comment.email</p>
+}
+<p><strong>Posted On:</strong> @(String.Format("{0:MMM d, yyyy} at {0:h:mm tt}",comment.createdDate))</p>
+<p><strong>Comment:</strong> @comment.comment_text</p>

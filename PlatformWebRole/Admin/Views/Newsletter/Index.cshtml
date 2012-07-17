@@ -1,0 +1,35 @@
+﻿@{
+    List<Admin.Newsletter> subs = ViewBag.subs;
+    if(subs == null){
+        subs = new List<Admin.Newsletter>();
+    }
+    
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/newsletter.css" rel="stylesheet" type="text/css" />
+<span class="title">Newsletter Subscriptions</span>
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>E-Mail</th>
+            <th>Date Added</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Admin.Newsletter sub in subs) {
+            <tr>
+                <td>@sub.Name</td>
+                <td>@sub.Email</td>
+                <td>@Convert.ToDateTime(sub.DateAdded)</td>
+                <td>
+                    <a href="javascript:void(0)" title="Unsubscribe" class="remove" data-id="@sub.ID">Remove</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script defer type="text/javascript" src="/Admin/Scripts/custom/newsletter.js"></script>

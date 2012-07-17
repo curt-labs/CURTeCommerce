@@ -1,0 +1,47 @@
+﻿@{
+    Admin.FAQ faq = ViewBag.faq;
+    if(faq == null){
+        faq = new Admin.FAQ();   
+    }
+
+    List<Admin.FaqTopic> topics = ViewBag.topics;
+    if(topics == null){
+        topics = new List<Admin.FaqTopic>();   
+    }
+
+    string error = ViewBag.error;
+    if(error == null){
+        error = "";
+    }
+    
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<span class="title">Edit FAQ</span>
+
+<form class="admin_form" method="post" action="/Admin/FAQManager/SaveQuestion/@faq.ID">
+    @if (error.Length > 0) {
+        <p class="error">@error</p>
+    }
+    <label for="question">
+        Question
+        <input type="text" name="question" id="question" placeholder="Enter the frequently asked question..." value="@faq.question" required="required" title="You must enter a question for this FAQ" />
+    </label>
+
+    <label for="answer">
+        Answer<br />
+        <textarea name="answer" id="answer" rows="5" cols="50" placeholder="Enter the frequently asked answer..." required="required" title="You must enter an answer for this FAQ">@faq.answer</textarea>
+    </label>
+
+    <label for="topic">
+        Topic
+        <select name="topic" id="topic" required="required" title="You must select a topic">
+            <option value="0">- Select a Topic -</option>
+            @foreach (Admin.FaqTopic topic in topics) {
+                <option value="@topic.ID" @((faq.topic == topic.ID)?"selected=selected":"")>@topic.topic</option>
+            }
+        </select>
+    </label>
+
+    <input type="submit" name="btnSubmit" id="btnSubmit" value="Save" />
+</form>

@@ -1,0 +1,41 @@
+﻿@{
+    List<EcommercePlatform.BlogCategory> categories = ViewBag.categories;
+    List<EcommercePlatform.Models.Archive> months = ViewBag.months;
+    string openul = "<ul>";
+    string openli = "<li class=\"year\">";
+    string closeul = "</ul>";
+    string closeli = "</li>";
+}
+
+<div class="blog-nav">
+    <span>Categories</span>
+    <ul>
+        @foreach (EcommercePlatform.BlogCategory category in categories) {
+            <li><a href="/Blog/Category/@category.slug">@category.name</a></li>
+        }
+    </ul>
+    @if (months != null && months.Count() > 0) {
+        <span>Archive</span>
+        <ul>
+            @for (var i = 0; i < months.Count(); i++) {
+                if (i != 0 && months[i - 1].year != months[i].year) {
+                    @Html.Raw(closeul)
+                    @Html.Raw(closeli)
+                    @Html.Raw(openli)
+                    <a class="yearlink" href="javascript:;">@months[i].year</a>
+                    @Html.Raw(openul)
+                } else if (i == 0) {
+                    @Html.Raw(openli)
+                    <a class="yearlink" href="javascript:;">@months[i].year</a>
+                    @Html.Raw(openul)
+                }
+                <li class="month">
+                    <a href="/Blog/Archive/@String.Format("{0:MMMM}", Convert.ToDateTime(months[i].month + "/1/" + months[i].year))/@(months[i].year)">@String.Format("{0:MMMM}", Convert.ToDateTime(months[i].month + "/1/" + months[i].year))</a>
+                </li>
+            }
+            @Html.Raw(closeul)
+            @Html.Raw(closeli)
+        </ul>
+    }
+</div>
+<script type="text/javascript" src="/Scripts/custom/archive.js"></script>

@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ecom_platform" Class="EcommercePlatformDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=d49echki7t.database.windows.net;Initial Catalog=ecom_platform;User ID=hitchdepotusa" SettingsObjectName="AzureFtpServer.Properties.Settings" SettingsPropertyName="ecom_platformConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Profile" Member="Profiles">
+    <Type Name="Profile">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="username" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="password" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="email" Type="System.String" DbType="VarChar(300)" CanBeNull="true" />
+      <Column Name="first" Type="System.String" DbType="VarChar(400)" CanBeNull="true" />
+      <Column Name="last" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="date_added" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="image" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="bio" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Association Name="Profile_ProfileModule" Member="ProfileModules" ThisKey="id" OtherKey="profileID" Type="ProfileModule" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ProfileModules" Member="ProfileModules">
+    <Type Name="ProfileModule">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="profileID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="moduleID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="ProfileModule_Module" Member="Modules" ThisKey="moduleID" OtherKey="id" Type="Module" />
+      <Association Name="Profile_ProfileModule" Member="Profile" ThisKey="profileID" OtherKey="id" Type="Profile" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Modules" Member="Modules">
+    <Type Name="Module">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="path" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="parentID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="alt_text" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="inMenu" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="image" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Association Name="ProfileModule_Module" Member="ProfileModule" ThisKey="id" OtherKey="moduleID" Type="ProfileModule" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

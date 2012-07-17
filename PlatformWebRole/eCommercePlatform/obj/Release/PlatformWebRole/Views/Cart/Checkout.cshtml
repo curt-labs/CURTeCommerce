@@ -1,0 +1,261 @@
+﻿@{
+    EcommercePlatform.ContentPage page = ViewBag.page;
+    if(page == null){
+        page = new EcommercePlatform.ContentPage();   
+    }
+    ViewBag.Title = "Shopping Cart";
+    EcommercePlatform.Customer cust = ViewBag.customer;
+    if (cust == null) {
+        cust = new EcommercePlatform.Customer();
+    }
+
+    List<EcommercePlatform.Country> countries = ViewBag.countries;
+    if (countries == null) {
+        countries = new List<EcommercePlatform.Country>();
+    }
+
+    List<EcommercePlatform.Address> addresses = ViewBag.addresses;
+    if (addresses == null) {
+        addresses = new List<EcommercePlatform.Address>();
+    }
+
+    EcommercePlatform.Models.ShippingResponse shippingresponse = ViewBag.shippingresponse;
+    if (shippingresponse == null) {
+        shippingresponse = new EcommercePlatform.Models.ShippingResponse();
+    }
+
+    string shipping_type = "";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int quebec = 59;
+}
+<link href="/Content/view_sass/cart.css" rel="stylesheet" type="text/css" />
+<div class="content">
+    <h2>Checkout</h2>
+    @Html.Raw(page.content)
+
+    <ul class="tabs">
+        <li>
+            <a href="#billing" title="Billing Information">Billing</a>
+        </li>
+        <li>
+            <a href="#shipping" title="Shipping Information">Shipping</a>
+        </li>
+    </ul>
+    <div class="tab_container">
+        <div class="tab_content" id="billing">
+            <div class="left">
+                <div id="current-billing-address">
+                    <p class="tab-title">Confirm Your Billing Address</p>
+                    <div class="address main-address">
+                        <span>@((cust.Cart.Billing.residential) ? "Residential" : "Commercial")</span>
+                        @cust.Cart.Billing.first @cust.Cart.Billing.last<br />
+                        @cust.Cart.Billing.street1<br />
+                        @if (!String.IsNullOrEmpty(cust.Cart.Billing.street2)) {
+                            @cust.Cart.Billing.street2<br />
+                        }
+                        @cust.Cart.Billing.city, @cust.Cart.Billing.State1.abbr @cust.Cart.Billing.postal_code<br />
+                        @cust.Cart.Billing.State1.Country.name
+                    </div>
+                    <a href="/Cart/Checkout#shipping" class="button">Confirm</a>
+                </div>
+                <form class="simple-form" id="add-billing-address" method="post" action="/Cart/AddBillingAddress">
+                    <fieldset>
+                        <legend>Use a new Address</legend>
+                        <label for="bfirst">
+                            Billing First Name
+                            <input type="text" name="bfirst" id="bfirst" class="placeholder" placeholder="Enter the billing first name" required="required" title="Last Name on billing address is required" />
+                        </label>
+
+                        <label for="blast">
+                            Billing Last Name
+                            <input type="text" name="blast" id="blast" class="placeholder" placeholder="Enter the billing last name" required="required" title="Last name on billing address is required" />
+                        </label>
+
+                        <label for="bstreet1">
+                            Billing Street 1
+                            <input type="text" name="bstreet1" id="bstreet1" class="placeholder" placeholder="Enter the billing street" required="required" title="Billing street is required" />
+                        </label>
+                        <label for="bstreet2">
+                            Billing Street 2
+                            <input type="text" name="bstreet2" id="bstreet2" class="placeholder" placeholder="Enter additional info for billing street" />
+                        </label>
+
+                        <label for="bcity">
+                            Billing City
+                            <input type="text" name="bcity" id="bcity" class="placeholder" placeholder="Enter the billing city" required="required" title="Billing city is required" />
+                        </label>
+
+                        <label for="bstate">
+                            Billing State/Province
+                            <select name="bstate" id="bstate" required="required" title="Select a Billing State/Province">
+                                <option value="0">- Select State/Province -</option>
+                                @foreach (EcommercePlatform.Country country in countries) {
+                                    <optgroup label="@country.name">
+                                        @foreach (EcommercePlatform.State state in country.getProvinces()) {
+                                            if (state.stateID != quebec) {
+                                                <option value="@state.stateID" @((cust.Address.state == state.stateID) ? "selected=selected" : "")>@(String.Format("{0} - {1}", state.abbr, state.state1))</option>
+                                            }
+                                        }
+                                    </optgroup>
+                                }
+                            </select>
+                        </label>
+                        <label for="bzip">
+                            Billing Postal Code
+                            <input type="text" name="bzip" id="bzip" class="placeholder" placeholder="Enter the billing postal code" required="required" title="Billing Postal Code is required" />
+                        </label>
+                        <label for="bresidential">
+                            <input type="checkbox" name="bresidential" id="bresidential" value="true" checked="checked" />
+                            Residential Address?
+                        </label>
+                    </fieldset>
+                    <input type="submit" id="btnAddBillingAddress" class="button" value="Add Address" />
+                    <input type="reset" id="btnResetBilling" class="button cancel" value="Cancel" />
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+            <div class="right">
+                <article class="scroller">
+                    <span class="banner">Addresses</span>
+                    @foreach(EcommercePlatform.Address a in addresses) {
+                        if (!a.ID.Equals(cust.Cart.Billing.ID)) {
+                            <div class="address" data-id="@a.ID" id="address-@a.ID">
+                                <span>@((a.residential) ? "Residential" : "Commercial")</span>
+                                @a.first @a.last<br />
+                                @a.street1<br />
+                                @if (!String.IsNullOrEmpty(a.street2)) {
+                                    @a.street2<br />
+                                }
+                                @a.city, @a.State1.abbr @a.postal_code<br />
+                                @a.State1.Country.name
+                                <a href="/Cart/ChooseBilling/@a.ID" class="button">Choose</a>
+                            </div>
+                        }
+                    }
+                    <a href="javascript: void;" class="new-address button" id="new-billing-address">New Address</a>
+                </article>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="tab_content" id="shipping">
+            <div class="left">
+                <div id="current-shipping-address">
+                    <p class="tab-title">Choose Your Shipping Option</p>
+                    <div class="address main-address">
+                        <span>@((cust.Cart.Shipping.residential) ? "Residential" : "Commercial")</span>
+                        @cust.Cart.Shipping.first @cust.Cart.Shipping.last<br />
+                        @cust.Cart.Shipping.street1<br />
+                        @if (!String.IsNullOrEmpty(cust.Cart.Shipping.street2)) {
+                            @cust.Cart.Shipping.street2<br />
+                        }
+                        @cust.Cart.Shipping.city, @cust.Cart.Shipping.State1.abbr @cust.Cart.Shipping.postal_code<br />
+                        @cust.Cart.Shipping.State1.Country.name
+                    </div>
+                    <form action="/Cart/ChooseShippingType" method="post" id="shipping_type" class="simple-form">
+                        @if (!cust.Cart.HasFreeShipping()) {
+                            <p class="callout">Spend @String.Format("{0:C}", (Convert.ToInt32(ViewBag.settings.Get("FreeShippingAmount")) - cust.Cart.GetSubTotal())) to get free shipping!</p>
+                        }
+                        <fieldset>
+                            @if (shippingresponse.Result != null) {
+                                int shipcount = 0;
+                                for (int i = shippingresponse.Result.Count - 1; i >= 0; i--) {
+                                    shipcount++;
+                                    EcommercePlatform.Models.ShipmentRateDetails rate = shippingresponse.Result[i];
+                                    <label for="shipping_@(shipcount)">
+                                        @if (cust.Cart.HasFreeShipping() && rate.ServiceType == ViewBag.settings.Get("FreeShippingType")) {
+                                            shipping_type = rate.ServiceType;
+                                            <input type="radio" name="shipping_type" id="shipping_@(shipcount)" value="@rate.ServiceType|0" @((shipcount == 1) ? "checked=checked" : "") />
+                                            <span class="rate">Free Shipping - @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rate.ServiceType.Replace("_", " ").ToLower()) (1 - 3) Business Days</span>
+                                        } else {
+                                            shipping_type = rate.ServiceType;
+                                            <input type="radio" name="shipping_type" id="shipping_@(shipcount)" value="@rate.ServiceType|@rate.Rates.FirstOrDefault().NetCharge.Key" @((shipcount == 1) ? "checked=checked" : "") />
+                                            <span class="rate">@String.Format("{0:C}", rate.Rates.First().NetCharge.Key) @rate.Rates.First().NetCharge.Value - @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rate.ServiceType.Replace("_", " ").ToLower())</span>
+                                        }
+                                    </label>
+                                }
+                            }
+                            <input type="submit" class="button" id="btnChooseShippingType" value="Choose" />
+                        </fieldset>
+                    </form>
+                </div>
+                <form class="simple-form" id="add-shipping-address" method="post" action="/Cart/AddShippingAddress">
+                    <fieldset>
+                        <legend>Use a new Address</legend>
+                        <label for="sfirst">
+                            Shipping First Name
+                            <input type="text" name="sfirst" id="sfirst" class="placeholder" placeholder="Enter the shipping first name" required="required" title="First Name on shipping address is required" />
+                        </label>
+
+                        <label for="slast">
+                            Shipping Last Name
+                            <input type="text" name="slast" id="slast" class="placeholder" placeholder="Enter the shipping last name" required="required" title="Last Name on shipping address is required" />
+                        </label>
+
+                        <label for="sstreet1">
+                            Shipping Street 1
+                            <input type="text" name="sstreet1" id="sstreet1" class="placeholder" placeholder="Enter the shipping street" required="required" title="Shipping street is required" />
+                        </label>
+                        <label for="sstreet2">
+                            Shipping Street 2
+                            <input type="text" name="sstreet2" id="sstreet2" class="placeholder" placeholder="Enter additional info for shipping street" />
+                        </label>
+
+                        <label for="scity">
+                            Shipping City
+                            <input type="text" name="scity" id="scity" class="placeholder" placeholder="Enter the shipping city" required="required" title="Shipping city is required" />
+                        </label>
+
+                        <label for="sstate">
+                            Shipping State/Province
+                            <select name="sstate" id="sstate" required="required" title="Select a Shipping State/Province">
+                                <option value="0">- Select State/Province -</option>
+                                @foreach (EcommercePlatform.Country country in countries) {
+                                    <optgroup label="@country.name">
+                                        @foreach (EcommercePlatform.State state in country.getProvinces()) {
+                                            if (state.stateID != quebec) {
+                                                <option value="@state.stateID" @((cust.Address1.state == state.stateID) ? "selected=selected" : "")>@(String.Format("{0} - {1}", state.abbr, state.state1))</option>
+                                            }
+                                        }
+                                    </optgroup>
+                                }
+                            </select>
+                        </label>
+                        <label for="szip">
+                            Shipping Postal Code
+                            <input type="text" name="szip" id="szip" class="placeholder" placeholder="Enter the shipping postal code" required="required" title="Shipping Postal Code is required" />
+                        </label>
+                        <label for="sresidential">
+                            <input type="checkbox" name="sresidential" id="sresidential" value="true" checked="checked" />
+                            Residential Address?
+                        </label>
+                    </fieldset>
+                    <input type="submit" id="btnAddShippingAddress" class="button" value="Add Address" />
+                    <input type="reset" id="btnResetShipping" class="button cancel" value="Cancel" />
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+            <div class="right">
+                <article class="scroller">
+                    <span class="banner">Addresses</span>
+                    @foreach (EcommercePlatform.Address a in addresses) {
+                        if (!a.ID.Equals(cust.Cart.Shipping.ID)) {
+                            <div class="address" data-id="@a.ID" id="address-@a.ID">
+                                <span>@((a.residential) ? "Residential" : "Commercial")</span>
+                                @a.first @a.last<br />
+                                @a.street1<br />
+                                @if (!String.IsNullOrEmpty(a.street2)) {
+                                    @a.street2<br />
+                                }
+                                @a.city, @a.State1.abbr @a.postal_code<br />
+                                @a.State1.Country.name
+                                <a href="/Cart/ChooseShipping/@a.ID" class="button">Choose</a>
+                            </div>
+                        }
+                    }
+                    <a href="javascript: void;" class="new-address button" id="new-shipping-address">New Address</a>
+                </article>
+            </div>
+            <div class="clearfix"></div>
+    </div>
+</div>
+<script defer src="/Scripts/custom/checkout.js"></script>

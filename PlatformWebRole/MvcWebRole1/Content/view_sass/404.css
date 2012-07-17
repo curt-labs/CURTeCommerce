@@ -1,0 +1,23 @@
+.explanation{
+     width: 75%;
+     float:left;
+}
+
+.explanation .title{
+     width: 100%;
+     margin-bottom: 20px;
+}
+
+.explanation .title span{
+    font-size: 16px;
+    margin-left: 25px;
+}
+
+.explanation ul li{
+    margin-bottom: 15px;
+}
+
+.dilbert{
+     width: 25%;
+     float:right;
+}

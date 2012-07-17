@@ -1,0 +1,83 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "eCommercePlatform", "eCommercePlatform\eCommercePlatform.ccproj", "{45FDB16B-B611-4C79-AD0C-5E135ECE5327}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlatformWebRole", "MvcWebRole1\PlatformWebRole.csproj", "{836DBA86-BD2C-4F45-B3BD-4F8543FE2DD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin", "Admin\Admin.csproj", "{212FCDED-61DF-4A5F-ACAF-80DF3050351D}"
+EndProject
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "Admin.Azure", "Admin.Azure\Admin.Azure.ccproj", "{E5B99277-72AC-4CC1-8C5C-8DEF8C770587}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureFtpServer", "AzureFtpServer\AzureFtpServer.csproj", "{A6520CEB-6E55-4C9D-B581-64E432DB16D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FTPServerRole", "WorkerRole1\FTPServerRole.csproj", "{19D55950-ED17-46EF-85BC-78690CD6AE4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskScheduler", "TaskScheduler\TaskScheduler.csproj", "{37381F2C-6433-433D-BB80-E5B575A8934F}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 8
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://s-foundation:8080/tfs/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = eCommercePlatform\\eCommercePlatform.ccproj
+		SccProjectName1 = eCommercePlatform
+		SccLocalPath1 = eCommercePlatform
+		SccProjectUniqueName2 = MvcWebRole1\\PlatformWebRole.csproj
+		SccProjectName2 = MvcWebRole1
+		SccLocalPath2 = MvcWebRole1
+		SccProjectUniqueName3 = Admin\\Admin.csproj
+		SccProjectName3 = ../Admin/Admin
+		SccLocalPath3 = Admin
+		SccProjectUniqueName4 = Admin.Azure\\Admin.Azure.ccproj
+		SccProjectName4 = Admin.Azure
+		SccLocalPath4 = Admin.Azure
+		SccProjectUniqueName5 = AzureFtpServer\\AzureFtpServer.csproj
+		SccProjectName5 = AzureFtpServer
+		SccLocalPath5 = AzureFtpServer
+		SccProjectUniqueName6 = WorkerRole1\\FTPServerRole.csproj
+		SccProjectName6 = WorkerRole1
+		SccLocalPath6 = WorkerRole1
+		SccProjectUniqueName7 = TaskScheduler\\TaskScheduler.csproj
+		SccProjectName7 = TaskScheduler
+		SccLocalPath7 = TaskScheduler
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{45FDB16B-B611-4C79-AD0C-5E135ECE5327}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45FDB16B-B611-4C79-AD0C-5E135ECE5327}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45FDB16B-B611-4C79-AD0C-5E135ECE5327}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45FDB16B-B611-4C79-AD0C-5E135ECE5327}.Release|Any CPU.Build.0 = Release|Any CPU
+		{836DBA86-BD2C-4F45-B3BD-4F8543FE2DD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{836DBA86-BD2C-4F45-B3BD-4F8543FE2DD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{836DBA86-BD2C-4F45-B3BD-4F8543FE2DD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{836DBA86-BD2C-4F45-B3BD-4F8543FE2DD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{212FCDED-61DF-4A5F-ACAF-80DF3050351D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{212FCDED-61DF-4A5F-ACAF-80DF3050351D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{212FCDED-61DF-4A5F-ACAF-80DF3050351D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{212FCDED-61DF-4A5F-ACAF-80DF3050351D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5B99277-72AC-4CC1-8C5C-8DEF8C770587}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5B99277-72AC-4CC1-8C5C-8DEF8C770587}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5B99277-72AC-4CC1-8C5C-8DEF8C770587}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5B99277-72AC-4CC1-8C5C-8DEF8C770587}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6520CEB-6E55-4C9D-B581-64E432DB16D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6520CEB-6E55-4C9D-B581-64E432DB16D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6520CEB-6E55-4C9D-B581-64E432DB16D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6520CEB-6E55-4C9D-B581-64E432DB16D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19D55950-ED17-46EF-85BC-78690CD6AE4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19D55950-ED17-46EF-85BC-78690CD6AE4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19D55950-ED17-46EF-85BC-78690CD6AE4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19D55950-ED17-46EF-85BC-78690CD6AE4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37381F2C-6433-433D-BB80-E5B575A8934F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37381F2C-6433-433D-BB80-E5B575A8934F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37381F2C-6433-433D-BB80-E5B575A8934F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37381F2C-6433-433D-BB80-E5B575A8934F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

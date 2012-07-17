@@ -1,0 +1,355 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using EcommercePlatform.Models;
+using Newtonsoft.Json;
+
+namespace EcommercePlatform.Controllers {
+    public class CartController : BaseController {
+
+        public ActionResult Index() {
+            // Create Customer
+            Customer customer = new Customer();
+
+            // Retrieve Customer from Sessions/Cookie
+            customer.GetFromStorage();
+
+            // Create Cart object from customer
+            Cart cart = customer.Cart;
+
+            // Get the parts from this Cart
+            List<CartItem> parts = cart.GetParts();
+            cart.CartItems.Clear();
+            cart.CartItems.AddRange(parts);
+            ViewBag.cart = cart;
+            return View();
+        }
+
+        public void CreatePO(int id = 0) {
+            EDI edi = new EDI();
+            edi.CreatePurchaseOrder(id);
+        }
+
+        //[RequireHttps]
+        public ActionResult Checkout() {
+            // Create Customer
+            Customer customer = ViewBag.customer;
+
+            // Retrieve Customer from Sessions/Cookie
+            customer.GetFromStorage();
+
+            if (!customer.LoggedIn()) {
+                Response.Redirect("/Authenticate");
+            }
+            
+            customer.BindAddresses();
+            
+            List<Address> addresses = customer.GetAddresses();
+            ViewBag.addresses = addresses;
+
+            List<Country> countries = UDF.GetCountries();
+            ViewBag.countries = countries;
+
+            List<string> shipping_types = CURTAPI.GetShippingTypes();
+            ViewBag.shipping_types = shipping_types;
+
+            ShippingResponse shippingresponse = new ShippingResponse();
+            if (TempData["shipping_response"] != null) {
+                try {
+                    shippingresponse = (ShippingResponse)TempData["shipping_response"];
+                } catch (Exception) { }
+            }
+            if (shippingresponse == null || shippingresponse.Result == null) {
+                string type = "";
+                if (customer.Cart.shipping_type != null) {
+                    type = customer.Cart.shipping_type;   
+                }
+                shippingresponse = getShipping();
+            }
+            ViewBag.shippingresponse = shippingresponse;
+
+            return View();
+        }
+
+        public ActionResult Add(int id = 0, int qty = 1) {
+            // Create Customer
+            Customer customer = new Customer();
+
+            // Retrieve Customer from Sessions/Cookie
+            customer.GetFromStorage();
+
+            // Add the item to the cart
+            customer.Cart.Add(id,qty);
+            if (customer.ID > 0 && customer.Cart.ID == 0) {
+                customer.Cart = customer.Cart.Save(customer.ID);
+            }
+
+            customer.SerializeToStorage();
+
+            // Serialize the Customer back to where it came from
+            return RedirectToAction("Index");
+        }
+
+        public string AddAjax(int id = 0, int qty = 0) {
+            // Create Customer
+            Customer customer = new Customer();
+
+            // Retrieve Customer from Sessions/Cookie
+            customer.GetFromStorage();
+            if (customer.ID > 0 && customer.Cart.ID == 0) {
+                customer.Cart = customer.Cart.Save(customer.ID);
+            }
+
+            customer.Cart.Add(id, qty);
+
+            customer.SerializeToStorage();
+            return getCart();
+        }
+
+        public ActionResult Update(int id = 0, int qty = 1) {
+            // Create Customer
+            Customer customer = new Customer();
+
+            // Retrieve Customer from Sessions/Cookie
+            customer.GetFromStorage();
+
+            customer.Cart.Update(id, qty);
+            customer.SerializeToStorage();
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Remove(int id = 0) {
+            // Create Customer
+            Customer customer = new Customer();
+
+            // Retrieve Customer from Sessions/Cookie
+            customer.GetFromStorage();
+
+            customer.Cart.Remove(id);
+            customer.SerializeToStorage();
+            return RedirectToAction("Index");
+        }
+
+        public string RemoveAjax(int id = 0) {
+            // Create Customer
+            Customer customer = new Customer();
+
+            // Retrieve Customer from Sessions/Cookie
+            customer.GetFromStorage();
+
+            customer.Cart.Remove(id);
+            customer.SerializeToStorage();
+
+            return Response.Cookies["cart"].Value;
+        }
+
+        public string getCart() {
+            Customer customer = new Customer();
+
+            // Retrieve Customer from Sessions/Cookie
+            customer.GetFromStorage();
+            Cart cart = customer.Cart;
+            Newtonsoft.Json.JsonSerializerSettings settings = new Newtonsoft.Json.JsonSerializerSettings();
+            settings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            Newtonsoft.Json.Formatting format = Newtonsoft.Json.Formatting.None;
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(cart,format,settings);
+        }
+
+        //[RequireHttps]
+        public ActionResult ChooseBilling(int id = 0) {
+            // Create Customer
+            Customer customer = new Customer();
+
+            // Retrieve Customer from Sessions/Cookie
+            customer.GetFromStorage();
+            if (!customer.LoggedIn()) {
+                Response.Redirect("/Authenticate");
+            }
+
+            customer.Cart.SetBilling(id);
+            customer.SerializeToStorage();
+
+            return Redirect("/Cart/Checkout#billing");
+        }
+        
+        //[RequireHttps]
+        public ActionResult AddBillingAddress() {
+            try {
+                // Create Customer
+                Customer customer = new Customer();
+                customer.GetFromStorage();
+                if (!customer.LoggedIn()) {
+                    Response.Redirect("/Authenticate");
+                }
+                Address billing = new Address();
+                // Build out our Billing object
+                billing = new Address {
+                    first = Request.Form["bfirst"],
+                    last = Request.Form["blast"],
+                    street1 = Request.Form["bstreet1"],
+                    street2 = Request.Form["bstreet2"],
+                    city = Request.Form["bcity"],
+                    postal_code = Request.Form["bzip"],
+                    residential = (Request.Form["bresidential"] == null) ? false : true,
+                    active = true
+                };
+                try {
+                    billing.state = Convert.ToInt32(Request.Form["bstate"]);
+                } catch (Exception) {
+                    throw new Exception("You must select a billing state/province.");
+                }
+                billing.Save(customer.ID);
+
+                // Retrieve Customer from Sessions/Cookie
+
+                customer.Cart.SetBilling(billing.ID);
+                customer.SerializeToStorage();
+            } catch { }
+
+            return Redirect("/Cart/Checkout#billing");
+        }
+
+        //[RequireHttps]
+        public ActionResult ChooseShipping(int id = 0) {
+            // Create Customer
+            Customer customer = new Customer();
+
+            // Retrieve Customer from Sessions/Cookie
+            customer.GetFromStorage();
+            if (!customer.LoggedIn()) {
+                Response.Redirect("/Authenticate");
+            }
+            customer.Cart.SetShipping(id);
+            customer.SerializeToStorage();
+
+            return Redirect("/Cart/Checkout#shipping");
+        }
+
+        //[RequireHttps]
+        public ActionResult AddShippingAddress() {
+            try {
+                // Create Customer
+                Customer customer = new Customer();
+                customer.GetFromStorage();
+                if (!customer.LoggedIn()) {
+                    Response.Redirect("/Authenticate");
+                }
+
+                Address shipping = new Address();
+                // Build out our Billing object
+                shipping = new Address {
+                    first = Request.Form["sfirst"],
+                    last = Request.Form["slast"],
+                    street1 = Request.Form["sstreet1"],
+                    street2 = Request.Form["sstreet2"],
+                    city = Request.Form["scity"],
+                    postal_code = Request.Form["szip"],
+                    residential = (Request.Form["sresidential"] == null) ? false : true,
+                    active = true
+                };
+                try {
+                    shipping.state = Convert.ToInt32(Request.Form["sstate"]);
+                } catch (Exception) {
+                    throw new Exception("You must select a shipping state/province.");
+                }
+                //shipping.GeoLocate();
+                shipping.Save(customer.ID);
+
+                // Retrieve Customer from Sessions/Cookie
+                customer.Cart.SetShipping(shipping.ID);
+                customer.SerializeToStorage();
+            } catch(Exception e) {
+                TempData["error"] = e.Message;
+            }
+
+            return Redirect("/Cart/Checkout#shipping");
+        }
+
+        public ActionResult UpgradeShipping(string type = ""){
+            ShippingResponse resp = getShipping();
+            if (resp.Status_Description == "OK") {
+                ShipmentRateDetails details = resp.Result.FirstOrDefault<ShipmentRateDetails>();
+                RateDetail rate = details.Rates.FirstOrDefault<RateDetail>();
+
+                Customer customer = new Customer();
+
+                // Retrieve Customer from Sessions/Cookie
+                customer.GetFromStorage();
+                if (!customer.LoggedIn()) {
+                    Response.Redirect("/Authenticate");
+                }
+
+                decimal shipping_price = Convert.ToDecimal(rate.NetCharge.Key);
+                string shipping_type = details.ServiceType;
+                customer.Cart.setShippingType(shipping_type, shipping_price);
+            }
+            TempData["shipping_response"] = resp;
+            return Redirect("/Cart/Checkout#shipping");
+        }
+
+        public ShippingResponse getShipping() {
+            Customer customer = new Customer();
+            customer.GetFromStorage();
+            if (!customer.LoggedIn()) {
+                Response.Redirect("/Authenticate");
+            }
+
+            FedExAuthentication auth = new FedExAuthentication {
+                AccountNumber = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["FedExAccount"]),
+                Key = System.Configuration.ConfigurationManager.AppSettings["FedExKey"],
+                Password = System.Configuration.ConfigurationManager.AppSettings["FedExPassword"],
+                CustomerTransactionId = "",
+                MeterNumber = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["FedExMeter"])
+            };
+
+            customer.Cart.BindAddresses();
+
+            ShippingAddress destination = new ShippingAddress();
+            try {
+                destination = customer.Cart.Shipping.getShipping();
+            } catch (Exception) {
+                Response.Redirect("/Authenticate");
+            }
+            DistributionCenter d = new DistributionCenter().GetNearest(customer.Cart.Shipping.GeoLocate());
+            ShippingAddress origin = d.getAddress().getShipping();
+            List<int> parts = new List<int>();
+            foreach (CartItem item in customer.Cart.CartItems) {
+                for (int i = 1; i <= item.quantity; i++) {
+                    parts.Add(item.partID);
+                }
+            }
+
+            ShippingResponse response = CURTAPI.GetShipping(auth, origin, destination, parts);
+
+            return response;
+        }
+
+        public ActionResult ChooseShippingType(string shipping_type = "") {
+            Customer customer = new Customer();
+
+            // Retrieve Customer from Sessions/Cookie
+            customer.GetFromStorage();
+            if (!customer.LoggedIn()) {
+                Response.Redirect("/Authenticate");
+            }
+
+            decimal shipping_price = 0;
+            string shiptype = "";
+            string[] typesplit = shipping_type.Split('|');
+            shiptype = typesplit[0];
+            shipping_price = Convert.ToDecimal(typesplit[1]);
+            customer.Cart.setShippingType(shiptype, shipping_price);
+            
+            // We need to calculate the tax now that we know the shipping state
+            customer.Cart.SetTax();
+            
+            customer.SerializeToStorage();
+
+            return RedirectToAction("Index","Payment");
+        }
+
+    }
+}

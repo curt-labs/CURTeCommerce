@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceDefinition name="FTP2Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
+  <WorkerRole name="FTPServerRole">
+    <Endpoints>
+      <InputEndpoint name="FTP" port="21" protocol="tcp" />
+    </Endpoints>
+    <ConfigurationSettings>
+      <!-- <Setting name="DiagnosticsConnectionString" /> -->
+      <Setting name="ProviderName" />
+      <Setting name="AccountKey" />
+      <Setting name="AccountName" />
+      <Setting name="Mode" />
+      <Setting name="BaseUri" />
+      <Setting name="UseHttps" />
+      <Setting name="UseAsyncMethods" />
+    </ConfigurationSettings>
+  </WorkerRole>
+</ServiceDefinition>

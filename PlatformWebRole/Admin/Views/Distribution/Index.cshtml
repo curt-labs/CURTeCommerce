@@ -1,0 +1,57 @@
+﻿@{
+    List<Admin.DistributionCenter> dcs = ViewBag.dcList;
+    if(dcs == null){
+        dcs = new List<Admin.DistributionCenter>();   
+    }
+
+    List<Admin.Models.GroupedModule> modules = ViewBag.modules;
+    if (modules == null) {
+        modules = new List<Admin.Models.GroupedModule>();
+    }
+
+    bool can_edit = false;
+    try {
+        if (modules.Where(x => x.path.ToUpper().Equals("/ADMIN/DISTRIBUTION")).FirstOrDefault<Admin.Models.GroupedModule>().subs.Where(x => x.name.ToUpper().Equals("EDIT")).Count() > 0) {
+            can_edit = true;
+        }
+    } catch (Exception) { }
+    
+    ViewBag.Title = "Distribution Centers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/dc.css" rel="stylesheet" type="text/css" />
+@if (can_edit) {
+    <span class="title">Manage Distribution Centers</span>
+    <a href="/Admin/Distribution/Edit/0" title="Add Distribution Center" class="addDC">Add Distribution Center</a>
+} else {
+    <span class="title">View Distribution Centers</span>
+}
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Phone</th>
+            <th>Fax</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Admin.DistributionCenter dc in dcs) {
+            <tr data-lat="@dc.Latitude" data-lon="@dc.Longitude" data-name="@dc.Name">
+                <td>
+                    @if (can_edit) {
+                        <a href="/Admin/Distribution/Edit/@dc.ID" title="Edit @dc.Name">@dc.Name</a>
+                    } else {
+                        @dc.Name
+                    }
+                </td>
+                <td>@(dc.City + ", " + dc.State1.abbr)</td>
+                <td>@dc.Phone</td>
+                <td>@dc.Fax</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div id="map"></div>
+<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script src="/Admin/Scripts/custom/dc.js" type="text/javascript"></script>

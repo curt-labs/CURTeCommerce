@@ -1,0 +1,86 @@
+﻿div.content {
+    position: relative;
+}
+
+div.content article{
+    padding: 20px 10px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+div.content article span.title{
+    padding-bottom: 10px;
+    font-size: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+div.content article span.date{
+    font-size: 11px;
+}
+
+div.content article span.name{
+    display: block;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+div.content article span.full_stars{
+    height:15px;
+    width:80px;
+    background: url('/Content/img/review_stars/star_sprite.png') top left repeat-x;
+    display: inline-block;
+}
+
+div.content article span.full_stars .review_rating{
+    display:block;
+    height: 15px;
+    background: url('/Content/img/review_stars/star_sprite.png') bottom left repeat-x;
+}
+
+#btnContact {
+    margin-bottom: 30px;
+}
+
+#addTestimonial {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border:none;
+    background:#FA241A;
+    color:white;
+    font-size:16px;
+    -moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+    font-weight:bold;
+    text-decoration: none;
+    padding: 5px 15px;
+}
+
+div.content footer#pagination {
+    background-color: #E6E6E6;
+    display: block;
+    width: auto;
+    padding: 10px;
+    margin-top: 15px;
+    text-align: left;
+    text-align: center;
+}
+
+div.content footer#pagination a#prevpage {
+    float: left;
+    color: #222;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+div.content footer#pagination a#nextpage {
+    float: right;
+    color: #222;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+div.content footer#pagination a#nextpage:hover, div.content footer#pagination a#prevpage:hover {
+    text-decoration: underline;
+}

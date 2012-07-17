@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A6520CEB-6E55-4C9D-B581-64E432DB16D0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AzureFtpServer</RootNamespace>
+    <AssemblyName>AzureFtpServer</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.4.3.1\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.WindowsAzure.StorageClient, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Azure\AzureFile.cs" />
+    <Compile Include="Azure\AzureFileInfo.cs" />
+    <Compile Include="Azure\AzureFileSystem.cs" />
+    <Compile Include="Azure\AzureFileSystemFactory.cs" />
+    <Compile Include="Azure\AzureFileSystemObject.cs" />
+    <Compile Include="Azure\ExtensionMethods.cs" />
+    <Compile Include="EcommercePlatform.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EcommercePlatform.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Ftp\AlloCommandHandler.cs" />
+    <Compile Include="Ftp\AppendCommandHandler.cs" />
+    <Compile Include="Ftp\CDUPCommandHandler.cs" />
+    <Compile Include="Ftp\CwdCommandHandler.cs" />
+    <Compile Include="Ftp\DeleCommandHandler.cs" />
+    <Compile Include="Ftp\FtpCommandHandler.cs" />
+    <Compile Include="Ftp\FtpConnectionData.cs" />
+    <Compile Include="Ftp\FtpConnectionObject.cs" />
+    <Compile Include="Ftp\FtpReplySocket.cs" />
+    <Compile Include="Ftp\FtpServer.cs" />
+    <Compile Include="Ftp\FtpSocketHandler.cs" />
+    <Compile Include="Ftp\General.cs" />
+    <Compile Include="Ftp\Interfaces.cs" />
+    <Compile Include="Ftp\ListCommandHandler.cs" />
+    <Compile Include="Ftp\ListCommandHandlerBase.cs" />
+    <Compile Include="Ftp\MakeDirectoryCommandHandler.cs" />
+    <Compile Include="Ftp\MakeDirectoryCommandHandlerBase.cs" />
+    <Compile Include="Ftp\MessageHandler.cs" />
+    <Compile Include="Ftp\NlstCommandHandler.cs" />
+    <Compile Include="Ftp\NoopCommandHandler.cs" />
+    <Compile Include="Ftp\PasswordCommandHandler.cs" />
+    <Compile Include="Ftp\PasvCommandHandler.cs" />
+    <Compile Include="Ftp\PortCommandHandler.cs" />
+    <Compile Include="Ftp\PwdCommandHandler.cs" />
+    <Compile Include="Ftp\PwdCommandHandlerBase.cs" />
+    <Compile Include="Ftp\QuitCommandHandler.cs" />
+    <Compile Include="Ftp\RemoveDirectoryCommandHandler.cs" />
+    <Compile Include="Ftp\RemoveDirectoryCommandHandlerBase.cs" />
+    <Compile Include="Ftp\RenameCompleteCommandHandler.cs" />
+    <Compile Include="Ftp\RenameStartCommandHandler.cs" />
+    <Compile Include="Ftp\RetrCommandHandler.cs" />
+    <Compile Include="Ftp\SizeCommandHandler.cs" />
+    <Compile Include="Ftp\StandardFileInfoObject.cs" />
+    <Compile Include="Ftp\StandardFileObject.cs" />
+    <Compile Include="Ftp\StandardFileSystemClassFactory.cs" />
+    <Compile Include="Ftp\StandardFileSystemObject.cs" />
+    <Compile Include="Ftp\StoreCommandHandler.cs" />
+    <Compile Include="Ftp\TypeCommandHandler.cs" />
+    <Compile Include="Ftp\UserCommandHandler.cs" />
+    <Compile Include="Ftp\UserData.cs" />
+    <Compile Include="Ftp\XMkdCommandHandler.cs" />
+    <Compile Include="Ftp\XPwdCommandHandler.cs" />
+    <Compile Include="Ftp\XRmdCommandHandler.cs" />
+    <Compile Include="General\ArrayHelpers.cs" />
+    <Compile Include="General\LoadedClass.cs" />
+    <Compile Include="General\Profiles.cs" />
+    <Compile Include="General\SocketHelpers.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Provider\AzureBlobStorageProvider.cs" />
+    <Compile Include="Provider\AzureCloudFile.cs" />
+    <Compile Include="Provider\CloudDirectory.cs" />
+    <Compile Include="Provider\CloudFileCollection.cs" />
+    <Compile Include="Provider\Configuration.cs" />
+    <Compile Include="Provider\ExtensionMethods.cs" />
+    <Compile Include="Provider\StorageOperation.cs" />
+    <Compile Include="Provider\StorageOperationResult.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Ftp\Copyright.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="EcommercePlatform.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>EcommercePlatform.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="EcommercePlatform.dbml.layout">
+      <DependentUpon>EcommercePlatform.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,161 @@
+﻿@{
+    Admin.Service serv = ViewBag.service;
+    if (serv == null) {
+        serv = new Admin.Service();
+        serv.ID = 0;
+    }
+
+    List<Admin.Location> locations = ViewBag.locations;
+    if (locations == null) {
+        locations = new List<Admin.Location>();   
+    }
+
+    List<Admin.Location> all_locations = ViewBag.all_locations;
+    if (all_locations == null) {
+        all_locations = new List<Admin.Location>();
+    }
+
+    List<string> errors = ViewBag.errors;
+    if (errors == null) {
+        errors = new List<string>();
+    }
+
+    bool failed = ViewBag.failed;
+    if (failed == null) {
+        failed = false;
+    }
+
+    List<Admin.Models.GroupedModule> modules = ViewBag.modules;
+    if (modules == null) {
+        modules = new List<Admin.Models.GroupedModule>();
+    }
+
+    bool can_delete = false;
+    try {
+        if (modules.Where(x => x.path.ToUpper().Equals("/ADMIN/SERVICES")).FirstOrDefault<Admin.Models.GroupedModule>().subs.Where(x => x.name.ToUpper().Equals("DELETE")).Count() > 0) {
+            can_delete = true;
+        }
+    } catch (Exception) { }
+
+    ViewBag.Title = "| Edit Service";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" media="all" href="/Admin/Content/css/admin_form.css" />
+<link rel="stylesheet" type="text/css" media="all" href="/Admin/Content/css/services.css" />
+@if (serv.ID == 0) {
+    <span class="title">Add Service</span>
+    <div class="clearfix"></div>
+} else {
+    <span class="title">Edit Service</span>
+    if(can_delete) {
+        <a href="/Admin/Services/Delete/@serv.ID" title="Delete @serv.title" class="delete">Delete Service</a>
+    }
+}
+<div class="clearfix"></div>
+@if (failed) { 
+    <span class="error">There was an error while saving the service.</span>
+}
+
+<form action="/Admin/Services/Save/@serv.ID" method="post" class="admin_form">
+    @if (errors != null && errors.Count > 0) {
+        <ul class="error_box">
+            @foreach (string e in errors) {
+                <li>@e</li>
+            }
+        </ul>
+    }
+
+    @if (serv.ID > 0) {
+        <ul class="tabs">
+            <li>
+                <a href="#main" title="Main Content">Main</a>
+            </li>
+            <li>
+                <a href="#locations" title="Locations">Locations</a>
+            </li>
+        </ul>
+    }
+
+    <div class="tab_container">
+        <div class="tab_content" id="main">
+            <label for="title">
+                Title
+                <input type="text" name="title" id="title" placeholder="Enter the title of the service" value="@serv.title" required="required" title="Title is required" />
+            </label>
+
+            <label for="Price">
+                Price
+                <input type="text" name="price" id="price" placeholder="Enter the price of this service" value="@serv.price" required="required" title="Price is required" />
+            </label>
+
+            <label for="hourly">
+                Price Hourly?
+                <input type="radio" name="hourly" id="hourly_yes" value="1" @((serv.hourly == "1")?"checked=checked":"") />Yes
+                <input type="radio" name="hourly" id="hourly_no" value="0" @((serv.hourly != "1")?"checked=checked":"")/>No
+            </label>
+
+            <label for="description">
+                Description<br />
+                <textarea cols="60" rows="5" id="description" name="description" placeholder="Enter the description of this service">@serv.description</textarea>
+            </label>
+            <input type="submit" name="btnSubmit" id="btnSubmit" value="Save" />
+        </div>
+        @if (serv.ID > 0) {
+            <div class="tab_content" id="locations">
+                <span class="title">Matched Locations</span>
+                <table id="matchedLocations">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Phone</th>
+                            <th>E-Mail</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Admin.Location loc in locations) {
+                            <tr>
+                                <td>@loc.name</td>
+                                <td>@(loc.city + ", " + loc.States.Where(x => x.stateID.Equals(loc.stateID)).FirstOrDefault<Admin.State>().abbr)</td>
+                                <td>@loc.phone</td>
+                                <td>@loc.email</td>
+                                <td>
+                                    <a href="javascript:void(0)" title="Remove Location" class="removeLocation" data-locationID="@loc.locationID" data-serviceID="@serv.ID">Remove</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <span class="title">Other Locations</span>
+                <table id="otherLocations">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Phone</th>
+                            <th>E-Mail</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Admin.Location loc in all_locations) {
+                            <tr>
+                                <td>@loc.name</td>
+                                <td>@(loc.city + ", " + loc.States.Where(x => x.stateID.Equals(loc.stateID)).FirstOrDefault<Admin.State>().abbr)</td>
+                                <td>@loc.phone</td>
+                                <td>@loc.email</td>
+                                <td>
+                                    <a href="javascript:void(0)" title="Add @loc.name" class="addLocation" data-locationID="@loc.locationID" data-serviceID="@serv.ID">Add</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</form>
+
+<script src="/Admin/Scripts/custom/services.js" type="text/javascript"></script>

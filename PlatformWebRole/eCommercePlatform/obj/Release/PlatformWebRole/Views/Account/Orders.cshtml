@@ -1,0 +1,47 @@
+﻿@{
+    EcommercePlatform.Customer cust = ViewBag.cust;
+    if(cust == null){
+        cust = new EcommercePlatform.Customer();
+    }
+    
+    string error = ViewBag.error;
+    if(error == null){
+        error = "";
+    }
+    
+    ViewBag.Title = "Orders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="/Content/view_sass/account.css" rel="stylesheet" type="text/css" />
+<p class="error">@error</p>
+<ul class="tabs">
+    <li>
+        <a href="/Account" title="Basic Information">Account</a>
+    </li>
+    <li>
+        <a href="/Account/Orders" title="View Orders" class="active">Orders</a>
+    </li>
+</ul>
+<div class="tab_container">
+    <div class="tab_content">
+        <article class="order-heading">
+            <span class="title">Order #</span>
+            <div class="info">
+                <span class="date">Date Created</span>
+                <span class="total">Order Total</span>
+            </div>
+        </article>
+        @foreach (EcommercePlatform.Cart order in cust.Orders) {
+            <article class="order" data-id="@order.ID">
+                <span class="title">Order #@(order.ID)</span>
+                <div class="info">
+                    <span class="date">@Convert.ToDateTime(order.date_created)</span>
+                    <span class="total">@String.Format("{0:C}",order.getTotal())</span>
+                </div>
+            </article>
+        }
+        <div class="clearfix"></div>
+    </div>
+</div>
+<script src="/Scripts/custom/account.js" type="text/javascript"></script>

@@ -1,0 +1,59 @@
+﻿@{
+    Admin.Banner banner = ViewBag.banner;
+    if(banner == null){
+        banner = new Admin.Banner();
+    }
+
+    string error = "";
+    if (ViewBag.error != null) {
+        error = ViewBag.error;
+    }
+    
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/banner.manager.css" rel="stylesheet" type="text/css" />
+<span class="title">Edit Banner</span>
+
+@if (error != null && error.Length > 0) {
+    <div class="alert">
+        <a class="close" data-dismiss="alert">×</a>
+        <h4 class="alert-heading">Warning!</h4>
+        @error
+    </div>
+}
+
+<form class="admin_form" method="post" action="/Admin/Banner/Save/@banner.ID">
+    <label for="title">Title
+        <input type="text" name="title" id="title" value="@banner.title" required="required" title="Banner Title is required" placeholder="Enter title of banner" />
+    </label>
+    
+    <label for="image">
+        Image
+        <input type="text" name="image" id="image" class="imagefield" value="@banner.image" required="required" title="Banner image path must be set" placeholder="Enter the URL of the image to be used" />
+    </label>
+    
+    <label for="body">
+        Description
+        <input type="text" name="body" id="body" value="@banner.body" placeholder="Enter descriptive text for this banner" />
+    </label>
+
+    <label for="link">
+        Link
+        <input type="url" name="link" id="link" value="@banner.link" placeholder="Enter the URL that banner should link to" />
+    </label>
+
+    <!--label for="order">
+        Sort Order
+        <input type="number" name="order" id="order" value="@((banner.order == null)?ViewBag.banner_count:banner.order)" />
+    </label-->
+
+    <label for="isVisible">
+        Visible?
+        <input type="radio" name="isVisible" id="isVisible_yes" value="1" @((banner.isVisible == 1)?"checked=checked":"")" />Yes
+        <input type="radio" name="isVisible" id="isVisible_no" value="0" @((banner.isVisible == null || banner.isVisible == 0)?"checked=checked":"")" />No
+    </label>
+
+    <input type="submit" id="btnSubmit" name="btnSubmit" value="Save" />
+</form>
+<script src="/Admin/Scripts/custom/banner.manager.js" type="text/javascript"></script>

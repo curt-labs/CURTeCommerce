@@ -1,0 +1,99 @@
+﻿@{
+    EcommercePlatform.Models.PostWithCategories post = ViewBag.post;
+    if (post.meta_title == "") {
+        ViewBag.Title = post.post_title;
+    } else {
+        ViewBag.Title = post.meta_title;
+    }
+    if (post.meta_description != "") {
+        ViewBag.metadescription = post.meta_description;
+    }
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<EcommercePlatform.BlogCategory> categories = post.categories;
+    List<EcommercePlatform.Comment> comments = post.comments;
+    string catlist = "";
+    for (int i = 0; i < categories.Count(); i++) {
+        if (i == 0) {
+            catlist = "<a href=\"/Blog/Category/" + categories[i].name + "\">" + categories[i].name + "</a>";
+        } else {
+            if(i == (categories.Count() - 1)) {
+                catlist += " and " + "<a href=\"/Blog/Category/" + categories[i].name + "\">" + categories[i].name + "</a>";
+            } else {
+                catlist += ", " + "<a href=\"/Blog/Category/" + categories[i].name + "\">" + categories[i].name + "</a>";
+            }
+        }   
+    }
+    string message = Request.QueryString.Get("message");
+    string errors = Request.QueryString.Get("err");
+}
+<link href="/Content/view_sass/blog.css" rel="stylesheet" type="text/css" />
+
+@Html.Partial("_BlogNavigation")
+
+<div class="content">
+    <article class="post" id="post_@post.postID">
+        <span class="header">
+            @if (errors != null && errors.Trim() != "") {<p class="error">@errors</p>}
+            <h2>@post.post_title</h2>
+            <p class="byline">
+                By @post.author.first @post.author.last
+                <span>@String.Format("{0:MMMM d, yyyy} at {0:h:mm tt}", post.publishedDate.Value)</span>
+            </p>
+            @if (catlist.Length > 0) {
+                <p class="categories">Posted in: @Html.Raw(catlist)</p>
+            }
+        </span>
+        @Html.Raw(post.post_text)
+        <footer>
+            <p>@comments.Count() Comment@((comments.Count() != 1) ? "s" : "")  <a href="javascript:;" id="add_comment" >Add a Comment</a></p>
+        </footer>
+    </article>
+    <section id="comments">
+        @if (message != null && message.Trim() != "") {<p class="message">@message</p>}
+        <div id="comment_form">
+            <p class="header">Add a Comment</p>
+            <form method="post" action="/Blog/Post/Comment/@post.blogPostID" class="simple-form">
+                <label for="name">
+                    <span>Name <span class="req">*</span></span>
+                    <input type="text" name="name" id="name" class="placeholder" placeholder="Enter your name" value="@((Request.QueryString.Get("name") == null) ? "" : Request.QueryString.Get("name"))" required="required" title="Name is required" />
+                </label>
+                <label for="email">
+                    <span>Email</span>
+                    <input type="text" name="email" id="email" class="placeholder" placeholder="Enter your email" value="@((Request.QueryString.Get("email") == null) ? "" : Request.QueryString.Get("email"))" />
+                </label>
+                <label for="comment_text">
+                    <span>Comment <span class="req">*</span></span>
+                    <textarea name="comment_text" id="comment_text" class="placeholder" placeholder="Enter your comment" title="Comment is required" required="required">@((Request.QueryString.Get("comment_text") == null) ? "" : Request.QueryString.Get("comment_text"))</textarea>
+                </label>
+                <div id="comment_cont">
+                    <div style="display: block;margin-top: 20px;">
+                        @Html.Raw(EcommercePlatform.Models.ReCaptcha.GenerateCaptcha())
+                    </div>
+                    <input type="submit" id="submit_comment" value="Add Comment" />
+                    <p><span class="req">*</span> = required</p>
+                </div>
+            </form>
+        </div>
+        @foreach (EcommercePlatform.Comment comment in comments) {
+            <div class="comment">
+                <p class="header">
+                    @comment.name
+                    <span>Posted On: @String.Format("{0:MMM d, yyyy} at {0:h:mm tt}", comment.createdDate)</span>
+                </p>
+                <p>@comment.comment_text</p>
+            </div>
+        }
+    </section>
+</div>
+<span class="clear"></span>
+<script type="text/javascript">
+    $(function () {
+        $('#comment_cont').hide();
+        $('#add_comment').click(function () { $('#comment_cont').slideDown('fast'); })
+        $('#comment_text').css('height', '18px');
+        $('#comment_text').focus(function () {
+            $('#comment_cont').slideDown('fast');
+            $(this).css('height', '100px');
+        })
+    });
+</script>

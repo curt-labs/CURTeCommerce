@@ -1,0 +1,47 @@
+﻿@{
+    List<Admin.Models.SimplePricing> points = ViewBag.pricePoints;
+    if (points == null) {
+        points = new List<Admin.Models.SimplePricing>();
+    }
+    
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/price.manager.css" rel="stylesheet" type="text/css" />
+<span class="title">Price Management</span>
+
+<table class="priceTable">
+    <thead>
+        <tr>
+            <th>Part #</th>
+            <th>Price</th>
+            <th>Sale (Yes/No)</th>
+            <th>Sale Start</th>
+            <th>Sale End</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Admin.Models.SimplePricing point in points) {
+            <tr>
+                <td>@point.partID</td>
+                <td>@String.Format("{0:C}",point.price)</td>
+                <td>@((point.isSale == 1)?"Yes":"No")</td>
+                <td>@((point.isSale == 1)?point.sale_start:"")</td>
+                <td>@((point.isSale == 1)?point.sale_end:"")</td>
+                <td>
+                    @if (point.isSale == 0) {
+                        <a href="javascript:void(0)" title="Set Price" data-partID="@point.partID" class="setPrice">Update Price</a>
+                        <span>&nbsp|&nbsp;</span>
+                        <a href="javascript:void(0)" title="Set Sale" data-partID="@point.partID" class="setSale">Set Sale</a>
+                        <span>&nbsp|&nbsp;</span>
+                        <a href="javascript:void(0)" title="Set to List Price" data-partID="@point.partID" class="setList">Reset to List</a>
+                    } else {
+                        <a href="javascript:void(0)" title="Remove Sale" data-partID="@point.partID" data-price="@point.price" class="removeSale">Remove Sale Price</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script defer src="/Admin/Scripts/custom/price.manager.js"></script>

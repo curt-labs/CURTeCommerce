@@ -1,0 +1,503 @@
+﻿body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 13px;
+}
+
+article.tools{
+    border-bottom: 2px solid #bf3504;
+    height: 40px;
+    margin-bottom: 20px;
+    padding: 5px 5px 2px 5px;
+    line-height: 40px;
+}
+
+article.tools span.title{
+    font-size: 16px;
+    font-weight:bold;
+}
+
+article.tools span.title span{
+    color: #bf3504;
+    font-size: 13px;
+    font-weight:normal;
+    margin-left: 5px;
+}
+
+article.tools div.actions{
+    float:right;
+}
+
+article.tools div.actions a{
+    color: #bf3504;
+    font-size: 13px;
+    border: 1px solid #aaaaaa;
+    background: #f2f2f2;
+    -moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	text-align: center;
+	text-decoration: none;
+	display:inline-block;
+	width: 100px;
+	height: 25px;
+	line-height:25px;
+	margin: 0px 5px;
+}
+
+article.listing{
+    min-height:50px;
+    border-bottom: 2px solid #aaaaaa;
+    font-size: 11px;
+    padding: 5px;
+    overflow: hidden;
+}
+
+article.listing.hover{
+    background: #f2f2f2;
+    cursor: move;
+}
+
+article.listing span.folder {
+    float: left;
+    height: 6px;
+    width: 16px;
+    margin: 16px 10px 10px 0;
+    padding: 10px 5px 5px;
+    border-radius: 3px;
+    background-color: #EFCC7F;
+    position: relative;
+    border-left: 2px solid #E2BE76;
+    text-align: center;
+    font-size: 11px;
+}
+
+article.listing span.folder::before {
+    content: "";
+    left: 0px;
+    width: 100%;
+    height: 2px;
+    margin-top: -10px;
+    background-color: #E2BE76;
+    border-radius: 10px 10px 0 0;
+    position: absolute;
+    z-index: 5;   
+}
+
+article.listing span.folder::after {
+    content: "";
+    right: 2px;
+    width: 9px;
+    height: 4px;
+    top: -1px;
+    background-color: #E2BE76;
+    border-radius: 5px;
+    position: absolute;
+    z-index: 5;
+}
+
+article.listing span.name{
+    font-size: 13px;
+    line-height: 55px;
+}
+
+article.listing div.info{
+    display:inline-block;
+    min-height: 50px;
+    float: left;
+    width: 80%;
+}
+
+article.listing div.info span.filename{
+    line-height:40px;
+}
+
+article.listing div.info div{
+    margin-left: 20px;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+article.listing div.info div span.filename{
+    color:#bf3504;
+    margin-right: 20px;
+    display:inline-block;
+    width: 200px;
+}
+
+article.listing div.info div div.progress_container{
+    display:block;
+    width:100%;
+    background:#f2f2f2;
+    height: 25px;
+    line-height:20px;
+    position: relative;
+}
+
+article.listing div.info div span.text{
+float: left;
+z-index: 100;
+position: absolute;
+left: 0;
+display: block;
+width: 100%;
+text-align: center;
+line-height: 25px;
+color: #999;
+}
+
+article.listing div.info div span.progress{
+    display:inline-block;
+    background:#bf3504;
+    border: 1px solid #efefef;
+    text-align:center;
+    color:white;
+    height:25px;
+    box-shadow: 1px 1px 1px #eaeaea;
+    float: left;
+}
+
+article.listing div.info img{
+    width: 40px;
+    max-height:80px;
+    margin-right:10px;
+}
+
+article.lisiting div.info .link{
+    font-size: 13px;
+}
+
+article.listing div.info span.blobCount{
+    display: block;
+    font-size: 11px;
+}
+
+article.listing div.actions{
+    float:right;
+    line-height: 50px;
+    height:50px;
+}
+
+article.listing div.actions a{
+    color: #bf3504;
+    margin: 0px 4px;
+    display: inline-block;
+    width: 95px;
+    -ms-transition: 0.3s all ease-in-out;
+	-moz-transition: 0.3s all ease-in-out;
+	-webkit-transition: 0.3s all ease-in-out;
+	-o-transition: 0.3s all ease-in-out;
+	transition: 0.3s all ease-in-out;
+	text-align:center;
+	border: 1px solid transparent;
+	text-decoration: none;
+}
+
+article.listing div.actions a:hover{
+    border: 1px solid #aaaaaa;
+    background: #f2f2f2;
+    -moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+    /*box-shadow: 1px 2px 2px #aaaaaa;*/
+}
+
+a.modalClose, a.changeFolder{
+    margin-left: 10px;
+    font-size: 13px;
+    color: #bf3504;
+}
+
+#uploadArea{
+    width: 90%;
+    margin:auto;
+    height: 100px;
+    background: #aaaaaa;
+    border: 6px dashed #bf3504;
+    border-radius: 6px;
+    color: #bf3504;
+}
+
+#uploadArea.hover{
+    opacity: 0.8;   
+}
+
+#uploadArea span{
+    line-height:100px;
+    display:block;
+    text-align:center;
+    font-size: 24px;
+}
+
+ul.uploadList{
+    padding:0;
+    margin:0;
+    list-style:none;
+    margin-top: 10px;
+}
+
+ul.uploadList li{
+    border-bottom: 1px solid #aaaaaa;
+    min-height: 50px;
+    font-size: 12px;
+    padding: 4px 0px;
+}
+
+ul.uploadList li span.filename{
+    color: #bf3504;
+    display:block;
+}
+
+ul.uploadList li span.progress{
+    display: block;
+    height: 18px;
+    width: 100%;
+    text-align:center;
+}
+
+ul.uploadList li span.progress span.complete{
+    background: #bf3504;
+    border: 1px solid #f2f2f2;
+    -moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+    -moz-box-shadow: 1px 1px 1px #f2f2f2;
+	-webkit-box-shadow: 1px 1px 1px #f2f2f2;
+	-o-box-shadow: 1px 1px 1px #f2f2f2;
+	box-shadow: 1px 1px 1px #f2f2f2;
+    width: 100%;
+    display: block;
+    height: 20px;
+    color: white;
+}
+
+ul.uploadList li span.progress span.error{
+    background: #f2f2f2;
+    border: 1px solid #f2f2f2;
+    -moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+    -moz-box-shadow: 1px 1px 1px #f2f2f2;
+	-webkit-box-shadow: 1px 1px 1px #f2f2f2;
+	-o-box-shadow: 1px 1px 1px #f2f2f2;
+	box-shadow: 1px 1px 1px #f2f2f2;
+    width: 100%;
+    display: block;
+    height: 20px;
+    color: #bf3504;
+}
+
+ul#galleries {
+    list-style: none;
+    margin: 10px 0 0;
+    padding: 0;
+}
+
+ul#galleries li {
+    float: left;
+    position: relative;
+    margin: 3px;
+}
+
+ul#galleries li#dropzone {
+    position: relative;
+    text-align: center;
+    border: 3px dashed #888;
+    height: 171px;
+    width: 140px;
+    padding: 11px 7px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+ul#galleries li#dropzone span {
+    display: block;
+    text-align: center;
+    font-size: 24px;
+    color: #888;
+    line-height: 32px;
+}
+
+ul#galleries li#dropzone span.preserve {
+    position: absolute;
+    bottom: 5px;
+    left: 15px;
+    display: block;
+    text-align: center;
+    font-size: 12px;
+    color: #888;
+    line-height: 12px;
+}
+
+ul#galleries li#dropzone progress {
+    display: none;
+    width: 90%;
+    margin: 5px auto 0;
+}
+
+ul#galleries li ul.menu {
+    position: absolute;
+    list-style: none;
+    display: none;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    left: 0;
+    background-color: #eeeeee;
+    font-size: 11px;
+    width: 90px;
+    box-shadow: 2px 2px 5px #343434;
+    z-index: 100;
+    border: 1px solid #777;
+}
+
+ul#galleries li ul.menu li {
+    float: none;
+    display: block;
+}
+
+ul#galleries li ul.menu li a {
+    display: block;
+    padding: 2px 0 2px 4px;
+    border: 1px solid transparent;
+    color: #343434;
+    text-decoration: none;
+}
+
+ul#galleries li ul.menu li a:hover {
+    background-color: #ccc;
+}
+
+ul#galleries li a.gallery {
+    float: left;
+    width: 140px;
+    padding: 10px;
+    height: 160px;
+    border-radius: 8px;
+}
+
+ul#galleries li a:hover {
+    background: #ccc;
+}
+
+ul#galleries li.nogalleries {
+    float: none;
+    display: block;
+    font-size: 1.2em;
+}
+
+ul#galleries li a.gallery {
+    color: #222;
+    text-decoration: none;
+    position: relative;
+}
+
+ul#galleries li a.gallery span.folder {
+    display: block;
+    height: 65px;
+    width: 80%;
+    margin: 8px 0 10px;
+    padding: 10px 5px 5px;
+    /* css3 */
+    border-radius: 5px;   
+    background-color: #efcc7f;
+    position: relative;
+    border-left: 2px solid #e2be76;
+    text-align: center;
+    font-size: 11px;
+}
+
+ul#galleries li a.gallery span.folder::before {
+    content: "";
+    left: 0px;
+    width: 100%;
+    height: 3px;
+    margin-top:-10px;
+    background-color: #e2be76;
+    border-radius: 10px 10px 0 0;
+    position: absolute;
+    z-index: 5;
+}
+
+ul#galleries li a.gallery span.folder::after {
+    content: "";
+    right:3px;
+    width:30px;
+    height:12px;
+    top:-6px;
+    background-color: #e2be76;
+    border-radius: 5px;
+    position: absolute;
+    z-index: 5;
+}
+
+ul#galleries li span.galleryname, ul#galleries li span.filename {
+    display: block;
+    text-align: left;
+    font-size: 11px;
+}
+
+ul#galleries li span.galleryname strong, ul#galleries li span.filename strong {
+    display: block;
+}
+
+ul#galleries li a.gallery span.folder img.tall {
+    display: block;
+    margin: auto;
+    height: 100%;
+    width: auto;
+}
+
+ul#galleries li a.gallery span.folder img.wide {
+    display: block;
+    margin: auto;
+    width: 100%;
+    height: auto;
+}
+
+ul#galleries li.lifile {
+    width: 140px;
+    height: 190px;
+    padding: 0 10px 10px;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+}
+
+ul#galleries li.lifile span.filebox {
+    display: block;
+    margin: 10px auto;
+    width: 100%;
+    height: 86px;
+}
+
+ul#galleries li.lifile span.filebox img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    width: auto;
+    margin: 0;
+    max-height: 100%;
+}
+
+ul#galleries li.lifile span.filebox img.tall {
+    height: 100%;
+    width: auto;
+    margin: 0;
+}
+
+ul#galleries li.lifile span.filebox img.wide {
+}
+
+p.gallerybreadcrumbs {
+    display: block;
+    margin: 0 0 20px;
+}
+
+p.gallerybreadcrumbs a {
+    color: #000;
+    text-decoration: none;
+}
+
+p.gallerybreadcrumbs a:hover {text-decoration: underline;}
+div#renameForm {
+    display: none;
+}

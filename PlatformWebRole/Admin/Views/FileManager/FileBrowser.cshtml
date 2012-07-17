@@ -1,0 +1,131 @@
+﻿@using Admin.Models;
+@using Microsoft.WindowsAzure.StorageClient;
+@{
+    List<IListBlobItem> files = ViewBag.files ?? new List<IListBlobItem>();
+
+    DiscountBlobContainer container = ViewBag.container;
+    if (container == null) {
+        container = new DiscountBlobContainer {
+            Container = null,
+            BlobCount = 0
+        };
+    }
+    string[] img_types = { ".jpg", ".png", ".jpeg", ".bmp", ".gif" };
+    List<string> image_types = new List<string>(img_types);
+    List<string> usernames = ViewBag.usernames ?? new List<string>();
+    string[] folders = ViewBag.folders;
+
+    string ckeditor = ViewBag.CKEditor;
+    string func_num = ViewBag.CKEditorFuncNum;
+    string langCode = ViewBag.langCode;
+    string folderstr = "";
+    string qstring = "";
+    if(ckeditor != "") {
+        qstring = "CKEditor=" + ckeditor + "&CKEditorFuncNum=" + func_num + "&langCode=" + langCode;
+    }
+
+    List<Admin.Models.GroupedModule> modules = ViewBag.modules ?? new List<Admin.Models.GroupedModule>();
+    Admin.Profile profile = ViewBag.profile;
+
+    bool can_edit = false;
+    try {
+        if (modules.Where(x => x.path.ToUpper().Equals("/ADMIN/FILEMANAGER")).FirstOrDefault<Admin.Models.GroupedModule>().subs.Where(x => x.name.ToUpper().Equals("UPLOAD")).Count() > 0) {
+            can_edit = true;
+        }
+    } catch (Exception) { }
+    bool isRoot = true;
+
+    Layout = "~/Views/Shared/_FrameLayout.cshtml";
+}
+<link href="/Admin/Content/css/file.manager.css" rel="stylesheet" type="text/css" />
+<link href="/Admin/Content/css/editor.css" rel="stylesheet" type="text/css" />
+<span id="func_num" style="display:none">@func_num</span>
+<article class="tools">
+    <span class="title">
+        <a href="/Admin/FileManager/FileBrowser@((qstring != "") ? "?" + qstring : qstring)">File Manager</a>
+        @for(var i = 0; i < folders.Count(); i++) {
+            if (folders[i] != "") {
+                folderstr += folders[i];
+                <span>&gt;
+                @if(i == folders.Count() - 1) {
+                    @folders[i]
+                } else {
+                    <a href="/Admin/FileManager/FileBrowser?@((qstring != "") ? qstring + "&" : qstring)name=@folderstr">@folders[i]</a>
+                }
+                </span>
+                if (i < folders.Count() - 1) {
+                    folderstr += "/";
+                }
+                isRoot = false;
+            }
+        }
+    </span>
+    <div class="actions">
+        @if (can_edit && container.Container == null || (can_edit && container.Container != null && ((profile.username.Equals(container.Container.Name) || !usernames.Contains(container.Container.Name))))) {
+            <a href="javascript:void(0)" title="Create Folder" data-qstring="@qstring" data-uri="@folderstr" class="createFolder">Create Folder</a>
+        }
+    </div>
+</article>
+<div class="clearfix"></div>
+<ul id="galleries">
+    @if (!isRoot && can_edit && container.Container != null && ((profile.username.Equals(container.Container.Name) || !usernames.Contains(container.Container.Name)))) {
+        <li id="dropzone" data-uri="@folderstr">
+            <span class="plus">&#43;</span>
+            <span class="text">Drag File Here</span>
+            <progress id="loader" value="0" max="100"></progress >
+        </li>
+    }
+    @if (container.SubContainers.Count() > 0) {
+        foreach (DiscountBlobContainer g in container.SubContainers) {
+            <li class="ligallery" id="folder_@(UDF.getBlobFileName(g.uri))">
+                <a class="gallery" href="/Admin/FileManager/FileBrowser?@((qstring != "") ? qstring + "&" : qstring)name=@UDF.getFolderPath(g.uri)">
+                    <span class="folder contextmenu"></span>
+                    <span class="galleryname"><strong>@UDF.getBlobFileName(g.uri)</strong> @((g.SubContainers != null) ? g.SubContainers.Count() : 0) subfolders; @((g.SubContainers != null) ? g.BlobCount - g.SubContainers.Count() : g.BlobCount) files</span>
+                </a>
+                @if(can_edit && g.BlobCount == 0 && ((profile.username.Equals(g.Container.Name) || !usernames.Contains(g.Container.Name)))) {
+                    <ul class="menu">
+                        <li><a href="/Admin/FileManager/DeleteContainer?name=@g.Container.Name" data-name="@g.Container.Name" class="deleteContainer">Delete</a></li>
+                    </ul>
+                }
+            </li>
+        }
+    }
+    @if (files.Count() > 0) {
+        foreach (Microsoft.WindowsAzure.StorageClient.IListBlobItem file in files) {
+            <li class="lifile" id="file_@(UDF.getBlobFileName(file.Uri))">
+                <span class="filebox">
+                    @if (image_types.Contains(Path.GetExtension(file.Uri.ToString().ToLower()))) {
+                        <img src="@file.Uri" class="contextmenu" alt="@UDF.getBlobFileName(file.Uri)" />
+                    } else {
+                        <img src="/Admin/Content/img/FileNew.png" class="contextmenu" alt="@UDF.getBlobFileName(file.Uri)" />
+                    }
+                </span>
+                <span class="filename">
+                    <strong>@UDF.getBlobFileName(file.Uri)</strong> path: <a href="@file.Uri">link</a><br />
+                </span>
+                @if(can_edit && ((profile.username.Equals(container.Container.Name) || !usernames.Contains(container.Container.Name)))) {
+                    <ul class="menu">
+                        <li><a href="javascript:void(0)" title="Delete File" class="deleteBlob" data-id="file_@(UDF.getBlobFileName(file.Uri))" data-uri="@file.Uri">Delete File</a></li>
+                    </ul>
+                }
+            </li>
+        }
+    }
+    <li class="clear"></li>
+</ul>
+<div class="clear"></div>
+
+<script defer src="/Admin/Scripts/ckeditor/ckeditor.js"></script>
+<script defer src="/Admin/Scripts/ckeditor/adapters/jquery.js"></script>
+<script defer src="/Admin/Scripts/custom/file.manager.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.lifile').live('click', function () {
+            var uri, func_num;
+            func_num = $('#func_num').text();
+            var uri = $(this).find("span.filename a").attr('href').replace('http:','').replace('https:','');
+            window.opener.CKEDITOR.tools.callFunction(func_num, uri,"");
+            window.close();
+        });
+    });
+</script>

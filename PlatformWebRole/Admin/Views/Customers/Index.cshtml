@@ -1,0 +1,48 @@
+﻿@{
+    List<Admin.Customer> customers = ViewBag.custs;
+    if(customers == null){
+        customers = new List<Admin.Customer>();
+    }
+
+    string error = ViewBag.error;
+    if(error == null){
+        error = "";
+    }
+    
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/customer.manager.css" rel="stylesheet" type="text/css" />
+<span class="title">Manage Customers</span>
+
+@if (error.Length > 0) {
+    <p class="error">@error</p>
+}
+
+<table class="customerTable">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>E-Mail</th>
+            <th>Phone</th>
+            <th>Order Count</th>
+            <th>Date Joined</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Admin.Customer cust in customers) {
+            <tr>
+                <td>
+                    <a href="/Admin/Customers/Info/@cust.ID" title="View Customer">@(cust.fname + " " + cust.lname)</a>
+                </td>
+                <td>@cust.email</td>
+                <td>@cust.phone</td>
+                <td>@cust.Carts.Where(x => x.payment_id > 0).Count()</td>
+                <td>@Convert.ToDateTime(cust.dateAdded)</td>
+                <td>@((cust.isSuspended == 1)?"Suspended":"Active")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script defer src="/Admin/Scripts/custom/customer.manager.js"></script>

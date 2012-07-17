@@ -1,0 +1,37 @@
+﻿section span.title{
+    margin-bottom: 40px;
+    color: #bf3504;
+    font-size: 16px;
+    display:inline-block;
+}
+
+section a.add{
+    display:inline-block;
+    width: 200px;
+    height: 45px;
+    background:#bf3504;
+    margin: 0px 25px 40px 25px;
+    -moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+    text-align:center;
+    color: white;
+    text-decoration:none;
+    font-size: 24px;
+    font-weight:600;
+    line-height:45px;
+}
+
+section form.admin_form label input[type=radio]{
+    display:inline-block;
+    vertical-align: bottom;
+    margin-left: 10px;
+}
+
+img.banner {
+    width: 300px;
+    height: auto;
+    margin: auto;
+    display: block;
+    padding: 3px 0;
+}

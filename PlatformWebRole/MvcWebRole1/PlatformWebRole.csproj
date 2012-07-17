@@ -1,0 +1,611 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{836DBA86-BD2C-4F45-B3BD-4F8543FE2DD9}</ProjectGuid>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EcommercePlatform</RootNamespace>
+    <AssemblyName>EcommercePlatform</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AuthorizeNet, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\AuthorizeNet.dll</HintPath>
+    </Reference>
+    <Reference Include="AuthorizeNet.Helpers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\AuthorizeNet.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="AzureToolkit">
+      <HintPath>..\packages\AzureToolkit.2.4.10\lib\net40\AzureToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="EcmaScript.NET.modified">
+      <HintPath>..\packages\YUICompressor.NET-MsBuild-Task.1.7.0.0\lib\net35\EcmaScript.NET.modified.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.4.3.1\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="GCheckout, Version=2.5.0.7, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\GCheckout.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Diagnostics, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="Microsoft.WindowsAzure.StorageClient, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.5\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Norm">
+      <HintPath>..\packages\NoRM.0.9.8\lib\Norm.dll</HintPath>
+    </Reference>
+    <Reference Include="paypal_base, Version=5.6.76.0, Culture=neutral, PublicKeyToken=b37401294aaf5617, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\paypal_base.dll</HintPath>
+    </Reference>
+    <Reference Include="RouteMagic">
+      <HintPath>..\packages\RouteMagic.1.2\lib\net40\RouteMagic.dll</HintPath>
+    </Reference>
+    <Reference Include="RouteMagic.Mvc">
+      <HintPath>..\packages\RouteMagic.Mvc.1.2\lib\net40\RouteMagic.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Providers">
+      <HintPath>..\packages\System.Web.Providers.Core.1.0\lib\net40\System.Web.Providers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.WebPages.Deployment, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Yahoo.Yui.Compressor">
+      <HintPath>..\packages\YUICompressor.NET-MsBuild-Task.1.7.0.0\lib\net35\Yahoo.Yui.Compressor.dll</HintPath>
+    </Reference>
+    <Reference Include="Yahoo.Yui.Compressor.MsBuildTask">
+      <HintPath>..\packages\YUICompressor.NET-MsBuild-Task.1.7.0.0\lib\net35\Yahoo.Yui.Compressor.MsBuildTask.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AuthenticateController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BlogController.cs" />
+    <Compile Include="Controllers\CartController.cs" />
+    <Compile Include="Controllers\CategoriesController.cs" />
+    <Compile Include="Controllers\ContactController.cs" />
+    <Compile Include="Controllers\EDIController.cs" />
+    <Compile Include="Controllers\CustomerAuthController.cs" />
+    <Compile Include="Controllers\FAQController.cs" />
+    <Compile Include="Controllers\GlobalFunctionsController.cs" />
+    <Compile Include="Controllers\IndexController.cs" />
+    <Compile Include="Controllers\InfoController.cs" />
+    <Compile Include="Controllers\LocationsController.cs" />
+    <Compile Include="Controllers\Lookup.cs" />
+    <Compile Include="Controllers\NewsletterController.cs" />
+    <Compile Include="Controllers\PageController.cs" />
+    <Compile Include="Controllers\PartController.cs" />
+    <Compile Include="Controllers\PaymentController.cs" />
+    <Compile Include="Controllers\RepairController.cs" />
+    <Compile Include="Controllers\ReviewController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Controllers\ShareController.cs" />
+    <Compile Include="Controllers\TestimonialsController.cs" />
+    <Compile Include="Controllers\_404Controller.cs" />
+    <Compile Include="EcommercePlatform.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EcommercePlatform.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\Archive.cs" />
+    <Compile Include="Models\BlobManagement.cs" />
+    <Compile Include="Models\BlogCategory.cs" />
+    <Compile Include="Models\Cart.cs" />
+    <Compile Include="Models\Console.cs" />
+    <Compile Include="Models\ContactManagement.cs" />
+    <Compile Include="Models\ContentManagement.cs" />
+    <Compile Include="Models\ContentPage.cs" />
+    <Compile Include="Models\Invoice.cs" />
+    <Compile Include="Models\State.cs" />
+    <Compile Include="Models\GoogleCheckout.cs" />
+    <Compile Include="Models\Settings.cs" />
+    <Compile Include="Models\Country.cs" />
+    <Compile Include="Models\CURTAPI.cs" />
+    <Compile Include="Models\CURTAPI_Classes.cs" />
+    <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\DistributionCenter.cs" />
+    <Compile Include="Models\EDI.cs" />
+    <Compile Include="Models\FaqManagement.cs" />
+    <Compile Include="Models\Geocoding.cs" />
+    <Compile Include="Models\Location.cs" />
+    <Compile Include="Models\Logger.cs" />
+    <Compile Include="Models\NewsletterFunctions.cs" />
+    <Compile Include="Models\PasswordGenerator.cs" />
+    <Compile Include="Models\Paypal.cs" />
+    <Compile Include="Models\Post.cs" />
+    <Compile Include="Models\ReCaptcha.cs" />
+    <Compile Include="Models\SessionWorker.cs" />
+    <Compile Include="Models\Testimonials.cs" />
+    <Compile Include="Models\UDF.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebRole.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\AuthorizeNet.dll" />
+    <Content Include="bin\AuthorizeNet.Helpers.dll" />
+    <Content Include="Content\audio\bitches_please.mp3" />
+    <Content Include="Content\audio\bitches_please.wav" />
+    <Content Include="Content\audio\sp_player.swf" />
+    <Content Include="Content\DataTables\media\css\demo_page.css" />
+    <Content Include="Content\DataTables\media\css\demo_page.min.css" />
+    <Content Include="Content\DataTables\media\css\demo_table.css" />
+    <Content Include="Content\DataTables\media\css\demo_table.min.css" />
+    <Content Include="Content\DataTables\media\css\demo_table_jui.css" />
+    <Content Include="Content\DataTables\media\css\demo_table_jui.min.css" />
+    <Content Include="Content\DataTables\media\images\back_disabled.jpg" />
+    <Content Include="Content\DataTables\media\images\back_enabled.jpg" />
+    <Content Include="Content\DataTables\media\images\favicon.ico" />
+    <Content Include="Content\DataTables\media\images\forward_disabled.jpg" />
+    <Content Include="Content\DataTables\media\images\forward_enabled.jpg" />
+    <Content Include="Content\DataTables\media\images\sort_asc.png" />
+    <Content Include="Content\DataTables\media\images\sort_asc_disabled.png" />
+    <Content Include="Content\DataTables\media\images\sort_both.png" />
+    <Content Include="Content\DataTables\media\images\sort_desc.png" />
+    <Content Include="Content\DataTables\media\images\sort_desc_disabled.png" />
+    <Content Include="Content\Fonts\2848532f-bf3e-4430-aae1-bc0d1367eb84.svg" />
+    <Content Include="Content\Fonts\298a903d-4a78-456b-bbcc-f4f6c36611f5.svg" />
+    <Content Include="Content\Fonts\34153597-0d00-4984-ac4e-e9cdc8e6cc0c.svg" />
+    <Content Include="Content\Fonts\59c05ddc-99f9-44db-82ce-cb7f503b5110.svg" />
+    <Content Include="Content\Fonts\64c78c73-af6b-4166-8a8b-323fb6a10043.svg" />
+    <Content Include="Content\Fonts\66d3bbb2-4ca8-48e9-b707-f53f776ec476.svg" />
+    <Content Include="Content\Fonts\984fd618-379b-4681-9807-305f99bf6fd2.svg" />
+    <Content Include="Content\Fonts\9fb03fe8-9256-46ae-8b43-b91a0744ec93.svg" />
+    <Content Include="Content\Fonts\f0aba0f2-7ae4-47f0-94aa-6d62a938e55f.svg" />
+    <Content Include="Content\img\159.gif" />
+    <Content Include="Content\img\add_cart.png" />
+    <Content Include="Content\img\ajax-loader-small.gif" />
+    <Content Include="Content\img\ajax-loader.gif" />
+    <Content Include="Content\img\apickup.jpg" />
+    <Content Include="Content\img\baby_404.jpg" />
+    <Content Include="Content\img\bg.jpg" />
+    <Content Include="Content\img\buy_now.png" />
+    <Content Include="Content\img\camper.jpg" />
+    <Content Include="Content\img\cart.png" />
+    <Content Include="Content\img\curt.jpg" />
+    <Content Include="Content\img\curt_lifestyles\5thWheels.png" />
+    <Content Include="Content\img\curt_lifestyles\Accessories.jpg" />
+    <Content Include="Content\img\curt_lifestyles\BallMounts.jpg" />
+    <Content Include="Content\img\curt_lifestyles\bw_lifestyle.jpg" />
+    <Content Include="Content\img\curt_lifestyles\CargoManagement.jpg" />
+    <Content Include="Content\img\curt_lifestyles\CargoManagement2.jpg" />
+    <Content Include="Content\img\curt_lifestyles\GooseneckHitches.jpg" />
+    <Content Include="Content\img\curt_lifestyles\GooseneckHitches2.jpg" />
+    <Content Include="Content\img\curt_lifestyles\HeavyDuty.jpg" />
+    <Content Include="Content\img\curt_lifestyles\ReceiverHitches.jpg" />
+    <Content Include="Content\img\curt_lifestyles\Security.jpg" />
+    <Content Include="Content\img\curt_lifestyles\Security2.jpg" />
+    <Content Include="Content\img\curt_lifestyles\SpecializedTowing2.jpg" />
+    <Content Include="Content\img\curt_lifestyles\UnderstandingTowing.jpg" />
+    <Content Include="Content\img\curt_logo.png" />
+    <Content Include="Content\img\curt_logo_notag.png" />
+    <Content Include="Content\img\dilbert.png" />
+    <Content Include="Content\img\directions.jpg" />
+    <Content Include="Content\img\facebook.png" />
+    <Content Include="Content\img\faq_banner.png" />
+    <Content Include="Content\img\faq_banner_small.png" />
+    <Content Include="Content\img\Fax.png" />
+    <Content Include="Content\img\footer\amex.png" />
+    <Content Include="Content\img\footer\authorize.gif" />
+    <Content Include="Content\img\footer\authorize.png" />
+    <Content Include="Content\img\footer\discover.png" />
+    <Content Include="Content\img\footer\facebook_active.png" />
+    <Content Include="Content\img\footer\facebook_dark.png" />
+    <Content Include="Content\img\footer\faq_banner.png" />
+    <Content Include="Content\img\footer\faq_banner_small.png" />
+    <Content Include="Content\img\footer\freeshipping.jpg" />
+    <Content Include="Content\img\footer\google_checkout.png" />
+    <Content Include="Content\img\footer\mail-icon.png" />
+    <Content Include="Content\img\footer\mail.png" />
+    <Content Include="Content\img\footer\mastercard.png" />
+    <Content Include="Content\img\footer\paypal.png" />
+    <Content Include="Content\img\footer\sema.png" />
+    <Content Include="Content\img\footer\twitter_active.png" />
+    <Content Include="Content\img\footer\twitter_dark.png" />
+    <Content Include="Content\img\footer\visa.png" />
+    <Content Include="Content\img\footer\youtube_active.png" />
+    <Content Include="Content\img\footer\youtube_dark.png" />
+    <Content Include="Content\img\forgot_banner.png" />
+    <Content Include="Content\img\freeshipping.jpg" />
+    <Content Include="Content\img\h.jpg" />
+    <Content Include="Content\img\header-holder.png" />
+    <Content Include="Content\img\header-holder_400x60.png" />
+    <Content Include="Content\img\large-loader.gif" />
+    <Content Include="Content\img\login_banner.png" />
+    <Content Include="Content\img\logo.png" />
+    <Content Include="Content\img\mail-icon.png" />
+    <Content Include="Content\img\map.png" />
+    <Content Include="Content\img\mini_search_box_button.png" />
+    <Content Include="Content\img\mini_search_button.png" />
+    <Content Include="Content\img\module_list_hover.png" />
+    <Content Include="Content\img\nav_corner.png" />
+    <Content Include="Content\img\pageerror.gif" />
+    <Content Include="Content\img\pdf.png" />
+    <Content Include="Content\img\phone-icon.png" />
+    <Content Include="Content\img\phone.png" />
+    <Content Include="Content\img\reset.png" />
+    <Content Include="Content\img\review_stars\star_sprite.png" />
+    <Content Include="Content\img\save.png" />
+    <Content Include="Content\img\scroll_logo.png" />
+    <Content Include="Content\img\scroll_logo2.png" />
+    <Content Include="Content\img\search_box_button.png" />
+    <Content Include="Content\img\search_button.png" />
+    <Content Include="Content\img\sep.jpg" />
+    <Content Include="Content\img\signup_banner.png" />
+    <Content Include="Content\img\swatches\Avignon.png" />
+    <Content Include="Content\img\swatches\cape_fear.png" />
+    <Content Include="Content\img\swatches\honey_pot.png" />
+    <Content Include="Content\img\swatches\orange_blue_tomato.png" />
+    <Content Include="Content\img\swatches\sand_shade.png" />
+    <Content Include="Content\img\swatches\winter_road.png" />
+    <Content Include="Content\img\twitter.png" />
+    <Content Include="Content\img\view_details.png" />
+    <Content Include="Content\img\youtube.png" />
+    <Content Include="Content\shadowbox\close.png" />
+    <Content Include="Content\shadowbox\loading.gif" />
+    <Content Include="Content\shadowbox\next.png" />
+    <Content Include="Content\shadowbox\pause.png" />
+    <Content Include="Content\shadowbox\play.png" />
+    <Content Include="Content\shadowbox\previous.png" />
+    <Content Include="Content\shadowbox\shadowbox.css" />
+    <Content Include="Content\shadowbox\shadowbox.min.css" />
+    <Content Include="Content\site_nomount.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
+    <Content Include="Content\themes\base\jquery.ui.all.css" />
+    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
+    <Content Include="Content\themes\base\jquery.ui.base.css" />
+    <Content Include="Content\themes\base\jquery.ui.button.css" />
+    <Content Include="Content\themes\base\jquery.ui.core.css" />
+    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
+    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
+    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
+    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
+    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
+    <Content Include="Content\themes\base\jquery.ui.slider.css" />
+    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
+    <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\minified\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.accordion.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.all.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.base.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.button.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.core.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.datepicker.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.dialog.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.progressbar.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.resizable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.selectable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="Content\view_sass\404.css" />
+    <Content Include="Content\view_sass\account.css" />
+    <Content Include="Content\view_sass\auth.css" />
+    <Content Include="Content\view_sass\blog.css" />
+    <Content Include="Content\view_sass\cart.css" />
+    <Content Include="Content\view_sass\category.css" />
+    <Content Include="Content\view_sass\ie8.css" />
+    <Content Include="Content\view_sass\faq.css" />
+    <Content Include="Content\view_sass\home_page.css" />
+    <Content Include="Content\view_sass\locations.css" />
+    <Content Include="Content\view_sass\new_review.css" />
+    <Content Include="Content\view_sass\part.css" />
+    <Content Include="Content\view_sass\part_listing.css" />
+    <Content Include="Content\view_sass\search.css" />
+    <Content Include="Content\view_sass\share-email.css" />
+    <Content Include="Content\view_sass\testimonials.css" />
+    <Content Include="GCheckout.dll" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="log4net.dll" />
+    <Content Include="paypal_base.dll" />
+    <Content Include="robots.txt" />
+    <Content Include="Scripts\custom\account.js" />
+    <Content Include="Scripts\custom\account.min.js" />
+    <Content Include="Scripts\custom\archive.js" />
+    <Content Include="Scripts\custom\archive.min.js" />
+    <Content Include="Scripts\custom\auth.js" />
+    <Content Include="Scripts\custom\auth.min.js" />
+    <Content Include="Scripts\custom\category_parts.js" />
+    <Content Include="Scripts\custom\category_parts.min.js" />
+    <Content Include="Scripts\custom\checkout.js" />
+    <Content Include="Scripts\custom\checkout.min.js" />
+    <Content Include="Scripts\custom\global.js" />
+    <Content Include="Scripts\custom\global.min.js" />
+    <Content Include="Scripts\custom\homepage.js" />
+    <Content Include="Scripts\custom\homepage.min.js" />
+    <Content Include="Scripts\custom\locations.js" />
+    <Content Include="Scripts\custom\locations.min.js" />
+    <Content Include="Scripts\custom\new_review.js" />
+    <Content Include="Scripts\custom\new_review.min.js" />
+    <Content Include="Scripts\custom\part.js" />
+    <Content Include="Scripts\custom\part.min.js" />
+    <Content Include="Scripts\custom\part_listing.js" />
+    <Content Include="Scripts\custom\part_listing.min.js" />
+    <Content Include="Scripts\custom\plugins.js" />
+    <Content Include="Scripts\custom\plugins.min.js" />
+    <Content Include="Scripts\custom\search.js" />
+    <Content Include="Scripts\custom\search.min.js" />
+    <Content Include="Scripts\custom\testimonials.js" />
+    <Content Include="Scripts\custom\testimonials.min.js" />
+    <Content Include="Scripts\jquery-1.7-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.7.js" />
+    <Content Include="Scripts\jquery-1.7.min.js" />
+    <Content Include="Scripts\jquery-ui-1.8.16.js" />
+    <Content Include="Scripts\jquery-ui-1.8.16.min.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\less.js" />
+    <Content Include="Scripts\modernizr-2.0.6-development-only.js" />
+    <Content Include="Scripts\modernizr.js" />
+    <Content Include="Scripts\tools\jquery.bbq.min.js" />
+    <Content Include="Scripts\tools\jquery.cycle.js" />
+    <Content Include="Scripts\tools\jquery.dataTables.min.js" />
+    <Content Include="Scripts\tools\jquery.simplemodal.js" />
+    <Content Include="Scripts\tools\jquery.simplemodal.min.js" />
+    <Content Include="Scripts\tools\shadowbox.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\hitchdepotusa-16052012.zip" />
+    <None Include="Content\audio\bitches_please.ogg" />
+    <None Include="Content\DataTables\media\images\Sorting icons.psd" />
+    <Content Include="Content\Fonts\080109cd-e993-4dc4-9c21-b34766eba5aa.ttf" />
+    <Content Include="Content\Fonts\0a0a3b6d-c6d4-4867-b940-2fc5a433345f.eot" />
+    <Content Include="Content\Fonts\197ebbbd-d981-48a3-9e9a-8d21cc6fff21.eot" />
+    <Content Include="Content\Fonts\2e15409d-9ea0-43dd-bc85-d0c6284d3fd2.eot" />
+    <Content Include="Content\Fonts\49ff3af5-13b2-4add-8470-4cdac3cf650e.woff" />
+    <Content Include="Content\Fonts\5c3157e8-1685-449b-8e7d-ea65660cdffc.woff" />
+    <Content Include="Content\Fonts\689e269c-72ae-41f7-9ba9-97e17f883bd5.woff" />
+    <Content Include="Content\Fonts\73e6c08f-deb5-4d6f-827b-597a84046aa4.eot" />
+    <Content Include="Content\Fonts\75601e70-cd01-4069-8258-94c51650f588.woff" />
+    <Content Include="Content\Fonts\7658dda6-217a-406c-bcb8-7551f88e2c49.woff" />
+    <Content Include="Content\Fonts\7c244623-7559-4bf4-b3c4-bb6874d2acfa.ttf" />
+    <Content Include="Content\Fonts\7d69578b-ab0e-4986-af19-428861ada4e4.ttf" />
+    <Content Include="Content\Fonts\864373f8-943b-449d-a730-462eb66d7058.eot" />
+    <Content Include="Content\Fonts\8a120ae1-7a5b-484b-a170-f67812b59652.eot" />
+    <Content Include="Content\Fonts\8ffb54fb-49c1-474c-858e-1e2cf0505408.eot" />
+    <Content Include="Content\Fonts\91b45e0c-c450-4dd3-b05e-d27326ab1156.ttf" />
+    <Content Include="Content\Fonts\a6940b46-a224-4791-84c5-372aced917b7.ttf" />
+    <Content Include="Content\Fonts\b4127bd6-c223-4426-aa55-f931049c1924.woff" />
+    <Content Include="Content\Fonts\ba535a2e-9c93-4edc-9ed5-3f17f31e7b0b.woff" />
+    <Content Include="Content\Fonts\bc34c4cd-af2c-400d-b4d0-726e2d89f690.ttf" />
+    <Content Include="Content\Fonts\cff4adfd-f12d-4555-a2d9-229e87d6a056.ttf" />
+    <Content Include="Content\Fonts\d34aec13-9ff7-4660-9396-4537a6c7fd1a.eot" />
+    <Content Include="Content\Fonts\de4b0540-9702-4662-8f3a-228419485257.woff" />
+    <Content Include="Content\Fonts\ec796902-2e28-46d0-8bbd-071b83705a39.ttf" />
+    <Content Include="Content\Fonts\f0c81ebb-e6f4-4a1f-9354-06ac9ad7b262.woff" />
+    <Content Include="Content\Fonts\f919dd72-709f-485b-9fd7-fb9680f1a16c.ttf" />
+    <Content Include="Content\Fonts\fe030def-2cb4-435d-aa12-73917873ba1b.eot" />
+    <None Include="Content\less\bootstrap\adaptive.less" />
+    <None Include="Content\less\bootstrap\bootstrap.less" />
+    <None Include="Content\less\bootstrap\forms.less" />
+    <None Include="Content\less\bootstrap\patterns.less" />
+    <None Include="Content\less\bootstrap\preboot.less" />
+    <None Include="Content\less\bootstrap\reset.less" />
+    <None Include="Content\less\bootstrap\scaffolding.less" />
+    <None Include="Content\less\bootstrap\tables.less" />
+    <None Include="Content\less\bootstrap\type.less" />
+    <None Include="Content\less\Site.less" />
+    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\Order.cshtml" />
+    <Content Include="Views\Account\Orders.cshtml" />
+    <Content Include="Views\Authenticate\Forgot.cshtml" />
+    <Content Include="Views\Authenticate\Index.cshtml" />
+    <Content Include="Views\Blog\Author.cshtml" />
+    <Content Include="Views\Blog\Index.cshtml" />
+    <Content Include="Views\Blog\ViewArchive.cshtml" />
+    <Content Include="Views\Blog\ViewCategory.cshtml" />
+    <Content Include="Views\Blog\ViewPost.cshtml" />
+    <Content Include="Views\Blog\_BlogNavigation.cshtml" />
+    <Content Include="Views\Cart\Checkout.cshtml" />
+    <Content Include="Views\Cart\Index.cshtml" />
+    <Content Include="Views\Categories\Index.cshtml" />
+    <Content Include="Views\Categories\Parts.cshtml" />
+    <Content Include="Views\Contact\Index.cshtml" />
+    <Content Include="Views\FAQ\Index.cshtml" />
+    <Content Include="Views\FAQ\Topic.cshtml" />
+    <Content Include="Views\Index\Index.cshtml" />
+    <Content Include="Views\Info\Index.cshtml" />
+    <Content Include="Views\Locations\Index.cshtml" />
+    <Content Include="Views\Lookup\Index.cshtml" />
+    <Content Include="Views\Newsletter\Index.cshtml" />
+    <Content Include="Views\Newsletter\SignUp.cshtml" />
+    <Content Include="Views\Page\Index.cshtml" />
+    <Content Include="Views\Part\Index.cshtml" />
+    <Content Include="Views\Payment\Complete.cshtml" />
+    <Content Include="Views\Payment\Index.cshtml" />
+    <Content Include="Views\Payment\PayPalCheckout.cshtml" />
+    <Content Include="Views\Repair\Index.cshtml" />
+    <Content Include="Views\Review\New.cshtml" />
+    <Content Include="Views\Search\Index.cshtml" />
+    <Content Include="Views\Share\Index.cshtml" />
+    <Content Include="Views\_404\Index.cshtml" />
+    <Content Include="Views\Testimonials\Add.cshtml" />
+    <Content Include="Views\Testimonials\Index.cshtml" />
+    <Content Include="Views\Shared\_Cart.cshtml" />
+    <Content Include="Views\Shared\_CartNoQty.cshtml" />
+    <Content Include="Views\Shared\_CustomerForm.cshtml" />
+    <Content Include="Views\Shared\_PartListing.cshtml" />
+    <None Include="EcommercePlatform.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>EcommercePlatform.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="EcommercePlatform.dbml.layout">
+      <DependentUpon>EcommercePlatform.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\Logs\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>55466</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:55466/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

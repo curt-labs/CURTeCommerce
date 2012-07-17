@@ -1,0 +1,158 @@
+﻿@{
+    Admin.Invoice invoice = ViewBag.invoice ?? new Admin.Invoice();
+
+    ViewBag.Title = "Invoice #" + invoice.number;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/invoice.manager.css" rel="stylesheet" type="text/css" />
+<span class="title">Invoice #@invoice.number</span>
+@if (invoice.paid) {
+    <p class="void">Reconciled</p>
+} else {
+    <a class="button" href="/Admin/Invoice/Paid/@invoice.id" id="pay">Reconcile</a>
+}
+
+<ul class="tabs">
+    <li>
+        <a href="#order">Summary</a>
+    </li>
+    <li>
+        <a href="#items">Items</a>
+    </li>
+    <li>
+        <a href="#billto">Bill To</a>
+    </li>
+    <li>
+        <a href="#shipto">Ship To</a>
+    </li>
+</ul>
+<div class="tab_container">
+    <div class="tab_content admin_form" id="order">
+        <h2>@invoice.invoiceType</h2>
+        <div class="left">
+            <label>
+                Date Invoiced
+                <input type="text" value="@String.Format("{0:MM/dd/yyyy}",invoice.dateAdded)" readonly="readonly" />
+            </label>
+            <label>
+                Order ID
+                <input type="text" value="@invoice.orderID" readonly />
+            </label>
+            <label>
+                CURT Order Reference Number
+                <input type="text" value="@invoice.curtOrder" readonly />
+            </label>
+            <label>
+                Invoice Type
+                <input type="text" value="@invoice.invoiceType" readonly />
+            </label>
+            <label>
+                Invoice Terms Type
+                <input type="text" value="@invoice.termsType" readonly />
+            </label>
+            <label>
+                Invoice Terms
+                <input type="text" value="@invoice.termsDescription" readonly />
+            </label>
+        </div>
+        <div class="left">
+            <span class="title">Invoice Totals</span>
+            <span class="subdata"><span>Bill To Currency</span>@invoice.billToCurrency</span>
+            <span class="subdata"><span>Subtotal</span>@String.Format("{0:C}",invoice.subtotal)</span>
+            @foreach (Admin.InvoiceCode code in invoice.InvoiceCodes) {
+                <span class="subdata"><span>@code.type: @code.code - @code.description</span>@String.Format("{0:C}", code.value)</span>
+            }
+            <span class="subdata"><span>Sales Tax</span>@String.Format("{0:C}",invoice.salesTax)</span>
+            <br />
+            <span class="subdata"><span>Discount Due Date</span>@String.Format("{0:MM/dd/yyyy}",invoice.discountDueDate) (@invoice.discountDueDays Days)</span>
+            <span class="subdata"><span>Discount Percentage</span>@invoice.discountPercent%</span>
+            <span class="subdata"><span>Discount Amount</span>@String.Format("{0:C}",invoice.discount)</span>
+            <span class="subdata"><span>Discount Total</span>@String.Format("{0:C}", invoice.discountTotal)</span>
+
+            <br />
+            <span class="subdata"><span>Net Due Date</span>@String.Format("{0:MM/dd/yyyy}", invoice.netDueDate) (@invoice.netDueDays Days)</span>
+            <span class="subdata"><span>Net Total</span>@String.Format("{0:C}", invoice.total)</span>
+            
+            <span class="title">Number of Items</span>
+            <span class="data">@invoice.InvoiceItems.Count</span>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="tab_content" id="items">
+        @foreach (Admin.InvoiceItem item in invoice.InvoiceItems) {
+            <article>
+                <div class="info">
+                    <p>@item.partID</p>
+                    <p>@item.description</p>
+                </div>
+                <div class="pricing">
+                    <span class="price">@String.Format("{0:C}", item.price)</span>
+                    <span class="qty">x&nbsp;@item.quantity</span>
+                </div>
+            </article>
+        }
+    </div>
+    <div class="tab_content" id="billto">
+        <h3>Bill To</h3>
+        <label>
+            Name
+            <input type="text" value="@invoice.BillTo.first @invoice.BillTo.last" readonly />
+        </label>
+        <label>
+            Street
+            <input type="text" value="@invoice.BillTo.street1" readonly />
+        </label>
+        <label>
+            Street 2
+            <input type="text" value="@invoice.BillTo.street2" readonly />
+        </label>
+        <label>
+            City
+            <input type="text" value="@invoice.BillTo.city" readonly />
+        </label>
+        <label>
+            State/Province
+            <input type="text" value="@(invoice.BillTo.State1.abbr + " - " + invoice.BillTo.State1.state1)" readonly />
+        </label>
+        <label>
+            Country
+            <input type="text" value="@(invoice.BillTo.State1.Country.abbr + " - " + invoice.BillTo.State1.Country.name)" readonly />
+        </label>
+        <label>
+            Postal Code
+            <input type="text" value="@invoice.BillTo.postal_code" readonly />
+        </label>
+    </div>
+    <div class="tab_content" id="shipto">
+        <h3>Ship To</h3>
+        <label>
+            Name
+            <input type="text" value="@(invoice.ShipTo.first + " " + invoice.ShipTo.last)" readonly />
+        </label>
+        <label>
+            Street
+            <input type="text" value="@invoice.ShipTo.street1" readonly />
+        </label>
+        <label>
+            City
+            <input type="text" value="@invoice.ShipTo.city" readonly />
+        </label>
+        <label>
+            State/Province
+            <input type="text" value="@(invoice.ShipTo.State1.abbr + " - " + invoice.ShipTo.State1.state1)" readonly />
+        </label>
+        <label>
+            Country
+            <input type="text" value="@(invoice.ShipTo.State1.Country.abbr + " - " + invoice.ShipTo.State1.Country.name)" readonly />
+        </label>
+        <label>
+            Postal Code
+            <input type="text" value="@invoice.ShipTo.postal_code" readonly />
+        </label>
+        <label>
+            Phone
+            <input type="text" value="@invoice.ShipTo.street2" readonly />
+        </label>
+    </div>
+
+</div>

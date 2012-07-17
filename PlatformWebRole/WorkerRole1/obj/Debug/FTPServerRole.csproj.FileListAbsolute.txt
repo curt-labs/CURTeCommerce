@@ -1,0 +1,13 @@
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\WorkerRole1\bin\Debug\FTPServerRole.dll.config
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\WorkerRole1\bin\Debug\FTPServerRole.dll
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\WorkerRole1\bin\Debug\FTPServerRole.pdb
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\WorkerRole1\bin\Debug\AzureFtpServer.dll
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\WorkerRole1\bin\Debug\Microsoft.WindowsAzure.Diagnostics.dll
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\WorkerRole1\bin\Debug\Microsoft.WindowsAzure.StorageClient.dll
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\WorkerRole1\bin\Debug\msshrtmi.dll
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\WorkerRole1\bin\Debug\AzureFtpServer.pdb
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\WorkerRole1\bin\Debug\Microsoft.WindowsAzure.Diagnostics.xml
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\WorkerRole1\bin\Debug\Microsoft.WindowsAzure.StorageClient.xml
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\WorkerRole1\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\WorkerRole1\obj\Debug\FTPServerRole.dll
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\WorkerRole1\obj\Debug\FTPServerRole.pdb

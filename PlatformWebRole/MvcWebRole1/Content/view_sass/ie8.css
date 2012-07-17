@@ -1,0 +1,22 @@
+﻿header nav span.phone:after {
+    display: none;
+}
+
+header nav span.phone span:after {
+    display: none;
+}
+
+header nav span.phone:before {
+    display: none;
+}
+
+#curt_product div a.info{
+    background: transparent;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#60000000,endColorstr=#60000000);
+    zoom: 1;
+}
+
+#curt_product div a.info:hover{
+    background: transparent;
+    filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#60BF3504', EndColorStr='#60BF3504');
+}

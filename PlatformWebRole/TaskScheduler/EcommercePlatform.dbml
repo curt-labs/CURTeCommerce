@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ecom_platform" Class="EcommercePlatformDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=d49echki7t.database.windows.net;Initial Catalog=ecom_platform;Persist Security Info=True;User ID=hitchdepotusa" SettingsObjectName="TaskScheduler.Properties.Settings" SettingsPropertyName="ecom_platformConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.ScheduledTask" Member="ScheduledTasks">
+    <Type Name="ScheduledTask">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="url" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="runtime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="lastRan" Type="System.DateTime" DbType="DateTime NULL" CanBeNull="true" />
+      <Column Name="interval" Type="System.Int32" DbType="int NULL" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Setting" Member="Settings">
+    <Type Name="Setting">
+      <Column Name="settingID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="groupID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="value" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="isImage" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+</Database>

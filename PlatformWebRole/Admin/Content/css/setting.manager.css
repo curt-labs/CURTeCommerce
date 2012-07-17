@@ -1,0 +1,123 @@
+﻿body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 13px;
+}
+
+article.tools{
+    border-bottom: 2px solid #bf3504;
+    height: 40px;
+    margin-bottom: 20px;
+    padding: 5px 5px 2px 5px;
+    line-height: 40px;
+}
+
+article.tools span.title{
+    font-size: 16px;
+    color: #BF3504;
+}
+
+article.tools span.title span{
+    color: #bf3504;
+    font-size: 13px;
+    font-weight:normal;
+    margin-left: 5px;
+}
+
+article.tools div.actions{
+    float:right;
+}
+
+article.tools div.actions a{
+    color: #bf3504;
+    font-size: 13px;
+    border: 1px solid #aaaaaa;
+    background: #f2f2f2;
+    -moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	text-align: center;
+	text-decoration: none;
+	display:inline-block;
+	width: 100px;
+	height: 25px;
+	line-height:25px;
+	margin: 0px 5px;
+}
+
+.addSetting {
+    display: block;
+    clear: both;
+    font-size: 14px;
+    font-weight: bold;
+    color: #BF3504;
+    margin: 25px 0 0 20px;
+}
+
+.addSetting span {
+    color: #fff;
+    background: #BF3504;
+    border-radius: 17px;
+    padding: 1px 5px;
+    line-height: 14px;
+    height: 17px;
+    width: 17px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.addSetting:hover {
+    color: #BF3504;
+    text-decoration: none;
+}
+
+.admin_form #submitText, .admin_form #submitImage {
+    margin-right: 6px;
+    background: #BF3504;
+    border: 2px solid #C63707;
+    border-radius: 2px;
+    color: white;
+    font-size: 16px;
+    padding: 0px 10px;
+}
+
+ul.tabs li ul.menu, .tab_container .tab_content label span ul.menu {
+    position: absolute;
+    list-style: none;
+    display: none;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    left: 0;
+    background-color: #eeeeee;
+    font-size: 11px;
+    width: 90px;
+    box-shadow: 2px 2px 5px #343434;
+    z-index: 100;
+    border: 1px solid #777;
+}
+
+ul.tabs li ul.menu li, .tab_container .tab_content label span ul.menu li {
+    float: none;
+    display: block;
+}
+
+ul.tabs li ul.menu li a, .tab_container .tab_content label span ul.menu li a {
+    display: block;
+    padding: 2px 0 2px 4px;
+    border: 1px solid transparent;
+    color: #343434;
+    text-decoration: none;
+    margin: 0;
+}
+
+ul.tabs li ul.menu li a:hover, .tab_container .tab_content label span ul.menu li a:hover {
+    background-color: #ccc;
+}
+
+.admin_form label {
+	position: relative;
+}
+
+.admin_form label span {
+	position: relative;
+}

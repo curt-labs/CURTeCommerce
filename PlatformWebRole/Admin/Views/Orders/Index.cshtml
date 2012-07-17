@@ -1,0 +1,44 @@
+﻿@{
+    List<Admin.Cart> carts = ViewBag.carts;
+    if(carts == null){
+        carts = new List<Admin.Cart>();
+    }
+    
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/order.manager.css" rel="stylesheet" type="text/css" />
+<span class="title">Manage Orders</span>
+<a href="/Admin/Orders/Add" class="button" title="Add Order">Add Order</a>
+
+<table class="orderTable">
+    <thead>
+        <tr>
+            <th>Order #</th>
+            <th>Customer</th>
+            <th>Number of Items</th>
+            <th>Order Date</th>
+            <th>Payment Method</th>
+            <th>Status</th>
+            <th>Order Total</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Admin.Cart order in carts) {
+            <tr>
+                <td>@order.ID</td>
+                <td>@(order.Customer.fname + " " + order.Customer.lname)</td>
+                <td>@order.getCount()</td>
+                <td>@String.Format("{0:M/d/yyyy h:mm tt}", order.Payment.created)</td>
+                <td>@order.Payment.PaymentTypes.name</td>
+                <td>@((order.voided) ? "Void" : order.Payment.status)</td>
+                <td>@String.Format("{0:C}", order.getTotal())</td>
+                <td>
+                    <a class="btn" href="/Admin/Orders/Items/@order.ID">View</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script src="/Admin/Scripts/custom/order.manager.js"></script>

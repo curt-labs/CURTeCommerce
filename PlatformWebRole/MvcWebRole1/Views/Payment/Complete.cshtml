@@ -1,0 +1,72 @@
+﻿@{
+    EcommercePlatform.ContentPage page = ViewBag.page;
+    if (page == null) {
+        page = new EcommercePlatform.ContentPage();
+    }
+
+    EcommercePlatform.Cart order = ViewBag.order;
+    EcommercePlatform.Payment payment = ViewBag.payment;
+
+    decimal total = order.shipping_price;
+    
+    ViewBag.Title = "Payment Complete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Content/view_sass/cart.css" rel="stylesheet" type="text/css" />
+<div class="content">
+    <h2>Order Placed Successfully!</h2>
+    @Html.Raw(page.content)
+    <p>You can print this page for your records.</p>
+    <p><strong>Order ID:</strong> @order.ID</p>
+    <p><strong>Paid by:</strong> @payment.PaymentTypes.name on @String.Format("{0:M/d/yyyy} at {0:h:mm tt}",payment.created)</p>
+    <div class="address">
+        <span>Billing Address</span>
+        @order.Billing.first @order.Billing.last<br />
+        @order.Billing.street1<br />
+        @if (!String.IsNullOrEmpty(order.Billing.street2)) {
+            @order.Billing.street2<br />
+        }
+        @order.Billing.city, @order.Billing.State1.abbr @order.Billing.postal_code<br />
+        @order.Billing.State1.Country.name
+    </div>
+    <div class="address">
+        <span>Shipping Address</span>
+        @order.Shipping.first @order.Shipping.last<br />
+        @order.Shipping.street1<br />
+        @if (!String.IsNullOrEmpty(order.Shipping.street2)) {
+            @order.Shipping.street2<br />
+        }
+        @order.Shipping.city, @order.Shipping.State1.abbr @order.Shipping.postal_code<br />
+        @order.Shipping.State1.Country.name
+    </div>
+    <table id="cart">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th class="last">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (EcommercePlatform.CartItem item in order.CartItems) {
+                decimal price = item.quantity * item.price;
+                total += price;
+                <tr id="part-@item.partID">
+                    <td><a href="/Part/@item.partID">@item.shortDesc</a></td>
+                    <td class="quantity">@item.quantity</td>
+                    <td class="price">@String.Format("{0:C}", price)</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" class="shippingtype">(@order.shipping_type.Replace("_"," ").ToLower()) Shipping:</td>
+                <td class="price">@String.Format("{0:C}", order.shipping_price)</td>
+            </tr>
+            <tr>
+                <td colspan="2"><strong>Total:</strong></td>
+                <td class="price"><strong>@String.Format("{0:C}", total)</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

@@ -1,0 +1,113 @@
+.new_review h3{
+    float:left;
+    width: 300px;
+}
+
+#container #main #mid_col .new_review article.part{
+    float: left;
+    width: 400px;
+}
+
+.new_review .part .text{
+    float:left;
+    width: 240px;
+}
+
+.new_review .part .text span{
+    display:block;
+    margin-bottom: 10px;
+}
+
+#container #main #mid_col section.new_review article.part img{
+    float:right;
+    width: 125px;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    height: auto;
+}
+
+.new_review form{
+    width: 695px;
+    padding:20px;
+    margin-bottom:25px;
+}
+
+.new_review form label{
+    display:block;
+    height: 46px;
+    line-height:30px;
+}
+
+.new_review label span{
+    color: #ccc;
+    font-size: 11px;
+    line-height: 30px;
+    float:right;
+    margin-right: 20px;
+}
+
+.new_review label span.desc{
+    margin-right: 475px;
+
+    margin-left: 15px;
+    color: black;
+    font-size: 11px;
+}
+
+.new_review form input[type=text],.new_review form input[type=email], .new_review form textarea, .new_review form select{
+    display:block;
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    height: 20px;
+    line-height:15px;
+    width: 550px;
+    padding: 5px 15px 5px 5px;
+    background: white;
+    float:right;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.new_review form #rating{
+    width: 35px;
+    padding: 0px;
+}
+
+.new_review form input[type=text].error,.new_review form input[type=email].error, .new_review form textarea.error{
+    border: 1px solid #bf3504;
+    background:#FAFFBD;   
+}
+
+.new_review form textarea{
+    width: 675px;
+    height: 200px;
+    float:none;
+    margin-bottom: 20px;
+}
+
+.new_review form input[type=submit]{
+    background: #343434;
+    border:none;
+    color:white;
+    width: 100px;
+    height: 35px;
+    border-radius: 2px;
+    font-size: 16px;
+    font-weight:bold;
+    float:right;
+}
+
+.new_review .ra_button{
+    float:right;
+    line-height: 55px;
+    margin-right: 10px;
+    color: #343434;
+    font-size: 11px;
+    text-decoration:none;
+}
+
+.new_review .ra_button:hover{
+    text-decoration:underline;
+}

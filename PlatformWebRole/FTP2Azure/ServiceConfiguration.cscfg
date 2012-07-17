@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<ServiceConfiguration serviceName="FTP2Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration">
+  <Role name="FTPServerRole">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <!-- Configure your diagnostic store -->
+      <!-- <Setting name="DiagnosticsConnectionString" value="DefaultEndpointsProtocol=tcp;AccountName=hitchdepotusa;AccountKey=iIWnDyLlpUpufLtCBp6AnaRvPbe1y5v1EvXwZKku/TqtVUcEmFt4ayKmFpJCgeDBDDA9oiscz46d4+PrFjZd8g==" /> -->
+      <!-- Change these to point to your development or live storage -->
+      <Setting name="AccountKey" value="iIWnDyLlpUpufLtCBp6AnaRvPbe1y5v1EvXwZKku/TqtVUcEmFt4ayKmFpJCgeDBDDA9oiscz46d4+PrFjZd8g==" />
+      <Setting name="AccountName" value="hitchdepotusa" />
+      <Setting name="Mode" value="Live" />
+      <!-- You must change this to "Live" if you don't want to use development storage -->
+      <!-- No need to edit these unless specifically required (reserved for future use) -->
+      <Setting name="UseHttps" value="true" />
+      <Setting name="UseAsyncMethods" value="true" />
+      <Setting name="ProviderName" value="AzureBlobStorageProvider" />
+      <Setting name="BaseUri" value="" />
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>

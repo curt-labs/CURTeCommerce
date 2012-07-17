@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "New";
+    bool hide_layout = ViewBag.hide_layout;
+    int partID = ViewBag.partID;
+
+    EcommercePlatform.Models.APIPart part = ViewBag.part;
+    if(part == null){
+        part = new EcommercePlatform.Models.APIPart();   
+    }
+    
+    if(!hide_layout){
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    
+    string _err = ViewBag.err;
+    if (_err == null) {
+        _err = ""; 
+    }
+}
+<link href="/Content/view_sass/new_review.css" rel="stylesheet" type="text/css" />
+
+<section class="new_review">
+    <h3>Add a new review</h3>
+
+    <article class="part">
+        <div class="text">
+            <span>@part.shortDesc</span>
+            <a href="/Part/@part.partID" title="View Details">View Details</a>
+        </div>
+        <img src="https://www.curtmfg.com/CURTLibrary/@part.partID/images/@(part.partID)_300x225_a.jpg" alt="Part #@part.partID" />
+    </article>
+    <div class="clearfix"></div>
+
+    @if (_err.Length > 0) {
+        <p class="error">@_err</p>
+    }
+    
+    <form method="get" action="/Review/Submit/@partID">
+        <label for="rname">
+            Name
+            <input type="text" name="name" id="rname" value="@ViewBag.name" class="placeholder" placeholder="Enter your name" />
+            <span>(optional)</span>
+        </label>
+
+        <label for="remail">
+            E-Mail
+            <input type="email" name="email" id="remail" value="@ViewBag.email" class="placeholder" placeholder="Enter your e-mail address" />
+            <span>(optional)</span>
+        </label>
+
+        <label for="rsubject">
+            Subject
+            <input type="text" name="subject" id="rsubject" value="@ViewBag.subject" class="placeholder" placeholder="Title of Review" />
+        </label>
+
+        <label for="rating">
+            Rating
+            <span class="desc">out of 5.0</span>
+            <select name="rating" id="rating">
+                @for (int i = 5; i > 0; i--) { 
+                    <option @((i == ViewBag.rating) ? "selected=selected" : "")>@i</option>
+                }
+            </select>
+        </label>
+
+        <textarea rows="15" cols="50" name="review" class="placeholder" placeholder="Write new review...">@ViewBag.review</textarea>
+        <input type="submit" name="btnReview" id="btnReview" value="Submit" />
+        
+    </form>
+</section>
+@if (HttpContext.Current.IsDebuggingEnabled) {
+    <script src="/Scripts/custom/new_review.js" type="text/javascript"></script>
+} else {
+    <script src="/Scripts/custom/new_review.min.js" type="text/javascript"></script>
+}
