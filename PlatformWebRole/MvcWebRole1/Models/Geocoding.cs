@@ -37,10 +37,10 @@ namespace EcommercePlatform.Models {
         public static dynamic AddPlace(NewPlace place) {
             try {
                 string jsonPlace = new JavaScriptSerializer().Serialize(place);
-
-                StringBuilder sb = new StringBuilder(System.Configuration.ConfigurationManager.AppSettings["PLACE_API_DOMAIN"]);
+                Settings settings = new Settings();
+                StringBuilder sb = new StringBuilder(settings.Get("PlacesAPIDomain"));
                 sb.Append("add/json?sensor=false");
-                sb.Append("&key=" + System.Configuration.ConfigurationManager.AppSettings["GOOGLE_API_KEY"]);
+                sb.Append("&key=" + settings.Get("GoogleAPIKey"));
 
                 byte[] byteArr = Encoding.UTF8.GetBytes(jsonPlace);
 
@@ -91,10 +91,10 @@ namespace EcommercePlatform.Models {
                 reference = referenceCode
             };
             string json_reference = new JavaScriptSerializer().Serialize(place);
-
-            StringBuilder sb = new StringBuilder(System.Configuration.ConfigurationManager.AppSettings["PLACE_API_DOMAIN"]);
+            Settings settings = new Settings();
+            StringBuilder sb = new StringBuilder(settings.Get("PlacesAPIDomain"));
             sb.Append("delete/json?sensor=false");
-            sb.Append("&key=" + System.Configuration.ConfigurationManager.AppSettings["GOOGLE_API_KEY"]);
+            sb.Append("&key=" + settings.Get("GoogleAPIKey"));
 
             byte[] byteArr = Encoding.UTF8.GetBytes(json_reference);
 
@@ -125,7 +125,7 @@ namespace EcommercePlatform.Models {
                 WebClient wc = new WebClient();
                 StringBuilder sb = new StringBuilder();
                 sb.Append("https://maps.googleapis.com/maps/api/place/details/json?key=");
-                sb.Append(System.Configuration.ConfigurationManager.AppSettings["GOOGLE_API_KEY"]);
+                sb.Append(new Settings().Get("GoogleAPIKey"));
                 sb.Append("&sensor=false");
                 sb.Append("&reference=" + reference);
 

@@ -15,6 +15,8 @@
         errors = new List<string>();   
     }
 
+    Admin.Models.Settings settings = ViewBag.settings ?? new Admin.Models.Settings();
+
     bool failed = ViewBag.failed;
     if(failed == null){
         failed = false;
@@ -111,8 +113,8 @@
         </label-->
     } else {
         if (loc.places_id != null && loc.places_id.Length > 0) {
-            <a href="javascript:void(0)" title="Preview Places Listing" class="view-place-listing" data-reference="@loc.places_reference" data-key="@System.Configuration.ConfigurationManager.AppSettings["GOOGLE_API_KEY"]">View Place</a>
-            <a href="javascript:void(0)" title="Request to Delete Places Listing" class="delete-place-listing" data-key="@System.Configuration.ConfigurationManager.AppSettings["GOOGLE_API_KEY"]">Delete Place</a>
+            <a href="javascript:void(0)" title="Preview Places Listing" class="view-place-listing" data-reference="@loc.places_reference" data-key="@settings.Get("GoogleAPIKey")">View Place</a>
+            <a href="javascript:void(0)" title="Request to Delete Places Listing" class="delete-place-listing" data-key="@settings.Get("GoogleAPIKey")">Delete Place</a>
         } else if (loc.latitude != null && loc.longitude != null && loc.latitude != 0 && loc.longitude != 0) {
             <a href="javascript:void(0)" title="View on Map" class="view-map" data-latitude="@loc.latitude" data-longitude="@loc.longitude">View Map</a>
             <div id="map"></div>

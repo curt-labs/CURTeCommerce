@@ -7,7 +7,7 @@ namespace Admin.Models {
     public class PriceManagement {
 
         private string api_key = new Settings().Get("CURTAPIKey");
-        private string api_domain = System.Configuration.ConfigurationManager.AppSettings["CURT_API_DOMAIN"];
+        private string api_domain = new Settings().Get("CURTAPIDOMAIN");
         private string customerID = new Settings().Get("CURTAccount");
 
         internal List<SimplePricing> GetPricing() {

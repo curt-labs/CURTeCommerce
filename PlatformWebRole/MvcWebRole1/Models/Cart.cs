@@ -488,7 +488,9 @@ namespace EcommercePlatform
             try {
                 string image = "";
                 WebClient wc = new WebClient();
-                StringBuilder sb = new StringBuilder(System.Configuration.ConfigurationManager.AppSettings["CURT_API_DOMAIN"]);
+                Settings settings = new Settings();
+
+                StringBuilder sb = new StringBuilder(settings.Get("CURTAPIDOMAIN"));
                 sb.AppendFormat("GetPart?partID={0}&dataType=JSON", this.partID);
 
                 string resp = wc.DownloadString(sb.ToString());

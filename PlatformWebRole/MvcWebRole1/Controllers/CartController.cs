@@ -292,17 +292,18 @@ namespace EcommercePlatform.Controllers {
 
         public ShippingResponse getShipping() {
             Customer customer = new Customer();
+            Settings settings = new Settings();
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
                 Response.Redirect("/Authenticate");
             }
 
             FedExAuthentication auth = new FedExAuthentication {
-                AccountNumber = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["FedExAccount"]),
-                Key = System.Configuration.ConfigurationManager.AppSettings["FedExKey"],
-                Password = System.Configuration.ConfigurationManager.AppSettings["FedExPassword"],
+                AccountNumber = Convert.ToInt32(settings.Get("FedExAccount")),
+                Key = settings.Get("FedExKey"),
+                Password = settings.Get("FedExPassword"),
                 CustomerTransactionId = "",
-                MeterNumber = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["FedExMeter"])
+                MeterNumber = Convert.ToInt32(settings.Get("FedExMeter"))
             };
 
             customer.Cart.BindAddresses();

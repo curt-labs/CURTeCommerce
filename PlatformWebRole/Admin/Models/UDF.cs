@@ -58,7 +58,7 @@ namespace Admin.Models {
             sb.Append("<hr /><br />");
             sb.Append("<p style='font-size:11px'>If you feel this was a mistake please disregard this e-mail.</p>");
 
-            string[] tos = { System.Configuration.ConfigurationManager.AppSettings["support_email"] };
+            string[] tos = { settings.Get("SupportEmail") };
             SendEmail(settings.Get("NoReplyEmailAddress"), tos, "Bug submitted from " + HttpContext.Current.Request.Url.Host, true, sb.ToString());
         }
 

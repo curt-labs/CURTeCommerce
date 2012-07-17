@@ -286,8 +286,9 @@ namespace EcommercePlatform.Models {
             ShippingResponse response = new ShippingResponse();
             try {
                 WebClient wc = new WebClient();
+                Settings settings = new Settings();
                 wc.Headers["Content-type"] = "application/x-www-form-urlencoded";
-                string URI = System.Configuration.ConfigurationManager.AppSettings["CURT_API_SHIPPING_DOMAIN"] + "GetShipping";
+                string URI = settings.Get("CURTAPISHIPPINGDOMAIN") + "GetShipping";
                 string parameters = "dataType=JSON";
                 parameters += "&auth=" + Newtonsoft.Json.JsonConvert.SerializeObject(auth);
                 parameters += "&origin=" + Newtonsoft.Json.JsonConvert.SerializeObject(origin);
@@ -304,7 +305,7 @@ namespace EcommercePlatform.Models {
 
         internal static List<string> GetShippingTypes() {
             try {
-                StringBuilder sb = new StringBuilder(System.Configuration.ConfigurationManager.AppSettings["CURT_API_SHIPPING_DOMAIN"]);
+                StringBuilder sb = new StringBuilder(new Settings().Get("CURTAPISHIPPINGDOMAIN"));
                 sb.Append("GenerateJSONServiceTypes");
                 WebClient wc = new WebClient();
                 string resp = wc.DownloadString(sb.ToString());
@@ -317,7 +318,8 @@ namespace EcommercePlatform.Models {
         }
 
         private static string getAPIPath() {
-            string API = ConfigurationManager.AppSettings["CURT_API_DOMAIN"];
+            Settings settings = new Settings();
+            string API = settings.Get("CURTAPIDOMAIN");
             if (isSecure()) {
                 return API.Replace("http:", "https:");
             }

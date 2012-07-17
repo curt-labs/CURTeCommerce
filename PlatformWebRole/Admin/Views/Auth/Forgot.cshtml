@@ -51,7 +51,7 @@
     <img src="/Admin/Content/img/forgot_pass_banner.png" class="banner" alt="Retrieve your Account" />
     <form method="post" action="/Admin/Auth/ForgotSubmission">
         @if (failed) {
-            <span class="error">There was an error while generating a new password for your account. Please contact <a href="mailto:@(System.Configuration.ConfigurationManager.AppSettings["support_email"])" title="Technical Support">CURT Support</a>.</span>
+            <span class="error">There was an error while generating a new password for your account. Please contact <a href="mailto:@(settings.Get("SupportEmail"))" title="Technical Support">CURT Support</a>.</span>
         }
         <label for="email">
             E-Mail Address<br />
