@@ -203,13 +203,19 @@ label[for=bresidential] input, label[for=sresidential] input, #shipping_type lab
     margin: 30px 50px;
 }
 
-#ccform .left {
+div.paymentForm .simple-form fieldset {
+    background: none;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+div.paymentForm .left {
     padding-right: 62px;
     border-right: 1px solid #aaa;
     position: relative;
 }
 
-#ccform .left:after {
+div.paymentForm .left:after {
     content: "OR";
     background-color: #f2f2f2;
     color: #aaa;
@@ -221,7 +227,17 @@ label[for=bresidential] input, label[for=sresidential] input, #shipping_type lab
     font-size: 18px;
 }
 
-#ccform p.paymentHeader {
+div.paymentForm .right {
+    padding-top: 25px;
+}
+
+div.paymentForm {
+    background: #F2F2F2;
+    padding: 10px 35px;
+    margin-bottom: 20px;
+}
+
+div.paymentForm p.paymentHeader {
 	font-size: 16px;
 	margin: 0;
 	text-transform: uppercase;
@@ -229,14 +245,19 @@ label[for=bresidential] input, label[for=sresidential] input, #shipping_type lab
 	color: #aaa;
 }
 
-#ccform .right p.paymentHeader {
+div.paymentForm .right p.paymentHeader {
     padding-left: 50px;
-}
-
-#ccform .left p.paymentHeader {
     padding-bottom: 30px;
 }
 
-#ccform .ccimg {
+div.paymentForm .right form {
+    margin-left: 50px;
+}
+
+div.paymentForm .left p.paymentHeader {
+    padding-bottom: 30px;
+}
+
+div.paymentForm .ccimg {
     padding-bottom: 15px;
 }

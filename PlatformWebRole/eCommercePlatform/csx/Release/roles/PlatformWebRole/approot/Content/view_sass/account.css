@@ -70,7 +70,7 @@ article.order div.info span:last-child{
 
 .address {
     background-color: #F2F2F2;
-    padding: 14px 35px 10px;
+    padding: 14px 35px 18px;
     margin-bottom: 20px;
     display: block;
     position: relative;
@@ -202,4 +202,67 @@ article.order div.info span:last-child{
 #container #main #mid_col #items article.totals span.value:last-child{
     color: #FA241A;
     font-size: 14px;
+}
+
+.right .scroller span.banner {
+    font-size: 18px;
+    display:block;
+    padding: 0px 0px 5px 35px;
+    background: url('/Content/img/faq_banner_small.png') no-repeat;
+    height: 51px;
+    line-height:35px;
+    width: 210px;
+    color:white;
+    position: relative;
+    left: -22px;
+}
+
+.right .scroller a.new-address {
+    display: block;
+    text-align: center;
+    font-size: 16px;
+}
+
+.address a.delete {
+    position: absolute;
+    top: 0px;
+    right: 3px;
+    color: #111;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.address a.delete:hover {
+	font-weight: bold;
+}
+
+.address a.billing {
+	left: 5px;
+	right: auto;
+}
+
+label[for=residential] {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    min-height: 25px;
+}
+
+label[for=residential] input {
+    display:inline;
+    vertical-align: middle;
+    margin-right: 10px;
+    width: auto;
+}
+
+.left .cancel, .simple-form input.cancel {
+    background-color: #E64D2D;
+    font-size: 16px;
+    margin: 25px 0 0 20px;
+    border-radius: 2px;
+    height: 30px;
+}
+
+
+.simple-form input[type="submit"]#btnAddAddress {
+    float: left;
 }

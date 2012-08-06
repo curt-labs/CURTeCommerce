@@ -131,7 +131,7 @@ $(function () {
                 });
             } else {
                 $('div.tab_container div.tab_content:first').show();
-                $('ul.tabs li:first a').addClass('active');
+                $('ul.tabs').not('ul.nojs').find('li:first a').addClass('active');
                 if ($('div.part_container').get() !== undefined && $('div.part_container').get().length > 0) {
                     $('div.part_tab_container li:first a').addClass('active');
                     $('div.part_container div.part_content:first').show();
@@ -634,7 +634,7 @@ $(function () {
         validateForm($(this).closest('.simple-form'));
     });
 
-    $('ul.tabs li a:first').addClass('active');
+    $('ul.tabs').not('ul.nojs').find('li a:first').addClass('active');
     $('div.tab_container div.tab_content').hide();
     $('div.tab_container div.tab_content:first').addClass('active');
 

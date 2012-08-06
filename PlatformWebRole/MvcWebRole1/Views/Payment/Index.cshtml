@@ -16,67 +16,73 @@
         <p class="message">@ViewBag.message</p>
     }
     @if (cart.CartItems.Count > 0) {
-        <form class="simple-form" id="ccform" action="/Payment/Authorize" method="post">
-            <fieldset>
-                <legend>Payment Information</legend>
-                <div class="left">
-                    <p class="paymentHeader">Pay By Credit Card</p>
-                    <img class="ccimg" src="/Content/img/footer/amex.png" alt="American Express" />
-                    <img class="ccimg" src="/Content/img/footer/mastercard.png" alt="Mastercard" />
-                    <img class="ccimg" src="/Content/img/footer/visa.png" alt="Visa" />
-                    <img class="ccimg" src="/Content/img/footer/discover.png" alt="Discover Card" />
+    <div class="paymentForm">
+        <div class="left">
+            <form class="simple-form" id="ccform" action="/Payment/Authorize" method="post">
+                <fieldset>
+                    <legend>Payment Information</legend>
+                        <p class="paymentHeader">Pay By Credit Card</p>
+                        <img class="ccimg" src="/Content/img/footer/amex.png" alt="American Express" />
+                        <img class="ccimg" src="/Content/img/footer/mastercard.png" alt="Mastercard" />
+                        <img class="ccimg" src="/Content/img/footer/visa.png" alt="Visa" />
+                        <img class="ccimg" src="/Content/img/footer/discover.png" alt="Discover Card" />
 
-                    <label for="first">
-                        First Name on Card
-                        <input type="text" id="first" name="first" class="placeholder" placeholder="Enter your First Name" autocomplete="off" value="@ViewBag.Cart.Billing.first" required title="First Name on Card is required"/>
-                    </label>
-                    <label for="last">
-                        Last Name on Card
-                        <input type="text" id="last" name="last" class="placeholder" placeholder="Enter your Last Name" autocomplete="off" value="@ViewBag.Cart.Billing.last" required title="Last Name on Card is required" />
-                    </label>
-                    <label for="cardnumber">
-                        Credit Card Number
-                        <input type="text" id="cardnumber" name="cardnumber" class="placeholder" placeholder="Enter your Credit Card Number" value="" autocomplete="off" required title="Credit Card Number is required" />
-                    </label>
-                    <label for="expiration">
-                        Expiration Date<br />
-                        <select name="expiremonth" id="expiremonth" required title="Expiration Date is required">
-                            @foreach (int month in ViewBag.months) {
-                                <option value="@month" @((DateTime.Now.Month == month) ? "selected=selected" : "")>@month</option>
-                            }
-                        </select>
-                        <span id="monthsep">/</span>
-                        <select name="expireyear" id="expireyear" required title="Expiration Date is required">
-                            @foreach (int year in ViewBag.yearlist) {
-                                <option value="@year.ToString().Substring(2)">@year</option>
-                            }
-                        </select>
-                    </label>
-                    <label for="cvv">
-                        CVV
-                        <input type="text" id="cvv" name="cvv" autocomplete="off" required title="CVV Code is required" />
-                    </label>
-                </div>
-                <div class="right options">
-                    <p class="paymentHeader">Choose a Payment Option</p>
-                    @if (ViewBag.settings.Get("GoogleMerchantId") != "") {
-                        <a href="/Payment/Google" id="gCheckout">
-                            @if (Request.Url.Host.Contains("127.0.0") || Request.Url.Host.Contains("localhost")) {
-                                <img src="https://checkout.google.com/buttons/checkout.gif?merchant_id=@ViewBag.settings.Get("GoogleDevMerchantId")&w=180&h=46&style=trans&variant=text&loc=en_US" alt="Google Checkout" />
-                            } else {
-                                <img src="https://checkout.google.com/buttons/checkout.gif?merchant_id=@ViewBag.settings.Get("GoogleMerchantId")&w=180&h=46&style=trans&variant=text&loc=en_US" alt="Google Checkout" />
-                            }
-                        </a>
-                    }
-                    @if (ViewBag.settings.Get("PayPalAPIUserName") != "") {
-                        <a href="/Payment/PayPal" id="ppCheckout">
-                            <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Pay With PayPal" />
-                        </a>
-                    }
-                </div>
-                <div class="clearfix"></div>
-                <input type="submit" class="button" id="paymentSubmit" value="Submit" />
-            </fieldset>
-        </form>
+                        <label for="first">
+                            First Name on Card
+                            <input type="text" id="first" name="first" class="placeholder" placeholder="Enter your First Name" autocomplete="off" value="@ViewBag.Cart.Billing.first" required title="First Name on Card is required"/>
+                        </label>
+                        <label for="last">
+                            Last Name on Card
+                            <input type="text" id="last" name="last" class="placeholder" placeholder="Enter your Last Name" autocomplete="off" value="@ViewBag.Cart.Billing.last" required title="Last Name on Card is required" />
+                        </label>
+                        <label for="cardnumber">
+                            Credit Card Number
+                            <input type="text" id="cardnumber" name="cardnumber" class="placeholder" placeholder="Enter your Credit Card Number" value="" autocomplete="off" required title="Credit Card Number is required" />
+                        </label>
+                        <label for="expiration">
+                            Expiration Date<br />
+                            <select name="expiremonth" id="expiremonth" required title="Expiration Date is required">
+                                @foreach (int month in ViewBag.months) {
+                                    <option value="@month" @((DateTime.Now.Month == month) ? "selected=selected" : "")>@month</option>
+                                }
+                            </select>
+                            <span id="monthsep">/</span>
+                            <select name="expireyear" id="expireyear" required title="Expiration Date is required">
+                                @foreach (int year in ViewBag.yearlist) {
+                                    <option value="@year.ToString().Substring(2)">@year</option>
+                                }
+                            </select>
+                        </label>
+                        <label for="cvv">
+                            CVV
+                            <input type="text" id="cvv" name="cvv" autocomplete="off" required title="CVV Code is required" />
+                        </label>
+                        <input type="submit" class="button" id="paymentSubmit" value="Submit" />
+                    </fieldset>
+                </form>
+            </div>
+            <div class="right options">
+                <p class="paymentHeader">Choose a Payment Option</p>
+                @if (ViewBag.settings.Get("GoogleMerchantId") != "" && cart.Billing.State1.Country.abbr == "US") {
+                    <script src="https://checkout.google.com/files/digital/ga_post.js" type="text/javascript"></script>
+                    <form action="/Payment/Google" method="POST" onsubmit="_gaq.push(function() {var pageTracker = _gaq._getAsyncTracker();setUrchinInputCode(pageTracker);});">
+                        <input type="hidden" name="cart" value="...">
+                        <input type="hidden" name="signature" value="...">
+                        <input type="hidden" name="analyticsdata" value="">
+                        @if (Request.Url.Host.Contains("127.0.0") || Request.Url.Host.Contains("localhost")) {
+                            <input type="image" name="Google Checkout" alt="Fast checkout through Google" src="https://checkout.google.com/buttons/checkout.gif?merchant_id=@ViewBag.settings.Get("GoogleDevMerchantId")&w=180&h=46&style=trans&variant=text&loc=en_US" alt="Google Checkout" height="46" width="180" />
+                        } else {
+                            <input type="image" name="Google Checkout" alt="Fast checkout through Google" src="https://checkout.google.com/buttons/checkout.gif?merchant_id=@ViewBag.settings.Get("GoogleMerchantId")&w=180&h=46&style=trans&variant=text&loc=en_US" alt="Google Checkout" height="46" width="180" />
+                        }
+                    </form>
+                }
+                @if (ViewBag.settings.Get("PayPalAPIUserName") != "") {
+                    <a href="/Payment/PayPal" id="ppCheckout">
+                        <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Pay With PayPal" />
+                    </a>
+                }
+            </div>
+            <div class="clearfix"></div>
+        </div>
     }
 </div>

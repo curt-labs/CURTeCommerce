@@ -13,6 +13,8 @@ namespace EcommercePlatform.Models {
                 return false;
             }
             WebRequest req = WebRequest.Create(path);
+            req.Proxy = null;
+
             req.Method = "HEAD";
 
             try {

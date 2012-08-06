@@ -292,14 +292,12 @@ namespace Admin
 
         internal void SetTax() {
             decimal tax = 0;
-            if (this.Shipping.State1.state1.ToLower() == "texas") {
-                tax = (this.GetSubTotal() * Convert.ToDecimal(0.0825));
+            tax = ((this.GetSubTotal() + this.shipping_price) * (this.Billing.State1.taxRate / 100));
 
-                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-                Cart c = db.Carts.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<Cart>();
-                c.tax = tax;
-                db.SubmitChanges();
-            }
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Cart c = db.Carts.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<Cart>();
+            c.tax = tax;
+            db.SubmitChanges();
 
             this.tax = tax;
         }

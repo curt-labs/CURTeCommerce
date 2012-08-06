@@ -22,6 +22,7 @@ namespace Admin {
             string url = this.url;
             url += "?lastRan=" + ((this.lastRan != null) ? String.Format("{0:MMddyyyyHHmmss}", this.lastRan) : "");
             WebClient wc = new WebClient();
+            wc.Proxy = null;
             wc.DownloadString(url);
 
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();

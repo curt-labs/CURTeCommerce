@@ -102,6 +102,9 @@ namespace Admin.Models {
                 ContentPage existing = db.ContentPages.Where(x => x.ID.Equals(page.ID)).FirstOrDefault<ContentPage>();
                 existing.Title = page.Title;
                 existing.content = page.content;
+                existing.metaTitle = page.metaTitle;
+                existing.metaDescription = page.metaDescription;
+                existing.visible = page.visible;
                 db.SubmitChanges();
                 page = existing;
             } else {

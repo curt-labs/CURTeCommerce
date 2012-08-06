@@ -26,6 +26,7 @@ namespace EcommercePlatform.Models {
                 sb.Append("&sensor=false");
 
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
                 GeocodingResponse geo = new JavaScriptSerializer().Deserialize<GeocodingResponse>(wc.DownloadString(sb.ToString()));
 
                 return geo;
@@ -123,6 +124,7 @@ namespace EcommercePlatform.Models {
         internal static string GetGooglePlace(string reference) {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
                 StringBuilder sb = new StringBuilder();
                 sb.Append("https://maps.googleapis.com/maps/api/place/details/json?key=");
                 sb.Append(new Settings().Get("GoogleAPIKey"));

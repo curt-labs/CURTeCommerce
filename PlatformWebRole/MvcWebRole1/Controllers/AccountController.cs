@@ -36,6 +36,17 @@ namespace EcommercePlatform.Controllers {
             return View();
         }
 
+        public ActionResult Addresses() {
+            Customer cust = ViewBag.customer;
+            List<Address> addresses = cust.GetAddresses();
+            List<Country> countries = UDF.GetCountries();
+            ViewBag.countries = countries;
+            cust.BindAddresses();
+            ViewBag.cust = cust;
+            ViewBag.addresses = addresses;
+            return View();
+        }
+
         public ActionResult Order(int id = 0) {
             Customer cust = new Customer();
             cust.ID = ViewBag.customer.ID;
@@ -165,6 +176,42 @@ namespace EcommercePlatform.Controllers {
                 TempData["error"] = "Failed to save your account information. " + e.Message + e.StackTrace;
                 return Redirect("/Account");
             }
+        }
+
+        public ActionResult DeleteAddress(int id = 0) {
+            Customer cust = new Customer();
+            cust.GetFromStorage();
+            Address a = new Address().Get(id);
+            cust.ClearAddress(a.ID);
+            if (a.cust_id == cust.ID) {
+                a.Delete(id);
+            }
+            cust.SerializeToStorage();
+            return RedirectToAction("Addresses");
+        }
+
+        public ActionResult SetBillingDefault(int id = 0) {
+            Customer cust = new Customer();
+            cust.GetFromStorage();
+            Address a = new Address().Get(id);
+            if (a.cust_id == cust.ID) {
+                cust.SetBillingDefaultAddress(id);
+                cust.BindAddresses();
+                cust.SerializeToStorage();
+            }
+            return RedirectToAction("Addresses");
+        }
+
+        public ActionResult SetShippingDefault(int id = 0) {
+            Customer cust = new Customer();
+            cust.GetFromStorage();
+            Address a = new Address().Get(id);
+            if (a.cust_id == cust.ID) {
+                cust.SetShippingDefaultAddress(id);
+                cust.BindAddresses();
+                cust.SerializeToStorage();
+            }
+            return RedirectToAction("Addresses");
         }
 
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Net;
 
 namespace Admin {
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
@@ -31,9 +32,15 @@ namespace Admin {
 
         protected void Application_Start() {
             AreaRegistration.RegisterAllAreas();
-
+            WebRequest.DefaultWebProxy = null;
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+        }
+
+        protected void Application_BeginRequest(Object sender, EventArgs e) {
+            if (HttpContext.Current.Request.IsSecureConnection == false) {
+                Response.Redirect("https://" + Request.ServerVariables["HTTP_HOST"] + HttpContext.Current.Request.RawUrl);
+            }
         }
 
         protected void Application_Error(object sender, EventArgs e) {

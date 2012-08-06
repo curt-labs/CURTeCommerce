@@ -34,7 +34,7 @@ namespace EcommercePlatform.Models {
             try {
                 val = settings[name];
             } catch { };
-            return val;
+            return val.Trim();
         }
 
     }

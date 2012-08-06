@@ -17,6 +17,7 @@ namespace TaskScheduler {
             db.SubmitChanges();
 
             WebClient wc = new WebClient();
+            wc.Proxy = null;
             wc.DownloadString(url);
         }
 

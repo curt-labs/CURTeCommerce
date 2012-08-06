@@ -127,7 +127,7 @@
       <Column Name="contact_type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="dateAdded" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="followedUp" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="ContactType_ContactInquiry" Member="ContactType" ThisKey="contact_type" OtherKey="ID" Type="ContactType" IsForeignKey="true" />
+      <Association Name="ContactInquiry_ContactType" Member="ContactType" ThisKey="contact_type" OtherKey="ID" Type="ContactType" Cardinality="One" />
     </Type>
   </Table>
   <Table Name="dbo.ContactTypes" Member="ContactTypes">
@@ -135,7 +135,7 @@
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="label" Type="System.String" DbType="VarChar(300) NOT NULL" CanBeNull="false" />
       <Column Name="email" Type="System.String" DbType="VarChar(300) NOT NULL" CanBeNull="false" />
-      <Association Name="ContactType_ContactInquiry" Member="ContactInquiries" ThisKey="ID" OtherKey="contact_type" Type="ContactInquiry" />
+      <Association Name="ContactInquiry_ContactType" Member="ContactInquiry" AccessModifier="Internal" ThisKey="ID" OtherKey="contact_type" Type="ContactInquiry" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.ContentNesting" Member="ContentNestings">
@@ -153,6 +153,8 @@
       <Column Name="Title" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
       <Column Name="content" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
       <Column Name="visible" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="metaTitle" Type="System.String" DbType="VarChar(255) NULL" CanBeNull="true" />
+      <Column Name="metaDescription" Type="System.String" DbType="VarChar(255) NULL" CanBeNull="true" />
       <Association Name="ContentPage_ContentNesting" Member="ContentNestings" ThisKey="ID" OtherKey="parentID" Type="ContentNesting" />
       <Association Name="ContentNesting_ContentPage" Member="ContentNesting" ThisKey="ID" OtherKey="pageID" Type="ContentNesting" IsForeignKey="true" />
     </Type>
@@ -313,6 +315,7 @@
       <Column Name="state" Member="state1" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
       <Column Name="abbr" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
       <Column Name="countryID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="taxRate" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
       <Association Name="State_Address" Member="Addresses" AccessModifier="Internal" ThisKey="stateID" OtherKey="state" Type="Address" />
       <Association Name="State_DistributionCenter" Member="DistributionCenters" AccessModifier="Internal" ThisKey="stateID" OtherKey="State" Type="DistributionCenter" />
       <Association Name="Country_State" Member="Country" ThisKey="countryID" OtherKey="ID" Type="Country" IsForeignKey="true" />

@@ -7,11 +7,11 @@ using EcommercePlatform.Models;
 using System.Text;
 using System.Globalization;
 using System.Net;
+using Newtonsoft.Json;
 
 namespace EcommercePlatform
 {
     partial class Cart {
-
         public string paypalToken { get; set; }
 
         partial void OnCreated() {
@@ -26,7 +26,6 @@ namespace EcommercePlatform
             string upcval = part.attributes.Where(x => x.key.ToLower().Equals("upc")).Select(x => x.value).FirstOrDefault();
             string weight = part.attributes.Where(x => x.key.ToLower().Equals("weight")).Select(x => x.value).FirstOrDefault();
             CartItem i = new CartItem(partID, quantity, Convert.ToDecimal(part.listPrice.Replace("$", "")), part.shortDesc, upcval, Convert.ToDecimal(weight));
-
 
             if (this.cust_id > 0) {
                 EcommercePlatformDataContext db = new EcommercePlatformDataContext();
@@ -260,7 +259,7 @@ namespace EcommercePlatform
                 cust = db.Customers.Where(x => x.ID.Equals(this.cust_id)).FirstOrDefault<Customer>();
                 if (cust != null) {
                     this.Billing = db.Addresses.Where(x => x.ID.Equals(cust.billingID)).FirstOrDefault<Address>();
-                    this._bill_to = this.Billing.ID;
+                    this._bill_to = cust.billingID;
                 } else {
                     this.Billing = new Address();
                     this._bill_to = 0;
@@ -272,7 +271,7 @@ namespace EcommercePlatform
                 }
                 if (cust != null) {
                     this.Shipping = db.Addresses.Where(x => x.ID.Equals(cust.shippingID)).FirstOrDefault<Address>();
-                    this._ship_to = this.Shipping.ID;
+                    this._ship_to = cust.shippingID;
                 } else {
                     this.Shipping = new Address();
                     this._ship_to = 0;
@@ -338,6 +337,14 @@ namespace EcommercePlatform
             Cart c = db.Carts.Where(x => x.ID == this.ID).First<Cart>();
             c.voided = true;
             db.SubmitChanges();
+        }
+
+        public bool Validate() {
+            bool valid = false;
+            if (this.bill_to > 0 && this.ship_to > 0 && this.GetSubTotal() > 0) {
+                valid = true;
+            }
+            return valid;
         }
 
         internal void SendConfirmation() {
@@ -447,14 +454,12 @@ namespace EcommercePlatform
 
         internal void SetTax() {
             decimal tax = 0;
-            if (this.Shipping.State1.state1.ToLower() == "texas") {
-                tax = (this.GetSubTotal() * Convert.ToDecimal(0.0825));
+            tax = ((this.GetSubTotal() + this.shipping_price) * (this.Billing.State1.taxRate / 100));
 
-                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-                Cart c = db.Carts.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<Cart>();
-                c.tax = tax;
-                db.SubmitChanges();
-            }
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Cart c = db.Carts.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<Cart>();
+            c.tax = tax;
+            db.SubmitChanges();
 
             this.tax = tax;
         }
@@ -488,6 +493,7 @@ namespace EcommercePlatform
             try {
                 string image = "";
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
                 Settings settings = new Settings();
 
                 StringBuilder sb = new StringBuilder(settings.Get("CURTAPIDOMAIN"));

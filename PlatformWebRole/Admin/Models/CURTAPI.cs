@@ -14,6 +14,7 @@ namespace Admin.Models {
             try {
                 string year_json = "";
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
                 Settings settings = new Settings();
                 year_json = wc.DownloadString(settings.Get("CURTAPIDOMAIN") + "getyear?dataType=JSON");
                 List<double> years = JsonConvert.DeserializeObject<List<double>>(year_json);
@@ -26,6 +27,7 @@ namespace Admin.Models {
         internal static List<APIPart> GetVehicleParts(string year, string make, string model, string style, int cust_id = 0) {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
                 Settings settings = new Settings();
                 string url = settings.Get("CURTAPIDOMAIN");
                 url += "getparts?dataType=JSON";
@@ -49,6 +51,7 @@ namespace Admin.Models {
         internal static List<APICategory> GetParentCategories() {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
                 Settings settings = new Settings();
                 string url = settings.Get("CURTAPIDOMAIN");
                 url += "GetParentCategories";
@@ -68,6 +71,7 @@ namespace Admin.Models {
         internal static List<APICategory> GetSubCategories(int catID) {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
                 Settings settings = new Settings();
 
                 StringBuilder sb = new StringBuilder(settings.Get("CURTAPIDOMAIN"));
@@ -83,6 +87,7 @@ namespace Admin.Models {
         internal static APICategory GetCategoryByName(string cat) {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
                 Settings settings = new Settings();
                 string url = settings.Get("CURTAPIDOMAIN");
                 url += "GetCategoryByName";
@@ -103,6 +108,7 @@ namespace Admin.Models {
         internal static APICategory GetCategory(int id) {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
                 Settings settings = new Settings();
                 StringBuilder sb = new StringBuilder();
                 sb.Append(settings.Get("CURTAPIDOMAIN"));
@@ -134,6 +140,7 @@ namespace Admin.Models {
                 sb.Append("&dataType=JSON");
 
                 HttpWebRequest req = WebRequest.Create(sb.ToString()) as HttpWebRequest;
+                req.Proxy = null;
                 HttpWebResponse resp = req.GetResponse() as HttpWebResponse;
                 string json = new StreamReader(resp.GetResponseStream()).ReadToEnd();
                 List<APIPart> parts = JsonConvert.DeserializeObject<List<APIPart>>(json);
@@ -146,6 +153,7 @@ namespace Admin.Models {
         internal static APIColorCode GetColorCode(int p) {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
                 Settings settings = new Settings();
                 string url = settings.Get("CURTAPIDOMAIN");
                 url += "GetColor?partID=" + p;
@@ -160,6 +168,7 @@ namespace Admin.Models {
         internal static APIPart GetPart(int p, string year = "", string make = "", string model = "", string style = "") {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
                 Settings settings = new Settings();
                 string url = settings.Get("CURTAPIDOMAIN");
                 url += "GetPart?dataType=JSON";
@@ -181,6 +190,7 @@ namespace Admin.Models {
         internal static List<APIPart> GetPartsByList(string partlist = "", string year = "", string make = "", string model = "", string style = "") {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
                 Settings settings = new Settings();
                 string url = settings.Get("CURTAPIDOMAIN");
                 url += "GetPartsByList?dataType=JSON";
@@ -202,6 +212,7 @@ namespace Admin.Models {
         internal static List<APIPart> GetRelatedParts(int p) {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
                 Settings settings = new Settings();
                 string url = settings.Get("CURTAPIDOMAIN");
                 url += "GetRelatedParts?dataType=JSON";
@@ -217,6 +228,7 @@ namespace Admin.Models {
         internal static List<FullVehicle> GetPartVehicles(int p) {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
                 Settings settings = new Settings();
                 string url = settings.Get("CURTAPIDOMAIN");
                 url += "GetPartVehicles?dataType=JSON";
@@ -231,6 +243,7 @@ namespace Admin.Models {
         internal static List<APIPart> GetConnector(string year, string make, string model, string style) {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
                 Settings settings = new Settings();
                 StringBuilder sb = new StringBuilder();
                 sb.Append(settings.Get("CURTAPIDOMAIN"));
@@ -249,6 +262,7 @@ namespace Admin.Models {
         internal static void SubmitReview(int partID, int rating = 5, string subject = "", string review_text = "", string name = "", string email = "") {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
                 StringBuilder sb = new StringBuilder();
                 Settings settings = new Settings();
                 sb.Append(settings.Get("CURTAPIDOMAIN"));
@@ -274,6 +288,7 @@ namespace Admin.Models {
         internal static List<APIPart> Search(string term, int page = 1, int per_page = 10) {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
                 StringBuilder sb = new StringBuilder();
                 Settings settings = new Settings();
                 sb.Append(settings.Get("CURTAPIDOMAIN"));
@@ -293,6 +308,7 @@ namespace Admin.Models {
             ShippingResponse response = new ShippingResponse();
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
                 wc.Headers["Content-type"] = "application/x-www-form-urlencoded";
                 string URI = new Settings().Get("CURTAPISHIPPINGDOMAIN") + "GetShipping";
                 string parameters = "dataType=JSON";
@@ -300,8 +316,10 @@ namespace Admin.Models {
                 parameters += "&origin=" + Newtonsoft.Json.JsonConvert.SerializeObject(origin);
                 parameters += "&destination=" + Newtonsoft.Json.JsonConvert.SerializeObject(dest);
                 parameters += "&parts=" + Newtonsoft.Json.JsonConvert.SerializeObject(parts);
-                if (System.Configuration.ConfigurationManager.AppSettings["FedExEnvironment"] != "production") {
+                if (new Settings().Get("FedExEnvironment") == "development") {
                     parameters += "&environment=development";
+                } else {
+                    parameters += "&environment=production";
                 }
                 string APIresponse = wc.UploadString(URI, parameters);
                 response = JsonConvert.DeserializeObject<ShippingResponse>(APIresponse);
@@ -314,6 +332,7 @@ namespace Admin.Models {
                 StringBuilder sb = new StringBuilder(new Settings().Get("CURTAPISHIPPINGDOMAIN"));
                 sb.Append("GenerateJSONServiceTypes");
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
                 string resp = wc.DownloadString(sb.ToString());
 
                 List<string> types = JsonConvert.DeserializeObject<List<string>>(resp);

@@ -17,17 +17,6 @@ namespace EcommercePlatform.Controllers {
         /// <returns>View page</returns>
         public ActionResult Index() {
 
-            // Clear out previous Authentication
-            /*Session.Remove("customer");
-            Session.Clear();
-            Session.Abandon();
-
-            if (Request.Cookies["customer"] != null) {
-                var c = new HttpCookie("customer");
-                c.Expires = DateTime.Now.AddDays(-1);
-                Response.Cookies.Add(c);
-            }*/
-
             string referrer = "";
             if(Request.UrlReferrer != null && Request.UrlReferrer.Host != null && Request.UrlReferrer.Host.Contains(Request.Url.Host)){
                 referrer = Request.UrlReferrer.AbsoluteUri;
@@ -36,28 +25,28 @@ namespace EcommercePlatform.Controllers {
             List<Country> countries = UDF.GetCountries();
 
             Customer cust = new Customer();
-            Address billing = new Address();
-            Address shipping = new Address();
+            /*Address billing = new Address();
+            Address shipping = new Address();*/
             try {
                 cust = (Customer)TempData["customer"];
             } catch (Exception) { }
-            try {
+            /*try {
                 billing = (Address)TempData["billing"];
             } catch (Exception) { }
             try {
                 shipping = (Address)TempData["shipping"];
-            } catch (Exception) { }
+            } catch (Exception) { }*/
 
             ViewBag.cust = cust;
-            ViewBag.billing = billing;
-            ViewBag.shipping = shipping;
+            /*ViewBag.billing = billing;
+            ViewBag.shipping = shipping;*/
             ViewBag.countries = countries;
             ViewBag.error = TempData["error"];
             ViewBag.referrer = referrer;
+            ViewBag.settings = new Settings();
             return View();
         }
 
-        [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Login(string email = "", string password = "", int remember = 0, string redirect = "") {
             try {
                 /**
@@ -79,17 +68,17 @@ namespace EcommercePlatform.Controllers {
                 cust.Login();
                 cust.password = "Ya'll suckas got ketchup'd!";
                 if (remember > 0) {
-                    cust.cookified = true;
+                    cust.remember = true;
                 }
 
                 Cart cust_cart = tmp_cart;
                 try {
-                    cust_cart = db.Carts.Where(x => x.cust_id == cust.ID).Where(x => x.payment_id == 0).First<Cart>();
+                    cust_cart = db.Carts.Where(x => x.cust_id == cust.ID).Where(x => x.payment_id == 0).OrderByDescending(x => x.last_updated).First<Cart>();
                 } catch {
                     cust_cart = cust_cart.Save(cust.ID);
                 };
 
-                if (tmp_cart.CartItems.Count > 0) {
+                if (tmp_cart != null && tmp_cart.CartItems.Count > 0) {
                     cust_cart.Empty();
                     // We need to parse the Cart items from tmp_cart into our Authenticated Customer's cart
                     if (tmp_cart != null) {
@@ -101,7 +90,7 @@ namespace EcommercePlatform.Controllers {
                         }
                     }
                 }
-                cust_cart.BindAddresses();
+                //cust_cart.BindAddresses();
                 cust.Cart = cust_cart;
                 // Serialize our Customer object and send it back to Session/Cookie storage
                 cust.SerializeToStorage();
@@ -135,10 +124,16 @@ namespace EcommercePlatform.Controllers {
 
         public ActionResult Signup() {
             Customer cust = new Customer();
-            Address billing = new Address();
-            Address shipping = new Address();
+            Settings settings = new Settings();
+            /*Address billing = new Address();
+            Address shipping = new Address();*/
+            bool loginAfterRegistration = false;
+            if (settings.Get("CustomerLoginAfterRegistration") == "true") {
+                loginAfterRegistration = true;
+            }
             try {
                 #region Object Instantiation
+                string referrer = Request.Form["redirect"];
                 // Build out our Customer object
                 cust = new Customer {
                     email = Request.Form["email"],
@@ -152,7 +147,7 @@ namespace EcommercePlatform.Controllers {
                 };
 
                 // Build out our Billing object
-                billing = new Address {
+                /*billing = new Address {
                     first = Request.Form["bfirst"],
                     last = Request.Form["blast"],
                     street1 = Request.Form["bstreet1"],
@@ -173,7 +168,7 @@ namespace EcommercePlatform.Controllers {
                     postal_code = Request.Form["szip"],
                     residential = (Request.Form["sresidential"] == null) ? false : true,
                     active = true
-                };
+                };*/
                 #endregion
 
                 cust.ValidatePasswords(Request.Form["password"], Request.Form["password2"]);
@@ -199,7 +194,7 @@ namespace EcommercePlatform.Controllers {
 
                 #region Address state validation
                 // Validate billing state
-                try {
+                /*try {
                     billing.state = Convert.ToInt32(Request.Form["bstate"]);
                 } catch (Exception) {
                     throw new Exception("You must select a billing state/province.");
@@ -209,14 +204,14 @@ namespace EcommercePlatform.Controllers {
                     shipping.state = Convert.ToInt32(Request.Form["sstate"]);
                 } catch (Exception) {
                     throw new Exception("You must select a shipping state/province.");
-                }
+                }*/
                 #endregion
 
-                string[] nullables = new string[] { "phone", "address", "address1", "issuspended", "receivenewsletter", "receiveoffers", "isvalidated", "billingid", "shippingid", "cart", "id", "orders" };
+                string[] nullables = new string[] { "phone", "issuspended", "receivenewsletter", "receiveoffers", "isvalidated", "billingid", "shippingid", "Address", "Address1" , "cart", "id", "orders" };
                 UDF.Sanitize(cust,nullables);
 
                 cust.Save();
-                billing.Save(cust.ID);
+                /*billing.Save(cust.ID);
                 if(billing.Equals(shipping)) {
                     shipping = billing;
                 } else {
@@ -224,15 +219,19 @@ namespace EcommercePlatform.Controllers {
                 }
                 cust.SaveAddresses(billing, shipping);
                 cust.Address = billing;
-                cust.Address1 = shipping;
+                cust.Address1 = shipping;*/
 
-                TempData["error"] = "You're account has been successfully created. Please check your e-mail to confirm your account.";
-                return Redirect("/Authenticate");
+                if (loginAfterRegistration) {
+                    return RedirectToAction("login", new { email = cust.email, password = Request.Form["password"], remember = 0, redirect = referrer });
+                } else {
+                    TempData["error"] = "You're account has been successfully created. Please check your e-mail to confirm your account.";
+                    return Redirect("/Authenticate");
+                }
             } catch (Exception e) {
                 TempData["customer"] = cust;
-                TempData["billing"] = billing;
-                TempData["shipping"] = shipping;
-                TempData["error"] = e.Message + e.StackTrace;
+                /*TempData["billing"] = billing;
+                TempData["shipping"] = shipping;*/
+                TempData["error"] = e.Message;
                 return Redirect(String.Format("/Authenticate/Index?#{0}","signup"));
             }
         }
@@ -272,6 +271,7 @@ namespace EcommercePlatform.Controllers {
 
         public ActionResult Forgot() {
             ViewBag.error = TempData["error"];
+            ViewBag.settings = new Settings();
             return View();
         }
 

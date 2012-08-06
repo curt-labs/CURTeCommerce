@@ -16,6 +16,7 @@ namespace EcommercePlatform.Models {
 
             // create web client
             WebClient wc = new WebClient();
+            wc.Proxy = null;
             
             // get merchant info from settings
             Settings settings = new Settings();

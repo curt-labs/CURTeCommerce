@@ -124,6 +124,7 @@
     <Compile Include="Controllers\BugController.cs" />
     <Compile Include="Controllers\ContactManagerController.cs" />
     <Compile Include="Controllers\ContentManagerController.cs" />
+    <Compile Include="Controllers\TaxesController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\SchedulerController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="Models\ContactManagement.cs" />
     <Compile Include="Models\ContentManagement.cs" />
     <Compile Include="Models\ContentPage.cs" />
+    <Compile Include="Models\State.cs" />
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\ScheduledTask.cs" />
     <Compile Include="Models\Country.cs" />
@@ -192,6 +194,7 @@
   <ItemGroup>
     <Content Include="bin\AuthorizeNet.dll" />
     <Content Include="bin\AuthorizeNet.Helpers.dll" />
+    <Content Include="Content\css\taxes.manager.css" />
     <Content Include="Content\css\invoice.manager.css" />
     <Content Include="Content\css\scheduler.css" />
     <Content Include="Content\css\setting.manager.css" />
@@ -282,6 +285,7 @@
     <Content Include="Content\img\glyphicons-halflings.png" />
     <Content Include="Content\img\login_banner.png" />
     <Content Include="Content\img\module_icons\AddressBook.png" />
+    <Content Include="Content\img\module_icons\Bank.png" />
     <Content Include="Content\img\module_icons\BookOpen.png" />
     <Content Include="Content\img\module_icons\Box.png" />
     <Content Include="Content\img\module_icons\ControlPanel.png" />
@@ -694,6 +698,7 @@
     <Content Include="Scripts\custom\blog.manager.js" />
     <Content Include="Scripts\custom\contact.manager.js" />
     <Content Include="Scripts\custom\content.manager.js" />
+    <Content Include="Scripts\custom\taxes.manager.js" />
     <Content Include="Scripts\custom\invoice.manager.js" />
     <Content Include="Scripts\custom\scheduler.js" />
     <Content Include="Scripts\custom\setting.manager.js" />
@@ -807,6 +812,7 @@
     <Content Include="Views\Scheduler\Index.cshtml" />
     <Content Include="Views\Invoice\Index.cshtml" />
     <Content Include="Views\Invoice\Details.cshtml" />
+    <Content Include="Views\Taxes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

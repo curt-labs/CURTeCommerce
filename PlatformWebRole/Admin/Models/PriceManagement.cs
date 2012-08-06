@@ -17,7 +17,7 @@ namespace Admin.Models {
                 using (System.Net.WebClient client = new System.Net.WebClient()) {
                     StringBuilder sb = new StringBuilder(api_domain);
                     sb.AppendFormat("GetPricing?key={0}&customerID={1}", api_key, customerID);
-
+                    client.Proxy = null;
                     string resp = client.DownloadString(sb.ToString());
                     priceList = JsonConvert.DeserializeObject<List<SimplePricing>>(resp);
                 }

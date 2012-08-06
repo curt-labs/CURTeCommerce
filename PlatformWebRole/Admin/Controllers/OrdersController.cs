@@ -219,6 +219,7 @@ namespace Admin.Controllers {
                 shipping_price = Convert.ToDecimal(typesplit[1]);
                 currentCart.setShippingType(shiptype, shipping_price);
             }
+            // We need to calculate the tax now that we know the shipping state
             ViewBag.cart = currentCart;
 
             return View("Add-Billing");
@@ -234,6 +235,7 @@ namespace Admin.Controllers {
             if (address != 0) {
                 currentCart.SetBilling(address);
             }
+            currentCart.SetTax();
             ViewBag.cart = currentCart;
             
             ViewBag.showShipping = true;
@@ -292,7 +294,12 @@ namespace Admin.Controllers {
             //which is true by default
             //this login and key are the shared dev account - you should get your own if you 
             //want to do more testing
-            Gateway gate = new Gateway(settings.Get("AuthorizeNetLoginKey"), settings.Get("AuthorizeNetTransactionKey"), true);
+            bool testmode = false;
+            if (settings.Get("AuthorizeNetTestMode").Trim() == "true") {
+                testmode = true;
+            }
+
+            Gateway gate = new Gateway(settings.Get("AuthorizeNetLoginKey"), settings.Get("AuthorizeNetTransactionKey"), testmode);
 
             //step 3 - make some money
             IGatewayResponse response = gate.Send(request);

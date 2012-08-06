@@ -69,7 +69,17 @@
             </label>
 
             <textarea cols="60" rows="1" name="content" id="content">@page.content</textarea><br />
-            <input type="submit" name="btnSubmit" id="btnSubmit" value="Save" />
+            <label for="metaTitle">
+                Meta Title
+                <input type="text" name="metaTitle" id="metaTitle" placeholder="Enter the meta title of this page (optional)" value="@page.metaTitle" />
+            </label>
+
+            <label for="metaDescription">
+                Meta Description
+                <input type="text" name="metaDescription" id="metaDescription" placeholder="Enter the meta description of this page (optional)" value="@page.metaDescription" />
+            </label>
+
+            <input type="submit" id="btnSubmit" value="Save" />
         </form>
     </div>
     @if (page.ID > 0) {

@@ -1,5 +1,5 @@
 ﻿$(function () {
-    $('#add-billing-address, #add-shipping-address').hide();
+    $('#add-billing-address.hideme, #add-shipping-address.hideme').hide();
     $(document).on('click', '#new-billing-address', function (event) {
         event.preventDefault();
         $('#current-billing-address').hide();

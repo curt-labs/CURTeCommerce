@@ -25,6 +25,9 @@
     if (customer == null) {
         customer = new EcommercePlatform.Customer();
     }
+
+    string titletag = page.metaTitle ?? ViewBag.settings.Get("SiteTitle");
+
     Layout = null;
 }
 <!doctype html>
@@ -42,7 +45,7 @@
     <!-- Use the .htaccess and remove these lines to avoid edge case issues.
            More info: h5bp.com/b/378 -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>@ViewBag.settings.Get("SiteName")</title>
+    <title>@ViewBag.settings.Get("SiteName")@((String.IsNullOrEmpty(titletag)) ? "" : " | " + titletag)</title>
 
     <meta name="description" content="@ViewBag.settings.Get("SiteDescription")">
     <meta name="author" content="CURT Manufacturing, LLC. Copyright @DateTime.Now">
@@ -113,7 +116,7 @@
                 <div class="sub_menu_container">
                     <form method="get" action="/Search" class="search">
                         <input type="search" name="search" class="placeholder" id="mini-search" placeholder="Search for Product">
-                        <input type="submit" name="btnSearch" id="btnSearch" value="" />
+                        <input type="submit" id="btnSearch" value="" />
                     </form>
                     <a href="/" title="Home" class="sub_link">Home</a>
                     @if (customer != null && customer.ID > 0) {
@@ -136,7 +139,7 @@
             </a>
             <div style="clear:both"></div>
             <form method="get" action="/Search" id="search_box">
-                <input type="submit" name="btnSearch" id="btnSearch" value="" />
+                <input type="submit" id="btnSearch" value="" />
                 <label for="search">
                     PRODUCT SEARCH
                     <span>Find What You're Looking For</span>

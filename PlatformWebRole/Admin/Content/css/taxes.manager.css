@@ -1,0 +1,63 @@
+﻿section {
+    position: relative;
+}
+
+section span.title{
+    margin-bottom: 40px;
+    color: #bf3504;
+    font-size: 16px;
+    display:inline-block;
+}
+
+section a.button{
+    display:inline-block;
+    width: 200px;
+    height: 45px;
+    background:#bf3504;
+    margin: 0px 25px 40px 25px;
+    -moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+    text-align:center;
+    color: white;
+    text-decoration:none;
+    font-size: 24px;
+    font-weight:600;
+    line-height:45px;
+}
+
+ul.taxProvinces li {
+	list-style: none;
+	padding: 5px 15px;
+}
+
+ul.taxProvinces li:nth-child(odd) {
+    background-color: #eee;    
+}
+
+ul.taxProvinces li label {
+	display: inline-block;
+	margin-bottom: 0px;
+}
+ul.taxProvinces li label span {
+    display: inline-block;
+    width: 200px;
+}
+
+ul.taxProvinces li label input {
+    display: inline-block;
+    width: 70px;
+    margin-bottom: 0px;
+}
+
+ul.taxProvinces li button.setStateRate {
+    display: inline-block;
+    background: #BF3504;
+    border: 2px solid #C63707;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    color: white;
+    font-size: 20px;
+    padding: 0px 10px 2px;
+}

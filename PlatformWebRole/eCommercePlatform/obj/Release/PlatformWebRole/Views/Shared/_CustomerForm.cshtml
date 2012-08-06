@@ -7,6 +7,7 @@
     EcommercePlatform.Customer cust = ViewBag.cust;
     EcommercePlatform.Address billing = ViewBag.billing;
     EcommercePlatform.Address shipping = ViewBag.shipping;
+    string referrer = ViewBag.referrer ?? "";
     if (billing == null) {
         billing = new EcommercePlatform.Address();
     }
@@ -22,6 +23,7 @@
     // Quebec stateID = 59
 }
 <form class="simple-form" method="post" action="@((ViewBag.setup)?"/Authenticate/Signup":"/Account/Save")">
+    <input type="hidden" name="redirect" value="@referrer" />
     <fieldset class="left">
         <legend>Basic Information</legend>
         @if (ViewBag.setup) {
@@ -34,12 +36,12 @@
                 <input type="email" name="email2" id="confirm_email" class="placeholder" placeholder="Confirm your e-mail address" required="required" title="You must confirm E-Mail Address" />
             </label>
             <label for="signup_password">
-                Password
-                <input type="password" name="password" id="signup_password" class="placeholder" placeholder="Enter your password" required="required" title="Password is required" />
+                Password (must be at least 6 characters)
+                <input type="password" name="password" id="signup_password" class="placeholder" placeholder="Enter your password" required="required" title="Password is required" pattern="\S{6,}" />
             </label>
             <label for="confirm_password">
                 Confirm Password
-                <input type="password" name="password2" id="confirm_password" class="placeholder" placeholder="Confirm your password" required="required" title="You must confirm your password" />
+                <input type="password" name="password2" id="confirm_password" class="placeholder" placeholder="Confirm your password" required="required" title="You must confirm your password" pattern="\S{6,}" />
             </label>
         } else {
             <label for="signup_email">
@@ -61,7 +63,7 @@
         </label>
     </fieldset>
             
-    <fieldset class="billing left">
+    @*<fieldset class="billing left">
         <legend>Billing Information</legend>
 
         <label for="bfirst">
@@ -162,7 +164,7 @@
             <input type="checkbox" name="sresidential" id="sresidential" value="true" checked="checked" />
             Residential Address?
         </label>
-    </fieldset>
+    </fieldset>*@
 
     <fieldset class="left">
         <legend>Offers/Newsletter</legend>

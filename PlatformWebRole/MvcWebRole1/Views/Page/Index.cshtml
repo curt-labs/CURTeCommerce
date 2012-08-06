@@ -4,7 +4,9 @@
         page = new EcommercePlatform.ContentPage();
     }
     
-    ViewBag.Title = page.Title;
+    ViewBag.Title = (String.IsNullOrEmpty(page.metaTitle)) ? page.Title : page.metaTitle;
+    ViewBag.metadescription = page.metaDescription;
+    
     List<EcommercePlatform.ContentPage> crumbs = ViewBag.crumbs;
     List<EcommercePlatform.ContentPage> subpages = ViewBag.subpages;
     Layout = "~/Views/Shared/_Layout.cshtml";

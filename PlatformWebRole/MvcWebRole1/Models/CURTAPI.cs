@@ -15,6 +15,7 @@ namespace EcommercePlatform.Models {
             try {
                 string year_json = "";
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
 
                 year_json = wc.DownloadString(getAPIPath() + "getyear?dataType=JSON");
                 List<double> years = JsonConvert.DeserializeObject<List<double>>(year_json);
@@ -28,6 +29,8 @@ namespace EcommercePlatform.Models {
             try {
                 Settings settings = new Settings();
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
+
                 string url = getAPIPath();
                 url += "getparts?dataType=JSON";
                 url += "&cust_id=" + cust_id;
@@ -50,6 +53,8 @@ namespace EcommercePlatform.Models {
         internal static List<APICategory> GetParentCategories() {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
+
                 string url = getAPIPath();
                 url += "GetParentCategories";
                 url += "?dataType=JSON";
@@ -68,6 +73,9 @@ namespace EcommercePlatform.Models {
         internal static List<APICategory> GetSubCategories(int catID) {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
+                ServicePointManager.MaxServicePoints = int.MaxValue;
+
                 StringBuilder sb = new StringBuilder(getAPIPath());
                 sb.Append("GetCategories?dataType=JSON");
                 sb.Append("&parentID=" + catID);
@@ -81,6 +89,8 @@ namespace EcommercePlatform.Models {
         internal static APICategory GetCategoryByName(string cat) {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
+
                 string url = getAPIPath();
                 url += "GetCategoryByName";
                 url += "?dataType=JSON";
@@ -100,6 +110,8 @@ namespace EcommercePlatform.Models {
         internal static APICategory GetCategory(int id) {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
+
                 StringBuilder sb = new StringBuilder();
                 sb.Append(getAPIPath());
                 sb.Append("GetCategory");
@@ -129,6 +141,8 @@ namespace EcommercePlatform.Models {
                 sb.Append("&dataType=JSON");
 
                 HttpWebRequest req = WebRequest.Create(sb.ToString()) as HttpWebRequest;
+                req.Proxy = null;
+
                 HttpWebResponse resp = req.GetResponse() as HttpWebResponse;
                 string json = new StreamReader(resp.GetResponseStream()).ReadToEnd();
                 List<APIPart> parts = JsonConvert.DeserializeObject<List<APIPart>>(json);
@@ -141,6 +155,8 @@ namespace EcommercePlatform.Models {
         internal static APIColorCode GetColorCode(int p) {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
+
                 string url = getAPIPath();
                 url += "GetColor?partID=" + p;
 
@@ -155,6 +171,8 @@ namespace EcommercePlatform.Models {
             try {
                 Settings settings = new Settings();
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
+
                 string url = getAPIPath();
                 url += "GetPart?dataType=JSON";
                 url += "&partID=" + p;
@@ -176,6 +194,8 @@ namespace EcommercePlatform.Models {
             try {
                 Settings settings = new Settings();
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
+
                 string url = getAPIPath();
                 url += "GetPartsByList?dataType=JSON";
                 url += "&partlist=" + partlist;
@@ -197,6 +217,8 @@ namespace EcommercePlatform.Models {
             try {
                 Settings settings = new Settings();
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
+
                 string url = getAPIPath();
                 url += "GetRelatedParts?dataType=JSON";
                 url += "&partID=" + p;
@@ -211,6 +233,8 @@ namespace EcommercePlatform.Models {
         internal static List<FullVehicle> GetPartVehicles(int p) {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
+
                 string url = getAPIPath();
                 url += "GetPartVehicles?dataType=JSON";
                 url += "&partID=" + p;
@@ -224,6 +248,8 @@ namespace EcommercePlatform.Models {
         internal static List<APIPart> GetConnector(string year, string make, string model, string style) {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
+
                 Settings settings = new Settings();
                 StringBuilder sb = new StringBuilder();
                 sb.Append(getAPIPath());
@@ -242,6 +268,8 @@ namespace EcommercePlatform.Models {
         internal static void SubmitReview(int partID, int rating = 5, string subject = "", string review_text = "", string name = "", string email = "") {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
+
                 Settings settings = new Settings();
                 StringBuilder sb = new StringBuilder();
                 sb.Append(getAPIPath());
@@ -267,6 +295,8 @@ namespace EcommercePlatform.Models {
         internal static List<APIPart> Search(string term, int page = 1, int per_page = 10) {
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
+
                 Settings settings = new Settings();
                 StringBuilder sb = new StringBuilder();
                 sb.Append(getAPIPath());
@@ -286,6 +316,8 @@ namespace EcommercePlatform.Models {
             ShippingResponse response = new ShippingResponse();
             try {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
+
                 Settings settings = new Settings();
                 wc.Headers["Content-type"] = "application/x-www-form-urlencoded";
                 string URI = settings.Get("CURTAPISHIPPINGDOMAIN") + "GetShipping";
@@ -294,11 +326,16 @@ namespace EcommercePlatform.Models {
                 parameters += "&origin=" + Newtonsoft.Json.JsonConvert.SerializeObject(origin);
                 parameters += "&destination=" + Newtonsoft.Json.JsonConvert.SerializeObject(dest);
                 parameters += "&parts=" + Newtonsoft.Json.JsonConvert.SerializeObject(parts);
-                if (System.Configuration.ConfigurationManager.AppSettings["FedExEnvironment"] != "production") {
+                if (settings.Get("FedExEnvironment") == "development") {
                     parameters += "&environment=development";
+                } else {
+                    parameters += "&environment=production";
                 }
                 string APIresponse = wc.UploadString(URI, parameters);
                 response = JsonConvert.DeserializeObject<ShippingResponse>(APIresponse);
+                if (response.Status == "ERROR") {
+                    throw new Exception("FedEx is having issues at the moment. Please try again.");
+                }
             } catch (Exception) { }
             return response;
         }
@@ -308,6 +345,8 @@ namespace EcommercePlatform.Models {
                 StringBuilder sb = new StringBuilder(new Settings().Get("CURTAPISHIPPINGDOMAIN"));
                 sb.Append("GenerateJSONServiceTypes");
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
+
                 string resp = wc.DownloadString(sb.ToString());
 
                 List<string> types = JsonConvert.DeserializeObject<List<string>>(resp);

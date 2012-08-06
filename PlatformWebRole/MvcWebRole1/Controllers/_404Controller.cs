@@ -9,18 +9,21 @@ namespace EcommercePlatform.Controllers {
     public class _404Controller : BaseController {
 
         public ActionResult Index() {
-            string path = "";
-            if (Request.QueryString.ToString().StartsWith("/")) {
-                path = Request.QueryString.ToString().Substring(1);
-            } else {
-                path = Request.QueryString.ToString();
+            try {
+                string errorpath = Request.QueryString["aspxerrorpath"];
+                if (errorpath.LastIndexOf("/") != -1 && errorpath.LastIndexOf("/") == 0) {
+                    string name = errorpath.Substring(1);
+                    int page = ContentManagement.GetPageID(errorpath);
+                    if (page > 0) {
+                        return RedirectToAction("Page", "Index", new { id = page });
+                    }
+                }
+            } catch (Exception e) {
+                string message = e.Message;
             }
-            int page = ContentManagement.GetPageID(path);
-            if (page > 0) {
-                return RedirectToAction("Page", "Index", new { id = page });
-            }
+
+            ViewBag.settings = new Settings();
             return View();
         }
-
     }
 }

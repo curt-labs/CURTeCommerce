@@ -16,7 +16,7 @@ namespace EcommercePlatform.Controllers {
         protected GCheckoutButton gButton = new GCheckoutButton();
 
         [RequireHttps]
-        public ActionResult Index() {
+        public ActionResult Index(string message = "") {
             Customer customer = new Customer();
 
             // Retrieve Customer from Sessions/Cookie
@@ -36,7 +36,7 @@ namespace EcommercePlatform.Controllers {
 
             ViewBag.showShipping = true;
             ViewBag.cart = cart;
-            ViewBag.message = TempData["message"];
+            ViewBag.message = message;
             List<int> months = new List<int>();
             for (int i = 1; i <= 12; i++) {
                 months.Add(i);
@@ -94,7 +94,12 @@ namespace EcommercePlatform.Controllers {
             //which is true by default
             //this login and key are the shared dev account - you should get your own if you 
             //want to do more testing
-            Gateway gate = new Gateway(settings.Get("AuthorizeNetLoginKey"), settings.Get("AuthorizeNetTransactionKey"), true);
+            bool testmode = false;
+            if (settings.Get("AuthorizeNetTestMode").Trim() == "true") {
+                testmode = true;
+            }
+
+            Gateway gate = new Gateway(settings.Get("AuthorizeNetLoginKey"), settings.Get("AuthorizeNetTransactionKey"), testmode);
 
             //step 3 - make some money
             IGatewayResponse response = gate.Send(request);
@@ -118,7 +123,7 @@ namespace EcommercePlatform.Controllers {
         }
 
         [RequireHttps]
-        public void Google() {
+        public ActionResult Google() {
 
             Customer customer = ViewBag.customer;
             customer.GetFromStorage();
@@ -137,6 +142,9 @@ namespace EcommercePlatform.Controllers {
                 req.MerchantID = settings.Get("GoogleMerchantId");
                 req.MerchantKey = settings.Get("GoogleMerchantKey");
                 req.Environment = GCheckout.EnvironmentType.Production;
+            }
+            if (settings.Get("GoogleAnalyticsCode") != "") {
+                req.AnalyticsData = Request.Form["analyticsdata"];
             }
             req.ContinueShoppingUrl = Request.Url.Scheme + "://" + Request.Url.Host;
             //req.EditCartUrl = Request.Url.Host + "/Cart";
@@ -158,6 +166,14 @@ namespace EcommercePlatform.Controllers {
 
             req.AddShippingPackage("0", customer.Cart.Shipping.city, customer.Cart.Shipping.State1.state1, customer.Cart.Shipping.postal_code);
             req.AddFlatRateShippingMethod(customer.Cart.shipping_type, customer.Cart.shipping_price);
+
+            Country country = db.Countries.Where(x => x.abbr.Equals("US")).FirstOrDefault();
+            if(country != null) {
+                foreach(State state in country.States) {
+                    req.AddStateTaxRule(state.abbr, Convert.ToDouble(state.taxRate / 100), true);
+                }
+            }
+            
             GCheckoutResponse resp = req.Send();
             if (resp.IsGood) {
                 customer.Cart.AddPayment("Google Checkout", "", "Pending");
@@ -166,37 +182,31 @@ namespace EcommercePlatform.Controllers {
                 customer.Cart.BindAddresses();
                 customer.SerializeToStorage();
 
-                Response.Redirect(resp.RedirectUrl, true);
+                return Redirect(resp.RedirectUrl);
             } else {
-                TempData["message"] = resp.ErrorMessage;
-                Response.Redirect("/Payment");
+                return RedirectToAction("Index", new { message = resp.ErrorMessage });
             }
         }
         
         [RequireHttps]
-        public void PayPal() {
+        public ActionResult PayPal() {
             Customer customer = ViewBag.customer;
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
                 Response.Redirect("/Authenticate");
             }
-            decimal total = customer.Cart.shipping_price;
-            foreach (CartItem item in customer.Cart.CartItems) {
-                total += (item.price * item.quantity);
-            }
             Paypal p = new Paypal();
-            string token = p.ECSetExpressCheckout(total.ToString(),customer.Cart.CartItems.ToList<CartItem>(),customer.Cart.shipping_price);
-            if (token != "Failure") {
+            string token = p.ECSetExpressCheckout(customer.Cart);
+            if (!token.ToLower().Contains("failure")) {
                 customer.Cart.paypalToken = token;
                 customer.SerializeToStorage();
                 if (Request.Url.Host.Contains("127.0.0") || Request.Url.Host.Contains("localhost")) {
-                    Response.Redirect("https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=" + token);
+                    return Redirect("https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=" + token);
                 } else {
-                    Response.Redirect("https://www.paypal.com/webscr?cmd=_express-checkout&token=" + token);
+                    return Redirect("https://www.paypal.com/webscr?cmd=_express-checkout&token=" + token);
                 }
             } else {
-                TempData["message"] = "There was a problem with your PayPal transaction.";
-                Response.Redirect("/Payment");
+                return RedirectToAction("Index", new { message = "There was a problem with your PayPal transaction. " + token });
             }
         }
         
@@ -257,8 +267,7 @@ namespace EcommercePlatform.Controllers {
                 edi.CreatePurchaseOrder(cartid); 
                 return RedirectToAction("Complete", new { id = cartid });
             } else {
-                TempData["message"] = "Your PayPal Transaction Could not be processed. Try Again.";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { message = "Your PayPal Transaction Could not be processed. Try Again." });
             }
 
         }

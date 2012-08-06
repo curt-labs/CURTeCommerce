@@ -328,6 +328,7 @@ C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\ob
 C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\obj\Release\PlatformWebRole\Scripts\tools\jquery.simplemodal.js
 C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\obj\Release\PlatformWebRole\Scripts\tools\jquery.simplemodal.min.js
 C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\obj\Release\PlatformWebRole\Scripts\tools\shadowbox.js
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\obj\Release\PlatformWebRole\Views\Account\Addresses.cshtml
 C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\obj\Release\PlatformWebRole\Views\Account\Index.cshtml
 C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\obj\Release\PlatformWebRole\Views\Account\Order.cshtml
 C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\obj\Release\PlatformWebRole\Views\Account\Orders.cshtml
@@ -339,8 +340,9 @@ C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\ob
 C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\obj\Release\PlatformWebRole\Views\Blog\ViewCategory.cshtml
 C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\obj\Release\PlatformWebRole\Views\Blog\ViewPost.cshtml
 C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\obj\Release\PlatformWebRole\Views\Blog\_BlogNavigation.cshtml
-C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\obj\Release\PlatformWebRole\Views\Cart\Checkout.cshtml
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\obj\Release\PlatformWebRole\Views\Cart\Billing.cshtml
 C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\obj\Release\PlatformWebRole\Views\Cart\Index.cshtml
+C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\obj\Release\PlatformWebRole\Views\Cart\Shipping.cshtml
 C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\obj\Release\PlatformWebRole\Views\Categories\Index.cshtml
 C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\obj\Release\PlatformWebRole\Views\Categories\Parts.cshtml
 C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\obj\Release\PlatformWebRole\Views\Contact\Index.cshtml

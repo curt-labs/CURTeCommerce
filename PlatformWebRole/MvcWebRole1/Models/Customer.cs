@@ -8,11 +8,13 @@ using System.Reflection;
 using Newtonsoft.Json;
 using System.Data.Linq;
 using System.Diagnostics;
+using System.Web.Script.Serialization;
+using Newtonsoft.Json.Serialization;
 
 namespace EcommercePlatform {
     partial class Customer {
 
-        public bool cookified { get; set; }
+        public bool remember { get; set; }
         public List<Cart> Orders { get; set; }
         public Cart Cart { get; set; }
 
@@ -57,6 +59,11 @@ namespace EcommercePlatform {
 
         internal void Save() {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Settings settings = new Settings();
+            bool RequireCustomerActivation = true;
+            if (settings.Get("RequireCustomerActivation") == "false") {
+                RequireCustomerActivation = false;
+            }
 
             // Make sure we don't have an account with this e-mail address
             Customer cust = this.GetCustomerByEmail();
@@ -80,11 +87,16 @@ namespace EcommercePlatform {
                 receiveOffers = this.receiveOffers,
             };
 
+            if (!RequireCustomerActivation) {
+                new_customer.isValidated = 1;
+            }
             db.Customers.InsertOnSubmit(new_customer);
             db.SubmitChanges();
             this.ID = new_customer.ID;
 
-            SendValidation();
+            if (RequireCustomerActivation) {
+                SendValidation();
+            }
         }
 
         internal void Update(string fname, string lname, string phone, int receiveOffers, int receiveNewsletter) {
@@ -112,10 +124,24 @@ namespace EcommercePlatform {
             db.SubmitChanges();
         }
 
+        internal void ClearAddress(int id) {
+            if (this.billingID == id || this.shippingID == id) {
+                Customer tmp = new Customer();
+                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+                tmp = db.Customers.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<Customer>();
+                if (tmp.billingID == id) {
+                    tmp.billingID = 0;
+                }
+                if (tmp.shippingID == id) {
+                    tmp.shippingID = 0;
+                }
+                db.SubmitChanges();
+            }
+        }
         internal List<Address> GetAddresses() {
             List<Address> addresses = new List<Address>();
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-            addresses = db.Addresses.Where(x => x.cust_id.Equals(this.ID)).ToList<Address>();
+            addresses = db.Addresses.Where(x => x.cust_id.Equals(this.ID) && x.active).ToList<Address>();
             return addresses;
         }
 
@@ -212,53 +238,79 @@ namespace EcommercePlatform {
 
         internal void BindAddresses() {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-            if (this.billingID == 0) {
-                this.billingID = db.Customers.Where(x => x.ID.Equals(this.ID)).Select(x => x.billingID).FirstOrDefault<int>();
+            if (this.billingID != 0) {
+                this.Address = db.Addresses.Where(x => x.ID.Equals(this.billingID)).FirstOrDefault<Address>();
             }
-            if (this.shippingID == 0) {
-                this.shippingID = db.Customers.Where(x => x.ID.Equals(this.ID)).Select(x => x.shippingID).FirstOrDefault<int>();
+            if (this.shippingID != 0) {
+                this.Address1 = db.Addresses.Where(x => x.ID.Equals(this.shippingID)).FirstOrDefault<Address>();
             }
-            
-            this.Address = db.Addresses.Where(x => x.ID.Equals(this.billingID)).FirstOrDefault<Address>();
-            this.Address1 = db.Addresses.Where(x => x.ID.Equals(this.shippingID)).FirstOrDefault<Address>();
 
             this.Cart.BindAddresses();
 
         }
 
+        internal void SetBillingDefaultAddress(int id) {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Customer cust = new Customer();
+            cust = db.Customers.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<Customer>();
+            cust.billingID = id;
+            this.billingID = id;
+            db.SubmitChanges();
+        }
+
+        internal void SetShippingDefaultAddress(int id) {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Customer cust = new Customer();
+            cust = db.Customers.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<Customer>();
+            cust.shippingID = id;
+            this.shippingID = id;
+            db.SubmitChanges();
+        }
+
         internal void GetFromStorage() {
-            this.cookified = false;
+
+            Customer customer = new Customer();
 
             // We're gonna dump our Customer Session object out
-            Customer customer = new Customer();
-            var custSession = HttpContext.Current.Session["customer"];
+            /*var custSession = HttpContext.Current.Session["customer"];
             if (custSession != null && custSession.GetType() == typeof(string) && custSession.ToString() != null) {
                 customer = JsonConvert.DeserializeObject<Customer>(custSession.ToString());
-            }
+            }*/
 
             HttpCookie cust_cookie = null;
-            if (customer == null || customer.ID == 0) {
-                // Get the customer cookie if it exists
-                cust_cookie = HttpContext.Current.Request.Cookies.Get("customer");
-                if (cust_cookie != null && cust_cookie.Value != null && cust_cookie.Value.Length > 0) {
-                    int id = Convert.ToInt32(cust_cookie.Value);
-                    EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-                    customer = db.Customers.Where(x => x.ID.Equals(id)).FirstOrDefault<Customer>();
-                }
+            // Get the customer cookie if it exists
+            cust_cookie = HttpContext.Current.Request.Cookies.Get("customer");
+            if (cust_cookie != null && cust_cookie.Value != null && cust_cookie.Value.Length > 0) {
+                try {
+                    JsonSerializerSettings jsettings = new JsonSerializerSettings();
+                    jsettings.ObjectCreationHandling = ObjectCreationHandling.Replace;
+                    jsettings.NullValueHandling = NullValueHandling.Ignore;
+                    jsettings.DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate;
+                    jsettings.DateParseHandling = DateParseHandling.DateTime;
+                    jsettings.MissingMemberHandling = MissingMemberHandling.Ignore;
+                    jsettings.PreserveReferencesHandling = PreserveReferencesHandling.All;
+                    jsettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    jsettings.TypeNameAssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Full;
+
+                    customer = JsonConvert.DeserializeObject<Customer>(cust_cookie.Value,jsettings);
+                } catch {}
             }
-            this.ID = customer.ID;
-            this.email = customer.email;
-            this.fname = customer.fname;
-            this.lname = customer.lname;
-            this.phone = customer.phone;
-            this.dateAdded = customer.dateAdded;
-            this.isSuspended = customer.isSuspended;
-            this.receiveNewsletter = customer.receiveNewsletter;
-            this.receiveOffers = customer.receiveOffers;
-            this.billingID = customer.billingID;
-            this.shippingID = customer.shippingID;
-            this.validator = customer.validator;
-            this.Cart = customer.Cart;
+            if (customer != null) {
+                this.ID = customer.ID;
+                this.email = customer.email;
+                this.fname = customer.fname;
+                this.lname = customer.lname;
+                this.phone = customer.phone;
+                this.dateAdded = customer.dateAdded;
+                this.isSuspended = customer.isSuspended;
+                this.receiveNewsletter = customer.receiveNewsletter;
+                this.receiveOffers = customer.receiveOffers;
+                this.billingID = customer.billingID;
+                this.shippingID = customer.shippingID;
+                this.validator = customer.validator;
+                this.Cart = customer.Cart;
+                this.remember = customer.remember;
+            }
         }
 
         internal void SerializeToStorage() {
@@ -275,19 +327,20 @@ namespace EcommercePlatform {
                 billingID = this.billingID,
                 shippingID = this.shippingID,
                 validator = this.validator,
-                cookified = this.cookified,
+                remember = this.remember,
                 Cart = this.Cart
             };
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             string cust_json = JsonConvert.SerializeObject(serializable_customer, Formatting.None, settings);
-            
-            if (this.cookified) {
-                HttpCookie cook = new HttpCookie("customer",serializable_customer.ID.ToString());
+
+            HttpCookie cook = new HttpCookie("customer", cust_json);
+            if (this.remember) {
                 cook.Expires = DateTime.Now.AddDays(30);
-                HttpContext.Current.Response.Cookies.Add(cook);
             }
-            HttpContext.Current.Session.Add("customer", cust_json);
+            HttpContext.Current.Response.Cookies.Add(cook);
+
+            //HttpContext.Current.Session.Add("customer", cust_json);
         }
 
         internal void SendValidation() {

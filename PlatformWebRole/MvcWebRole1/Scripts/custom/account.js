@@ -11,4 +11,19 @@ $(function () {
             gotoOrder(id);
         }
     });
+    $('#add-address').hide();
+    $(document).on('click', '#new-address', function (event) {
+        event.preventDefault();
+        $('#add-address').slideDown();
+    });
+    $(document).on('click', '#btnResetAddress', function (event) {
+        $('#add-address').hide();
+    });
+    $(document).on('click', '.address a.delete', function (e) {
+        event.preventDefault();
+        var src = $(this).attr('href');
+        if (confirm('Are you sure you want to delete this address?')) {
+            window.location.href = src;
+        }
+    });
 });

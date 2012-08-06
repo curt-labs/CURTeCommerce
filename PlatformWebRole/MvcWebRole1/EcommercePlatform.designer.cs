@@ -3394,6 +3394,10 @@ namespace EcommercePlatform
 		
 		private int _visible;
 		
+		private string _metaTitle;
+		
+		private string _metaDescription;
+		
 		private EntitySet<ContentNesting> _ContentNestings;
 		
 		private EntityRef<ContentNesting> _ContentNesting;
@@ -3410,6 +3414,10 @@ namespace EcommercePlatform
     partial void OncontentChanged();
     partial void OnvisibleChanging(int value);
     partial void OnvisibleChanged();
+    partial void OnmetaTitleChanging(string value);
+    partial void OnmetaTitleChanged();
+    partial void OnmetaDescriptionChanging(string value);
+    partial void OnmetaDescriptionChanged();
     #endregion
 		
 		public ContentPage()
@@ -3499,6 +3507,46 @@ namespace EcommercePlatform
 					this._visible = value;
 					this.SendPropertyChanged("visible");
 					this.OnvisibleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_metaTitle", DbType="VarChar(255) NULL")]
+		public string metaTitle
+		{
+			get
+			{
+				return this._metaTitle;
+			}
+			set
+			{
+				if ((this._metaTitle != value))
+				{
+					this.OnmetaTitleChanging(value);
+					this.SendPropertyChanging();
+					this._metaTitle = value;
+					this.SendPropertyChanged("metaTitle");
+					this.OnmetaTitleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_metaDescription", DbType="VarChar(255) NULL")]
+		public string metaDescription
+		{
+			get
+			{
+				return this._metaDescription;
+			}
+			set
+			{
+				if ((this._metaDescription != value))
+				{
+					this.OnmetaDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._metaDescription = value;
+					this.SendPropertyChanged("metaDescription");
+					this.OnmetaDescriptionChanged();
 				}
 			}
 		}
@@ -5693,6 +5741,8 @@ namespace EcommercePlatform
 		
 		private int _countryID;
 		
+		private decimal _taxRate;
+		
 		private EntitySet<Address> _Addresses;
 		
 		private EntitySet<DistributionCenter> _DistributionCenters;
@@ -5711,6 +5761,8 @@ namespace EcommercePlatform
     partial void OnabbrChanged();
     partial void OncountryIDChanging(int value);
     partial void OncountryIDChanged();
+    partial void OntaxRateChanging(decimal value);
+    partial void OntaxRateChanged();
     #endregion
 		
 		public State()
@@ -5801,6 +5853,26 @@ namespace EcommercePlatform
 					this._countryID = value;
 					this.SendPropertyChanged("countryID");
 					this.OncountryIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_taxRate", DbType="Decimal(18,2) NOT NULL")]
+		public decimal taxRate
+		{
+			get
+			{
+				return this._taxRate;
+			}
+			set
+			{
+				if ((this._taxRate != value))
+				{
+					this.OntaxRateChanging(value);
+					this.SendPropertyChanging();
+					this._taxRate = value;
+					this.SendPropertyChanged("taxRate");
+					this.OntaxRateChanged();
 				}
 			}
 		}

@@ -103,7 +103,7 @@ namespace Admin {
         internal List<Address> GetAddresses() {
             List<Address> addresses = new List<Address>();
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-            addresses = db.Addresses.Where(x => x.cust_id.Equals(this.ID)).ToList<Address>();
+            addresses = db.Addresses.Where(x => x.cust_id.Equals(this.ID) && x.active).ToList<Address>();
             return addresses;
         }
 

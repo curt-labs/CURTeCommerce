@@ -66,6 +66,7 @@ namespace Admin.Models {
                 sb.Append("venues/categories");
                 sb.Append("?oauth_token=" + Token);
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
 
                 return wc.DownloadString(sb.ToString());
             } catch (Exception) {

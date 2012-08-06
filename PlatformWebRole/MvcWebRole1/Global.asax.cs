@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Hosting;
+using System.Net;
 
 namespace MvcWebRole1 {
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
@@ -21,6 +22,12 @@ namespace MvcWebRole1 {
             routes.IgnoreRoute("{file}.htm");
             routes.IgnoreRoute("{file}.html");
             routes.IgnoreRoute("{file}.xml");
+
+            routes.MapRoute(
+                "LegecyCatch", // Route name
+                "index.cfm", // URL with parameters
+                new { controller = "Legacy", action = "legacyRedirect" } // Parameter defaults
+            );
 
             routes.MapRoute(
                 "VehicleLookup",
@@ -164,6 +171,7 @@ namespace MvcWebRole1 {
         protected void Application_Start() {
             AreaRegistration.RegisterAllAreas();
 
+            WebRequest.DefaultWebProxy = null;
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
         }

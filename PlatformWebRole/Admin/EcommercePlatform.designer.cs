@@ -3167,10 +3167,6 @@ namespace Admin
 			{
 				if ((this._contact_type != value))
 				{
-					if (this._ContactType.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
 					this.Oncontact_typeChanging(value);
 					this.SendPropertyChanging();
 					this._contact_type = value;
@@ -3220,7 +3216,7 @@ namespace Admin
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ContactType_ContactInquiry", Storage="_ContactType", ThisKey="contact_type", OtherKey="ID", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ContactInquiry_ContactType", Storage="_ContactType", ThisKey="contact_type", OtherKey="ID", IsUnique=true, IsForeignKey=false)]
 		public ContactType ContactType
 		{
 			get
@@ -3237,17 +3233,12 @@ namespace Admin
 					if ((previousValue != null))
 					{
 						this._ContactType.Entity = null;
-						previousValue.ContactInquiries.Remove(this);
+						previousValue.ContactInquiry = null;
 					}
 					this._ContactType.Entity = value;
 					if ((value != null))
 					{
-						value.ContactInquiries.Add(this);
-						this._contact_type = value.ID;
-					}
-					else
-					{
-						this._contact_type = default(int);
+						value.ContactInquiry = this;
 					}
 					this.SendPropertyChanged("ContactType");
 				}
@@ -3287,7 +3278,7 @@ namespace Admin
 		
 		private string _email;
 		
-		private EntitySet<ContactInquiry> _ContactInquiries;
+		private EntityRef<ContactInquiry> _ContactInquiry;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -3303,7 +3294,7 @@ namespace Admin
 		
 		public ContactType()
 		{
-			this._ContactInquiries = new EntitySet<ContactInquiry>(new Action<ContactInquiry>(this.attach_ContactInquiries), new Action<ContactInquiry>(this.detach_ContactInquiries));
+			this._ContactInquiry = default(EntityRef<ContactInquiry>);
 			OnCreated();
 		}
 		
@@ -3318,6 +3309,10 @@ namespace Admin
 			{
 				if ((this._ID != value))
 				{
+					if (this._ContactInquiry.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnIDChanging(value);
 					this.SendPropertyChanging();
 					this._ID = value;
@@ -3367,16 +3362,37 @@ namespace Admin
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ContactType_ContactInquiry", Storage="_ContactInquiries", ThisKey="ID", OtherKey="contact_type")]
-		public EntitySet<ContactInquiry> ContactInquiries
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ContactInquiry_ContactType", Storage="_ContactInquiry", ThisKey="ID", OtherKey="contact_type", IsForeignKey=true)]
+		internal ContactInquiry ContactInquiry
 		{
 			get
 			{
-				return this._ContactInquiries;
+				return this._ContactInquiry.Entity;
 			}
 			set
 			{
-				this._ContactInquiries.Assign(value);
+				ContactInquiry previousValue = this._ContactInquiry.Entity;
+				if (((previousValue != value) 
+							|| (this._ContactInquiry.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._ContactInquiry.Entity = null;
+						previousValue.ContactType = null;
+					}
+					this._ContactInquiry.Entity = value;
+					if ((value != null))
+					{
+						value.ContactType = this;
+						this._ID = value.contact_type;
+					}
+					else
+					{
+						this._ID = default(int);
+					}
+					this.SendPropertyChanged("ContactInquiry");
+				}
 			}
 		}
 		
@@ -3398,18 +3414,6 @@ namespace Admin
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-		
-		private void attach_ContactInquiries(ContactInquiry entity)
-		{
-			this.SendPropertyChanging();
-			entity.ContactType = this;
-		}
-		
-		private void detach_ContactInquiries(ContactInquiry entity)
-		{
-			this.SendPropertyChanging();
-			entity.ContactType = null;
 		}
 	}
 	
@@ -3606,6 +3610,10 @@ namespace Admin
 		
 		private int _visible;
 		
+		private string _metaTitle;
+		
+		private string _metaDescription;
+		
 		private EntitySet<ContentNesting> _ContentNestings;
 		
 		private EntityRef<ContentNesting> _ContentNesting;
@@ -3622,6 +3630,10 @@ namespace Admin
     partial void OncontentChanged();
     partial void OnvisibleChanging(int value);
     partial void OnvisibleChanged();
+    partial void OnmetaTitleChanging(string value);
+    partial void OnmetaTitleChanged();
+    partial void OnmetaDescriptionChanging(string value);
+    partial void OnmetaDescriptionChanged();
     #endregion
 		
 		public ContentPage()
@@ -3711,6 +3723,46 @@ namespace Admin
 					this._visible = value;
 					this.SendPropertyChanged("visible");
 					this.OnvisibleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_metaTitle", DbType="VarChar(255) NULL")]
+		public string metaTitle
+		{
+			get
+			{
+				return this._metaTitle;
+			}
+			set
+			{
+				if ((this._metaTitle != value))
+				{
+					this.OnmetaTitleChanging(value);
+					this.SendPropertyChanging();
+					this._metaTitle = value;
+					this.SendPropertyChanged("metaTitle");
+					this.OnmetaTitleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_metaDescription", DbType="VarChar(255) NULL")]
+		public string metaDescription
+		{
+			get
+			{
+				return this._metaDescription;
+			}
+			set
+			{
+				if ((this._metaDescription != value))
+				{
+					this.OnmetaDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._metaDescription = value;
+					this.SendPropertyChanged("metaDescription");
+					this.OnmetaDescriptionChanged();
 				}
 			}
 		}
@@ -6835,6 +6887,8 @@ namespace Admin
 		
 		private int _countryID;
 		
+		private decimal _taxRate;
+		
 		private EntitySet<Address> _Addresses;
 		
 		private EntitySet<DistributionCenter> _DistributionCenters;
@@ -6855,6 +6909,8 @@ namespace Admin
     partial void OnabbrChanged();
     partial void OncountryIDChanging(int value);
     partial void OncountryIDChanged();
+    partial void OntaxRateChanging(decimal value);
+    partial void OntaxRateChanged();
     #endregion
 		
 		public State()
@@ -6950,6 +7006,26 @@ namespace Admin
 					this._countryID = value;
 					this.SendPropertyChanged("countryID");
 					this.OncountryIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_taxRate", DbType="Decimal(18,2) NOT NULL")]
+		public decimal taxRate
+		{
+			get
+			{
+				return this._taxRate;
+			}
+			set
+			{
+				if ((this._taxRate != value))
+				{
+					this.OntaxRateChanging(value);
+					this.SendPropertyChanging();
+					this._taxRate = value;
+					this.SendPropertyChanged("taxRate");
+					this.OntaxRateChanged();
 				}
 			}
 		}

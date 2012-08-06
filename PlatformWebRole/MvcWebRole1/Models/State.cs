@@ -6,6 +6,7 @@ using EcommercePlatform.Models;
 using System.Text;
 using System.Reflection;
 using System.Data.Linq;
+using GCheckout.Checkout;
 
 namespace EcommercePlatform {
     partial class State {
@@ -15,8 +16,6 @@ namespace EcommercePlatform {
             State state = db.States.Where(x => x.abbr.ToLower().Equals(abbr.ToLower())).FirstOrDefault();
             return state.stateID;
         }
-
-
 
     }
 
