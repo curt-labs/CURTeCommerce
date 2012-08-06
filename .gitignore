@@ -6,5 +6,4 @@ obj
 TestResults
 
 # web.config files
-
-web.config
+*/*.config
