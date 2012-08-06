@@ -22,6 +22,7 @@ CREATE TABLE [dbo].[States](
 	[state] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[abbr] [varchar](3) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[countryID] [int] NOT NULL,
+	[taxRate] [decimal](18, 2) NOT NULL,
  CONSTRAINT [PK_States] PRIMARY KEY CLUSTERED 
 (
 	[stateID] ASC
@@ -255,14 +256,6 @@ CREATE NONCLUSTERED INDEX [IX_Cart_Payment] ON [dbo].[Cart]
 	[payment_id] ASC
 )WITH (STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF)
 GO
-IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__Cart__bill_to__7E37BEF6]') AND parent_object_id = OBJECT_ID(N'[dbo].[Cart]'))
-ALTER TABLE [dbo].[Cart]  WITH CHECK ADD FOREIGN KEY([bill_to])
-REFERENCES [dbo].[Address] ([ID])
-GO
-IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__Cart__ship_to__7F2BE32F]') AND parent_object_id = OBJECT_ID(N'[dbo].[Cart]'))
-ALTER TABLE [dbo].[Cart]  WITH CHECK ADD FOREIGN KEY([ship_to])
-REFERENCES [dbo].[Address] ([ID])
-GO
 IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[ColumnDefault_77a7efe7-801b-4918-847a-4fb7f81e8224]') AND type = 'D')
 BEGIN
 ALTER TABLE [dbo].[Cart] ADD  CONSTRAINT [ColumnDefault_77a7efe7-801b-4918-847a-4fb7f81e8224]  DEFAULT (getdate()) FOR [date_created]
@@ -414,6 +407,8 @@ CREATE TABLE [dbo].[ContentPage](
 	[Title] [varchar](200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[content] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[visible] [int] NOT NULL,
+	[metaTitle] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[metaDescription] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PrimaryKey_caae9c6c-46f4-417d-9ade-0d19e96c3a15] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -942,7 +937,7 @@ GO
 GO
 -- BCPArgs:70:[dbo].[States] in "c:\SQLAzureMW\BCPData\dbo.States.dat" -E -n -b 10000 -a 16384
 GO
--- BCPArgs:23:[dbo].[Address] in "c:\SQLAzureMW\BCPData\dbo.Address.dat" -E -n -b 10000 -a 16384
+-- BCPArgs:41:[dbo].[Address] in "c:\SQLAzureMW\BCPData\dbo.Address.dat" -E -n -b 10000 -a 16384
 GO
 -- BCPArgs:5:[dbo].[Banners] in "c:\SQLAzureMW\BCPData\dbo.Banners.dat" -E -n -b 10000 -a 16384
 GO
@@ -952,9 +947,9 @@ GO
 GO
 -- BCPArgs:3:[dbo].[BlogPost_BlogCategory] in "c:\SQLAzureMW\BCPData\dbo.BlogPost_BlogCategory.dat" -E -n -b 10000 -a 16384
 GO
--- BCPArgs:53:[dbo].[Cart] in "c:\SQLAzureMW\BCPData\dbo.Cart.dat" -E -n -b 10000 -a 16384
+-- BCPArgs:63:[dbo].[Cart] in "c:\SQLAzureMW\BCPData\dbo.Cart.dat" -E -n -b 10000 -a 16384
 GO
--- BCPArgs:93:[dbo].[CartItem] in "c:\SQLAzureMW\BCPData\dbo.CartItem.dat" -E -n -b 10000 -a 16384
+-- BCPArgs:151:[dbo].[CartItem] in "c:\SQLAzureMW\BCPData\dbo.CartItem.dat" -E -n -b 10000 -a 16384
 GO
 -- BCPArgs:4:[dbo].[Comments] in "c:\SQLAzureMW\BCPData\dbo.Comments.dat" -E -n -b 10000 -a 16384
 GO
@@ -966,7 +961,7 @@ GO
 GO
 -- BCPArgs:12:[dbo].[ContentPage] in "c:\SQLAzureMW\BCPData\dbo.ContentPage.dat" -E -n -b 10000 -a 16384
 GO
--- BCPArgs:7:[dbo].[Customer] in "c:\SQLAzureMW\BCPData\dbo.Customer.dat" -E -n -b 10000 -a 16384
+-- BCPArgs:19:[dbo].[Customer] in "c:\SQLAzureMW\BCPData\dbo.Customer.dat" -E -n -b 10000 -a 16384
 GO
 -- BCPArgs:10:[dbo].[DistributionCenters] in "c:\SQLAzureMW\BCPData\dbo.DistributionCenters.dat" -E -n -b 10000 -a 16384
 GO
@@ -982,25 +977,25 @@ GO
 GO
 -- BCPArgs:8:[dbo].[Locations] in "c:\SQLAzureMW\BCPData\dbo.Locations.dat" -E -n -b 10000 -a 16384
 GO
--- BCPArgs:58:[dbo].[Modules] in "c:\SQLAzureMW\BCPData\dbo.Modules.dat" -E -n -b 10000 -a 16384
+-- BCPArgs:59:[dbo].[Modules] in "c:\SQLAzureMW\BCPData\dbo.Modules.dat" -E -n -b 10000 -a 16384
 GO
 -- BCPArgs:2:[dbo].[Newsletter] in "c:\SQLAzureMW\BCPData\dbo.Newsletter.dat" -E -n -b 10000 -a 16384
 GO
--- BCPArgs:33:[dbo].[Payment] in "c:\SQLAzureMW\BCPData\dbo.Payment.dat" -E -n -b 10000 -a 16384
+-- BCPArgs:36:[dbo].[Payment] in "c:\SQLAzureMW\BCPData\dbo.Payment.dat" -E -n -b 10000 -a 16384
 GO
 -- BCPArgs:3:[dbo].[PaymentType] in "c:\SQLAzureMW\BCPData\dbo.PaymentType.dat" -E -n -b 10000 -a 16384
 GO
 -- BCPArgs:8:[dbo].[Profile] in "c:\SQLAzureMW\BCPData\dbo.Profile.dat" -E -n -b 10000 -a 16384
 GO
--- BCPArgs:415:[dbo].[ProfileModules] in "c:\SQLAzureMW\BCPData\dbo.ProfileModules.dat" -E -n -b 10000 -a 16384
+-- BCPArgs:417:[dbo].[ProfileModules] in "c:\SQLAzureMW\BCPData\dbo.ProfileModules.dat" -E -n -b 10000 -a 16384
 GO
 -- BCPArgs:3:[dbo].[ScheduledTask] in "c:\SQLAzureMW\BCPData\dbo.ScheduledTask.dat" -E -n -b 10000 -a 16384
 GO
 -- BCPArgs:1:[dbo].[Services] in "c:\SQLAzureMW\BCPData\dbo.Services.dat" -E -n -b 10000 -a 16384
 GO
--- BCPArgs:6:[dbo].[SettingGroup] in "c:\SQLAzureMW\BCPData\dbo.SettingGroup.dat" -E -n -b 10000 -a 16384
+-- BCPArgs:8:[dbo].[SettingGroup] in "c:\SQLAzureMW\BCPData\dbo.SettingGroup.dat" -E -n -b 10000 -a 16384
 GO
--- BCPArgs:49:[dbo].[Setting] in "c:\SQLAzureMW\BCPData\dbo.Setting.dat" -E -n -b 10000 -a 16384
+-- BCPArgs:63:[dbo].[Setting] in "c:\SQLAzureMW\BCPData\dbo.Setting.dat" -E -n -b 10000 -a 16384
 GO
 -- BCPArgs:35:[dbo].[Testimonial] in "c:\SQLAzureMW\BCPData\dbo.Testimonial.dat" -E -n -b 10000 -a 16384
 GO
