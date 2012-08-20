@@ -746,7 +746,6 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ConnectionStrings.config" />
     <None Include="Content\less\bootstrap\adaptive.less" />
     <None Include="Content\less\bootstrap\bootstrap.less" />
     <None Include="Content\less\bootstrap\forms.less" />

@@ -76,7 +76,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Content Include="ConnectionStrings.config" />
     <None Include="EcommercePlatform.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>EcommercePlatform.designer.cs</LastGenOutput>

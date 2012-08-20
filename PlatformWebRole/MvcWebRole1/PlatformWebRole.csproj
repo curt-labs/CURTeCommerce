@@ -484,7 +484,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\hitchdepotusa-16052012.zip" />
-    <Content Include="ConnectionStrings.config" />
     <None Include="Content\audio\bitches_please.ogg" />
     <None Include="Content\DataTables\media\images\Sorting icons.psd" />
     <Content Include="Content\Fonts\080109cd-e993-4dc4-9c21-b34766eba5aa.ttf" />

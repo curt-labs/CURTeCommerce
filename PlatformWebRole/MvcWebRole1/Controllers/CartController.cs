@@ -46,7 +46,7 @@ namespace EcommercePlatform.Controllers {
             customer.GetFromStorage();
 
             if (!customer.LoggedIn()) {
-                Response.Redirect("/Authenticate");
+                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
             }
 
             customer.BindAddresses();
@@ -69,7 +69,7 @@ namespace EcommercePlatform.Controllers {
             customer.GetFromStorage();
 
             if (!customer.LoggedIn()) {
-                Response.Redirect("/Authenticate");
+                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
             }
 
             customer.BindAddresses();
@@ -199,8 +199,9 @@ namespace EcommercePlatform.Controllers {
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
-                Response.Redirect("/Authenticate");
+                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
             }
+
 
             customer.Cart.SetBilling(id);
             if (customer.billingID == 0) {
@@ -218,8 +219,9 @@ namespace EcommercePlatform.Controllers {
                 Customer customer = new Customer();
                 customer.GetFromStorage();
                 if (!customer.LoggedIn()) {
-                    Response.Redirect("/Authenticate");
+                    return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
                 }
+
                 Address billing = new Address();
                 // Build out our Billing object
                 billing = new Address {
@@ -256,8 +258,9 @@ namespace EcommercePlatform.Controllers {
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
-                Response.Redirect("/Authenticate");
+                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
             }
+
             customer.Cart.SetShipping(id);
             if (customer.shippingID == 0) {
                 customer.SetShippingDefaultAddress(id);
@@ -274,8 +277,9 @@ namespace EcommercePlatform.Controllers {
                 Customer customer = new Customer();
                 customer.GetFromStorage();
                 if (!customer.LoggedIn()) {
-                    Response.Redirect("/Authenticate");
+                    return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
                 }
+
 
                 Address shipping = new Address();
                 // Build out our Billing object
@@ -318,7 +322,7 @@ namespace EcommercePlatform.Controllers {
                 // Retrieve Customer from Sessions/Cookie
                 customer.GetFromStorage();
                 if (!customer.LoggedIn()) {
-                    Response.Redirect("/Authenticate");
+                    return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
                 }
 
                 decimal shipping_price = Convert.ToDecimal(rate.NetCharge.Key);
@@ -373,7 +377,7 @@ namespace EcommercePlatform.Controllers {
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
-                Response.Redirect("/Authenticate");
+                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
             }
 
             decimal shipping_price = 0;

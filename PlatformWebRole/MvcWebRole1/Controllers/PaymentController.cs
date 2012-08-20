@@ -22,7 +22,7 @@ namespace EcommercePlatform.Controllers {
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
-                Response.Redirect("/Authenticate");
+                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
             }
 
             // Create Cart object from customer
@@ -58,7 +58,7 @@ namespace EcommercePlatform.Controllers {
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
-                Response.Redirect("/Authenticate");
+                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
             }
 
             customer.BindAddresses();
@@ -128,7 +128,7 @@ namespace EcommercePlatform.Controllers {
             Customer customer = ViewBag.customer;
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
-                Response.Redirect("/Authenticate");
+                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
             }
 
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
@@ -193,7 +193,7 @@ namespace EcommercePlatform.Controllers {
             Customer customer = ViewBag.customer;
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
-                Response.Redirect("/Authenticate");
+                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
             }
             Paypal p = new Paypal();
             string token = p.ECSetExpressCheckout(customer.Cart);
@@ -216,7 +216,7 @@ namespace EcommercePlatform.Controllers {
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
-                Response.Redirect("/Authenticate");
+                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
             }
 
             // Create Cart object from customer
@@ -246,7 +246,7 @@ namespace EcommercePlatform.Controllers {
             Customer customer = ViewBag.customer;
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
-                Response.Redirect("/Authenticate");
+                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
             }
             decimal total = customer.Cart.shipping_price;
             foreach (CartItem item in customer.Cart.CartItems) {
@@ -281,7 +281,7 @@ namespace EcommercePlatform.Controllers {
             Cart order = new Cart().Get(id);
 
             if (!customer.LoggedIn() || order.cust_id != customer.ID) {
-                Response.Redirect("/Authenticate");
+                return RedirectToAction("Index", "Authenticate");
             }
 
             order.BindAddresses();

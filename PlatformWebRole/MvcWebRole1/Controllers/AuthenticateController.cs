@@ -15,10 +15,9 @@ namespace EcommercePlatform.Controllers {
         /// </summary>
         /// <param name="error">Error message from login</param>
         /// <returns>View page</returns>
-        public ActionResult Index() {
+        public ActionResult Index(string referrer = "") {
 
-            string referrer = "";
-            if(Request.UrlReferrer != null && Request.UrlReferrer.Host != null && Request.UrlReferrer.Host.Contains(Request.Url.Host)){
+            if(referrer == "" && Request.UrlReferrer != null && Request.UrlReferrer.Host != null && Request.UrlReferrer.Host.Contains(Request.Url.Host)){
                 referrer = Request.UrlReferrer.AbsoluteUri;
             }
 
