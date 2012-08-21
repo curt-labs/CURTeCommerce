@@ -15,6 +15,18 @@ namespace Admin.Controllers {
             return View();
         }
 
+        public ActionResult FirstUse() {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            try {
+                Profile p = db.Profiles.Where(x => x.username.Equals("admin")).First<Profile>();
+                if (p.password == "") {
+                    p.password = Crypto.EncryptString("admin");
+                    db.SubmitChanges();
+                }
+            } catch { };
+            return RedirectToAction("Index");
+        }
+
         public ActionResult In() {
             try {
                 string username = Request.Form["username"];
