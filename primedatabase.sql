@@ -217,16 +217,16 @@ INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('Yukon','YT',2,0);
 INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('Nunavut','NU',2,0);
 GO
 
-INSERT INTO DistrubutionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,Latitude,Longitude,State) VALUES ('CURT Headquarters','877.287.8634','715.831.8712','6208 Industrial Dr','','Eau Claire','54701','US',44.7937928,-91.4105522,56);
-INSERT INTO DistrubutionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,Latitude,Longitude,State) VALUES ('Atlanta Area','866.528.2878','866.529.2878','110 Northpoint Parkway','Suite 200','Acworth','30102','US',34.0816304,-84.6444805,13);
-INSERT INTO DistrubutionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,Latitude,Longitude,State) VALUES ('Central California','888.488.5688','559.442.1952','3134 S. East Avenue','Suite 104','Fresno','93725','US',36.689023,-119.770402,6);
-INSERT INTO DistrubutionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,Latitude,Longitude,State) VALUES ('Dallas Area','888.635.9824','972.352.2617','1102 W. N. Carrier Parkway','Suite 300','Grand Prairie','75050','US',32.7853096,-97.0476728,49);
-INSERT INTO DistrubutionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,Latitude,Longitude,State) VALUES ('Detroit Area','877.287.8634','734.729.4216','5820 N. Hix Road','','Westland','48185','US',42.325723,-83.417394,27);
-INSERT INTO DistrubutionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,Latitude,Longitude,State) VALUES ('Houston Area','866.341.7295','281.341.9243','4921 Timber Lane','','Rosenberg','77471','US',29.567977,-95.778192,49);
-INSERT INTO DistrubutionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,Latitude,Longitude,State) VALUES ('Northeast/Mid-Atlantic','800.325.2613','978.870.1056','6370 Hedgewood Dr','Suite 110','Allentown','18106','US',40.593165,-75.602074,42);
-INSERT INTO DistrubutionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,Latitude,Longitude,State) VALUES ('Phoenix Area','866.817.7189','602393.1434','4002 West Turney','Suite 1','Phoenix','85019','US',33.5015379,-112.14433,5);
-INSERT INTO DistrubutionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,Latitude,Longitude,State) VALUES ('Seattle Area','877.832.2370','253.804.3511','2108 B Street NW','Suite 120','Auburn','98001','US',47.325739,-122.231159,54);
-INSERT INTO DistrubutionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,Latitude,Longitude,State) VALUES ('Toronto Area','877.287.8634','905.569.8330','3250 Ridgeway Dr','Unit 15','Mississauga','L5l 5Y6','Canada',43.5191392,-79.6981668,58);
+INSERT INTO DistributionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,CountryCode,Latitude,Longitude,State) VALUES ('CURT Headquarters','877.287.8634','715.831.8712','6208 Industrial Dr','','Eau Claire','54701','US',44.7937928,-91.4105522,56);
+INSERT INTO DistributionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,CountryCode,Latitude,Longitude,State) VALUES ('Atlanta Area','866.528.2878','866.529.2878','110 Northpoint Parkway','Suite 200','Acworth','30102','US',34.0816304,-84.6444805,13);
+INSERT INTO DistributionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,CountryCode,Latitude,Longitude,State) VALUES ('Central California','888.488.5688','559.442.1952','3134 S. East Avenue','Suite 104','Fresno','93725','US',36.689023,-119.770402,6);
+INSERT INTO DistributionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,CountryCode,Latitude,Longitude,State) VALUES ('Dallas Area','888.635.9824','972.352.2617','1102 W. N. Carrier Parkway','Suite 300','Grand Prairie','75050','US',32.7853096,-97.0476728,49);
+INSERT INTO DistributionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,CountryCode,Latitude,Longitude,State) VALUES ('Detroit Area','877.287.8634','734.729.4216','5820 N. Hix Road','','Westland','48185','US',42.325723,-83.417394,27);
+INSERT INTO DistributionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,CountryCode,Latitude,Longitude,State) VALUES ('Houston Area','866.341.7295','281.341.9243','4921 Timber Lane','','Rosenberg','77471','US',29.567977,-95.778192,49);
+INSERT INTO DistributionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,CountryCode,Latitude,Longitude,State) VALUES ('Northeast/Mid-Atlantic','800.325.2613','978.870.1056','6370 Hedgewood Dr','Suite 110','Allentown','18106','US',40.593165,-75.602074,42);
+INSERT INTO DistributionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,CountryCode,Latitude,Longitude,State) VALUES ('Phoenix Area','866.817.7189','602393.1434','4002 West Turney','Suite 1','Phoenix','85019','US',33.5015379,-112.14433,5);
+INSERT INTO DistributionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,CountryCode,Latitude,Longitude,State) VALUES ('Seattle Area','877.832.2370','253.804.3511','2108 B Street NW','Suite 120','Auburn','98001','US',47.325739,-122.231159,54);
+INSERT INTO DistributionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,CountryCode,Latitude,Longitude,State) VALUES ('Toronto Area','877.287.8634','905.569.8330','3250 Ridgeway Dr','Unit 15','Mississauga','L5l 5Y6','Canada',43.5191392,-79.6981668,58);
 GO
 
 INSERT INTO PaymentType (name) VALUES ('Credit Card');

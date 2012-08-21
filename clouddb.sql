@@ -18,7 +18,7 @@ SET QUOTED_IDENTIFIER ON
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[States]') AND type in (N'U'))
 BEGIN
 CREATE TABLE [dbo].[States](
-	[stateID] [int] NOT NULL,
+	[stateID] [int] IDENTITY(1,1) NOT NULL,
 	[state] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[abbr] [varchar](3) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[countryID] [int] NOT NULL,
