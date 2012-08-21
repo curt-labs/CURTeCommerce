@@ -1407,7 +1407,7 @@ footer #footer_container .company div.footer_graphics a:hover img.dark{
     display:none;
 }
 
-footer #footer_container .company div.footer_graphics img, footer #footer_container .company div.social_links img{ width: 32px; }
+footer #footer_container .company div.footer_graphics img, footer #footer_container .footerlogo div.social_links img{ width: 32px; }
 
 footer #footer_container div.social_links a img.active {
     -ms-transition: all 0.5s ease-in-out;

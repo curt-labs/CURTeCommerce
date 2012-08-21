@@ -48,12 +48,13 @@ namespace EcommercePlatform.Controllers {
                     email = email,
                     contact_type = contact_type,
                     message = message,
-                    dateAdded = DateTime.Now
+                    dateAdded = DateTime.Now,
+                    followedUp = 0
                 };
                 bool recaptchavalid = ReCaptcha.ValidateCaptcha(Request.Form["recaptcha_challenge_field"], Request.Form["recaptcha_response_field"], remoteip);
                 if (!recaptchavalid) throw new Exception("Captcha Incorrect!");
 
-                UDF.Sanitize(inq, new string[] { "phone" });
+                UDF.Sanitize(inq, new string[] { "phone", "followedUp" });
                 inq.Save();
                 TempData["error"] = "Thank you for your inquiry, someone will contact you soon to follow up with your request.";
                 return RedirectToAction("Index", "Contact");
@@ -76,7 +77,8 @@ namespace EcommercePlatform.Controllers {
                     email = email,
                     contact_type = 0,
                     message = message,
-                    dateAdded = DateTime.Now
+                    dateAdded = DateTime.Now,
+                    followedUp = 0
                 };
                 bool recaptchavalid = ReCaptcha.ValidateCaptcha(recaptcha_challenge_field, recaptcha_response_field, remoteip);
                 if (!recaptchavalid) throw new Exception("Captcha Incorrect!");

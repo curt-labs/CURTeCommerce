@@ -36,6 +36,10 @@
             }
         </tbody>
         <tfoot>
+            <tr>
+                <td colspan="3"><strong>Subtotal:</strong></td>
+                <td class="price"><strong>@String.Format("{0:C}", total)</strong></td>
+            </tr>
             @if (showShipping) {
                 <tr>
                     <td colspan="3" class="shippingtype">(@cart.shipping_type.Replace("_"," ").ToLower()) Shipping:</td>
@@ -47,11 +51,11 @@
                 </tr>
                 total += cart.tax;
                 total += cart.shipping_price;
+                <tr>
+                    <td colspan="3"><strong>Total:</strong></td>
+                    <td class="price"><strong>@String.Format("{0:C}", total)</strong></td>
+                </tr>
             }
-            <tr>
-                <td colspan="3"><strong>@((showShipping) ? "Total" : "Subtotal"):</strong></td>
-                <td class="price"><strong>@String.Format("{0:C}", total)</strong></td>
-            </tr>
         </tfoot>
     </table>
 } else {

@@ -109,6 +109,7 @@ namespace EcommercePlatform.Controllers {
             try {
 
                 Session.Remove("customer");
+                Session.Remove("settings");
                 Session.Clear();
                 Session.Abandon();
 
