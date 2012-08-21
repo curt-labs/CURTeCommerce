@@ -70,6 +70,9 @@ namespace Admin.Models
         public static string Delete(int id = 0) {
             try {
                 EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+                List<BlogPost_BlogCategory> postcats = db.BlogPost_BlogCategories.Where(x => x.blogCategoryID.Equals(id)).ToList<BlogPost_BlogCategory>();
+                db.BlogPost_BlogCategories.DeleteAllOnSubmit(postcats);
+                db.SubmitChanges();
                 BlogCategory category = (from c in db.BlogCategories
                                          where c.blogCategoryID.Equals(id)
                                          select c).FirstOrDefault<BlogCategory>();

@@ -39,9 +39,9 @@ namespace Admin.Models {
             Dictionary<string, string> settings = GetAll();
             string val = "";
             try {
-                val = settings[name];
+                val = settings[name].Trim();
             } catch { };
-            return val.Trim();
+            return val;
         }
 
     }

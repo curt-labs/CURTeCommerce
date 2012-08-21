@@ -21,7 +21,7 @@ namespace TaskScheduler {
             Dictionary<string, string> settings = GetAll();
             string val = "";
             try {
-                val = settings[name];
+                val = settings[name].Trim();
             } catch { };
             return val;
         }
