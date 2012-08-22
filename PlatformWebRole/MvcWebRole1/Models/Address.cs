@@ -98,7 +98,7 @@ namespace EcommercePlatform {
                 StreetLines = new string[] { this.street1, this.street2 },
                 City = this.city,
                 StateOrProvinceCode = this.State1.abbr,
-                CountryCode = this.State1.Country.abbr,
+                CountryCode = this.State1.Country.abbr.Substring(0, 2),
                 PostalCode = this.postal_code,
                 Residential = this.residential,
                 ResidentialSpecified = true,
