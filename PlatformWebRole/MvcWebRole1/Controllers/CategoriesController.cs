@@ -10,10 +10,10 @@ using System.Web.Script.Serialization;
 namespace EcommercePlatform.Controllers {
     public class CategoriesController : BaseController {
 
-        public ActionResult Index(string cat = "") {
-            if (cat.Length > 0) {
+        public ActionResult Index(int catID = 0) {
+            if (catID > 0) {
                 APICategory category = new APICategory();
-                category = CURTAPI.GetCategoryByName(cat);
+                category = CURTAPI.GetCategory(catID);
                 
                 ViewBag.category = category;
 

@@ -23,7 +23,7 @@
 <div class="clearfix"></div>
 
 @foreach (EcommercePlatform.Models.APICategory sub in cat.sub_categories) {
-    <a href="/Category/@HttpUtility.UrlEncode(sub.catTitle.Trim())" class="sub_cat" title="@sub.catTitle.Trim()">
+    <a href="/Category/@sub.catID/@HttpUtility.UrlEncode(sub.catTitle.Trim())" class="sub_cat" title="@sub.catTitle.Trim()">
         <span class="img_container">
             <img src="@sub.image" alt="@sub.catTitle.Trim()" onerror="$(this).remove()" />
         </span>

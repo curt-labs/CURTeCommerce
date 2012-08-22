@@ -117,8 +117,7 @@ namespace EcommercePlatform.Controllers {
 
                 return RedirectToAction("Complete", new { id = cartid });
             } else {
-                TempData["message"] = response.Message;
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { message = response.Message });
             }
         }
 

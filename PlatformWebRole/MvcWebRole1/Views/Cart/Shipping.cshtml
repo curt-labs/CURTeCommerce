@@ -71,7 +71,7 @@
                                                 @if (cust.Cart.HasFreeShipping() && rate.ServiceType == ViewBag.settings.Get("FreeShippingType")) {
                                                     shipping_type = rate.ServiceType;
                                                     <input type="radio" name="shipping_type" id="shipping_@(shipcount)" value="@rate.ServiceType|0" @((shipcount == 1) ? "checked=checked" : "") />
-                                                    <span class="rate">Free Shipping - @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rate.ServiceType.Replace("_", " ").ToLower()) (1 - 3) Business Days</span>
+                                                    <span class="rate">Free Shipping - @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rate.ServiceType.Replace("_", " ").ToLower())</span>
                                                 } else {
                                                     shipping_type = rate.ServiceType;
                                                     <input type="radio" name="shipping_type" id="shipping_@(shipcount)" value="@rate.ServiceType|@rate.Rates.FirstOrDefault().NetCharge.Key" @((shipcount == 1) ? "checked=checked" : "") />

@@ -158,7 +158,7 @@
                         <ul>
                             @foreach (EcommercePlatform.Models.APICategory cat in parent_cats) {
                                 <li>
-                                    <a href="/Category/@HttpUtility.HtmlEncode(cat.catTitle.Trim())" title="@cat.catTitle.Trim()">@cat.catTitle.Trim()</a>
+                                    <a href="/Category/@cat.catID/@HttpUtility.HtmlEncode(cat.catTitle.Trim())" title="@cat.catTitle.Trim()">@cat.catTitle.Trim()</a>
                                 </li>
                             }
                         </ul>
