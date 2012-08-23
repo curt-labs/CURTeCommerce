@@ -36,7 +36,7 @@ $(function () {
         if (mount.length !== 0 && mount !== null) {
             $(this).removeClass('err').prev().hide();
         }
-        $.getJSON('http://api.curtmfg.com/v2/getyear?callback=?', { 'mount': mount, 'dataType': 'JSONP' }, function (years) {
+        $.getJSON('https://api.curtmfg.com/v2/getyear?callback=?', { 'mount': mount, 'dataType': 'JSONP' }, function (years) {
             $.each(years, function (i, year) {
                 var opt = document.createElement('option');
                 $(opt).text(year);
@@ -59,7 +59,7 @@ $(function () {
         if (year !== 0 && year !== null) {
             $(this).removeClass('err').prev().hide();
         }
-        $.getJSON('http://api.curtmfg.com/v2/getmake?callback=?', { 'mount': mount, 'year': year, 'dataType': 'JSONP' }, function (makes) {
+        $.getJSON('https://api.curtmfg.com/v2/getmake?callback=?', { 'mount': mount, 'year': year, 'dataType': 'JSONP' }, function (makes) {
             $.each(makes, function (i, make) {
                 var opt = document.createElement('option');
                 $(opt).text(make);
@@ -81,7 +81,7 @@ $(function () {
         if (make !== 0 && make !== null) {
             $(this).removeClass('err').prev().hide();
         }
-        $.getJSON('http://api.curtmfg.com/v2/getmodel?callback=?', { 'mount': mount, 'year': year, 'make': make, 'dataType': 'JSONP' }, function (models) {
+        $.getJSON('https://api.curtmfg.com/v2/getmodel?callback=?', { 'mount': mount, 'year': year, 'make': make, 'dataType': 'JSONP' }, function (models) {
             $.each(models, function (i, model) {
                 var opt = document.createElement('option');
                 $(opt).text(model);

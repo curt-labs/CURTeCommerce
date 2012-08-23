@@ -248,7 +248,9 @@
                     <img src="@ViewBag.settings.Get("HomeBannerLeft")" alt="@ViewBag.settings.Get("HomeBannerLeftAltText")" class="free-shipping" />
                 }
             </section>
-            <section id="home_content">@Html.Raw(page.content)</section>
+            <section id="home_content">
+                @Html.Raw(page.content)
+            </section>
             <section id="mid_col" @((recentParts.Count == 0) ? "style=width:790px" : "")>
                 <span class="heading">FEATURED PRODUCTS</span>
                 @foreach (EcommercePlatform.Models.APICategory cat in parent_cats) {

@@ -107,10 +107,16 @@ namespace EcommercePlatform.Controllers {
                 customer.Cart.AddPayment("credit card",response.AuthorizationCode,"Complete");
                 customer.Cart.SendConfirmation();
                 int cartid = customer.Cart.ID;
-                Cart new_cart = new Cart().Save(customer.ID);
+                
+                Cart new_cart = new Cart().Save();
+                new_cart.UpdateCart(customer.ID);
+                DateTime cookexp = Request.Cookies["hdcart"].Expires;
+                HttpCookie cook = new HttpCookie("hdcart", new_cart.ID.ToString());
+                cook.Expires = cookexp;
+                Response.Cookies.Add(cook);
+
                 customer.Cart = new_cart;
                 customer.Cart.BindAddresses();
-                customer.SerializeToStorage();
 
                 EDI edi = new EDI();
                 edi.CreatePurchaseOrder(cartid); 
@@ -176,10 +182,16 @@ namespace EcommercePlatform.Controllers {
             GCheckoutResponse resp = req.Send();
             if (resp.IsGood) {
                 customer.Cart.AddPayment("Google Checkout", "", "Pending");
-                Cart new_cart = new Cart().Save(customer.ID);
+                
+                Cart new_cart = new Cart().Save();
+                new_cart.UpdateCart(customer.ID);
+                DateTime cookexp = Request.Cookies["hdcart"].Expires;
+                HttpCookie cook = new HttpCookie("hdcart", new_cart.ID.ToString());
+                cook.Expires = cookexp;
+                Response.Cookies.Add(cook);
+                
                 customer.Cart = new_cart;
                 customer.Cart.BindAddresses();
-                customer.SerializeToStorage();
 
                 return Redirect(resp.RedirectUrl);
             } else {
@@ -198,7 +210,6 @@ namespace EcommercePlatform.Controllers {
             string token = p.ECSetExpressCheckout(customer.Cart);
             if (!token.ToLower().Contains("failure")) {
                 customer.Cart.paypalToken = token;
-                customer.SerializeToStorage();
                 if (Request.Url.Host.Contains("127.0.0") || Request.Url.Host.Contains("localhost")) {
                     return Redirect("https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=" + token);
                 } else {
@@ -257,10 +268,16 @@ namespace EcommercePlatform.Controllers {
                 customer.Cart.AddPayment("PayPal", token, "Complete");
                 customer.Cart.SendConfirmation();
                 int cartid = customer.Cart.ID;
-                Cart new_cart = new Cart().Save(customer.ID);
+
+                Cart new_cart = new Cart().Save();
+                new_cart.UpdateCart(customer.ID);
+                DateTime cookexp = Request.Cookies["hdcart"].Expires;
+                HttpCookie cook = new HttpCookie("hdcart", new_cart.ID.ToString());
+                cook.Expires = cookexp;
+                Response.Cookies.Add(cook);
+
                 customer.Cart = new_cart;
                 customer.Cart.BindAddresses();
-                customer.SerializeToStorage();
 
                 EDI edi = new EDI();
                 edi.CreatePurchaseOrder(cartid); 

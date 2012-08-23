@@ -146,9 +146,7 @@ namespace Admin
 
         public decimal getTotal() {
             decimal total = 0;
-            foreach (Admin.CartItem item in this.CartItems) {
-                total += (item.quantity * item.price);
-            }
+            total += GetSubTotal();
             total += this.shipping_price;
             total += this.tax;
             return total;
@@ -252,11 +250,11 @@ namespace Admin
         internal void SendConfirmation() {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             Payment payment = this.getPayment();
-            Settings settings = new Settings();
 
             string toemail = db.Customers.Where(x => x.ID == this.cust_id).Select(x => x.email).FirstOrDefault();
             StringBuilder sb = new StringBuilder();
-            TextInfo myTI = new CultureInfo("en-US",false).TextInfo;
+            TextInfo myTI = new CultureInfo("en-US", false).TextInfo;
+            Settings settings = new Settings();
 
             string[] tos = { toemail };
             decimal total = 0;
@@ -265,7 +263,7 @@ namespace Admin
             sb.Append("<h2>Thank you for your order!</h2>");
             sb.Append("<hr />");
             sb.AppendFormat("<p><strong>Order ID:</strong> {0}<br />", this.ID);
-            sb.AppendFormat("<strong>Paid By:</strong> {0} on {1}</p>", payment.PaymentTypes.name, String.Format("{0:M/d/yyyy} at {0:h:mm tt}",payment.created));
+            sb.AppendFormat("<strong>Paid By:</strong> {0} on {1}</p>", payment.PaymentTypes.name, String.Format("{0:M/d/yyyy} at {0:h:mm tt}", payment.created));
             sb.Append("<p style=\"font-size: 12px;\"><strong style=\"font-size: 14px;\">Billing Address:</strong><br />");
             sb.AppendFormat("{0} {1}<br />", this.Billing.first, this.Billing.last);
             sb.AppendFormat("{0}{1}<br />{2}, {3} {4}<br />{5}</p>", this.Billing.street1, this.Billing.street2, this.Billing.city, this.Billing.State1.abbr, this.Billing.postal_code, this.Billing.State1.Country.name);
@@ -273,26 +271,30 @@ namespace Admin
             sb.AppendFormat("{0} {1}<br />", this.Shipping.first, this.Shipping.last);
             sb.AppendFormat("{0}{1}<br />{2}, {3} {4}<br />{5}</p>", this.Shipping.street1, this.Shipping.street2, this.Shipping.city, this.Shipping.State1.abbr, this.Shipping.postal_code, this.Shipping.State1.Country.name);
             sb.Append("<table style=\"width: 100%;\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\"><thead><tr><th style=\"background-color: #343434; color: #fff;\">Item</th><th style=\"background-color: #343434; color: #fff;\">Quantity</th><th style=\"background-color: #343434; color: #fff;\">Price</th></tr></thead><tbody style=\"font-size: 12px;\">");
-            foreach(CartItem item in this.CartItems) {
+            foreach (CartItem item in this.CartItems) {
                 sb.AppendFormat("<tr><td><a href=\"" + settings.Get("SiteURL") + "part/{0}\">{1}</a></td><td style=\"text-align:center;\">{2}</td><td style=\"text-align:right;\">{3}</td></tr>", item.partID, item.shortDesc, item.quantity, String.Format("{0:C}", item.price));
                 total += (item.quantity * item.price);
             }
             sb.Append("</tbody><tfoot style=\"font-size: 12px;\">");
-            sb.AppendFormat("<tr><td colspan=\"2\" style=\"border-top: 1px solid #222;text-align: right;\">({0}) Shipping:</td>", myTI.ToTitleCase(this.shipping_type.Replace("_", " ")));
-            sb.AppendFormat("<td style=\"border-top: 1px solid #222;text-align:right;\">{0}</td></tr>", (this.shipping_price == 0) ? "Free" : String.Format("{0:C}", this.shipping_price));
+            sb.Append("<tr><td colspan=\"2\" style=\"border-top: 1px solid #222; text-align: right;\"><strong>SubTotal:<strong></td>");
+            sb.AppendFormat("<td style=\"border-top: 1px solid #222; text-align:right;\"><strong>{0}</strong></td></tr>", String.Format("{0:C}", this.GetSubTotal()));
+            sb.AppendFormat("<tr><td colspan=\"2\" style=\"text-align: right;\">({0}) Shipping:</td>", myTI.ToTitleCase(this.shipping_type.Replace("_", " ")));
+            sb.AppendFormat("<td style=\"text-align:right;\">{0}</td></tr>", (this.shipping_price == 0) ? "Free" : String.Format("{0:C}", this.shipping_price));
+            sb.Append("<tr><td colspan=\"2\" style=\"text-align: right;\">Tax:</td>");
+            sb.AppendFormat("<td style=\"text-align:right;\">{0}</td></tr>", String.Format("{0:C}", this.tax));
             sb.Append("<tr><td colspan=\"2\" style=\"text-align: right;\"><strong>Total:<strong></td>");
             total += this.shipping_price;
-            sb.AppendFormat("<td style=\"text-align:right;\"><strong>{0}</strong></td></tr>",String.Format("{0:C}", total));
+            sb.AppendFormat("<td style=\"text-align:right;\"><strong>{0}</strong></td></tr>", String.Format("{0:C}", this.getTotal()));
             sb.Append("</tfoot></table>");
             sb.Append("<hr /><br />");
             sb.Append("<p style='font-size:11px'>If you have any questions, or if you did not place this order, please <a href='" + settings.Get("SiteURL") + "contact'>contact us</a>.</p>");
             sb.Append("</body></html>");
-            UDF.SendEmail(settings.Get("NoReplyEmailAddress"), tos, settings.Get("SiteName") + " Order Confirmation", true, sb.ToString());
+            UDF.SendEmail(tos, settings.Get("SiteName") + " Order Confirmation", true, sb.ToString());
         }
 
         internal void SetTax() {
             decimal tax = 0;
-            tax = ((this.GetSubTotal() + this.shipping_price) * (this.Billing.State1.taxRate / 100));
+            tax = Math.Round(((this.GetSubTotal() + this.shipping_price) * (this.Billing.State1.taxRate / 100)), 2);
 
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             Cart c = db.Carts.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<Cart>();

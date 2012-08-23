@@ -28,14 +28,6 @@ namespace EcommercePlatform.Controllers {
             
             ViewBag.settings = new Settings();
 
-            // Check to see if the cart object exists
-            if (customer.Cart == null) {
-                // Create a new Cart object and add it to the Customer object
-                Cart cart = new Cart();
-                customer.Cart = cart;
-                customer.SerializeToStorage();
-            }
-
             ViewBag.customer = customer;
 
         }

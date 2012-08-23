@@ -54,18 +54,23 @@ namespace Admin.Controllers {
             StringWriter writer = new StringWriter();
 
             writer.WriteLine("Invoice Number|Invoice Date|orderID|CURT Order|Invoice Type|remit To|currency|subtotal|sales tax|total|discount amount|discount total|terms type|terms description|discount percent|discount due date|discount days due|net due date|net days due|Bill To|Billing Street 1|Billing Street 2|Billing City|Billing Province|Billing Postal|Billing Country|Ship To|Shipping Street|Shipping City|Shipping Province|Shipping Postal|Shipping Country|Shipping Phone");
-            writer.WriteLine(invoice.number + "|" + String.Format("{0:MM-dd-yyyy}", invoice.dateAdded) + "|" + invoice.orderID + "|" + invoice.curtOrder + "|" + invoice.invoiceType + "|" + invoice.remitTo + "|" + invoice.billToCurrency + "|" + invoice.subtotal + "|" + invoice.salesTax + "|" + invoice.total + "|" + invoice.discount + "|" + invoice.discountTotal + "|" + invoice.termsType + "|" + invoice.termsDescription + "|" + invoice.discountPercent + "|" + String.Format("{0:MM-dd-yyyy}", invoice.discountDueDate) + "|" + invoice.discountDueDays + "|" + String.Format("{0:MM-dd-yyyy}", invoice.netDueDate) + "|" + invoice.netDueDays + "|" + invoice.BillTo.first + " " + invoice.BillTo.last + "|" + invoice.BillTo.street1 + "|" + invoice.BillTo.city + "|" + invoice.BillTo.State1.abbr + "|" + invoice.BillTo.postal_code + "|" + invoice.BillTo.State1.Country.abbr + "|" + invoice.ShipTo.first + " " + invoice.ShipTo.last + "|" + invoice.ShipTo.street1 + "|" + invoice.ShipTo.street2 + "|" + invoice.ShipTo.city + "|" + invoice.ShipTo.State1.abbr + "|" + invoice.ShipTo.postal_code + "|" + invoice.ShipTo.State1.Country.abbr + "|" + invoice.ShipTo.street2);
-            writer.WriteLine("PartID|Quantity|price|Description");
-            foreach (InvoiceItem item in invoice.InvoiceItems) {
-                try {
-                    writer.WriteLine(item.partID + "|" + item.quantity + "|" + item.price + "|" + item.description);
-                } catch { };
+            int loopcount = invoice.InvoiceItems.Count;
+            if (invoice.InvoiceCodes.Count > loopcount) {
+                loopcount = invoice.InvoiceCodes.Count;
             }
-            writer.WriteLine("CodeType|code|value|Description");
-            foreach (InvoiceCode code in invoice.InvoiceCodes) {
+            for (int i = 0; i < loopcount; i++) {
+                string iline = invoice.number + "|" + String.Format("{0:MM-dd-yyyy}", invoice.dateAdded) + "|" + invoice.orderID + "|" + invoice.curtOrder + "|" + invoice.invoiceType + "|" + invoice.remitTo + "|" + invoice.billToCurrency + "|" + invoice.subtotal + "|" + invoice.salesTax + "|" + invoice.total + "|" + invoice.discount + "|" + invoice.discountTotal + "|" + invoice.termsType + "|" + invoice.termsDescription + "|" + invoice.discountPercent + "|" + String.Format("{0:MM-dd-yyyy}", invoice.discountDueDate) + "|" + invoice.discountDueDays + "|" + String.Format("{0:MM-dd-yyyy}", invoice.netDueDate) + "|" + invoice.netDueDays + "|" + invoice.BillTo.first + " " + invoice.BillTo.last + "|" + invoice.BillTo.street1 + "|" + invoice.BillTo.city + "|" + invoice.BillTo.State1.abbr + "|" + invoice.BillTo.postal_code + "|" + invoice.BillTo.State1.Country.abbr + "|" + invoice.ShipTo.first + " " + invoice.ShipTo.last + "|" + invoice.ShipTo.street1 + "|" + invoice.ShipTo.street2 + "|" + invoice.ShipTo.city + "|" + invoice.ShipTo.State1.abbr + "|" + invoice.ShipTo.postal_code + "|" + invoice.ShipTo.State1.Country.abbr + "|" + invoice.ShipTo.street2 + "|";
                 try {
-                    writer.WriteLine(code.type + "|" + code.code + "|" + code.value + "|" + code.description);
-                } catch { };
+                    iline += invoice.InvoiceItems[i].partID + "|" + invoice.InvoiceItems[i].quantity + "|" + invoice.InvoiceItems[i].price.ToString("0.00") + "|" + invoice.InvoiceItems[i].description + "|";
+                } catch {
+                    iline += "||||";
+                }
+                try {
+                    iline += invoice.InvoiceCodes[i].type + "|" + invoice.InvoiceCodes[i].code + "|" + invoice.InvoiceCodes[i].value + "|" + invoice.InvoiceCodes[i].description;
+                } catch {
+                    iline += "|||";
+                }
+                writer.WriteLine(iline);
             }
             string attachment = "attachment; filename=Invoice-" + invoiceNumber + ".txt";
             HttpContext.Response.Clear();
@@ -139,19 +144,24 @@ namespace Admin.Controllers {
 
                 StringWriter writer = new StringWriter();
 
-                writer.WriteLine("Invoice Number|Invoice Date|orderID|CURT Order|Invoice Type|remit To|currency|subtotal|sales tax|total|discount amount|discount total|terms type|terms description|discount percent|discount due date|discount days due|net due date|net days due|Bill To|Billing Street 1|Billing Street 2|Billing City|Billing Province|Billing Postal|Billing Country|Ship To|Shipping Street|Shipping City|Shipping Province|Shipping Postal|Shipping Country|Shipping Phone");
-                writer.WriteLine(invoice.number + "|" + String.Format("{0:MM-dd-yyyy}", invoice.dateAdded) + "|" + invoice.orderID + "|" + invoice.curtOrder + "|" + invoice.invoiceType + "|" + invoice.remitTo + "|" + invoice.billToCurrency + "|" + invoice.subtotal + "|" + invoice.salesTax + "|" + invoice.total + "|" + invoice.discount + "|" + invoice.discountTotal + "|" + invoice.termsType + "|" + invoice.termsDescription + "|" + invoice.discountPercent + "|" + String.Format("{0:MM-dd-yyyy}", invoice.discountDueDate) + "|" + invoice.discountDueDays + "|" + String.Format("{0:MM-dd-yyyy}", invoice.netDueDate) + "|" + invoice.netDueDays + "|" + invoice.BillTo.first + " " + invoice.BillTo.last + "|" + invoice.BillTo.street1 + "|" + invoice.BillTo.city + "|" + invoice.BillTo.State1.abbr + "|" + invoice.BillTo.postal_code + "|" + invoice.BillTo.State1.Country.abbr + "|" + invoice.ShipTo.first + " " + invoice.ShipTo.last + "|" + invoice.ShipTo.street1 + "|" + invoice.ShipTo.street2 + "|" + invoice.ShipTo.city + "|" + invoice.ShipTo.State1.abbr + "|" + invoice.ShipTo.postal_code + "|" + invoice.ShipTo.State1.Country.abbr + "|" + invoice.ShipTo.street2);
-                writer.WriteLine("PartID|Quantity|price|Description");
-                foreach (InvoiceItem item in invoice.InvoiceItems) {
-                    try {
-                        writer.WriteLine(item.partID + "|" + item.quantity + "|" + item.price + "|" + item.description);
-                    } catch { };
+                writer.WriteLine("Invoice Number|Invoice Date|orderID|CURT Order|Invoice Type|remit To|currency|subtotal|sales tax|total|discount amount|discount total|terms type|terms description|discount percent|discount due date|discount days due|net due date|net days due|Bill To|Billing Street 1|Billing Street 2|Billing City|Billing Province|Billing Postal|Billing Country|Ship To|Shipping Street|Shipping City|Shipping Province|Shipping Postal|Shipping Country|Shipping Phone|PartID|Quantity|price|Description|CodeType|code|value|Description");
+                int loopcount = invoice.InvoiceItems.Count;
+                if (invoice.InvoiceCodes.Count > loopcount) {
+                    loopcount = invoice.InvoiceCodes.Count;
                 }
-                writer.WriteLine("CodeType|code|value|Description");
-                foreach (InvoiceCode code in invoice.InvoiceCodes) {
+                for (int i = 0; i < loopcount; i++) {
+                    string iline = invoice.number + "|" + String.Format("{0:MM-dd-yyyy}", invoice.dateAdded) + "|" + invoice.orderID + "|" + invoice.curtOrder + "|" + invoice.invoiceType + "|" + invoice.remitTo + "|" + invoice.billToCurrency + "|" + invoice.subtotal + "|" + invoice.salesTax + "|" + invoice.total + "|" + invoice.discount + "|" + invoice.discountTotal + "|" + invoice.termsType + "|" + invoice.termsDescription + "|" + invoice.discountPercent + "|" + String.Format("{0:MM-dd-yyyy}", invoice.discountDueDate) + "|" + invoice.discountDueDays + "|" + String.Format("{0:MM-dd-yyyy}", invoice.netDueDate) + "|" + invoice.netDueDays + "|" + invoice.BillTo.first + " " + invoice.BillTo.last + "|" + invoice.BillTo.street1 + "|" + invoice.BillTo.city + "|" + invoice.BillTo.State1.abbr + "|" + invoice.BillTo.postal_code + "|" + invoice.BillTo.State1.Country.abbr + "|" + invoice.ShipTo.first + " " + invoice.ShipTo.last + "|" + invoice.ShipTo.street1 + "|" + invoice.ShipTo.street2 + "|" + invoice.ShipTo.city + "|" + invoice.ShipTo.State1.abbr + "|" + invoice.ShipTo.postal_code + "|" + invoice.ShipTo.State1.Country.abbr + "|" + invoice.ShipTo.street2 + "|";
                     try {
-                        writer.WriteLine(code.type + "|" + code.code + "|" + code.value + "|" + code.description);
-                    } catch { };
+                        iline += invoice.InvoiceItems[i].partID + "|" + invoice.InvoiceItems[i].quantity + "|" + invoice.InvoiceItems[i].price.ToString("0.00") + "|" + invoice.InvoiceItems[i].description + "|";
+                    } catch {
+                        iline += "||||";
+                    }
+                    try {
+                        iline += invoice.InvoiceCodes[i].type + "|" + invoice.InvoiceCodes[i].code + "|" + invoice.InvoiceCodes[i].value + "|" + invoice.InvoiceCodes[i].description;
+                    } catch {
+                        iline += "|||";
+                    }
+                    writer.WriteLine(iline);
                 }
 
                 string filename = "/invoice-" + invoice.number + ".csv";

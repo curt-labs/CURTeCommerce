@@ -155,7 +155,7 @@ namespace Admin.Models {
                 sb.Append("<hr /><br />");
                 sb.Append("<p style='font-size:11px'>If you feel this was a mistake please disregard this e-mail.</p>");
 
-                UDF.SendEmail(settings.Get("NoReplyEmailAddress"), tos, "New password for " + settings.Get("SiteName") + " Administrative Console", true, sb.ToString());
+                UDF.SendEmail(tos, "New password for " + settings.Get("SiteName") + " Administrative Console", true, sb.ToString());
             } catch (Exception e) {
                 throw new Exception("Failed to send e-mail.: " + e.Message + e.InnerException);
             }
@@ -454,7 +454,7 @@ namespace Admin.Models {
                 sb.Append("<p style='font-size:11px'>If you feel this was a mistake please disregard this e-mail.</p>");
 
                 string[] tos = {p.email};
-                UDF.SendEmail(settings.Get("NoReplyEmailAddress"), tos, "Account successfully created for " + settings.Get("SiteName") + " Administrative Console", true, sb.ToString());
+                UDF.SendEmail(tos, "Account successfully created for " + settings.Get("SiteName") + " Administrative Console", true, sb.ToString());
             } catch (Exception e) {
                 string h = e.Message;
             }

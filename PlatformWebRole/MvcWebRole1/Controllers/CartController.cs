@@ -115,11 +115,6 @@ namespace EcommercePlatform.Controllers {
 
             // Add the item to the cart
             customer.Cart.Add(id,qty);
-            if (customer.ID > 0 && customer.Cart.ID == 0) {
-                customer.Cart = customer.Cart.Save(customer.ID);
-            }
-
-            customer.SerializeToStorage();
 
             // Serialize the Customer back to where it came from
             return RedirectToAction("Index");
@@ -131,13 +126,8 @@ namespace EcommercePlatform.Controllers {
 
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
-            if (customer.ID > 0 && customer.Cart.ID == 0) {
-                customer.Cart = customer.Cart.Save(customer.ID);
-            }
-
             customer.Cart.Add(id, qty);
 
-            customer.SerializeToStorage();
             return getCart();
         }
 
@@ -149,7 +139,6 @@ namespace EcommercePlatform.Controllers {
             customer.GetFromStorage();
 
             customer.Cart.Update(id, qty);
-            customer.SerializeToStorage();
             return RedirectToAction("Index");
         }
 
@@ -161,7 +150,6 @@ namespace EcommercePlatform.Controllers {
             customer.GetFromStorage();
 
             customer.Cart.Remove(id);
-            customer.SerializeToStorage();
             return RedirectToAction("Index");
         }
 
@@ -173,7 +161,6 @@ namespace EcommercePlatform.Controllers {
             customer.GetFromStorage();
 
             customer.Cart.Remove(id);
-            customer.SerializeToStorage();
 
             return Response.Cookies["cart"].Value;
         }
@@ -203,11 +190,10 @@ namespace EcommercePlatform.Controllers {
             }
 
 
-            customer.Cart.SetBilling(id);
             if (customer.billingID == 0) {
                 customer.SetBillingDefaultAddress(id);
             }
-            customer.SerializeToStorage();
+            customer.Cart.SetBilling(id);
 
             return RedirectToAction("billing");
         }
@@ -244,7 +230,6 @@ namespace EcommercePlatform.Controllers {
                 // Retrieve Customer from Sessions/Cookie
 
                 customer.Cart.SetBilling(billing.ID);
-                customer.SerializeToStorage();
             } catch { }
 
             return RedirectToAction("billing");
@@ -261,11 +246,10 @@ namespace EcommercePlatform.Controllers {
                 return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
             }
 
-            customer.Cart.SetShipping(id);
             if (customer.shippingID == 0) {
                 customer.SetShippingDefaultAddress(id);
             }
-            customer.SerializeToStorage();
+            customer.Cart.SetShipping(id);
 
             return RedirectToAction("Shipping");
         }
@@ -303,7 +287,6 @@ namespace EcommercePlatform.Controllers {
 
                 // Retrieve Customer from Sessions/Cookie
                 customer.Cart.SetShipping(shipping.ID);
-                customer.SerializeToStorage();
             } catch(Exception e) {
                 TempData["error"] = e.Message;
             }
@@ -391,7 +374,6 @@ namespace EcommercePlatform.Controllers {
                 // We need to calculate the tax now that we know the shipping state
                 customer.Cart.SetTax();
 
-                customer.SerializeToStorage();
                 if (customer.Cart.Validate()) {
                     return RedirectToAction("Index", "Payment");
                 } else if (customer.Cart.bill_to == 0) {

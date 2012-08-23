@@ -59,7 +59,7 @@ namespace Admin.Models {
             sb.Append("<p style='font-size:11px'>If you feel this was a mistake please disregard this e-mail.</p>");
 
             string[] tos = { settings.Get("SupportEmail") };
-            SendEmail(settings.Get("NoReplyEmailAddress"), tos, "Bug submitted from " + HttpContext.Current.Request.Url.Host, true, sb.ToString());
+            SendEmail(tos, "Bug submitted from " + HttpContext.Current.Request.Url.Host, true, sb.ToString());
         }
 
         public static List<Country> GetCountries() {
@@ -86,26 +86,18 @@ namespace Admin.Models {
             return System.Text.Encoding.ASCII.GetString(bytes);
         }
 
-        internal static void SendEmail(string from, string[] to, string subject = "", bool isHTML = true, string message = "", bool suppressErrors = false) {
-            SmtpSection smtp = null;
+        internal static void SendEmail(string[] to, string subject = "", bool isHTML = true, string message = "", bool suppressErrors = false) {
             Settings settings = new Settings();
             SmtpClient client = null;
             try {
                 MailMessage mail = new MailMessage();
                 //SmtpSection smtp = null;
-                if (HttpContext.Current.Request.Url.Host.Contains("127.0.0")) { // Use CURT SMTP Server
-                    smtp = (SmtpSection)System.Configuration.ConfigurationManager.GetSection("mailSettings/smtp_prod");
-                    client = new SmtpClient(smtp.Network.Host, smtp.Network.Port);
-                    client.Credentials = new NetworkCredential(smtp.Network.UserName, smtp.Network.Password);
-                    client.EnableSsl = smtp.Network.EnableSsl;
-                } else { // Use GMail SMTP Server
-                    client = new SmtpClient(settings.Get("SMTPServer"), Convert.ToInt32(settings.Get("SMTPPort")));
-                    client.Credentials = new NetworkCredential(settings.Get("SMTPUserName"), settings.Get("SMTPPassword"));
-                    bool enableSSL = (settings.Get("SMTPSSL") == "true") ? true : false;
-                    client.EnableSsl = enableSSL;
-                }
+                client = new SmtpClient(settings.Get("SMTPServer"), Convert.ToInt32(settings.Get("SMTPPort")));
+                client.Credentials = new NetworkCredential(settings.Get("SMTPUserName"), settings.Get("SMTPPassword"));
+                bool enableSSL = (settings.Get("SMTPSSL") == "true") ? true : false;
+                client.EnableSsl = enableSSL;
 
-                mail.From = new MailAddress(from);
+                mail.From = new MailAddress(settings.Get("SMTPUserName"));
                 foreach (string recip in to) {
                     mail.To.Add(recip);
                 }

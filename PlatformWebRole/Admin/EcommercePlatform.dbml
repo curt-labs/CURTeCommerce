@@ -164,6 +164,7 @@
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="name" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
       <Column Name="abbr" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="longAbbr" Type="System.String" DbType="VarChar(5) NULL" CanBeNull="true" />
       <Association Name="Country_State" Member="States" AccessModifier="Internal" ThisKey="ID" OtherKey="countryID" Type="State" />
     </Type>
   </Table>

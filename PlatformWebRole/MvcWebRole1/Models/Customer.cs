@@ -254,8 +254,8 @@ namespace EcommercePlatform {
             Customer cust = new Customer();
             cust = db.Customers.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<Customer>();
             cust.billingID = id;
-            this.billingID = id;
             db.SubmitChanges();
+            this.billingID = id;
         }
 
         internal void SetShippingDefaultAddress(int id) {
@@ -263,58 +263,59 @@ namespace EcommercePlatform {
             Customer cust = new Customer();
             cust = db.Customers.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<Customer>();
             cust.shippingID = id;
-            this.shippingID = id;
             db.SubmitChanges();
+            this.shippingID = id;
         }
 
         internal void GetFromStorage() {
 
+            HttpCookie cart_cookie = null;
+            int cartID = 0;
+            int custID = 0;
+            Cart cart = new Cart();
+            cart_cookie = HttpContext.Current.Request.Cookies.Get("hdcart");
+            if (cart_cookie != null && cart_cookie.Value != null && cart_cookie.Value.Length > 0) {
+                cartID = Convert.ToInt32(cart_cookie.Value);
+            }
+            if (cartID == 0) {
+                cart = cart.Save();
+                cartID = cart.ID;
+                HttpCookie cook = new HttpCookie("hdcart", cartID.ToString());
+                if (this.remember) {
+                    cook.Expires = DateTime.Now.AddDays(30);
+                }
+                HttpContext.Current.Response.Cookies.Add(cook);
+            } else {
+                cart = new Cart().Get(cartID);
+                custID = cart.cust_id;
+            }
+
             Customer customer = new Customer();
-
-            // We're gonna dump our Customer Session object out
-            /*var custSession = HttpContext.Current.Session["customer"];
-            if (custSession != null && custSession.GetType() == typeof(string) && custSession.ToString() != null) {
-                customer = JsonConvert.DeserializeObject<Customer>(custSession.ToString());
-            }*/
-
-            HttpCookie cust_cookie = null;
-            // Get the customer cookie if it exists
-            cust_cookie = HttpContext.Current.Request.Cookies.Get("customer");
-            if (cust_cookie != null && cust_cookie.Value != null && cust_cookie.Value.Length > 0) {
+            if (custID > 0) {
                 try {
-                    JsonSerializerSettings jsettings = new JsonSerializerSettings();
-                    jsettings.ObjectCreationHandling = ObjectCreationHandling.Replace;
-                    jsettings.NullValueHandling = NullValueHandling.Ignore;
-                    jsettings.DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate;
-                    jsettings.DateParseHandling = DateParseHandling.DateTime;
-                    jsettings.MissingMemberHandling = MissingMemberHandling.Ignore;
-                    jsettings.PreserveReferencesHandling = PreserveReferencesHandling.All;
-                    jsettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                    jsettings.TypeNameAssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Full;
+                    customer = customer.Get(custID);
+                } catch { }
+            }
+            customer.Cart = cart;
 
-                    customer = JsonConvert.DeserializeObject<Customer>(cust_cookie.Value,jsettings);
-                } catch {}
-            }
-            if (customer != null) {
-                this.ID = customer.ID;
-                this.email = customer.email;
-                this.fname = customer.fname;
-                this.lname = customer.lname;
-                this.phone = customer.phone;
-                this.dateAdded = customer.dateAdded;
-                this.isSuspended = customer.isSuspended;
-                this.receiveNewsletter = customer.receiveNewsletter;
-                this.receiveOffers = customer.receiveOffers;
-                this.billingID = customer.billingID;
-                this.shippingID = customer.shippingID;
-                this.validator = customer.validator;
-                this.Cart = customer.Cart;
-                this.remember = customer.remember;
-            }
+            this.ID = customer.ID;
+            this.email = customer.email;
+            this.fname = customer.fname;
+            this.lname = customer.lname;
+            this.phone = customer.phone;
+            this.dateAdded = customer.dateAdded;
+            this.isSuspended = customer.isSuspended;
+            this.receiveNewsletter = customer.receiveNewsletter;
+            this.receiveOffers = customer.receiveOffers;
+            this.billingID = customer.billingID;
+            this.shippingID = customer.shippingID;
+            this.validator = customer.validator;
+            this.Cart = customer.Cart;
+            this.remember = customer.remember;
         }
 
         internal void SerializeToStorage() {
-            Customer serializable_customer = new Customer {
+            /*Customer serializable_customer = new Customer {
                 ID = this.ID,
                 email = this.email,
                 fname = this.fname,
@@ -340,7 +341,7 @@ namespace EcommercePlatform {
             }
             HttpContext.Current.Response.Cookies.Add(cook);
 
-            //HttpContext.Current.Session.Add("customer", cust_json);
+            //HttpContext.Current.Session.Add("customer", cust_json);*/
         }
 
         internal void SendValidation() {

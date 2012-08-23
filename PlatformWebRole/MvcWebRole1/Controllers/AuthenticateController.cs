@@ -66,33 +66,24 @@ namespace EcommercePlatform.Controllers {
                 };
                 cust.Login();
                 cust.password = "Ya'll suckas got ketchup'd!";
-                if (remember > 0) {
-                    cust.remember = true;
-                }
 
-                Cart cust_cart = tmp_cart;
-                try {
-                    cust_cart = db.Carts.Where(x => x.cust_id == cust.ID).Where(x => x.payment_id == 0).OrderByDescending(x => x.last_updated).First<Cart>();
-                } catch {
-                    cust_cart = cust_cart.Save(cust.ID);
-                };
-
-                if (tmp_cart != null && tmp_cart.CartItems.Count > 0) {
-                    cust_cart.Empty();
-                    // We need to parse the Cart items from tmp_cart into our Authenticated Customer's cart
-                    if (tmp_cart != null) {
-                        if (cust.Cart == null) {
-                            cust.Cart = new Cart();
-                        }
-                        foreach (CartItem item in tmp_cart.CartItems) {
-                            cust_cart.Add(item.partID, item.quantity);
-                        }
+                if (tmp_cart.CartItems.Count == 0) {
+                    try {
+                        Cart cust_cart = tmp_cart;
+                        cust_cart = db.Carts.Where(x => x.cust_id == cust.ID).Where(x => x.payment_id == 0).OrderByDescending(x => x.last_updated).First<Cart>();
+                        tmp_cart.RemoveCart();
+                        tmp.Cart = cust_cart;
+                    } catch {
+                        tmp_cart.UpdateCart(cust.ID);
                     }
+                } else {
+                    tmp_cart.UpdateCart(cust.ID);
                 }
-                //cust_cart.BindAddresses();
-                cust.Cart = cust_cart;
-                // Serialize our Customer object and send it back to Session/Cookie storage
-                cust.SerializeToStorage();
+                HttpCookie cook = new HttpCookie("hdcart", tmp.Cart.ID.ToString());
+                if (remember != 0) {
+                    cook.Expires = DateTime.Now.AddDays(30);
+                }
+                Response.Cookies.Add(cook);
 
                 if(redirect != null && redirect.Length != 0 && !redirect.ToUpper().Contains("AUTHENTICATE")){
                     return Redirect(redirect);
@@ -108,13 +99,12 @@ namespace EcommercePlatform.Controllers {
         public ActionResult Logout() {
             try {
 
-                Session.Remove("customer");
                 Session.Remove("settings");
                 Session.Clear();
                 Session.Abandon();
 
-                if (Request.Cookies["customer"] != null) {
-                    var c = new HttpCookie("customer");
+                if (Request.Cookies["hdcart"] != null) {
+                    var c = new HttpCookie("hdcart");
                     c.Expires = DateTime.Now.AddDays(-1);
                     Response.Cookies.Add(c);
                 }

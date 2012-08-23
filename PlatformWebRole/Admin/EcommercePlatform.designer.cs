@@ -3859,6 +3859,8 @@ namespace Admin
 		
 		private string _abbr;
 		
+		private string _longAbbr;
+		
 		private EntitySet<State> _States;
 		
     #region Extensibility Method Definitions
@@ -3871,6 +3873,8 @@ namespace Admin
     partial void OnnameChanged();
     partial void OnabbrChanging(string value);
     partial void OnabbrChanged();
+    partial void OnlongAbbrChanging(string value);
+    partial void OnlongAbbrChanged();
     #endregion
 		
 		public Country()
@@ -3935,6 +3939,26 @@ namespace Admin
 					this._abbr = value;
 					this.SendPropertyChanged("abbr");
 					this.OnabbrChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_longAbbr", DbType="VarChar(5) NULL")]
+		public string longAbbr
+		{
+			get
+			{
+				return this._longAbbr;
+			}
+			set
+			{
+				if ((this._longAbbr != value))
+				{
+					this.OnlongAbbrChanging(value);
+					this.SendPropertyChanging();
+					this._longAbbr = value;
+					this.SendPropertyChanged("longAbbr");
+					this.OnlongAbbrChanged();
 				}
 			}
 		}

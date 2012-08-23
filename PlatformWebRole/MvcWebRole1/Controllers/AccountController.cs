@@ -186,7 +186,6 @@ namespace EcommercePlatform.Controllers {
             if (a.cust_id == cust.ID) {
                 a.Delete(id);
             }
-            cust.SerializeToStorage();
             return RedirectToAction("Addresses");
         }
 
@@ -197,7 +196,6 @@ namespace EcommercePlatform.Controllers {
             if (a.cust_id == cust.ID) {
                 cust.SetBillingDefaultAddress(id);
                 cust.BindAddresses();
-                cust.SerializeToStorage();
             }
             return RedirectToAction("Addresses");
         }
@@ -209,7 +207,6 @@ namespace EcommercePlatform.Controllers {
             if (a.cust_id == cust.ID) {
                 cust.SetShippingDefaultAddress(id);
                 cust.BindAddresses();
-                cust.SerializeToStorage();
             }
             return RedirectToAction("Addresses");
         }

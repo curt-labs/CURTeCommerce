@@ -420,6 +420,10 @@ form.left{
     resize:horizontal;
 }
 
+.simple-form label input[type='radio'] {
+    height: auto;
+}
+
 .simple-form label select{
     height:30px;
     width:365px;

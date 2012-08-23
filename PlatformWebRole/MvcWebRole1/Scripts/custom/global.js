@@ -2,7 +2,7 @@
 var master_mount, master_year, master_make, master_model, master_style = 0;
 var year, make, model, style = 0;
 var animate_logo = true;
-var urlAddress = "http://www.yourwebsite.com/";
+var urlAddress = "https://www.hitchdepotusa.com/";
 var pageName = "Trailer Hitches";
 var modelClosingAction = null;
 var cartRendering, cartHovered = false;
@@ -360,7 +360,7 @@ $(function () {
         if (master_mount !== 0 && master_mount !== null) {
             $('#master_lookup #mount').removeClass('err');
         }
-        $.getJSON('http://api.curtmfg.com/v2/getyear?callback=?', { 'mount': master_mount, 'dataType': 'JSONP' }, function (years) {
+        $.getJSON('https://api.curtmfg.com/v2/getyear?callback=?', { 'mount': master_mount, 'dataType': 'JSONP' }, function (years) {
             $.each(years, function (i, year) {
                 var opt = document.createElement('option');
                 $(opt).text(year);
@@ -385,7 +385,7 @@ $(function () {
         if (master_year !== 0 && master_year !== null) {
             $('#master_lookup #year').removeClass('err').next().next().hide();
         }
-        $.getJSON('http://api.curtmfg.com/v2/getmake?callback=?', { 'mount': master_mount, 'year': master_year, 'dataType': 'JSONP' }, function (makes) {
+        $.getJSON('https://api.curtmfg.com/v2/getmake?callback=?', { 'mount': master_mount, 'year': master_year, 'dataType': 'JSONP' }, function (makes) {
             $.each(makes, function (i, make) {
                 var opt = document.createElement('option');
                 $(opt).text(make);
@@ -409,7 +409,7 @@ $(function () {
         if (master_make !== 0 && master_make !== null) {
             $('#master_lookup #make').removeClass('err').next().next().hide();
         }
-        $.getJSON('http://api.curtmfg.com/v2/getmodel?callback=?', { 'mount': master_mount, 'year': master_year, 'make': master_make, 'dataType': 'JSONP' }, function (models) {
+        $.getJSON('https://api.curtmfg.com/v2/getmodel?callback=?', { 'mount': master_mount, 'year': master_year, 'make': master_make, 'dataType': 'JSONP' }, function (models) {
             $.each(models, function (i, model) {
                 var opt = document.createElement('option');
                 $(opt).text(model);
@@ -431,7 +431,7 @@ $(function () {
         if (master_model !== 0 && master_model !== null) {
             $('#master_lookup #model').removeClass('err').next().next().hide();
         }
-        $.getJSON('http://api.curtmfg.com/v2/getstyle?callback=?', { 'mount': master_mount, 'year': master_year, 'make': master_make, 'model': master_model, 'dataType': 'JSONP' }, function (styles) {
+        $.getJSON('https://api.curtmfg.com/v2/getstyle?callback=?', { 'mount': master_mount, 'year': master_year, 'make': master_make, 'model': master_model, 'dataType': 'JSONP' }, function (styles) {
             $.each(styles, function (i, style) {
                 var opt = document.createElement('option');
                 $(opt).text(style);

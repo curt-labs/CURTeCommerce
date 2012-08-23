@@ -27,59 +27,60 @@ namespace EcommercePlatform
             string weight = part.attributes.Where(x => x.key.ToLower().Equals("weight")).Select(x => x.value).FirstOrDefault();
             CartItem i = new CartItem(partID, quantity, Convert.ToDecimal(part.listPrice.Replace("$", "")), part.shortDesc, upcval, Convert.ToDecimal(weight));
 
-            if (this.cust_id > 0) {
-                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-                try {
-                    CartItem item = db.CartItems.Where(x => x.partID == partID).Where(x => x.order_id == this.ID).First<CartItem>();
-                    item.quantity += quantity;
-                } catch {
-                    i.order_id = this.ID;
-                    db.CartItems.InsertOnSubmit(i);
-                };
-                db.SubmitChanges();
-            }
-            if (this.CartItems.Any(item => item.partID == i.partID)) {
-                this.CartItems.Where(x => x.partID.Equals(partID)).FirstOrDefault<CartItem>().quantity += quantity;
-            } else {
-                this.CartItems.Add(i);
-            }
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            try {
+                CartItem item = db.CartItems.Where(x => x.partID == partID).Where(x => x.order_id == this.ID).First<CartItem>();
+                item.quantity += quantity;
+            } catch {
+                i.order_id = this.ID;
+                db.CartItems.InsertOnSubmit(i);
+            };
+            db.SubmitChanges();
         }
 
         public void Update(int partID = 0, int quantity = 0) {
             if (quantity > 0) {
-                if (this.cust_id > 0) {
-                    EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-                    CartItem i = db.CartItems.Where(x => x.order_id == this.ID).Where(x => x.partID == partID).First<CartItem>();
-                    i.quantity = quantity;
-                    db.SubmitChanges();
-                }
-                this.CartItems.Where(x => x.partID.Equals(partID)).FirstOrDefault<CartItem>().quantity = quantity;
+                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+                CartItem i = db.CartItems.Where(x => x.order_id == this.ID).Where(x => x.partID == partID).First<CartItem>();
+                i.quantity = quantity;
+                db.SubmitChanges();
             } else {
                 Remove(partID);
             }
         }
 
         public void Remove(int partID = 0) {
-            if (this.cust_id > 0) {
-                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-                CartItem i = db.CartItems.Where(x => x.order_id == this.ID).Where(x => x.partID == partID).First<CartItem>();
-                db.CartItems.DeleteOnSubmit(i);
-                db.SubmitChanges();
-            }
-            if (this.CartItems != null && this.CartItems.Any(item => item.partID == partID)) {
-                this.CartItems.Remove(this.CartItems.Where(x => x.partID.Equals(partID)).FirstOrDefault<CartItem>());
-            }
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            CartItem i = db.CartItems.Where(x => x.order_id == this.ID).Where(x => x.partID == partID).First<CartItem>();
+            db.CartItems.DeleteOnSubmit(i);
+            db.SubmitChanges();
         }
 
-        public Cart Save(int cust_id = 0) {
+        public void RemoveCart() {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Cart i = db.Carts.Where(x => x.ID.Equals(this.ID)).First<Cart>();
+            db.Carts.DeleteOnSubmit(i);
+            db.SubmitChanges();
+        }
+
+        public void UpdateCart(int cust_id = 0) {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Cart c = db.Carts.Where(x => x.ID.Equals(this.ID)).First<Cart>();
+            c.cust_id = cust_id;
             try {
                 Customer cust = db.Customers.Where(x => x.ID == cust_id).First<Customer>();
+                c.ship_to = cust.shippingID;
+                c.bill_to = cust.billingID;
+            } catch { }
+            db.SubmitChanges();
+        }
+
+        public Cart Save() {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            try {
                 Cart c = new Cart {
-                    cust_id = cust_id,
+                    cust_id = 0,
                     date_created = DateTime.Now,
-                    ship_to = cust.shippingID,
-                    bill_to = cust.billingID,
                     shipping_price = 0
                 };
                 db.Carts.InsertOnSubmit(c);
@@ -376,11 +377,15 @@ namespace EcommercePlatform
                 total += (item.quantity * item.price);
             }
             sb.Append("</tbody><tfoot style=\"font-size: 12px;\">");
-            sb.AppendFormat("<tr><td colspan=\"2\" style=\"border-top: 1px solid #222;text-align: right;\">({0}) Shipping:</td>", myTI.ToTitleCase(this.shipping_type.Replace("_", " ")));
-            sb.AppendFormat("<td style=\"border-top: 1px solid #222;text-align:right;\">{0}</td></tr>", (this.shipping_price == 0) ? "Free" : String.Format("{0:C}", this.shipping_price));
+            sb.Append("<tr><td colspan=\"2\" style=\"border-top: 1px solid #222; text-align: right;\"><strong>SubTotal:<strong></td>");
+            sb.AppendFormat("<td style=\"border-top: 1px solid #222; text-align:right;\"><strong>{0}</strong></td></tr>", String.Format("{0:C}", this.GetSubTotal()));
+            sb.AppendFormat("<tr><td colspan=\"2\" style=\"text-align: right;\">({0}) Shipping:</td>", myTI.ToTitleCase(this.shipping_type.Replace("_", " ")));
+            sb.AppendFormat("<td style=\"text-align:right;\">{0}</td></tr>", (this.shipping_price == 0) ? "Free" : String.Format("{0:C}", this.shipping_price));
+            sb.Append("<tr><td colspan=\"2\" style=\"text-align: right;\">Tax:</td>");
+            sb.AppendFormat("<td style=\"text-align:right;\">{0}</td></tr>", String.Format("{0:C}", this.tax));
             sb.Append("<tr><td colspan=\"2\" style=\"text-align: right;\"><strong>Total:<strong></td>");
             total += this.shipping_price;
-            sb.AppendFormat("<td style=\"text-align:right;\"><strong>{0}</strong></td></tr>",String.Format("{0:C}", total));
+            sb.AppendFormat("<td style=\"text-align:right;\"><strong>{0}</strong></td></tr>",String.Format("{0:C}", this.getTotal()));
             sb.Append("</tfoot></table>");
             sb.Append("<hr /><br />");
             sb.Append("<p style='font-size:11px'>If you have any questions, or if you did not place this order, please <a href='" + settings.Get("SiteURL") + "contact'>contact us</a>.</p>");
@@ -454,7 +459,7 @@ namespace EcommercePlatform
 
         internal void SetTax() {
             decimal tax = 0;
-            tax = ((this.GetSubTotal() + this.shipping_price) * (this.Billing.State1.taxRate / 100));
+            tax = Math.Round(((this.GetSubTotal() + this.shipping_price) * (this.Billing.State1.taxRate / 100)),2);
 
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             Cart c = db.Carts.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<Cart>();

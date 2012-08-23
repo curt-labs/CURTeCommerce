@@ -128,7 +128,7 @@ namespace Admin {
             sb.Append("<hr /><br />");
             sb.Append("<p style='font-size:11px'>If you feel this was a mistake please disregard this e-mail.</p>");
 
-            UDF.SendEmail(settings.Get("NoReplyEmailAddress"), tos, "New Account for " + settings.Get("SiteName"), true, sb.ToString());
+            UDF.SendEmail(tos, "New Account for " + settings.Get("SiteName"), true, sb.ToString());
             this.plainpassword = "";
         }
 

@@ -6,6 +6,7 @@ CREATE TABLE [dbo].[Country](
 	[ID] [int] IDENTITY(1,1) NOT NULL,
 	[name] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[abbr] [varchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[longAbbr] [varchar](5) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PK__Country__3214EC2723202489] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC

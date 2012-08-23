@@ -53,10 +53,11 @@
         </form>    
     </div>
     <div class="tab_content" id="billing">
+        @if (cust.billingID != 0) {
         <form class="admin_form">
             <label>
                 Billing Name
-                <input type="text" readonly="readonly" value="@String.Format("{0:C}",cust.Address.first,cust.Address.last)" />
+                <input type="text" readonly="readonly" value="@cust.Address.first @cust.Address.last" />
             </label>
             <label>
                 Address Type
@@ -87,8 +88,12 @@
                 <input type="text" readonly="readonly" value="@cust.Address.postal_code" />
             </label>
         </form>
+        } else {
+            <p>No Default Billing Address</p>
+        }
     </div>
     <div class="tab_content" id="shipping">
+        @if (cust.shippingID != 0) {
         <form class="admin_form">
             <label>
                 Shipping Name
@@ -123,6 +128,9 @@
                 <input type="text" readonly="readonly" value="@cust.Address1.postal_code" />
             </label>
         </form>
+        } else {
+            <p>No Default Shipping Address</p>
+        }
     </div>
     @if (orders != null && orders.Count > 0) {
         <div class="tab_content" id="orders">
