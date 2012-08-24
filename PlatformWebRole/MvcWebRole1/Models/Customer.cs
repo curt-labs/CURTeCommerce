@@ -22,7 +22,7 @@ namespace EcommercePlatform {
             if (pass1 == null || pass1.Trim().Length == 0) {
                 throw new Exception("Password is required.");
             } else {
-                if (pass1.Trim().Length <= 6) {
+                if (pass1.Trim().Length < 6) {
                     throw new Exception("Password must be at least 6 characters long.");
                 }
                 pass1 = pass1.Trim();
