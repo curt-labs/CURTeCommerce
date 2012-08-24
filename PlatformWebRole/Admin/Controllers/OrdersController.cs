@@ -25,7 +25,7 @@ namespace Admin.Controllers {
         public ActionResult Items(int id = 0) {
             try {
                 Cart order = new Cart();
-                order = order.Get(id);
+                order = order.GetByPayment(id);
                 Customer customer = new Customer{ ID = order.cust_id };
                 customer.Get();
                 ViewBag.customer = customer;
@@ -38,7 +38,7 @@ namespace Admin.Controllers {
 
         public ActionResult Void(int id = 0) {
             Cart order = new Cart();
-            order = order.Get(id);
+            order = order.GetByPayment(id);
             order.Void();
             return RedirectToAction("Items", new { id = id });
         }
@@ -316,7 +316,8 @@ namespace Admin.Controllers {
 
         [RequireHttps]
         public ActionResult Step6(int id = 0) {
-            ViewBag.orderID = id;
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            ViewBag.orderID = db.Carts.Where(x => x.ID.Equals(id)).Select(x => x.payment_id).First();
             EDI edi = new EDI();
             edi.CreatePurchaseOrder(id);
             return View("Confirmation");

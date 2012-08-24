@@ -50,7 +50,7 @@ namespace EcommercePlatform.Controllers {
         public ActionResult Order(int id = 0) {
             Customer cust = new Customer();
             cust.ID = ViewBag.customer.ID;
-            Cart order = cust.GetOrder(id);
+            Cart order = cust.GetOrderByPayment(id);
             if (order == null || order.ID == 0) {
                 return RedirectToAction("Orders", "Account");
             }

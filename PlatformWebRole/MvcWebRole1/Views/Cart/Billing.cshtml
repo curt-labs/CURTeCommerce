@@ -50,7 +50,7 @@
                             @cust.Cart.Billing.city, @cust.Cart.Billing.State1.abbr @cust.Cart.Billing.postal_code<br />
                             @cust.Cart.Billing.State1.Country.name
                         </div>
-                        <a href="/Cart/Shipping" class="button">Confirm</a>
+                        <a href="/Cart/Shipping" class="button">Proceed to Shipping</a>
                     </div>
                 }
                 <form class="simple-form @((cust.Cart.bill_to != 0) ? "hideme" : "")" id="add-billing-address" method="post" action="/Cart/AddBillingAddress">
@@ -104,7 +104,7 @@
                             Residential Address?
                         </label>
                     </fieldset>
-                    <input type="submit" id="btnAddBillingAddress" class="button" value="Add Address" />
+                    <input type="submit" id="btnAddBillingAddress" class="button" value="Add and Proceed to Shipping" />
                     @if (cust.Cart.bill_to != 0) {
                         <input type="reset" id="btnResetBilling" class="button cancel" value="Cancel" />
                     }

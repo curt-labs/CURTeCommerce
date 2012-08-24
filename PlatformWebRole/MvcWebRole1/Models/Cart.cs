@@ -363,7 +363,7 @@ namespace EcommercePlatform
             sb.Append("<a href=\"" + settings.Get("SiteURL") + "\"><img src=\"" + settings.Get("EmailLogo") + "\" alt=\"" + settings.Get("SiteName") + "\" /></a>");
             sb.Append("<h2>Thank you for your order!</h2>");
             sb.Append("<hr />");
-            sb.AppendFormat("<p><strong>Order ID:</strong> {0}<br />", this.ID);
+            sb.AppendFormat("<p><strong>Order ID:</strong> {0}<br />", this.payment_id);
             sb.AppendFormat("<strong>Paid By:</strong> {0} on {1}</p>", payment.PaymentTypes.name, String.Format("{0:M/d/yyyy} at {0:h:mm tt}",payment.created));
             sb.Append("<p style=\"font-size: 12px;\"><strong style=\"font-size: 14px;\">Billing Address:</strong><br />");
             sb.AppendFormat("{0} {1}<br />", this.Billing.first, this.Billing.last);
@@ -406,7 +406,7 @@ namespace EcommercePlatform
             sb.Append("<a href=\"" + settings.Get("SiteURL") + "\"><img src=\"" + settings.Get("EmailLogo") + "\" alt=\"" + settings.Get("SiteName") + "\" /></a>");
             sb.Append("<h2>Your Order Has Shipped!</h2>");
             sb.Append("<hr />");
-            sb.AppendFormat("<p><strong>Order ID:</strong> {0}<br />", this.ID);
+            sb.AppendFormat("<p><strong>Order ID:</strong> {0}<br />", this.payment_id);
             sb.Append("<p>Your order shipped on " + String.Format("{0:dddd, MMMM d, yyyy}", shipped) + ". Your Tracking Number is <a href=\"http://www.fedex.com/Tracking?tracknumber_list=" + this.tracking_number + "\">" + this.tracking_number + "</a>.");
             sb.Append("<hr /><br />");
             sb.Append("<p style='font-size:11px'>If you have any questions, or if you did not place this order, please <a href='" + settings.Get("SiteURL") + "contact'>contact us</a>.</p>");
@@ -430,7 +430,7 @@ namespace EcommercePlatform
             sb.Append("<h2>We're Sorry</h2>");
             sb.Append("<hr />");
             sb.AppendFormat("<p>Your recent order placed with {0} has been cancelled. Google Checkout was unable to process your payment. The order details are listed below.</p>", settings.Get("SiteName"));
-            sb.AppendFormat("<p><strong>Order ID:</strong> {0}<br />", this.ID);
+            sb.AppendFormat("<p><strong>Order ID:</strong> {0}<br />", this.payment_id);
             sb.AppendFormat("<strong>Paid By:</strong> {0} on {1}</p>", payment.PaymentTypes.name, String.Format("{0:M/d/yyyy} at {0:h:mm tt}", payment.created));
             sb.AppendFormat("<strong>Payment Status:</strong> {0}</p>", payment.status);
             sb.Append("<p style=\"font-size: 12px;\"><strong style=\"font-size: 14px;\">Billing Address:</strong><br />");

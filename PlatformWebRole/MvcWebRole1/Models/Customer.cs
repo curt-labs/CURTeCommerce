@@ -413,5 +413,14 @@ namespace EcommercePlatform {
                 return new Cart();
             }
         }
+
+        internal Cart GetOrderByPayment(int id) {
+            try {
+                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+                return db.Carts.Where(x => x.cust_id.Equals(this.ID) && x.payment_id.Equals(id)).FirstOrDefault<Cart>();
+            } catch (Exception) {
+                return new Cart();
+            }
+        }
     }
 }

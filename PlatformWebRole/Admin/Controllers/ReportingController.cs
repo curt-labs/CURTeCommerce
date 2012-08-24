@@ -29,7 +29,7 @@ namespace Admin.Controllers {
             foreach (Cart order in orders) {
                 foreach (CartItem item in order.CartItems) {
                     try {
-                        writer.WriteLine(order.ID + "," + String.Format("{0:M/dd/yyyy H:mm}", order.Payment.created) + "," + item.partID + "," + item.quantity + "," + item.shortDesc.Replace(",", "") + "," + String.Format("{0:C}", item.price) + ",,," + order.cust_id + "," + order.Customer.fname + " " + order.Customer.lname + "," +
+                        writer.WriteLine(order.payment_id + "," + String.Format("{0:M/dd/yyyy H:mm}", order.Payment.created) + "," + item.partID + "," + item.quantity + "," + item.shortDesc.Replace(",", "") + "," + String.Format("{0:C}", item.price) + ",,," + order.cust_id + "," + order.Customer.fname + " " + order.Customer.lname + "," +
                             order.Customer.email + "," + order.Customer.phone + "," + order.Billing.first.Replace(",", "") + " " + order.Billing.last.Replace(",", "") + "," + order.Billing.street1.Replace(",", "") + "," + order.Billing.street2.Replace(",", "") + "," + order.Billing.city.Replace(",", "") + "," + order.Billing.State1.abbr + "," + order.Billing.postal_code + "," +
                             order.Shipping.first.Replace(",", "") + " " + order.Shipping.last.Replace(",", "") + "," + order.Shipping.street1.Replace(",", "") + "," + order.Shipping.street2.Replace(",", "") + "," + order.Shipping.city.Replace(",", "") + "," + order.Shipping.State1.abbr + "," + order.Shipping.postal_code + "," + String.Format("{0:C}", order.GetSubTotal()) + "," +
                             String.Format("{0:C}", order.tax) + "," + String.Format("{0:C}", order.shipping_price) + "," + String.Format("{0:C}", order.getTotal()));
@@ -96,7 +96,7 @@ namespace Admin.Controllers {
             foreach (Cart order in orders) {
                 foreach (CartItem item in order.CartItems) {
                     try {
-                        writer.WriteLine(order.ID + "," + String.Format("{0:M/dd/yyyy H:mm}", order.Payment.created) + "," + item.partID + "," + item.quantity + "," + item.shortDesc.Replace(",", "") + "," + String.Format("{0:C}", item.price) + ",,," + order.cust_id + "," + order.Customer.fname + " " + order.Customer.lname + "," +
+                        writer.WriteLine(order.payment_id + "," + String.Format("{0:M/dd/yyyy H:mm}", order.Payment.created) + "," + item.partID + "," + item.quantity + "," + item.shortDesc.Replace(",", "") + "," + String.Format("{0:C}", item.price) + ",,," + order.cust_id + "," + order.Customer.fname + " " + order.Customer.lname + "," +
                             order.Customer.email + "," + order.Customer.phone + "," + order.Billing.first.Replace(",", "") + " " + order.Billing.last.Replace(",", "") + "," + order.Billing.street1.Replace(",", "") + "," + order.Billing.street2.Replace(",", "") + "," + order.Billing.city.Replace(",", "") + "," + order.Billing.State1.abbr + "," + order.Billing.postal_code + "," +
                             order.Shipping.first.Replace(",", "") + " " + order.Shipping.last.Replace(",", "") + "," + order.Shipping.street1.Replace(",", "") + "," + order.Shipping.street2.Replace(",", "") + "," + order.Shipping.city.Replace(",", "") + "," + order.Shipping.State1.abbr + "," + order.Shipping.postal_code + "," + String.Format("{0:C}", order.GetSubTotal()) + "," +
                             String.Format("{0:C}", order.tax) + "," + String.Format("{0:C}", order.shipping_price) + "," + String.Format("{0:C}", order.getTotal()));

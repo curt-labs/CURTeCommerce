@@ -79,7 +79,7 @@
                                                 }
                                             </label>
                                         }
-                                        <input type="submit" class="button" id="btnChooseShippingType" value="Choose" />
+                                        <input type="submit" class="button" id="btnChooseShippingType" value="Proceed to Payment" />
                                 } else if (shippingresponse.Status == "ERROR") {
                                     <p>There was a problem with FedEx: @shippingresponse.Status_Description</p>
                                 } else {
@@ -140,7 +140,7 @@
                             Residential Address?
                         </label>
                     </fieldset>
-                    <input type="submit" id="btnAddShippingAddress" class="button" value="Add Address" />
+                    <input type="submit" id="btnAddShippingAddress" class="button" value="Add and Proceed to Payment" />
                     @if (cust.Cart.ship_to != 0) {
                         <input type="reset" id="btnResetShipping" class="button cancel" value="Cancel" />
                     }

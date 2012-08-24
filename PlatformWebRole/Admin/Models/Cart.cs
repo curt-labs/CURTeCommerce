@@ -221,6 +221,12 @@ namespace Admin
             return c;
         }
 
+        internal Cart GetByPayment(int id = 0) {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Cart c = db.Carts.Where(x => x.payment_id == id).FirstOrDefault<Cart>();
+            return c;
+        }
+
         internal void AddPayment(string type, string confirmKey, string status) {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             PaymentType ptype = db.PaymentTypes.Where(x => x.name.ToLower() == type.ToLower()).FirstOrDefault();
@@ -262,7 +268,7 @@ namespace Admin
             sb.Append("<a href=\"" + settings.Get("SiteURL") + "\"><img src=\"" + settings.Get("EmailLogo") + "\" alt=\"" + settings.Get("SiteName") + "\" /></a>");
             sb.Append("<h2>Thank you for your order!</h2>");
             sb.Append("<hr />");
-            sb.AppendFormat("<p><strong>Order ID:</strong> {0}<br />", this.ID);
+            sb.AppendFormat("<p><strong>Order ID:</strong> {0}<br />", this.payment_id);
             sb.AppendFormat("<strong>Paid By:</strong> {0} on {1}</p>", payment.PaymentTypes.name, String.Format("{0:M/d/yyyy} at {0:h:mm tt}", payment.created));
             sb.Append("<p style=\"font-size: 12px;\"><strong style=\"font-size: 14px;\">Billing Address:</strong><br />");
             sb.AppendFormat("{0} {1}<br />", this.Billing.first, this.Billing.last);
@@ -333,7 +339,7 @@ namespace Admin
         internal List<Cart> GetAll() {
             try {
                 EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-                return db.Carts.Where(x => x.payment_id > 0).OrderByDescending(x => x.date_created).ToList<Cart>();
+                return db.Carts.Where(x => x.payment_id > 0).ToList<Cart>();
             } catch (Exception) {
                 return new List<Cart>();
             }

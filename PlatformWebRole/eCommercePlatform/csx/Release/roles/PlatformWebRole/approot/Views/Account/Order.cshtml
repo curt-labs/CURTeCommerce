@@ -30,7 +30,7 @@
     </ul>
     <div class="tab_container">
         <div class="tab_content" id="order">
-            <p><strong>Order ID:</strong> @order.ID</p>
+            <p><strong>Order ID:</strong> @order.payment_id</p>
             <p><strong>Paid by:</strong> @payment.PaymentTypes.name on @String.Format("{0:M/d/yyyy} at {0:h:mm tt}",payment.created)</p>
             <p><strong>Payment Status:</strong> @payment.status</p>
             <div class="address">
@@ -56,7 +56,7 @@
         </div>
         <div class="tab_content" id="items">
             <article class="heading">
-                <span class="title">Items for Order #@order.ID</span>
+                <span class="title">Items for Order #@order.payment_id</span>
                 <span class="col-heading">Quantity</span>
                 <span class="col-heading">Price</span>
             </article>

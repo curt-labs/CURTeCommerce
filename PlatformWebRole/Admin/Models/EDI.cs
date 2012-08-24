@@ -20,16 +20,16 @@ namespace Admin.Models {
                     int linecount = 1;
                     // linecount is just for the PO section and doesn't include the head or tail
                     // next two lines are head
-                    edicontent += "ISA*00*          *00*          *12*" + settings.Get("EDIPhone") + "     *01*809988975      *" + String.Format("{0:yyMMdd}*{0:hhmm}", DateTime.Now) + "*U*00401*" + order.ID.ToString("000000000") + "*0*P*>~" + Environment.NewLine;
-                    edicontent += "GS*PO*" + settings.Get("EDIPhone") + "*809988975*" + String.Format("{0:yyyyMMdd}*{0:hhmm}", DateTime.Now) + "*" + order.ID.ToString("000000000") + "*X*004010~" + Environment.NewLine;
+                    edicontent += "ISA*00*          *00*          *12*" + settings.Get("EDIPhone") + "     *01*809988975      *" + String.Format("{0:yyMMdd}*{0:hhmm}", DateTime.Now) + "*U*00401*" + order.payment_id.ToString("000000000") + "*0*P*>~" + Environment.NewLine;
+                    edicontent += "GS*PO*" + settings.Get("EDIPhone") + "*809988975*" + String.Format("{0:yyyyMMdd}*{0:hhmm}", DateTime.Now) + "*" + order.payment_id.ToString("000000000") + "*X*004010~" + Environment.NewLine;
                     // begin PO section
-                    edicontent += "ST*850*" + order.ID + "~" + Environment.NewLine;
+                    edicontent += "ST*850*" + order.payment_id + "~" + Environment.NewLine;
                     linecount++;
-                    edicontent += "BEG*00*DS*" + order.ID + "**" + String.Format("{0:yyyyMMdd}", order.Payment.created) + "~" + Environment.NewLine;
+                    edicontent += "BEG*00*DS*" + order.payment_id + "**" + String.Format("{0:yyyyMMdd}", order.Payment.created) + "~" + Environment.NewLine;
                     linecount++;
                     edicontent += "CUR*BT*USD~" + Environment.NewLine;
                     linecount++;
-                    edicontent += "REF*CO*" + order.ID + "~" + Environment.NewLine;
+                    edicontent += "REF*CO*" + order.payment_id + "~" + Environment.NewLine;
                     linecount++;
                     edicontent += "REF*IA*" + settings.Get("CURTAccount") + "~" + Environment.NewLine;
                     linecount++;
@@ -59,11 +59,11 @@ namespace Admin.Models {
                     linecount++;
                     edicontent += "CTT*" + order.CartItems.Count + "*" + order.getCount() + "~" + Environment.NewLine;
                     linecount++;
-                    edicontent += "SE*" + linecount + "*" + order.ID + "~" + Environment.NewLine;
+                    edicontent += "SE*" + linecount + "*" + order.payment_id + "~" + Environment.NewLine;
                     // end PO section
                     // begin Tail section
-                    edicontent += "GE*1*" + order.ID.ToString("000000000") + "~" + Environment.NewLine;
-                    edicontent += "IEA*1*" + order.ID.ToString("000000000") + "~";
+                    edicontent += "GE*1*" + order.payment_id.ToString("000000000") + "~" + Environment.NewLine;
+                    edicontent += "IEA*1*" + order.payment_id.ToString("000000000") + "~";
 
                     // write file
                     DiscountBlobContainer blobcontainer = BlobManagement.GetContainer("edi");

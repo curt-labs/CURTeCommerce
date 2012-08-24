@@ -27,7 +27,7 @@
     <tbody>
         @foreach (Admin.Cart order in carts) {
             <tr>
-                <td>@order.ID</td>
+                <td>@order.payment_id</td>
                 <td>@(order.Customer.fname + " " + order.Customer.lname)</td>
                 <td>@order.getCount()</td>
                 <td>@String.Format("{0:M/d/yyyy h:mm tt}", order.Payment.created)</td>
@@ -35,7 +35,7 @@
                 <td>@((order.voided) ? "Void" : order.Payment.status)</td>
                 <td>@String.Format("{0:C}", order.getTotal())</td>
                 <td>
-                    <a class="btn" href="/Admin/Orders/Items/@order.ID">View</a>
+                    <a class="btn" href="/Admin/Orders/Items/@order.payment_id">View</a>
                 </td>
             </tr>
         }

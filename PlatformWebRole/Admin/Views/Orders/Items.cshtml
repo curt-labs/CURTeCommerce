@@ -14,11 +14,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link href="/Admin/Content/css/order.manager.css" rel="stylesheet" type="text/css" />
-<span class="title">Order #@order.ID</span>
+<span class="title">Order #@order.payment_id</span>
 @if (order.voided) {
     <p class="void">VOID</p>
 } else {
-    <a class="button" href="/Admin/Orders/Void/@order.ID" id="void">Void Order</a>
+    <a class="button" href="/Admin/Orders/Void/@order.payment_id" id="void">Void Order</a>
 }
 <ul class="tabs">
     <li>

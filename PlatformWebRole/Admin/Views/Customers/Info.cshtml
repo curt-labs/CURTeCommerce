@@ -149,12 +149,12 @@
                     <tbody>
                         @foreach (Admin.Cart order in orders) {
                             <tr>
-                                <td>@order.ID</td>
+                                <td>@order.payment_id</td>
                                 <td>@order.getCount()</td>
                                 <td>@String.Format("{0:M/d/yyyy at h:mm tt}",order.Payment.created)</td>
                                 <td>@String.Format("{0:C}",order.getTotal())</td>
                                 <td>@order.Payment.PaymentTypes.name</td>
-                                <td><a href="/Admin/Orders/Items/@order.ID" class="btn">View Items</a></td>
+                                <td><a href="/Admin/Orders/Items/@order.payment_id" class="btn">View Items</a></td>
                             </tr>
                         }
                     </tbody>

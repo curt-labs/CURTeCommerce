@@ -226,13 +226,22 @@ namespace EcommercePlatform.Controllers {
                     throw new Exception("You must select a billing state/province.");
                 }
                 billing.Save(customer.ID);
+                if (customer.billingID == 0) {
+                    customer.SetBillingDefaultAddress(billing.ID);
+                }
+                if (customer.shippingID == 0) {
+                    customer.SetShippingDefaultAddress(billing.ID);
+                }
 
                 // Retrieve Customer from Sessions/Cookie
 
                 customer.Cart.SetBilling(billing.ID);
+                if (customer.Cart.ship_to == 0) {
+                    customer.Cart.SetShipping(billing.ID);
+                }
             } catch { }
 
-            return RedirectToAction("billing");
+            return RedirectToAction("shipping");
         }
 
         //[RequireHttps]

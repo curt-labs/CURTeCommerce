@@ -36,8 +36,8 @@
             </div>
         </article>
         @foreach (EcommercePlatform.Cart order in cust.Orders) {
-            <article class="order" data-id="@order.ID">
-                <span class="title">Order #@(order.ID)</span>
+            <article class="order" data-id="@order.payment_id">
+                <span class="title">Order #@(order.payment_id)</span>
                 <div class="info">
                     <span class="date">@Convert.ToDateTime(order.date_created)</span>
                     <span class="total">@String.Format("{0:C}",order.getTotal())</span>
