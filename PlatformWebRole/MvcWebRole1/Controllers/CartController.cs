@@ -327,7 +327,7 @@ namespace EcommercePlatform.Controllers {
 
         public ShippingResponse getShipping() {
             Customer customer = new Customer();
-            Settings settings = new Settings();
+            Settings settings = ViewBag.settings;
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
                 Response.Redirect("/Authenticate");

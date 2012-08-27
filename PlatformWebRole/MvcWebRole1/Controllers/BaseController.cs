@@ -25,8 +25,9 @@ namespace EcommercePlatform.Controllers {
             // We're gonna dump our Customer Session object out
             Customer customer = new Customer();
             customer.GetFromStorage();
-            
-            ViewBag.settings = new Settings();
+
+            Settings settings = new Settings();
+            ViewBag.settings = settings;
 
             ViewBag.customer = customer;
 

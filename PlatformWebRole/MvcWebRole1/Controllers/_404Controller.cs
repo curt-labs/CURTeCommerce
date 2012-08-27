@@ -22,7 +22,6 @@ namespace EcommercePlatform.Controllers {
                 string message = e.Message;
             }
 
-            ViewBag.settings = new Settings();
             return View();
         }
     }

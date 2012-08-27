@@ -1,9 +1,5 @@
 ﻿@{
-    List<Admin.Cart> carts = ViewBag.carts;
-    if(carts == null){
-        carts = new List<Admin.Cart>();
-    }
-    
+    List<Admin.Models.Orders> orders = ViewBag.orders ?? new List<Admin.Models.Orders>();
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -25,17 +21,17 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (Admin.Cart order in carts) {
+        @foreach (Admin.Models.Orders order in orders) {
             <tr>
-                <td>@order.payment_id</td>
-                <td>@(order.Customer.fname + " " + order.Customer.lname)</td>
-                <td>@order.getCount()</td>
-                <td>@String.Format("{0:M/d/yyyy h:mm tt}", order.Payment.created)</td>
-                <td>@order.Payment.PaymentTypes.name</td>
-                <td>@((order.voided) ? "Void" : order.Payment.status)</td>
-                <td>@String.Format("{0:C}", order.getTotal())</td>
+                <td>@order.orderID</td>
+                <td>@order.customerName</td>
+                <td>@order.itemcount</td>
+                <td>@String.Format("{0:M/d/yyyy h:mm tt}", order.orderDate)</td>
+                <td>@order.PaymentMethod</td>
+                <td>@order.status</td>
+                <td>@String.Format("{0:C}", order.total)</td>
                 <td>
-                    <a class="btn" href="/Admin/Orders/Items/@order.payment_id">View</a>
+                    <a class="btn" href="/Admin/Orders/Items/@order.orderID">View</a>
                 </td>
             </tr>
         }

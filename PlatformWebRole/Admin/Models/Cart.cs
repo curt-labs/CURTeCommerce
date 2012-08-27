@@ -339,7 +339,7 @@ namespace Admin
         internal List<Cart> GetAll() {
             try {
                 EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-                return db.Carts.Where(x => x.payment_id > 0).ToList<Cart>();
+                return db.Carts.Where(x => x.payment_id > 0).OrderByDescending(x => x.date_created).ToList<Cart>();
             } catch (Exception) {
                 return new List<Cart>();
             }

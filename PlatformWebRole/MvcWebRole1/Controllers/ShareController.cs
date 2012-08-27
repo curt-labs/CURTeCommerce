@@ -28,7 +28,7 @@ namespace EcommercePlatform.Controllers {
         
         public dynamic SendMail(string type = "", int partID = 0, bool ajax = false) {
             try {
-                Settings settings = new Settings();
+                Settings settings = ViewBag.settings;
                 string sender = ((Request.Form["sender"] != null) ? Request.Form["sender"] : "");
                 string msg = ((Request.Form["msg"] != null) ? Request.Form["msg"] : "");
                 string recipient = ((Request.Form["recipient"] != null) ? Request.Form["recipient"] : "");

@@ -12,7 +12,7 @@ namespace EcommercePlatform.Controllers {
     public class LookupController : BaseController {
 
         public ActionResult Index(string year = "", string make = "", string model = "", string style = "") {
-            Settings settings = new Settings();
+            Settings settings = ViewBag.settings;
             style = style.Replace('!', '/');
 
             Session["year"] = year;

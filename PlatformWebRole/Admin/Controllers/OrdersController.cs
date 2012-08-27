@@ -17,8 +17,8 @@ namespace Admin.Controllers {
     public class OrdersController : BaseController {
 
         public ActionResult Index() {
-            List<Cart> carts = new Cart().GetAll();
-            ViewBag.carts = carts;
+            List<Orders> orders = new Orders().GetAll();
+            ViewBag.orders = orders;
             return View();
         }
 
@@ -261,7 +261,7 @@ namespace Admin.Controllers {
             Customer c = new Customer { ID = id };
             c.Get();
             Cart currentCart = c.Carts.Where(x => x.payment_id == 0).First<Cart>();
-            Settings settings = new Settings();
+            Settings settings = ViewBag.settings;
 
             decimal amount = currentCart.getTotal();
             string cardnum = Request.Form["cardnumber"];

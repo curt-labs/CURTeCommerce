@@ -109,7 +109,7 @@ namespace Admin.Controllers {
                 System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
                 byte[] fileContents = encoding.GetBytes(writer.ToString());
 
-                Settings settings = new Settings();
+                Settings settings = ViewBag.settings;
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(settings.Get("FTPServer") + settings.Get("FTPOrderPath") + filename);
                 request.Method = WebRequestMethods.Ftp.UploadFile;
                 request.UseBinary = true;
@@ -168,7 +168,7 @@ namespace Admin.Controllers {
                 System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
                 byte[] fileContents = encoding.GetBytes(writer.ToString());
 
-                Settings settings = new Settings();
+                Settings settings = ViewBag.settings;
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(settings.Get("FTPServer") + settings.Get("FTPInvoicePath") + filename);
                 request.Method = WebRequestMethods.Ftp.UploadFile;
                 request.UseBinary = true;

@@ -164,6 +164,7 @@
     <Compile Include="Models\ContactManagement.cs" />
     <Compile Include="Models\ContentManagement.cs" />
     <Compile Include="Models\ContentPage.cs" />
+    <Compile Include="Models\Order.cs" />
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\ScheduledTask.cs" />

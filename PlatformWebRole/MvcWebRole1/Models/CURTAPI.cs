@@ -342,7 +342,8 @@ namespace EcommercePlatform.Models {
 
         internal static List<string> GetShippingTypes() {
             try {
-                StringBuilder sb = new StringBuilder(new Settings().Get("CURTAPISHIPPINGDOMAIN"));
+                Settings settings = new Settings();
+                StringBuilder sb = new StringBuilder(settings.Get("CURTAPISHIPPINGDOMAIN"));
                 sb.Append("GenerateJSONServiceTypes");
                 WebClient wc = new WebClient();
                 wc.Proxy = null;

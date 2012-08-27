@@ -29,8 +29,6 @@ namespace Admin.Controllers {
                 } catch {};
             }
             db.SubmitChanges();
-            Settings settings = new Settings();
-            settings.refresh();
             return RedirectToAction("index");
         }
         
@@ -84,8 +82,6 @@ namespace Admin.Controllers {
                 if (db.Settings.Where(x => x.name.ToLower().Trim().Equals(sname.ToLower().Trim())).Count() == 0) {
                     db.Settings.InsertOnSubmit(s);
                     db.SubmitChanges();
-                    Settings settings = new Settings();
-                    settings.refresh();
                 } else {
                     throw new Exception("A Setting named " + sname + " already exists!");
                 }
@@ -102,8 +98,6 @@ namespace Admin.Controllers {
                 Setting s = db.Settings.Where(x => x.name.ToLower().Equals(name.Trim().ToLower())).First<Setting>();
                 db.Settings.DeleteOnSubmit(s);
                 db.SubmitChanges();
-                Settings settings = new Settings();
-                settings.refresh();
                 return "";
             } catch (Exception e) {
                 return e.Message;

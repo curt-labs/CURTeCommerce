@@ -30,7 +30,8 @@ namespace Admin.Controllers {
                 if (p == null || p.email == null || p.email.Length == 0 || p.id == 0) {
                     throw new Exception();
                 }
-                ViewBag.settings = new Settings();
+                Settings settings = new Settings();
+                ViewBag.settings = settings;
 
                 // We need to attempt to get the active module
                 string path = HttpContext.Request.Url.AbsolutePath;

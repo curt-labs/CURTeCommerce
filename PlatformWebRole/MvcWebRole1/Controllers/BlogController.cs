@@ -154,7 +154,7 @@ namespace EcommercePlatform.Controllers {
 
         public void Feed(string type = "rss") {
             List<PostWithCategories> posts = PostModel.GetAllPublished(1, 10);
-            Settings settings = new Settings();
+            Settings settings = ViewBag.settings;
             DateTime lastBuild = PostModel.GetLatestPublishedDate();
             if (type.ToLower() == "rss") {
                 Response.ContentType = "text/xml";
@@ -227,7 +227,7 @@ namespace EcommercePlatform.Controllers {
             BlogCategory category = BlogCategoryModel.GetCategoryByName(name);
             List<PostWithCategories> posts = PostModel.GetAllPublishedByCategory(name, 1, 10);
             DateTime lastBuild = PostModel.GetLatestPublishedDate();
-            Settings settings = new Settings();
+            Settings settings = ViewBag.settings;
             if (category != null) {
                 if (type.ToLower() == "rss") {
                     Response.ContentType = "text/xml";

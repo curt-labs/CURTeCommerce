@@ -31,7 +31,7 @@ namespace Admin.Controllers {
             if (TempData["location"] != null) {
                 ViewBag.location = TempData["location"];
             }
-            ViewBag.settings = new Settings();
+            ViewBag.settings = ViewBag.settings;
             ViewBag.countries = UDF.GetCountries();
             ViewBag.failed = failed;
             return View();
