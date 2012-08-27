@@ -286,6 +286,12 @@ namespace EcommercePlatform
             return c;
         }
 
+        internal Cart GetByPaymentID(int id = 0) {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Cart c = db.Carts.Where(x => x.payment_id == id).FirstOrDefault<Cart>();
+            return c;
+        }
+
         internal void AddPayment(string type, string confirmKey, string status) {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             PaymentType ptype = db.PaymentTypes.Where(x => x.name.ToLower() == type.ToLower()).FirstOrDefault();

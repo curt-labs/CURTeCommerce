@@ -288,7 +288,7 @@ namespace EcommercePlatform.Models {
                     case "SE":
                         // End of Invoice
                         try {
-                            order = new Cart().Get(Convert.ToInt32(purchaseOrderID));
+                            order = new Cart().GetByPaymentID(Convert.ToInt32(purchaseOrderID));
                             order.AddTrackingInfo(trackingcode);
                             order.SendShippingNotification(shipdate);
                         } catch { }
