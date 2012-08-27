@@ -388,7 +388,7 @@ $(function () {
         $.getJSON('https://api.curtmfg.com/v2/getmake?callback=?', { 'mount': master_mount, 'year': master_year, 'dataType': 'JSONP' }, function (makes) {
             $.each(makes, function (i, make) {
                 var opt = document.createElement('option');
-                $(opt).text(make);
+                $(opt).text($.trim(make));
                 $('#master_lookup #make').append(opt);
             });
             $('#master_lookup label[for=year]').hide();
@@ -412,7 +412,7 @@ $(function () {
         $.getJSON('https://api.curtmfg.com/v2/getmodel?callback=?', { 'mount': master_mount, 'year': master_year, 'make': master_make, 'dataType': 'JSONP' }, function (models) {
             $.each(models, function (i, model) {
                 var opt = document.createElement('option');
-                $(opt).text(model);
+                $(opt).text($.trim(model));
                 $('#master_lookup #model').append(opt);
             });
             $('#master_lookup label[for=make]').hide();
@@ -434,7 +434,7 @@ $(function () {
         $.getJSON('https://api.curtmfg.com/v2/getstyle?callback=?', { 'mount': master_mount, 'year': master_year, 'make': master_make, 'model': master_model, 'dataType': 'JSONP' }, function (styles) {
             $.each(styles, function (i, style) {
                 var opt = document.createElement('option');
-                $(opt).text(style);
+                $(opt).text($.trim(style));
                 $('#master_lookup #style').append(opt);
             });
             $('#master_lookup label[for=model]').hide();

@@ -62,7 +62,7 @@ $(function () {
         $.getJSON('https://api.curtmfg.com/v2/getmake?callback=?', { 'mount': mount, 'year': year, 'dataType': 'JSONP' }, function (makes) {
             $.each(makes, function (i, make) {
                 var opt = document.createElement('option');
-                $(opt).text(make);
+                $(opt).text($.trim(make));
                 $('#make').append(opt);
             });
             $('#make').removeAttr('disabled').focus();
@@ -84,7 +84,7 @@ $(function () {
         $.getJSON('https://api.curtmfg.com/v2/getmodel?callback=?', { 'mount': mount, 'year': year, 'make': make, 'dataType': 'JSONP' }, function (models) {
             $.each(models, function (i, model) {
                 var opt = document.createElement('option');
-                $(opt).text(model);
+                $(opt).text($.trim(model));
                 $('#model').append(opt);
             });
             $('#model').removeAttr('disabled').focus();
@@ -104,7 +104,7 @@ $(function () {
         $.getJSON('https://api.curtmfg.com/v2/getstyle?callback=?', { 'mount': mount, 'year': year, 'make': make, 'model': model, 'dataType': 'JSONP' }, function (styles) {
             $.each(styles, function (i, style) {
                 var opt = document.createElement('option');
-                $(opt).text(style);
+                $(opt).text($.trim(style));
                 $('#style').append(opt);
             });
             $('#style').removeAttr('disabled').focus();

@@ -15,10 +15,10 @@ namespace EcommercePlatform.Controllers {
             Settings settings = ViewBag.settings;
             style = style.Replace('!', '/');
 
-            Session["year"] = year;
-            Session["make"] = make;
-            Session["model"] = model;
-            Session["style"] = style;
+            Session["year"] = year.Trim();
+            Session["make"] = make.Trim();
+            Session["model"] = model.Trim();
+            Session["style"] = style.Trim();
             Session.Timeout = 30;
 
             int cust_id = 0;
@@ -27,7 +27,7 @@ namespace EcommercePlatform.Controllers {
             } catch (Exception) { }
 
             // Get all the parts that match our search criteria
-            List<APIPart> parts = CURTAPI.GetVehicleParts(year, make, model, style, cust_id);
+            List<APIPart> parts = CURTAPI.GetVehicleParts(year.Trim(), make.Trim(), model.Trim(), style.Trim(), cust_id);
 
             // Get the unique classes of the returned parts
             IEnumerable<IGrouping<string,APIPart>> distinct = parts.GroupBy(x => x.pClass.Trim());
