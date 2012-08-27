@@ -18,10 +18,10 @@ namespace TaskScheduler {
         }
 
         public string Get(string name = "") {
-            Dictionary<string, string> settings = GetAll();
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             string val = "";
             try {
-                val = settings[name].Trim();
+                val = db.Settings.Where(x => x.name.ToLower().Trim().Equals(name.ToLower().Trim())).Select(x => x.value).First().Trim();
             } catch { };
             return val;
         }

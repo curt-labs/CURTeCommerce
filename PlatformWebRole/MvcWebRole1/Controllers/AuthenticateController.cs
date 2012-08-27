@@ -99,7 +99,6 @@ namespace EcommercePlatform.Controllers {
         public ActionResult Logout() {
             try {
 
-                Session.Remove("settings");
                 Session.Clear();
                 Session.Abandon();
 

@@ -261,12 +261,17 @@ namespace EcommercePlatform.Models {
         internal void ReadShippingNotification(string editext) {
             string trackingcode = "";
             string purchaseOrderID = "";
+            Cart order = new Cart();
             DateTime shipdate = DateTime.Now;
 
             List<string> edilines = editext.Split('~').ToList<string>();
             foreach (string line in edilines) {
                 List<string> lineelements = line.Split('*').ToList<string>();
                 switch (lineelements[0]) {
+                    case "ST":
+                        // Beginning of invoice
+                        order = new Cart();
+                        break;
                     case "PRF":
                         // Purchase Order Reference
                         purchaseOrderID = lineelements[1];
@@ -278,14 +283,16 @@ namespace EcommercePlatform.Models {
                     case "DTM":
                         shipdate = Convert.ToDateTime(lineelements[2].Substring(4, 2) + "/" + lineelements[2].Substring(6, 2) + "/20" + lineelements[2].Substring(2, 2));
                         break;
+                    case "SE":
+                        // End of Invoice
+                        try {
+                            order = new Cart().Get(Convert.ToInt32(purchaseOrderID));
+                            order.AddTrackingInfo(trackingcode);
+                            order.SendShippingNotification(shipdate);
+                        } catch { }
+                        break;
                 }
             }
-
-            try {
-                Cart order = new Cart().Get(Convert.ToInt32(purchaseOrderID));
-                order.AddTrackingInfo(trackingcode);
-                order.SendShippingNotification(shipdate);
-            } catch {}
         }
     }
 
