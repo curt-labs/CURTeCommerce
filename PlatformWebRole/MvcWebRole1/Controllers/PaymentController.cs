@@ -30,9 +30,7 @@ namespace EcommercePlatform.Controllers {
             Cart cart = customer.Cart;
 
             // Get the parts from this Cart
-            List<CartItem> parts = cart.GetParts();
-            cart.CartItems.Clear();
-            cart.CartItems.AddRange(parts);
+            cart.GetParts();
 
             ViewBag.showShipping = true;
             ViewBag.cart = cart;
@@ -234,9 +232,7 @@ namespace EcommercePlatform.Controllers {
             Cart cart = customer.Cart;
 
             // Get the parts from this Cart
-            List<CartItem> parts = cart.GetParts();
-            cart.CartItems.Clear();
-            cart.CartItems.AddRange(parts);
+            cart.GetParts();
 
             ViewBag.showShipping = true;
             ViewBag.cart = cart;
@@ -296,9 +292,9 @@ namespace EcommercePlatform.Controllers {
             customer.GetFromStorage();
             Cart order = new Cart().Get(id);
 
-            /*if (!customer.LoggedIn() || order.cust_id != customer.ID) {
+            if (!customer.LoggedIn() || order.cust_id != customer.ID) {
                 return RedirectToAction("Index", "Authenticate");
-            }*/
+            }
 
             order.BindAddresses();
             Payment payment = order.getPayment();

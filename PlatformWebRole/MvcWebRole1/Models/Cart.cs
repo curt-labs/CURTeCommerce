@@ -114,15 +114,9 @@ namespace EcommercePlatform
             }
         }
 
-        public List<CartItem> GetParts() {
+        public void GetParts() {
             string partlist = "";
-            List<int> items = new List<int>();
-            if (this.cust_id > 0) {
-                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-                items = db.CartItems.Where(x => x.order_id == this.ID).Select(x => x.partID).ToList();
-            } else {
-                items = CartItems.Select(x => x.partID).ToList();
-            }
+            List<int> items = this.CartItems.Select(x => x.partID).ToList();
             foreach (int item in items) {
                 if (partlist != "") partlist += ",";
                 partlist += item.ToString();
@@ -136,20 +130,10 @@ namespace EcommercePlatform
                     };
                 }
             }
-            return this.CartItems.ToList<CartItem>();
         }
 
         public int getCount() {
-            int count = 0;
-            if (this.cust_id > 0) {
-                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-                try {
-                    count = db.CartItems.Where(x => x.order_id == this.ID).Sum(x => x.quantity);
-                } catch { }
-            } else {
-                count = this.CartItems.Sum(x => x.quantity);
-            }
-            return count;
+            return this.CartItems.Sum(x => x.quantity);
         }
 
         public decimal getTotal() {

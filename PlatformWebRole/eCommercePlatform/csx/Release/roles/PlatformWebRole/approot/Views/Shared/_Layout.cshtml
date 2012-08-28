@@ -80,10 +80,10 @@
     <header>
         <div id="top_bar">
             <nav>
-                <a href="/" id="scroll_logo" title="@ViewBag.settings.Get("SiteName")">
-                    <img src="@ViewBag.settings.Get("HeaderLogoScroll")" alt="@ViewBag.settings.Get("SiteName")" />
+                <a href="/" id="scroll_logo" title="@settings.Get("SiteName")">
+                    <img src="@settings.Get("HeaderLogoScroll")" alt="@settings.Get("SiteName")" />
                 </a>
-                <span class="phone">Call Us: <span>@ViewBag.settings.Get("PhoneNumber")</span></span>
+                <span class="phone">Call Us: <span>@settings.Get("PhoneNumber")</span></span>
                 <ul>
                     <li>
                         <a href="/Categories" title="Shop">Shop</a>
@@ -131,8 +131,8 @@
             </div>
         </div>
         <div class="sub_bar">
-            <a href="/" class="logo" title="@ViewBag.settings.Get("SiteName")">
-                <img src="@ViewBag.settings.Get("HeaderLogo")" alt="@ViewBag.settings.Get("SiteName")" />
+            <a href="/" class="logo" title="@settings.Get("SiteName")">
+                <img src="@settings.Get("HeaderLogo")" alt="@settings.Get("SiteName")" />
             </a>
             <div style="clear:both"></div>
             <form method="get" action="/Search" id="search_box">
@@ -144,8 +144,8 @@
                 <input type="search" name="search" id="search" class="placeholder" placeholder="Search for Product">
                 
             </form>
-            @if (!String.IsNullOrEmpty(ViewBag.settings.Get("HomeBannerTop"))) {
-                <img src="@ViewBag.settings.Get("HomeBannerTop")" alt="alt="@ViewBag.settings.Get("HomeBannerTopAltText")"" class="call_us" />
+            @if (!String.IsNullOrEmpty(settings.Get("HomeBannerTop"))) {
+                <img src="@settings.Get("HomeBannerTop")" alt="alt="@settings.Get("HomeBannerTopAltText")"" class="call_us" />
             }
             <div style="clear:both"></div>
         </div>
@@ -177,8 +177,8 @@
                         <div style="clear:both"></div>
                     </form>
                 </article>
-                @if (!String.IsNullOrEmpty(ViewBag.settings.Get("HomeBannerLeft"))) {
-                    <img src="@ViewBag.settings.Get("HomeBannerLeft")" alt="@ViewBag.settings.Get("HomeBannerLeftAltText")" class="free-shipping" />
+                @if (!String.IsNullOrEmpty(settings.Get("HomeBannerLeft"))) {
+                    <img src="@settings.Get("HomeBannerLeft")" alt="@settings.Get("HomeBannerLeftAltText")" class="free-shipping" />
                 }
             </section>
             <form id="master_lookup" action="/Lookup" method="get">
@@ -233,27 +233,27 @@
     <footer>
         <div id="footer_container">
             <div class="footerlogo">
-                @if (!String.IsNullOrEmpty(ViewBag.settings.Get("HeaderLogoScroll"))) {
-                    <img src="@ViewBag.settings.Get("HeaderLogoScroll")" alt="@ViewBag.settings.Get("SiteName")" />
+                @if (!String.IsNullOrEmpty(settings.Get("HeaderLogoScroll"))) {
+                    <img src="@settings.Get("HeaderLogoScroll")" alt="@settings.Get("SiteName")" />
                 }
-                <span class="copy">&copy; @DateTime.Now.Year @ViewBag.settings.Get("SiteName"). All Rights Reserved.</span>
+                <span class="copy">&copy; @DateTime.Now.Year @settings.Get("SiteName"). All Rights Reserved.</span>
                 <div class="social_links">
-                    @if (!String.IsNullOrEmpty(ViewBag.settings.Get("FacebookPageURL"))) {
-                        <a href="@ViewBag.settings.Get("FacebookPageURL")" title="@ViewBag.settings.Get("SiteName") on Facebook">
-                            <img src="/Content/img/footer/facebook_dark.png" alt="@ViewBag.settings.Get("SiteName") on Facebook" class="dark fb" />
-                            <img src="/Content/img/footer/facebook_active.png" alt="@ViewBag.settings.Get("SiteName") on Facebook" class="active fb" />
+                    @if (!String.IsNullOrEmpty(settings.Get("FacebookPageURL"))) {
+                        <a href="@settings.Get("FacebookPageURL")" title="@settings.Get("SiteName") on Facebook">
+                            <img src="/Content/img/footer/facebook_dark.png" alt="@settings.Get("SiteName") on Facebook" class="dark fb" />
+                            <img src="/Content/img/footer/facebook_active.png" alt="@settings.Get("SiteName") on Facebook" class="active fb" />
                         </a>
                     }
-                    @if (!String.IsNullOrEmpty(ViewBag.settings.Get("TwitterPageURL"))) {
-                        <a href="@ViewBag.settings.Get("TwitterPageURL")" title="@ViewBag.settings.Get("SiteName") on Twitter">
-                            <img src="/Content/img/footer/twitter_dark.png" alt="@ViewBag.settings.Get("SiteName") on Twitter" class="dark tweet" />
-                            <img src="/Content/img/footer/twitter_active.png" alt="@ViewBag.settings.Get("SiteName") on Twitter" class="active tweet" />
+                    @if (!String.IsNullOrEmpty(settings.Get("TwitterPageURL"))) {
+                        <a href="@settings.Get("TwitterPageURL")" title="@settings.Get("SiteName") on Twitter">
+                            <img src="/Content/img/footer/twitter_dark.png" alt="@settings.Get("SiteName") on Twitter" class="dark tweet" />
+                            <img src="/Content/img/footer/twitter_active.png" alt="@settings.Get("SiteName") on Twitter" class="active tweet" />
                         </a>
                     }
-                    @if (!String.IsNullOrEmpty(ViewBag.settings.Get("YouTubePageURL"))) {
-                        <a href="@ViewBag.settings.Get("YouTubePageURL")" title="@ViewBag.settings.Get("SiteName") on YouTube">
-                            <img src="/Content/img/footer/youtube_dark.png" alt="@ViewBag.settings.Get("SiteName") on YouTube" class="dark yt" />
-                            <img src="/Content/img/footer/youtube_active.png" alt="@ViewBag.settings.Get("SiteName") on YouTube" class="active yt" />
+                    @if (!String.IsNullOrEmpty(settings.Get("YouTubePageURL"))) {
+                        <a href="@settings.Get("YouTubePageURL")" title="@settings.Get("SiteName") on YouTube">
+                            <img src="/Content/img/footer/youtube_dark.png" alt="@settings.Get("SiteName") on YouTube" class="dark yt" />
+                            <img src="/Content/img/footer/youtube_active.png" alt="@settings.Get("SiteName") on YouTube" class="active yt" />
                         </a>
                     }
                     ​<a href="/Share/Index?type=site" title="Share via E-Mail" class="email-share" target="_blank">
@@ -279,8 +279,8 @@
             </div>
 
             <div class="company">
-                @if (!String.IsNullOrEmpty(ViewBag.settings.Get("PhoneNumber"))) {
-                    <span>CALL US WITH QUESTIONS: @ViewBag.settings.Get("PhoneNumber")</span>
+                @if (!String.IsNullOrEmpty(settings.Get("PhoneNumber"))) {
+                    <span>CALL US WITH QUESTIONS: @settings.Get("PhoneNumber")</span>
                 }
                 <div class="footer_graphics">
                     <img src="/Content/img/footer/amex.png" alt="American Express" />
@@ -335,7 +335,7 @@
     <!-- end scripts -->
     <!-- Asynchronous Google Analytics snippet. Change UA-XXXXX-X to be your site's ID.
        mathiasbynens.be/notes/async-analytics-snippet -->
-    @if (ViewBag.Settings.Get("GoogleAnalyticsCode") != "") {
+    @if (settings.Get("GoogleAnalyticsCode") != "") {
     <script type="text/javascript">
         (function () {
             var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
