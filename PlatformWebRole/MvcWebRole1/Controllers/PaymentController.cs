@@ -296,13 +296,12 @@ namespace EcommercePlatform.Controllers {
             customer.GetFromStorage();
             Cart order = new Cart().Get(id);
 
-            if (!customer.LoggedIn() || order.cust_id != customer.ID) {
+            /*if (!customer.LoggedIn() || order.cust_id != customer.ID) {
                 return RedirectToAction("Index", "Authenticate");
-            }
+            }*/
 
             order.BindAddresses();
             Payment payment = order.getPayment();
-
 
             ViewBag.order = order;
             ViewBag.payment = payment;

@@ -30,7 +30,7 @@ namespace AzureFtpServer.FtpCommands
                 return GetMessage(550, "Unable to establish data connection");
             }
 
-            SocketHelpers.Send(ConnectionObject.Socket, "150 Starting data transfer, please wait...\r\n");
+            SocketHelpers.Send(ConnectionObject.Socket, "150 Please Wait. Starting data transfer of " + sMessage + "\r\n");
 
             const int m_nBufferSize = 65536;
 

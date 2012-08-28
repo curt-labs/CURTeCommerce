@@ -3,6 +3,10 @@
     if (page == null) {
         page = new EcommercePlatform.ContentPage();
     }
+    
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
+    string adwordsid = settings.Get("GoogleAdwordsConversionID");
+    string adwordslabel = settings.Get("GoogleAdwordsConversionLabel");
 
     EcommercePlatform.Cart order = ViewBag.order;
     EcommercePlatform.Payment payment = ViewBag.payment;
@@ -50,7 +54,6 @@
         <tbody>
             @foreach (EcommercePlatform.CartItem item in order.CartItems) {
                 decimal price = item.quantity * item.price;
-                total += price;
                 <tr id="part-@item.partID">
                     <td><a href="/Part/@item.partID">@item.shortDesc</a></td>
                     <td class="quantity">@item.quantity</td>
@@ -60,13 +63,42 @@
         </tbody>
         <tfoot>
             <tr>
+                <td colspan="2">Subtotal:</td>
+                <td class="price">@String.Format("{0:C}", order.GetSubTotal())</td>
+            </tr>
+            <tr>
                 <td colspan="2" class="shippingtype">(@order.shipping_type.Replace("_"," ").ToLower()) Shipping:</td>
                 <td class="price">@String.Format("{0:C}", order.shipping_price)</td>
             </tr>
             <tr>
+                <td colspan="2">Tax:</td>
+                <td class="price">@String.Format("{0:C}", order.tax)</td>
+            </tr>
+            <tr>
                 <td colspan="2"><strong>Total:</strong></td>
-                <td class="price"><strong>@String.Format("{0:C}", total)</strong></td>
+                <td class="price"><strong>@String.Format("{0:C}", order.getTotal())</strong></td>
             </tr>
         </tfoot>
     </table>
 </div>
+
+@if (adwordsid != "" && adwordslabel != "") {
+    <!-- Google Code for adwords Conversion -->
+    <script type="text/javascript">
+    /* <![CDATA[ */
+    var google_conversion_id = @adwordsid;
+    var google_conversion_language = "en";
+    var google_conversion_format = "2";
+    var google_conversion_color = "ffffff";
+    var google_conversion_label = "@adwordslabel";
+    var google_conversion_value = @order.getTotal();
+    /* ]]> */
+    </script>
+    <script type="text/javascript" src="https://www.googleadservices.com/pagead/conversion.js">
+    </script>
+    <noscript>
+    <div style="display:inline;">
+    <img height="1" width="1" style="border-style:none;" alt="" src="https://www.googleadservices.com/pagead/conversion/@adwordsid/?value=@order.getTotal()&amp;label=@adwordslabel&amp;guid=ON&amp;script=0"/>
+    </div>
+    </noscript>
+}
