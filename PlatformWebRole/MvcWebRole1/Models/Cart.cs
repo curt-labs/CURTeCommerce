@@ -97,6 +97,7 @@ namespace EcommercePlatform
                 c.tracking_number = trackingNumber;
                 db.SubmitChanges();
             } catch { };
+            this.tracking_number = trackingNumber;
         }
 
         public void Empty() {

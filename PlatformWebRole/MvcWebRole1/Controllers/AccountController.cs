@@ -107,6 +107,39 @@ namespace EcommercePlatform.Controllers {
             }
         }
 
+        public ActionResult AddAddress() {
+            try {
+                // Create Customer
+                Customer customer = new Customer();
+                customer.GetFromStorage();
+                if (!customer.LoggedIn()) {
+                    return RedirectToAction("Index", "Authenticate");
+                }
+
+                Address address = new Address();
+                // Build out our Billing object
+                address = new Address {
+                    first = Request.Form["first"],
+                    last = Request.Form["last"],
+                    street1 = Request.Form["street1"],
+                    street2 = (Request.Form["street2"].Trim() == "") ? null : Request.Form["street2"].Trim(),
+                    city = Request.Form["city"],
+                    postal_code = Request.Form["zip"],
+                    residential = (Request.Form["residential"] == null) ? false : true,
+                    active = true
+                };
+                try {
+                    address.state = Convert.ToInt32(Request.Form["state"]);
+                } catch (Exception) {
+                    throw new Exception("You must select a state/province.");
+                }
+                address.Save(customer.ID);
+
+            } catch { }
+            return RedirectToAction("Addresses");
+
+        }
+        
         public ActionResult DeleteAddress(int id = 0) {
             Customer cust = new Customer();
             cust.GetFromStorage();

@@ -43,7 +43,7 @@
     </div>
     <div class="tab_content" id="login">
         <div class="left">
-            <form class="simple-form" method="post" action="/Authenticate/Login">
+            <form class="simple-form" method="post" action="https://@Request.Url.Host/Authenticate/Login">
                 <fieldset>
                     <legend>Enter Credentials</legend>
                     <input type="hidden" name="redirect" value="@ViewBag.referrer" />
@@ -53,7 +53,7 @@
                     </label>
                     <label for="login_password">
                         Password
-                        <input type="password" name="password" id="login_password" class="placeholder" placeholder="Enter your password" required="required" title="Password is required" />
+                        <input type="password" name="password" id="login_password" class="placeholder" autocomplete="off" placeholder="Enter your password" required="required" title="Password is required" />
                     </label>
                     <label for="remember">
                         <input type="checkbox" name="remember" id="remember" value="1" />

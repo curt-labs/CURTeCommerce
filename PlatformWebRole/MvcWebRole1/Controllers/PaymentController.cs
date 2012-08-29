@@ -219,7 +219,7 @@ namespace EcommercePlatform.Controllers {
         }
         
         [RequireHttps]
-        public ActionResult PayPalCheckout() {
+        public ActionResult PayPalCheckout(string token = "", string payerID = "") {
             Customer customer = ViewBag.customer;
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
@@ -237,7 +237,6 @@ namespace EcommercePlatform.Controllers {
             ViewBag.showShipping = true;
             ViewBag.cart = cart;
             ViewBag.message = TempData["message"];
-            string token = customer.Cart.paypalToken;
             Paypal p = new Paypal();
             PayPalResponse paypalResponse = p.ECGetExpressCheckout(token);
             if (paypalResponse.acknowledgement == "Success") {
@@ -254,12 +253,9 @@ namespace EcommercePlatform.Controllers {
             if (!customer.LoggedIn()) {
                 return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
             }
-            decimal total = customer.Cart.shipping_price;
-            foreach (CartItem item in customer.Cart.CartItems) {
-                total += (item.price * item.quantity);
-            }
+            decimal total = customer.Cart.getTotal();
             Paypal p = new Paypal();
-            string confirmationKey = p.ECDoExpressCheckout(token, payerID, total.ToString(), customer.Cart.CartItems.ToList<CartItem>(), customer.Cart.shipping_price);
+            string confirmationKey = p.ECDoExpressCheckout(token, payerID, total.ToString(), customer.Cart);
             if (confirmationKey == "Success") {
                 customer.Cart.AddPayment("PayPal", token, "Complete");
                 customer.Cart.SendConfirmation();

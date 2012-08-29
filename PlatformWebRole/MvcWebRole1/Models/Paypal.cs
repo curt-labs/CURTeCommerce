@@ -11,45 +11,46 @@ namespace EcommercePlatform.Models {
     public class Paypal {
 
 
-        public string ECDoExpressCheckout(string token, string payerID, string amount, List<CartItem> items, decimal shippingamount) {
+        public string ECDoExpressCheckout(string token, string payerID, string amount, Cart cart) {
             Settings settings = new Settings();
             NVPCallerServices caller = new NVPCallerServices();
             IAPIProfile profile = getProfile();
             caller.APIProfile = profile;
 
             NVPCodec encoder = new NVPCodec();
-            encoder["VERSION"] = "84.0";
-            encoder["METHOD"] = "DoExpressCheckoutPayment";
+            encoder.Add("VERSION","84.0");
+            encoder.Add("METHOD","DoExpressCheckoutPayment");
 
             // Add request-specific fields to the request.
-            encoder["TOKEN"] = token;
-            encoder["PAYERID"] = payerID;
-            encoder["RETURNURL"] = getSiteURL() + "Payment/PayPalCheckout";
-            encoder["CANCELURL"] = getSiteURL() + "Payment";
-            encoder["PAYMENTREQUEST_0_AMT"] = amount;
-            encoder["PAYMENTREQUEST_0_PAYMENTACTION"] = "Sale";
-            encoder["PAYMENTREQUEST_0_CURRENCYCODE"] = "USD";
-            encoder["BRANDNAME"] = settings.Get("SiteName");
-            encoder["LOGIN"] = "Login";
-            encoder["HDRIMG"] = settings.Get("EmailLogo");
-            encoder["CUSTOMERSERVICENUMBER"] = settings.Get("PhoneNumber");
-            encoder["PAYMENTREQUEST_0_SHIPPINGAMT"] = shippingamount.ToString();
-            encoder["PAYMENTREQUEST_0_DESC"] = "Your " + settings.Get("SiteName") + " Order";
-            encoder["ALLOWNOTE"] = "0";
-            encoder["NOSHIPPING"] = "1";
+            encoder.Add("TOKEN",token);
+            encoder.Add("PAYERID",payerID);
+            encoder.Add("RETURNURL",getSiteURL() + "Payment/PayPalCheckout");
+            encoder.Add("CANCELURL",getSiteURL() + "Payment");
+            encoder.Add("PAYMENTREQUEST_0_AMT",amount);
+            encoder.Add("PAYMENTREQUEST_0_PAYMENTACTION","Sale");
+            encoder.Add("PAYMENTREQUEST_0_CURRENCYCODE","USD");
+            encoder.Add("BRANDNAME",settings.Get("SiteName"));
+            encoder.Add("LOGIN","Login");
+            encoder.Add("HDRIMG",settings.Get("EmailLogo"));
+            encoder.Add("CUSTOMERSERVICENUMBER",settings.Get("PhoneNumber"));
+            encoder.Add("PAYMENTREQUEST_0_SHIPPINGAMT",cart.shipping_price.ToString());
+            encoder.Add("PAYMENTREQUEST_0_DESC","Your " + settings.Get("SiteName") + " Order");
+            encoder.Add("ALLOWNOTE","0");
+            encoder.Add("NOSHIPPING","1");
             int count = 0;
             decimal total = 0;
-            foreach (CartItem item in items) {
-                encoder["L_PAYMENTREQUEST_0_NUMBER" + count] = item.partID.ToString();
-                encoder["L_PAYMENTREQUEST_0_NAME" + count] = item.shortDesc;
-                encoder["L_PAYMENTREQUEST_0_AMT" + count] = String.Format("{0:C}", item.price);
-                encoder["L_PAYMENTREQUEST_0_QTY" + count] = item.quantity.ToString();
-                encoder["L_PAYMENTREQUEST_0_ITEMCATEGORY" + count] = "Physical";
-                encoder["L_PAYMENTREQUEST_0_ITEMURL" + count] = settings.Get("SiteURL") + "part/" + item.partID;
+            foreach (CartItem item in cart.CartItems) {
+                encoder.Add("L_PAYMENTREQUEST_0_NUMBER" + count, item.partID.ToString());
+                encoder.Add("L_PAYMENTREQUEST_0_NAME" + count, item.shortDesc);
+                encoder.Add("L_PAYMENTREQUEST_0_AMT" + count, String.Format("{0:N2}", item.price));
+                encoder.Add("L_PAYMENTREQUEST_0_QTY" + count, item.quantity.ToString());
+                encoder.Add("L_PAYMENTREQUEST_0_ITEMCATEGORY" + count, "Physical");
+                encoder.Add("L_PAYMENTREQUEST_0_ITEMURL" + count, settings.Get("SiteURL") + "part/" + item.partID);
                 total += item.price * item.quantity;
                 count++;
             }
-            encoder["PAYMENTREQUEST_0_ITEMAMT"] = total.ToString();
+            encoder.Add("PAYMENTREQUEST_0_TAXAMT", String.Format("{0:N2}", cart.tax));
+            encoder.Add("PAYMENTREQUEST_0_ITEMAMT", String.Format("{0:N2}", total));
             // Execute the API operation and obtain the response.
             string pStrrequestforNvp = encoder.Encode();
             string pStresponsenvp = caller.Call(pStrrequestforNvp);
@@ -99,7 +100,7 @@ namespace EcommercePlatform.Models {
             encoder.Add("VERSION", "84.0");
             encoder.Add("METHOD", "SetExpressCheckout");
             // Add request-specific fields to the request.
-            encoder.Add("RETURNURL", getSiteURL() + "Payment/PayPalCheckout");
+            encoder.Add("RETURNURL", getSiteURL() + "Payment/CompletePayPalCheckout");
             encoder.Add("CANCELURL", getSiteURL() + "Payment");
             encoder.Add("PAYMENTREQUEST_0_AMT", String.Format("{0:N2}", cart.getTotal()));
             encoder.Add("PAYMENTREQUEST_0_PAYMENTACTION", "Sale");
@@ -145,11 +146,11 @@ namespace EcommercePlatform.Models {
         private string getSiteURL() {
             Settings settings = new Settings();
             if (HttpContext.Current.Request.Url.Host.Contains("127.0.0")) {
-                return "http://127.0.0.1/";
+                return "https://127.0.0.1";
             } else if(HttpContext.Current.Request.Url.Host.Contains("localhost")) {
-                return "http://localhost:59295/";
+                return "https://localhost:59295/";
             } else {
-                return settings.Get("SiteURL");
+                return settings.Get("SiteURL").Replace("http:","https:");
             }
         }
 

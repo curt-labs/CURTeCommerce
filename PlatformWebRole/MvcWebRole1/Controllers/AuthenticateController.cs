@@ -45,6 +45,7 @@ namespace EcommercePlatform.Controllers {
             return View();
         }
 
+        [RequireHttps]
         public ActionResult Login(string email = "", string password = "", int remember = 0, string redirect = "") {
             try {
                 /**
@@ -110,6 +111,7 @@ namespace EcommercePlatform.Controllers {
             return RedirectToAction("Index", "Authenticate");
         }
 
+        [RequireHttps]
         public ActionResult Signup() {
             Customer cust = new Customer();
             Settings settings = ViewBag.settings;

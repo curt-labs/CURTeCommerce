@@ -22,7 +22,7 @@
     int quebec = 59;
     // Quebec stateID = 59
 }
-<form class="simple-form" method="post" action="@((ViewBag.setup)?"/Authenticate/Signup":"/Account/Save")">
+<form class="simple-form" method="post" action="https://@Request.Url.Host@((ViewBag.setup)?"/Authenticate/Signup":"/Account/Save")">
     <input type="hidden" name="redirect" value="@referrer" />
     <fieldset class="left">
         <legend>Basic Information</legend>
@@ -37,11 +37,11 @@
             </label>
             <label for="signup_password">
                 Password (must be at least 6 characters)
-                <input type="password" name="password" id="signup_password" class="placeholder" placeholder="Enter your password" required="required" title="Password is required" pattern="\S{6,}" />
+                <input type="password" name="password" id="signup_password" autocomplete="off" placeholder="Enter your password" required="required" title="Password is required" pattern="\S{6,}" />
             </label>
             <label for="confirm_password">
                 Confirm Password
-                <input type="password" name="password2" id="confirm_password" class="placeholder" placeholder="Confirm your password" required="required" title="You must confirm your password" pattern="\S{6,}" />
+                <input type="password" name="password2" id="confirm_password" autocomplete="off" placeholder="Confirm your password" required="required" title="You must confirm your password" pattern="\S{6,}" />
             </label>
         } else {
             <label for="signup_email">

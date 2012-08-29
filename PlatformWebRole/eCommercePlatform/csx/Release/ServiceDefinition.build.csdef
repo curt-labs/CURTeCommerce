@@ -49,7 +49,9 @@
     <Endpoints>
       <InputEndpoint name="FTP" protocol="tcp" port="21" localPort="21" />
     </Endpoints>
-    <Certificates />
+    <Certificates>
+      <Certificate name="HitchDepot" storeLocation="LocalMachine" storeName="CA" />
+    </Certificates>
   </WorkerRole>
   <WorkerRole name="TaskScheduler">
     <LocalResources>

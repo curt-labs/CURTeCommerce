@@ -36,7 +36,6 @@
   <WorkerRole name="FTPServerRole">
     <Endpoints>
       <InputEndpoint name="FTP" port="21" protocol="tcp" />
-      <InputEndpoint name="SFTP" protocol="https" port="22" certificate="HitchDepot" />
     </Endpoints>
     <ConfigurationSettings>
       <Setting name="ProviderName" />
