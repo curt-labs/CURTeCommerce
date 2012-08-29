@@ -39,6 +39,9 @@
       <Setting name="ProviderName" value="AzureBlobStorageProvider" />
       <Setting name="BaseUri" value="" />
     </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="HitchDepot" thumbprint="3B4068A2F7789DECA5AF56F1C326B1D4DA4C7D71" thumbprintAlgorithm="sha1" />
+    </Certificates>
   </Role>
   <Role name="TaskScheduler">
     <Instances count="1" />

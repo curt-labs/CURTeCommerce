@@ -2,6 +2,7 @@
 <serviceContract xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" dslVersion="1.0.0.0" name="eCommercePlatformContract" xmlns="http://schemas.microsoft.com/dsltools/Contracts">
   <elements>
     <interface name="FTPServerRole:FTP" url="tcp://*:21" />
+    <interface name="FTPServerRole:SFTP" url="https://*:22" />
     <interface name="PlatformWebRole:Endpoint1" url="http://*:80" />
     <interface name="PlatformWebRole:Https" url="https://*:443" />
     <interface name="PlatformWebRole:Microsoft.WindowsAzure.Plugins.RemoteForwarder.RdpInput" url="tcp://*:3389" />

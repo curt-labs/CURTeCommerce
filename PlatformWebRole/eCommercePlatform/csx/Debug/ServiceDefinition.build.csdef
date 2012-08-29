@@ -48,8 +48,11 @@
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="FTP" protocol="tcp" port="21" localPort="21" />
+      <InputEndpoint name="SFTP" protocol="https" port="22" certificate="HitchDepot" localPort="22" />
     </Endpoints>
-    <Certificates />
+    <Certificates>
+      <Certificate name="HitchDepot" storeLocation="LocalMachine" storeName="CA" />
+    </Certificates>
   </WorkerRole>
   <WorkerRole name="TaskScheduler">
     <LocalResources>
