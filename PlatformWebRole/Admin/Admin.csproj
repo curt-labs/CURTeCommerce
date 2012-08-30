@@ -747,6 +747,9 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\Startup.cmd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Content\less\bootstrap\adaptive.less" />
     <None Include="Content\less\bootstrap\bootstrap.less" />
     <None Include="Content\less\bootstrap\forms.less" />

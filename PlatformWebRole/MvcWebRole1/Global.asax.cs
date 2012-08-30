@@ -181,5 +181,38 @@ namespace MvcWebRole1 {
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
         }
+
+        protected void Application_Error(object sender, EventArgs e) {
+            var app = (MvcApplication)sender;
+            var context = app.Context;
+            var ex = app.Server.GetLastError();
+            context.Response.Clear();
+            context.ClearError();
+            var httpException = ex as HttpException;
+
+            var routeData = new RouteData();
+            routeData.Values["controller"] = "_404";
+            routeData.Values["exception"] = ex;
+            routeData.Values["action"] = "http500";
+            if (httpException != null) {
+                if (httpException.Message.ToLower().Contains("a potentially dangerous")) {
+                    routeData.Values["action"] = "http403";
+                } else {
+                    switch (httpException.GetHttpCode()) {
+                        case 404:
+                            routeData.Values["action"] = "http404";
+                            break;
+                        case 403:
+                            routeData.Values["action"] = "http403";
+                            break;
+                        case 500:
+                            routeData.Values["action"] = "http500";
+                            break;
+                    }
+                }
+            }
+            IController controller = new EcommercePlatform.Controllers._404Controller();
+            controller.Execute(new RequestContext(new HttpContextWrapper(context), routeData));
+        }
     }
 }

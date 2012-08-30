@@ -484,6 +484,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\hitchdepotusa-16052012.zip" />
+    <Content Include="bin\Startup.cmd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Content\audio\bitches_please.ogg" />
     <None Include="Content\DataTables\media\images\Sorting icons.psd" />
     <Content Include="Content\Fonts\080109cd-e993-4dc4-9c21-b34766eba5aa.ttf" />
@@ -570,6 +573,7 @@
     </None>
     <Content Include="Views\Cart\Shipping.cshtml" />
     <Content Include="Views\Account\Addresses.cshtml" />
+    <Content Include="Views\_404\Http404.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

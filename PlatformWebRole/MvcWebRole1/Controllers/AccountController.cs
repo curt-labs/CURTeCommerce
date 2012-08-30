@@ -101,6 +101,9 @@ namespace EcommercePlatform.Controllers {
                 TempData["error"] = "You're account has been successfully updated.";
                 return Redirect("/Account");
             } catch (Exception e) {
+                if (e.Message.ToLower().Contains("a potentially dangerous")) {
+                    throw new HttpException(403, "Forbidden");
+                }
                 TempData["customer"] = cust;
                 TempData["error"] = "Failed to save your account information. " + e.Message + e.StackTrace;
                 return Redirect("/Account");
@@ -135,7 +138,11 @@ namespace EcommercePlatform.Controllers {
                 }
                 address.Save(customer.ID);
 
-            } catch { }
+            } catch (Exception e) {
+                if (e.Message.ToLower().Contains("a potentially dangerous")) {
+                    throw new HttpException(403, "Forbidden");
+                }
+            }
             return RedirectToAction("Addresses");
 
         }

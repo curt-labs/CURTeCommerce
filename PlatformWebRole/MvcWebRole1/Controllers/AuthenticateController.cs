@@ -218,6 +218,9 @@ namespace EcommercePlatform.Controllers {
                     return Redirect("/Authenticate");
                 }
             } catch (Exception e) {
+                if (e.Message.ToLower().Contains("a potentially dangerous")) {
+                    throw new HttpException(403, "Forbidden");
+                }
                 TempData["customer"] = cust;
                 /*TempData["billing"] = billing;
                 TempData["shipping"] = shipping;*/

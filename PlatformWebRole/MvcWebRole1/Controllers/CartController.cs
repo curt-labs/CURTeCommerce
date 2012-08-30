@@ -130,13 +130,19 @@ namespace EcommercePlatform.Controllers {
         }
 
         public ActionResult Update(int id = 0, int qty = 1) {
-            // Create Customer
-            Customer customer = new Customer();
+            try {
+                // Create Customer
+                Customer customer = new Customer();
 
-            // Retrieve Customer from Sessions/Cookie
-            customer.GetFromStorage();
+                // Retrieve Customer from Sessions/Cookie
+                customer.GetFromStorage();
 
-            customer.Cart.Update(id, qty);
+                customer.Cart.Update(id, qty);
+            } catch (Exception e) {
+                if (e.Message.ToLower().Contains("a potentially dangerous")) {
+                    throw new HttpException(403, "Forbidden");
+                }
+            }
             return RedirectToAction("Index");
         }
 

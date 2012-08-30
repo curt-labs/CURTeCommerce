@@ -32,6 +32,9 @@
       <Certificate name="NewSSLCert" storeLocation="LocalMachine" storeName="CA" />
       <Certificate name="NoBarSSLCert" storeLocation="LocalMachine" storeName="CA" />
     </Certificates>
+    <Startup>
+      <Task commandLine="Startup.cmd" executionContext="limited" taskType="foreground"></Task>
+    </Startup>
   </WebRole>
   <WorkerRole name="FTPServerRole">
     <Endpoints>

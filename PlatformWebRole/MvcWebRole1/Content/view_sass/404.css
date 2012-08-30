@@ -21,3 +21,7 @@
      width: 25%;
      float:right;
 }
+
+header #search_box {
+    top: 35px;
+}

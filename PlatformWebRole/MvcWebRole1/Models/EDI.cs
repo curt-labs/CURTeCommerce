@@ -88,12 +88,16 @@ namespace EcommercePlatform.Models {
                     string editext = blob.DownloadText().Replace("\r\n", "");
                     if (blob.Name.ToLower().Contains("inv")) {
                         // invoice file
-                        ReadInvoice(editext);
-                        BlobManagement.MoveBlob(blob, "edi/archive", "edi/in");
+                        try {
+                            ReadInvoice(editext);
+                            BlobManagement.MoveBlob(blob, "edi/archive", "edi/in");
+                        } catch { }
                     } else if (blob.Name.ToLower().Contains("asn")) {
                         // ship notification
-                        ReadShippingNotification(editext);
-                        BlobManagement.MoveBlob(blob, "edi/archive", "edi/in");
+                        try {
+                            ReadShippingNotification(editext);
+                            BlobManagement.MoveBlob(blob, "edi/archive", "edi/in");
+                        } catch { }
                     }
                 }
             }
@@ -217,12 +221,21 @@ namespace EcommercePlatform.Models {
                         break;
                     case "IT1":
                         // item in the invoice
-                        InvoiceItem i = new InvoiceItem {
+                        InvoiceItem i = new InvoiceItem();
+                        try {
+                            i.quantity = Convert.ToInt32(lineelements[2]);
+                        } catch {
+                            i.quantity = 0;
+                        }
+                        i.price = Convert.ToDecimal(lineelements[4]);
+                        i.partID = lineelements[9];
+                        i.description = lineelements[15];
+                        /*InvoiceItem i = new InvoiceItem {
                             quantity = Convert.ToInt32(lineelements[2]),
                             price = Convert.ToDecimal(lineelements[4]),
                             partID = lineelements[9],
                             description = lineelements[15]
-                        };
+                        };*/
                         items.Add(i);
                         break;
                     case "TDS":

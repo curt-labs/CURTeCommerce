@@ -14,19 +14,24 @@ namespace EcommercePlatform {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             this.created = DateTime.Now;
             this.paid = false;
-            db.Invoices.InsertOnSubmit(this);
-            db.SubmitChanges();
+            try {
+                Invoice i = db.Invoices.Where(x => x.curtOrder.Equals(this.curtOrder)).First<Invoice>();
+            } catch {
+                db.Invoices.InsertOnSubmit(this);
+                db.SubmitChanges();
 
-            foreach (InvoiceItem itm in items) {
-                itm.invoiceID = this.id;
-            }
-            db.InvoiceItems.InsertAllOnSubmit(items);
+                foreach (InvoiceItem itm in items) {
+                    itm.invoiceID = this.id;
+                }
+                db.InvoiceItems.InsertAllOnSubmit(items);
 
-            foreach (InvoiceCode code in codes) {
-                code.invoiceID = this.id;
+                foreach (InvoiceCode code in codes) {
+                    code.invoiceID = this.id;
+                }
+                db.InvoiceCodes.InsertAllOnSubmit(codes);
+                db.SubmitChanges();
             }
-            db.InvoiceCodes.InsertAllOnSubmit(codes);
-            db.SubmitChanges();
+
         }
 
     }
