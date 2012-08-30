@@ -33,7 +33,7 @@
       <Certificate name="NoBarSSLCert" storeLocation="LocalMachine" storeName="CA" />
     </Certificates>
     <Startup>
-      <Task commandLine="Startup.cmd" executionContext="limited" taskType="foreground"></Task>
+      <Task commandLine="Startup.cmd" executionContext="elevated" taskType="simple"></Task>
     </Startup>
   </WebRole>
   <WorkerRole name="FTPServerRole">

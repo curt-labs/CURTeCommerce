@@ -18,6 +18,9 @@
     if (addresses == null) {
         addresses = new List<EcommercePlatform.Address>();
     }
+    
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
+    List<string> freeshippingtypes = settings.Get("FreeShippingType").Split(',').ToList<string>();
 
     EcommercePlatform.Models.ShippingResponse shippingresponse = ViewBag.shippingresponse;
     if (shippingresponse == null) {
@@ -68,7 +71,7 @@
                                             shipcount++;
                                             EcommercePlatform.Models.ShipmentRateDetails rate = shippingresponse.Result[i];
                                             <label for="shipping_@(shipcount)">
-                                                @if (cust.Cart.HasFreeShipping() && rate.ServiceType == ViewBag.settings.Get("FreeShippingType")) {
+                                                @if (cust.Cart.HasFreeShipping() && freeshippingtypes.Contains(rate.ServiceType)) {
                                                     shipping_type = rate.ServiceType;
                                                     <input type="radio" name="shipping_type" id="shipping_@(shipcount)" value="@rate.ServiceType|0" @((shipcount == 1) ? "checked=checked" : "") />
                                                     <span class="rate">Free Shipping - @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rate.ServiceType.Replace("_", " ").ToLower())</span>

@@ -750,6 +750,9 @@
     <Content Include="bin\Startup.cmd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="bin\tls.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Content\less\bootstrap\adaptive.less" />
     <None Include="Content\less\bootstrap\bootstrap.less" />
     <None Include="Content\less\bootstrap\forms.less" />
