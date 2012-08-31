@@ -1,158 +1,220 @@
 ﻿@{
     Admin.Invoice invoice = ViewBag.invoice ?? new Admin.Invoice();
+    Admin.Models.Settings settings = ViewBag.settings ?? new Admin.Models.Settings();
+    Admin.Cart order = ViewBag.order ?? new Admin.Cart();
 
     ViewBag.Title = "Invoice #" + invoice.number;
     Layout = "~/Views/Shared/_Layout.cshtml";
+    decimal freight = 0;
+    decimal misccharges = 0;
 }
 <link href="/Admin/Content/css/invoice.manager.css" rel="stylesheet" type="text/css" />
-<span class="title">Invoice #@invoice.number</span>
-@if (invoice.paid) {
-    <p class="void">Reconciled</p>
-} else {
-    <a class="button" href="/Admin/Invoice/Paid/@invoice.id" id="pay">Reconcile</a>
-}
-
-<ul class="tabs">
-    <li>
-        <a href="#order">Summary</a>
-    </li>
-    <li>
-        <a href="#items">Items</a>
-    </li>
-    <li>
-        <a href="#billto">Bill To</a>
-    </li>
-    <li>
-        <a href="#shipto">Ship To</a>
-    </li>
-</ul>
-<div class="tab_container">
-    <div class="tab_content admin_form" id="order">
-        <h2>@invoice.invoiceType</h2>
-        <div class="left">
-            <label>
-                Date Invoiced
-                <input type="text" value="@String.Format("{0:MM/dd/yyyy}",invoice.dateAdded)" readonly="readonly" />
-            </label>
-            <label>
-                Order ID
-                <input type="text" value="@invoice.orderID" readonly />
-            </label>
-            <label>
-                CURT Order Reference Number
-                <input type="text" value="@invoice.curtOrder" readonly />
-            </label>
-            <label>
-                Invoice Type
-                <input type="text" value="@invoice.invoiceType" readonly />
-            </label>
-            <label>
-                Invoice Terms Type
-                <input type="text" value="@invoice.termsType" readonly />
-            </label>
-            <label>
-                Invoice Terms
-                <input type="text" value="@invoice.termsDescription" readonly />
-            </label>
+<link href="/Admin/Content/css/invoice.manager.print.css" rel="stylesheet" type="text/css" media="print" />
+<div class="buttonarea">
+    <span class="title">Invoice #@invoice.number</span>
+    @if (invoice.paid) {
+        <p class="void">Reconciled</p>
+    } else {
+        <a class="button" href="/Admin/Invoice/Paid/@invoice.id" id="pay">Reconcile</a>
+    }
+    <a class="button" href="javascript:window.print()">Print</a>
+</div>
+<div class="invoice">
+    <div class="iheader">
+        <img src="/Admin/Content/img/invoicelogo.png" alt="CURT Manufacturing: The FIRST Name in Towing Products" class="curtlogo" />
+        <p class="remit">
+           <span>PLEASE REMIT TO: </span><br />
+           CURT Manufacturing LLC<br />
+           Box 88006<br />
+           Milwaukee, WI 53288
+        </p>
+        <div class="invoicenumber">
+            <span>INVOICE</span>
+            @invoice.number
         </div>
-        <div class="left">
-            <span class="title">Invoice Totals</span>
-            <span class="subdata"><span>Bill To Currency</span>@invoice.billToCurrency</span>
-            <span class="subdata"><span>Subtotal</span>@String.Format("{0:C}",invoice.subtotal)</span>
-            @foreach (Admin.InvoiceCode code in invoice.InvoiceCodes) {
-                <span class="subdata"><span>@code.type: @code.code - @code.description</span>@String.Format("{0:C}", code.value)</span>
+        <div style="clear:both;"></div>
+    </div>
+    <p class="small">6208 Industrial Dr, Eau Claire, WI 54701&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; www.curtmfg.com</p>
+    <div class="addresses">
+        <div id="shipto">
+            <h3>Ship To</h3>
+            <p>@invoice.ShipTo.first @invoice.ShipTo.last<br />
+            @invoice.ShipTo.street1<br />
+            @invoice.ShipTo.city @invoice.ShipTo.State1.abbr @invoice.ShipTo.postal_code<br />
+            @invoice.ShipTo.State1.Country.name</p>
+            <span style="clear:both;"></span>
+        </div>
+        <div id="billto">
+            <h3>Sold To</h3>
+            <p>@invoice.BillTo.first @invoice.BillTo.last<br />
+            @invoice.BillTo.street1<br />
+            @if (invoice.BillTo.street2 != "") {
+                @invoice.BillTo.street2<br />
             }
-            <span class="subdata"><span>Sales Tax</span>@String.Format("{0:C}",invoice.salesTax)</span>
-            <br />
-            <span class="subdata"><span>Discount Due Date</span>@String.Format("{0:MM/dd/yyyy}",invoice.discountDueDate) (@invoice.discountDueDays Days)</span>
-            <span class="subdata"><span>Discount Percentage</span>@invoice.discountPercent%</span>
-            <span class="subdata"><span>Discount Amount</span>@String.Format("{0:C}",invoice.discount)</span>
-            <span class="subdata"><span>Discount Total</span>@String.Format("{0:C}", invoice.discountTotal)</span>
-
-            <br />
-            <span class="subdata"><span>Net Due Date</span>@String.Format("{0:MM/dd/yyyy}", invoice.netDueDate) (@invoice.netDueDays Days)</span>
-            <span class="subdata"><span>Net Total</span>@String.Format("{0:C}", invoice.total)</span>
-            
-            <span class="title">Number of Items</span>
-            <span class="data">@invoice.InvoiceItems.Count</span>
+            @invoice.BillTo.city @invoice.BillTo.State1.abbr @invoice.BillTo.postal_code<br />
+            @invoice.BillTo.State1.Country.name</p>
+            <span style="clear:both;"></span>
         </div>
-        <div class="clearfix"></div>
     </div>
-    <div class="tab_content" id="items">
-        @foreach (Admin.InvoiceItem item in invoice.InvoiceItems) {
-            <article>
-                <div class="info">
-                    <p>@item.partID</p>
-                    <p>@item.description</p>
-                </div>
-                <div class="pricing">
-                    <span class="price">@String.Format("{0:C}", item.price)</span>
-                    <span class="qty">x&nbsp;@item.quantity</span>
-                </div>
-            </article>
-        }
+    <div class="dateinfo">
+        <p class="phone small">
+            Phone (715) 831-8713<br />
+            1-877-CURTMFG<br />
+            Fax (715) 831-8712
+        </p>
+        <div class="dates">
+            <p><strong>Date:</strong> @String.Format("{0:MM/dd/yyyy}", invoice.dateAdded)</p>
+            <p><strong>Due On:</strong> @String.Format("{0:MM/dd/yyyy}", invoice.netDueDate)</p>
+        </div>
+        <div style="clear:both;"></div>
+        <br />
+        <br />
+        <p><strong>Currency:</strong> @invoice.billToCurrency</p>
+        <p><strong>Terms:</strong> @invoice.termsType - @invoice.termsDescription</p>
+        <div style="clear:both;"></div>
     </div>
-    <div class="tab_content" id="billto">
-        <h3>Bill To</h3>
-        <label>
-            Name
-            <input type="text" value="@invoice.BillTo.first @invoice.BillTo.last" readonly />
-        </label>
-        <label>
-            Street
-            <input type="text" value="@invoice.BillTo.street1" readonly />
-        </label>
-        <label>
-            Street 2
-            <input type="text" value="@invoice.BillTo.street2" readonly />
-        </label>
-        <label>
-            City
-            <input type="text" value="@invoice.BillTo.city" readonly />
-        </label>
-        <label>
-            State/Province
-            <input type="text" value="@(invoice.BillTo.State1.abbr + " - " + invoice.BillTo.State1.state1)" readonly />
-        </label>
-        <label>
-            Country
-            <input type="text" value="@(invoice.BillTo.State1.Country.abbr + " - " + invoice.BillTo.State1.Country.name)" readonly />
-        </label>
-        <label>
-            Postal Code
-            <input type="text" value="@invoice.BillTo.postal_code" readonly />
-        </label>
-    </div>
-    <div class="tab_content" id="shipto">
-        <h3>Ship To</h3>
-        <label>
-            Name
-            <input type="text" value="@(invoice.ShipTo.first + " " + invoice.ShipTo.last)" readonly />
-        </label>
-        <label>
-            Street
-            <input type="text" value="@invoice.ShipTo.street1" readonly />
-        </label>
-        <label>
-            City
-            <input type="text" value="@invoice.ShipTo.city" readonly />
-        </label>
-        <label>
-            State/Province
-            <input type="text" value="@(invoice.ShipTo.State1.abbr + " - " + invoice.ShipTo.State1.state1)" readonly />
-        </label>
-        <label>
-            Country
-            <input type="text" value="@(invoice.ShipTo.State1.Country.abbr + " - " + invoice.ShipTo.State1.Country.name)" readonly />
-        </label>
-        <label>
-            Postal Code
-            <input type="text" value="@invoice.ShipTo.postal_code" readonly />
-        </label>
-        <label>
-            Phone
-            <input type="text" value="@invoice.ShipTo.street2" readonly />
-        </label>
-    </div>
-
+    <div style="clear:both;"></div>
+    <table class="invoicetable">
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Order</th>
+                <th>P.O. Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@settings.Get("CURTAccount")</td>
+                <td>@invoice.curtOrder</td>
+                <td>@invoice.orderID</td>
+            </tr>
+        </tbody>
+    </table>
+    @if (order != null && order.ID != 0 && order.Shipments.Count > 0) {
+        <table class="invoicetable">
+            <thead>
+                <tr>
+                    <th>Ship No.</th>
+                    <th>Shipping Type</th>
+                    <th>Ship Date</th>
+                    <th>Ship Weight</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@order.Shipments[0].shipment_number</td>
+                    <td>@order.shipping_type</td>
+                    <td>@String.Format("{0:M/dd/yyyy}", order.Shipments[0].dateShipped)</td>
+                    <td>@order.Shipments[0].weight</td>
+                </tr>
+            </tbody>
+        </table>
+    }
+    <table class="invoicetable items">
+        <thead>
+            <tr>
+                <th>Line No.</th>
+                <th>Item Number / Description</th>
+                <th>U/M</th>
+                <th>Quantity / Price</th>
+                <th>Net Sales Amt</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td class="desc">GST BUSINESS NUMBER:<br />
+                    89223 4907 RT0001<br />
+                    FEIN 27-4036974<br />
+                    ORDER ONLINE AT:<br />
+                    ORDERS.CURTMFG.COM<br />
+                    @if (order != null && order.ID != 0 && order.Shipments.Count > 0) {
+                        <text>Tracking Numbers:</text><br />
+                        foreach (Admin.Shipment shipment in order.Shipments) {
+                             @shipment.tracking_number<br />
+                        }
+                    }
+                    <br />
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            @for (int i = 0; i < invoice.InvoiceItems.Count; i++) {
+                <tr>
+                    <td>@((i + 1).ToString("000"))</td>
+                    <td class="desc">@invoice.InvoiceItems[i].partID<br />@invoice.InvoiceItems[i].description</td>
+                    <td>EA</td>
+                    <td class="desc">@invoice.InvoiceItems[i].quantity<br />@invoice.InvoiceItems[i].price</td>
+                    <td class="totals">@String.Format("{0:C}", (invoice.InvoiceItems[i].quantity * invoice.InvoiceItems[i].price))</td>
+                </tr>
+            }
+            @foreach (Admin.InvoiceCode code in invoice.InvoiceCodes) {
+                <tr>
+                    <td></td>
+                    <td class="desc">@code.description</td>
+                    <td></td>
+                    <td class="desc"></td>
+                    <td class="totals">@String.Format("{0:C}", code.value)</td>
+                </tr>
+                if (code.description.Trim().ToUpper().Equals("FREIGHT")) {
+                    freight += code.value;
+                } else {
+                    misccharges += code.value;
+                }
+            }
+            @if (invoice.salesTax != null) {
+                <tr>
+                    <td></td>
+                    <td class="desc">GOODS AND SERVICES TAX</td>
+                    <td></td>
+                    <td class="desc"></td>
+                    <td class="totals">@String.Format("{0:C}", invoice.salesTax)</td>
+                </tr>
+            }
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </tbody>
+    </table>
+    <table class="invoicetable foottable">
+        <thead>
+            <tr><td colspan="5"></td></tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="litem">Net Sales</td>
+            <td class="totals">@String.Format("{0:C}",invoice.subtotal)</td>
+            <td class="discountlabel">Trade Discount</td>
+            <td class="discountamount" colspan="2">@String.Format("{0:C}",0)</td>
+        </tr>
+        <tr>
+            <td class="litem">Misc Charges</td>
+            <td class="totals">@String.Format("{0:C}",misccharges)</td>
+            <td class="discountlabel">Terms Discount</td>
+            <td class="discountamount" colspan="2">@String.Format("{0:C}",invoice.discount ?? 0)</td>
+        </tr>
+        <tr>
+            <td class="litem">Frieght</td>
+            <td class="totals">@String.Format("{0:C}",freight)</td>
+            <td class="discountlabel"></td>
+            <td class="amountdue" rowspan="2">Amount Due</td>
+            <td class="amountdueamount" rowspan="2">@String.Format("{0:C}",invoice.total ?? 0)</td>
+        </tr>
+        <tr>
+            <td class="litem">Taxes</td>
+            <td class="totals">@String.Format("{0:C}", invoice.salesTax ?? 0)</td>
+            <td class="discountlabel"></td>
+        </tr>
+        </tbody>
+        <tfoot>
+            <tr><td colspan="5"></td></tr>
+        </tfoot>
+    </table>
 </div>

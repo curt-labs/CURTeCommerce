@@ -276,7 +276,10 @@ namespace EcommercePlatform.Models {
         internal void ReadShippingNotification(string editext) {
             string trackingcode = "";
             string purchaseOrderID = "";
+            string shipmentNumber = "";
+            string weight = "";
             Cart order = new Cart();
+            List<Shipment> shipments = new List<Shipment>();
             DateTime shipdate = DateTime.Now;
 
             List<string> edilines = editext.Split('~').ToList<string>();
@@ -286,6 +289,12 @@ namespace EcommercePlatform.Models {
                     case "ST":
                         // Beginning of invoice
                         order = new Cart();
+                        shipments = new List<Shipment>();
+                        weight = "";
+                        break;
+                    case "BSN":
+                        // Original Shipment Number from Shipper
+                        shipmentNumber = lineelements[2];
                         break;
                     case "PRF":
                         // Purchase Order Reference
@@ -294,16 +303,31 @@ namespace EcommercePlatform.Models {
                     case "REF":
                         // Tracking Code reference
                         trackingcode = lineelements[2];
+                        Shipment shipment = new Shipment {
+                            tracking_number = trackingcode
+                        };
+                        shipments.Add(shipment);
                         break;
                     case "DTM":
                         shipdate = Convert.ToDateTime(lineelements[2].Substring(4, 2) + "/" + lineelements[2].Substring(6, 2) + "/20" + lineelements[2].Substring(2, 2));
+                        break;
+                    case "TD1":
+                        weight = lineelements[7] + " " + lineelements[8];
                         break;
                     case "SE":
                         // End of Invoice
                         try {
                             order = new Cart().GetByPaymentID(Convert.ToInt32(purchaseOrderID));
-                            order.AddTrackingInfo(trackingcode);
-                            order.SendShippingNotification(shipdate);
+                            foreach (Shipment s in shipments) {
+                                s.order_id = order.ID;
+                                s.dateShipped = shipdate;
+                                s.shipment_number = shipmentNumber;
+                                s.weight = weight;
+                            }
+                            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+                            db.Shipments.InsertAllOnSubmit(shipments);
+                            db.SubmitChanges();
+                            order.SendShippingNotification();
                         } catch { }
                         break;
                 }

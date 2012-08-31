@@ -90,16 +90,6 @@ namespace EcommercePlatform
             return this;
         }
 
-        public void AddTrackingInfo(string trackingNumber) {
-            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-            try {
-                Cart c = db.Carts.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<Cart>();
-                c.tracking_number = trackingNumber;
-                db.SubmitChanges();
-            } catch { };
-            this.tracking_number = trackingNumber;
-        }
-
         public void Empty() {
             if (this.cust_id > 0) {
                 EcommercePlatformDataContext db = new EcommercePlatformDataContext();
@@ -384,25 +374,32 @@ namespace EcommercePlatform
             UDF.SendEmail(tos, settings.Get("SiteName") + " Order Confirmation", true, sb.ToString());
         }
 
-        internal void SendShippingNotification(DateTime shipped) {
+        internal void SendShippingNotification() {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            List<Shipment> shipments = db.Shipments.Where(x => x.order_id.Equals(this.ID)).ToList<Shipment>();
 
-            string toemail = db.Customers.Where(x => x.ID == this.cust_id).Select(x => x.email).FirstOrDefault();
-            StringBuilder sb = new StringBuilder();
-            TextInfo myTI = new CultureInfo("en-US", false).TextInfo;
-            Settings settings = new Settings();
+            if (shipments.Count > 0) {
+                DateTime shipdate = (DateTime)shipments[0].dateShipped;
+                string toemail = db.Customers.Where(x => x.ID == this.cust_id).Select(x => x.email).FirstOrDefault();
+                StringBuilder sb = new StringBuilder();
+                TextInfo myTI = new CultureInfo("en-US", false).TextInfo;
+                Settings settings = new Settings();
 
-            string[] tos = { toemail };
-            sb.Append("<html><body style=\"font-family: arial, helvetica,sans-serif;\">");
-            sb.Append("<a href=\"" + settings.Get("SiteURL") + "\"><img src=\"" + settings.Get("EmailLogo") + "\" alt=\"" + settings.Get("SiteName") + "\" /></a>");
-            sb.Append("<h2>Your Order Has Shipped!</h2>");
-            sb.Append("<hr />");
-            sb.AppendFormat("<p><strong>Order ID:</strong> {0}<br />", this.payment_id);
-            sb.Append("<p>Your order shipped on " + String.Format("{0:dddd, MMMM d, yyyy}", shipped) + ". Your Tracking Number is <a href=\"http://www.fedex.com/Tracking?tracknumber_list=" + this.tracking_number + "\">" + this.tracking_number + "</a>.");
-            sb.Append("<hr /><br />");
-            sb.Append("<p style='font-size:11px'>If you have any questions, or if you did not place this order, please <a href='" + settings.Get("SiteURL") + "contact'>contact us</a>.</p>");
-            sb.Append("</body></html>");
-            UDF.SendEmail(tos, settings.Get("SiteName") + " Shipping Notification", true, sb.ToString());
+                string[] tos = { toemail };
+                sb.Append("<html><body style=\"font-family: arial, helvetica,sans-serif;\">");
+                sb.Append("<a href=\"" + settings.Get("SiteURL") + "\"><img src=\"" + settings.Get("EmailLogo") + "\" alt=\"" + settings.Get("SiteName") + "\" /></a>");
+                sb.Append("<h2>Your Order Has Shipped!</h2>");
+                sb.Append("<hr />");
+                sb.AppendFormat("<p><strong>Order ID:</strong> {0}<br />", this.payment_id);
+                sb.Append("<p>Your order shipped on " + String.Format("{0:dddd, MMMM d, yyyy}", shipdate) + ". Your Tracking Numbers are:<br />");
+                foreach(Shipment shipment in shipments) {
+                    sb.Append("<a href=\"http://www.fedex.com/Tracking?tracknumber_list=" + shipment.tracking_number + "\">" + shipment.tracking_number + "</a><br />");
+                }
+                sb.Append("<hr /><br />");
+                sb.Append("<p style='font-size:11px'>If you have any questions, or if you did not place this order, please <a href='" + settings.Get("SiteURL") + "contact'>contact us</a>.</p>");
+                sb.Append("</body></html>");
+                UDF.SendEmail(tos, settings.Get("SiteName") + " Shipping Notification", true, sb.ToString());
+            }
         }
 
         internal void SendCancelNotice() {

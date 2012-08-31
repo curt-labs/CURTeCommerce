@@ -37,6 +37,9 @@ namespace EcommercePlatform.Controllers {
                 }
             } catch (Exception e) {
                 string message = e.Message;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = 404;
+                Response.StatusDescription = "File Not Found";
             }
             return View();
             //return Content("404", "text/plain");

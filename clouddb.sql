@@ -1001,3 +1001,12 @@ GO
 -- BCPArgs:35:[dbo].[Testimonial] in "c:\SQLAzureMW\BCPData\dbo.Testimonial.dat" -E -n -b 10000 -a 16384
 GO
 
+CREATE TABLE Shipment (
+	ID int IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	order_id varchar(255) NULL,
+	shipment_number varchar(255) NULL,
+	tracking_number varchar(255) NULL,
+	dateShipped datetime NULL,
+	weight varchar(25) NULL
+)
+GO

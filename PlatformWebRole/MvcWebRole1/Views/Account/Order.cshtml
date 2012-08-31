@@ -93,8 +93,18 @@
         <div class="tab_content" id="shipping">
             <p><strong>Type:</strong> @order.shipping_type</p>
             <p><strong>Amount:</strong> @String.Format("{0:C}", order.shipping_price)</p>
-            <p><strong>Tracking Code:</strong> @order.tracking_number</p>
-            <p><strong>Status:</strong> @((order.tracking_number == "") ? "Processing" : "Shipped")</p>
+            <p><strong>Status:</strong> @((order.Shipments.Count > 0) ? "Shipped" : "Processing")</p>
+            <p><strong>Tracking Codes:</strong> 
+            @for (int i = 0; i < order.Shipments.Count; i++) {
+                if (i > 0) {
+                    <text>, </text>
+                }
+                <a href="http://www.fedex.com/Tracking?tracknumber_list=@order.Shipments[i].tracking_number">@order.Shipments[i].tracking_number</a>
+            }
+            </p>
+            @if (order.Shipments.Count > 0 && order.Shipments[0].dateShipped != null) {
+                <p><strong>Date Shipped:</strong> @String.Format("{0: M/d/yyyy}", order.Shipments[0].dateShipped)</p>
+            }
         </div>
     </div>
     

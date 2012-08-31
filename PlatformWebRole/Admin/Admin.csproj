@@ -195,6 +195,7 @@
   <ItemGroup>
     <Content Include="bin\AuthorizeNet.dll" />
     <Content Include="bin\AuthorizeNet.Helpers.dll" />
+    <Content Include="Content\css\invoice.manager.print.css" />
     <Content Include="Content\css\taxes.manager.css" />
     <Content Include="Content\css\invoice.manager.css" />
     <Content Include="Content\css\scheduler.css" />
@@ -284,6 +285,7 @@
     <Content Include="Content\img\forward_enabled.jpg" />
     <Content Include="Content\img\glyphicons-halflings-white.png" />
     <Content Include="Content\img\glyphicons-halflings.png" />
+    <Content Include="Content\img\invoicelogo.png" />
     <Content Include="Content\img\login_banner.png" />
     <Content Include="Content\img\module_icons\AddressBook.png" />
     <Content Include="Content\img\module_icons\Bank.png" />

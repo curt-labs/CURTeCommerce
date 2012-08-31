@@ -20,6 +20,11 @@ namespace Admin.Controllers {
         public ActionResult Details(int id = 0) {
             Invoice invoice = new Invoice().Get(id);
             ViewBag.invoice = invoice;
+            Cart order = new Cart();
+            try {
+                order = new Cart().GetByPayment(invoice.orderID);
+            } catch { }
+            ViewBag.order = order;
             return View();
         }
 

@@ -132,6 +132,9 @@ namespace Admin
     partial void InsertInvoiceCode(InvoiceCode instance);
     partial void UpdateInvoiceCode(InvoiceCode instance);
     partial void DeleteInvoiceCode(InvoiceCode instance);
+    partial void InsertShipment(Shipment instance);
+    partial void UpdateShipment(Shipment instance);
+    partial void DeleteShipment(Shipment instance);
     #endregion
 		
 		public EcommercePlatformDataContext() : 
@@ -433,6 +436,14 @@ namespace Admin
 			get
 			{
 				return this.GetTable<InvoiceCode>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Shipment> Shipments
+		{
+			get
+			{
+				return this.GetTable<Shipment>();
 			}
 		}
 	}
@@ -1976,6 +1987,8 @@ namespace Admin
 		
 		private EntitySet<CartItem> _CartItems;
 		
+		private EntitySet<Shipment> _Shipments;
+		
 		private EntityRef<Customer> _Customer;
 		
 		private EntityRef<Payment> _Payment;
@@ -2017,6 +2030,7 @@ namespace Admin
 		public Cart()
 		{
 			this._CartItems = new EntitySet<CartItem>(new Action<CartItem>(this.attach_CartItems), new Action<CartItem>(this.detach_CartItems));
+			this._Shipments = new EntitySet<Shipment>(new Action<Shipment>(this.attach_Shipments), new Action<Shipment>(this.detach_Shipments));
 			this._Customer = default(EntityRef<Customer>);
 			this._Payment = default(EntityRef<Payment>);
 			this._Billing = default(EntityRef<Address>);
@@ -2293,6 +2307,19 @@ namespace Admin
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Cart_Shipment", Storage="_Shipments", ThisKey="ID", OtherKey="order_id")]
+		public EntitySet<Shipment> Shipments
+		{
+			get
+			{
+				return this._Shipments;
+			}
+			set
+			{
+				this._Shipments.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Customer_Cart", Storage="_Customer", ThisKey="cust_id", OtherKey="ID", IsForeignKey=true)]
 		public Customer Customer
 		{
@@ -2456,6 +2483,18 @@ namespace Admin
 		}
 		
 		private void detach_CartItems(CartItem entity)
+		{
+			this.SendPropertyChanging();
+			entity.Cart = null;
+		}
+		
+		private void attach_Shipments(Shipment entity)
+		{
+			this.SendPropertyChanging();
+			entity.Cart = this;
+		}
+		
+		private void detach_Shipments(Shipment entity)
 		{
 			this.SendPropertyChanging();
 			entity.Cart = null;
@@ -9416,6 +9455,229 @@ namespace Admin
 						this._invoiceID = default(int);
 					}
 					this.SendPropertyChanged("Invoice");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Shipment")]
+	public partial class Shipment : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private int _order_id;
+		
+		private string _shipment_number;
+		
+		private string _tracking_number;
+		
+		private System.Nullable<System.DateTime> _dateShipped;
+		
+		private string _weight;
+		
+		private EntityRef<Cart> _Cart;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void Onorder_idChanging(int value);
+    partial void Onorder_idChanged();
+    partial void Onshipment_numberChanging(string value);
+    partial void Onshipment_numberChanged();
+    partial void Ontracking_numberChanging(string value);
+    partial void Ontracking_numberChanged();
+    partial void OndateShippedChanging(System.Nullable<System.DateTime> value);
+    partial void OndateShippedChanged();
+    partial void OnweightChanging(string value);
+    partial void OnweightChanged();
+    #endregion
+		
+		public Shipment()
+		{
+			this._Cart = default(EntityRef<Cart>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_order_id", DbType="Int NOT NULL")]
+		public int order_id
+		{
+			get
+			{
+				return this._order_id;
+			}
+			set
+			{
+				if ((this._order_id != value))
+				{
+					if (this._Cart.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onorder_idChanging(value);
+					this.SendPropertyChanging();
+					this._order_id = value;
+					this.SendPropertyChanged("order_id");
+					this.Onorder_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_shipment_number", DbType="VarChar(255)")]
+		public string shipment_number
+		{
+			get
+			{
+				return this._shipment_number;
+			}
+			set
+			{
+				if ((this._shipment_number != value))
+				{
+					this.Onshipment_numberChanging(value);
+					this.SendPropertyChanging();
+					this._shipment_number = value;
+					this.SendPropertyChanged("shipment_number");
+					this.Onshipment_numberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_tracking_number", DbType="VarChar(255)")]
+		public string tracking_number
+		{
+			get
+			{
+				return this._tracking_number;
+			}
+			set
+			{
+				if ((this._tracking_number != value))
+				{
+					this.Ontracking_numberChanging(value);
+					this.SendPropertyChanging();
+					this._tracking_number = value;
+					this.SendPropertyChanged("tracking_number");
+					this.Ontracking_numberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_dateShipped", DbType="DateTime")]
+		public System.Nullable<System.DateTime> dateShipped
+		{
+			get
+			{
+				return this._dateShipped;
+			}
+			set
+			{
+				if ((this._dateShipped != value))
+				{
+					this.OndateShippedChanging(value);
+					this.SendPropertyChanging();
+					this._dateShipped = value;
+					this.SendPropertyChanged("dateShipped");
+					this.OndateShippedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_weight", DbType="VarChar(25)")]
+		public string weight
+		{
+			get
+			{
+				return this._weight;
+			}
+			set
+			{
+				if ((this._weight != value))
+				{
+					this.OnweightChanging(value);
+					this.SendPropertyChanging();
+					this._weight = value;
+					this.SendPropertyChanged("weight");
+					this.OnweightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Cart_Shipment", Storage="_Cart", ThisKey="order_id", OtherKey="ID", IsForeignKey=true)]
+		internal Cart Cart
+		{
+			get
+			{
+				return this._Cart.Entity;
+			}
+			set
+			{
+				Cart previousValue = this._Cart.Entity;
+				if (((previousValue != value) 
+							|| (this._Cart.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Cart.Entity = null;
+						previousValue.Shipments.Remove(this);
+					}
+					this._Cart.Entity = value;
+					if ((value != null))
+					{
+						value.Shipments.Add(this);
+						this._order_id = value.ID;
+					}
+					else
+					{
+						this._order_id = default(int);
+					}
+					this.SendPropertyChanged("Cart");
 				}
 			}
 		}
