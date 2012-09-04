@@ -164,6 +164,7 @@
     <Compile Include="Models\ContactManagement.cs" />
     <Compile Include="Models\ContentManagement.cs" />
     <Compile Include="Models\ContentPage.cs" />
+    <Compile Include="Models\InvoiceCount.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\Invoice.cs" />
@@ -822,6 +823,9 @@
     <Content Include="Views\Invoice\Index.cshtml" />
     <Content Include="Views\Invoice\Details.cshtml" />
     <Content Include="Views\Taxes\Index.cshtml" />
+    <Content Include="Views\Invoice\List.cshtml" />
+    <Content Include="Views\Invoice\Print.cshtml" />
+    <Content Include="Views\Invoice\UnPrinted.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

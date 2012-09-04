@@ -80,6 +80,8 @@ div.invoice {
    float: none !important;
    color: black;
    background: transparent none;
+   page-break-after: always;
+   page-break-inside: avoid;
 }
 
 div.invoice div.iheader {

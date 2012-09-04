@@ -384,7 +384,7 @@
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="number" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
       <Column Name="dateAdded" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="orderID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="orderID" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
       <Column Name="invoiceType" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="billTo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="shipTo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -405,6 +405,7 @@
       <Column Name="termsDescription" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
       <Column Name="paid" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="created" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="printed" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="Invoice_Address" Member="BillTo" ThisKey="billTo" OtherKey="ID" Type="Address" Cardinality="One" />
       <Association Name="Invoice_Address1" Member="ShipTo" ThisKey="shipTo" OtherKey="ID" Type="Address" Cardinality="One" />
       <Association Name="Invoice_InvoiceItem" Member="InvoiceItems" ThisKey="id" OtherKey="invoiceID" Type="InvoiceItem" />

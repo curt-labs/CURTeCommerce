@@ -17,7 +17,7 @@
     } else {
         <a class="button" href="/Admin/Invoice/Paid/@invoice.id" id="pay">Reconcile</a>
     }
-    <a class="button" href="javascript:window.print()">Print</a>
+    <a class="button" href="#" data-id="@invoice.id" id="printinvoice">Print</a>
 </div>
 <div class="invoice">
     <div class="iheader">
@@ -218,3 +218,18 @@
         </tfoot>
     </table>
 </div>
+
+<script type="text/javascript">
+    $(function () {
+        $(document).on('click', '#printinvoice', function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            $.post('/Admin/Invoice/PrintInvoice/' + id, function (data) {
+                console.log(data);
+                if (data == "success") {
+                    window.print();
+                }
+            });
+        });
+    });
+</script>

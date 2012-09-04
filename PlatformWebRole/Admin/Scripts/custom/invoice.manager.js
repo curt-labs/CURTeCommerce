@@ -13,6 +13,7 @@ $(function () {
             { "sType": "date" },
             null,
             null,
+            null,
             null
         ],
         "aaSorting": [[1, "desc"]]

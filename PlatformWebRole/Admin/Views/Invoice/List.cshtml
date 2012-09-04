@@ -1,0 +1,47 @@
+﻿@{
+    List<Admin.Invoice> invoices = ViewBag.invoices ?? new List<Admin.Invoice>();
+    DateTime date = ViewBag.invoicedate ?? DateTime.Now;
+    
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/invoice.manager.css" rel="stylesheet" type="text/css" />
+<span class="title">Invoices added on @String.Format("{0:M/d/yyyy}",date)</span>
+
+<table class="orderTable">
+    <thead>
+        <tr>
+            <th>Invoice #</th>
+            <th>Invoice Date</th>
+            <th>Invoice Type</th>
+            <th>Order #</th>
+            <th>Discount Due Date</th>
+            <th>Discount Total</th>
+            <th>Net Due Date</th>
+            <th>Net Total</th>
+            <th>Printed</th>
+            <th>Reconciled</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Admin.Invoice invoice in invoices) {
+            <tr>
+                <td>@invoice.number</td>
+                <td>@String.Format("{0:MM/dd/yyyy}",invoice.dateAdded)</td>
+                <td>@invoice.invoiceType</td>
+                <td>@invoice.orderID</td>
+                <td>@String.Format("{0:MM/dd/yyyy}", invoice.discountDueDate)</td>
+                <td>@String.Format("{0:C}", invoice.discountTotal)</td>
+                <td>@String.Format("{0:MM/dd/yyyy}", invoice.netDueDate)</td>
+                <td>@String.Format("{0:C}", invoice.total)</td>
+                <td>@((invoice.printed) ? "Yes" : "No")</td>
+                <td>@((invoice.paid) ? "Yes" : "No")</td>
+                <td>
+                    <a class="btn" href="/Admin/Invoice/Details/@invoice.id">View</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script src="/Admin/Scripts/custom/invoice.manager.js"></script>

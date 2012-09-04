@@ -332,6 +332,23 @@ div.dateinfo .dates strong {
     width: 55px;
 }
 
+table.invoicegroup thead th {
+    border: 1px solid lightGrey;
+    background-color: #E6E6E6;
+	color: #555;
+	font-weight: normal;
+}
+
+table.invoicegroup tbody td {
+    padding: 3px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+table.invoicegroup tbody tr:nth-child(odd) td  {
+    background-color: #E2E4FF;
+}
+
 table.invoicetable {
     margin-top: 15px;
     width: 700px;

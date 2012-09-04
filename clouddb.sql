@@ -589,7 +589,7 @@ CREATE TABLE [dbo].[Invoice](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[number] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[dateAdded] [datetime] NOT NULL,
-	[orderID] [int] NOT NULL,
+	[orderID] [varchar](100) NOT NULL,
 	[invoiceType] [varchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[billTo] [int] NOT NULL,
 	[shipTo] [int] NOT NULL,
@@ -609,6 +609,7 @@ CREATE TABLE [dbo].[Invoice](
 	[netDueDays] [int] NULL,
 	[termsDescription] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[paid] [bit] NOT NULL,
+	[printed] [bit] NOT NULL,
 	[created] [datetime] NOT NULL,
 PRIMARY KEY CLUSTERED 
 (

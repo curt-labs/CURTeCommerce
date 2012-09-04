@@ -7042,7 +7042,7 @@ namespace EcommercePlatform
 		
 		private System.DateTime _dateAdded;
 		
-		private int _orderID;
+		private string _orderID;
 		
 		private string _invoiceType;
 		
@@ -7084,6 +7084,8 @@ namespace EcommercePlatform
 		
 		private System.DateTime _created;
 		
+		private bool _printed;
+		
 		private EntitySet<InvoiceItem> _InvoiceItems;
 		
 		private EntitySet<InvoiceCode> _InvoiceCodes;
@@ -7098,7 +7100,7 @@ namespace EcommercePlatform
     partial void OnnumberChanged();
     partial void OndateAddedChanging(System.DateTime value);
     partial void OndateAddedChanged();
-    partial void OnorderIDChanging(int value);
+    partial void OnorderIDChanging(string value);
     partial void OnorderIDChanged();
     partial void OninvoiceTypeChanging(string value);
     partial void OninvoiceTypeChanged();
@@ -7140,6 +7142,8 @@ namespace EcommercePlatform
     partial void OnpaidChanged();
     partial void OncreatedChanging(System.DateTime value);
     partial void OncreatedChanged();
+    partial void OnprintedChanging(bool value);
+    partial void OnprintedChanged();
     #endregion
 		
 		public Invoice()
@@ -7209,8 +7213,8 @@ namespace EcommercePlatform
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_orderID", DbType="Int NOT NULL")]
-		public int orderID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_orderID", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
+		public string orderID
 		{
 			get
 			{
@@ -7625,6 +7629,26 @@ namespace EcommercePlatform
 					this._created = value;
 					this.SendPropertyChanged("created");
 					this.OncreatedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_printed", DbType="Bit NOT NULL")]
+		public bool printed
+		{
+			get
+			{
+				return this._printed;
+			}
+			set
+			{
+				if ((this._printed != value))
+				{
+					this.OnprintedChanging(value);
+					this.SendPropertyChanging();
+					this._printed = value;
+					this.SendPropertyChanged("printed");
+					this.OnprintedChanged();
 				}
 			}
 		}

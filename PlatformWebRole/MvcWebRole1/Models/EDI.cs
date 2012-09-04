@@ -91,7 +91,10 @@ namespace EcommercePlatform.Models {
                         try {
                             ReadInvoice(editext);
                             BlobManagement.MoveBlob(blob, "edi/archive", "edi/in");
-                        } catch { }
+                        } catch (Exception e) {
+                            string[] tos = new string [] {"jjaniuk@curtmfg.com"};
+                            UDF.SendEmail(tos, "Error in Invoice Read", false, e.Message + " " + e.StackTrace, false);
+                        }
                     } else if (blob.Name.ToLower().Contains("asn")) {
                         // ship notification
                         try {
@@ -141,7 +144,7 @@ namespace EcommercePlatform.Models {
                         string dt = lineelements[1].Substring(4,2) + "-" + lineelements[1].Substring(6,2) + "-" + lineelements[1].Substring(0,4);
                         inv.dateAdded = Convert.ToDateTime(dt);
                         inv.number = lineelements[2];
-                        inv.orderID = Convert.ToInt32(lineelements[4]);
+                        inv.orderID = lineelements[4];
                         switch (lineelements[7]) {
                             case "CN":
                                 inv.invoiceType = "Credit Invoice";

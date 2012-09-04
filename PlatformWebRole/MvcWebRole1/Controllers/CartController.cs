@@ -397,7 +397,7 @@ namespace EcommercePlatform.Controllers {
                     return RedirectToAction("Index");
                 }
             } catch {
-                return RedirectToAction("Cart", "Checkout");
+                return RedirectToAction("Checkout", "Cart");
             }
         }
 

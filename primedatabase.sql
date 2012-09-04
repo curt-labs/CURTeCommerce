@@ -58,6 +58,8 @@ insert into Modules (name,path,parentID,alt_text,inMenu) VALUES ('Post Comments'
 insert into Modules (name,path,parentID,alt_text,inMenu) VALUES ('Info','/Admin/Customers/Info',16,'Customer Info',0);
 insert into Modules (name,path,parentID,alt_text,inMenu) VALUES ('Edit','/Admin/Banner/Edit',17,'Edit Banners',0);
 insert into Modules (name,path,parentID,alt_text,inMenu) VALUES ('Details','/Admin/Invoice/Details',21,'View Invoice Details',0);
+INSERT INTO Modules (name,path,parentID,alt_text,inMenu) VALUES ('List Invoices','/Admin/Invoice/List',21,'View Invoices By Date',0);
+INSERT INTO Modules (name,path,parentID,alt_text,inMenu) VALUES ('Print Invoices','/Admin/Invoice/Print',21,'Print Invoices By Date',0);
 GO
 
 insert into Profile (username,password,email,first,last,date_added) VALUES ('admin','','admin@changeme.com','administrator','administrator',Getdate());
@@ -148,7 +150,7 @@ GO
 INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('Alabama','AL',1,0);
 INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('Alaska','AK',1,0);
 INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('American Samoa','AS',1,0);
-INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('Arizona','AR',1,0);
+INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('Arizona','AZ',1,0);
 INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('Arkansas','AR',1,0);
 INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('California','CA',1,0);
 INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('Colorado','CO',1,0);
@@ -186,6 +188,7 @@ INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('North Carolina','NC',
 INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('North Dakota','ND',1,0);
 INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('Northern Mariana Islands','MP',1,0);
 INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('Ohio','OH',1,0);
+INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('Oregon','OR',1,0);
 INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('Pennsylvania','PA',1,0);
 INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('Puerto Rico','PR',1,0);
 INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('Palau','PW',1,0);
