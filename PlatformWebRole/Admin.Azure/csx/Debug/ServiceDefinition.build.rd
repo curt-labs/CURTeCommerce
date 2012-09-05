@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<serviceModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="Admin.Azure" generation="1" functional="0" release="0" Id="97ba2232-da6e-48df-8320-bfdf67249fc1" dslVersion="1.2.0.0" xmlns="http://schemas.microsoft.com/dsltools/RDSM">
+<serviceModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="Admin.Azure" generation="1" functional="0" release="0" Id="ea6c129d-37e1-4dff-8f28-d630e844afdc" dslVersion="1.2.0.0" xmlns="http://schemas.microsoft.com/dsltools/RDSM">
   <groups>
     <group name="Admin.AzureGroup" generation="1" functional="0" release="0">
       <componentports>
@@ -68,9 +68,9 @@
     </group>
   </groups>
   <implements>
-    <implementation Id="b0b35739-7674-46c2-9d7a-9a5addf3db17" ref="Microsoft.RedDog.Contract\ServiceContract\Admin.AzureContract@ServiceDefinition.build">
+    <implementation Id="ad243fcd-55c3-45e3-9d39-2efee6ed5b66" ref="Microsoft.RedDog.Contract\ServiceContract\Admin.AzureContract@ServiceDefinition.build">
       <interfacereferences>
-        <interfaceReference Id="2354a9ca-989c-4ca9-86a6-c2a0f1a1501c" ref="Microsoft.RedDog.Contract\Interface\Admin:Endpoint1@ServiceDefinition.build">
+        <interfaceReference Id="d84a3f6b-9e84-4a1a-9875-33ffac496a49" ref="Microsoft.RedDog.Contract\Interface\Admin:Endpoint1@ServiceDefinition.build">
           <inPort>
             <inPortMoniker name="/Admin.Azure/Admin.AzureGroup/Admin:Endpoint1" />
           </inPort>

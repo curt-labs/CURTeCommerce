@@ -63,109 +63,6 @@
         </label>
     </fieldset>
             
-    @*<fieldset class="billing left">
-        <legend>Billing Information</legend>
-
-        <label for="bfirst">
-            Billing First Name
-            <input type="text" name="bfirst" id="bfirst" class="placeholder" placeholder="Enter the billing first name" required="required" title="Last Name on billing address is required" value="@cust.Address.first" />
-        </label>
-
-        <label for="blast">
-            Billing Last Name
-            <input type="text" name="blast" id="blast" class="placeholder" placeholder="Enter the billing last name" required="required" title="Last name on billing address is required" value="@cust.Address.last" />
-        </label>
-
-        <label for="bstreet1">
-            Billing Street 1
-            <input type="text" name="bstreet1" id="bstreet1" class="placeholder" placeholder="Enter the billing street" required="required" title="Billing street is required" value="@cust.Address.street1" />
-        </label>
-        <label for="bstreet2">
-            Billing Street 2
-            <input type="text" name="bstreet2" id="bstreet2" class="placeholder" placeholder="Enter additional info for billing street" value="@cust.Address.street2" />
-        </label>
-
-        <label for="bcity">
-            Billing City
-            <input type="text" name="bcity" id="bcity" class="placeholder" placeholder="Enter the billing city" required="required" title="Billing city is required" value="@cust.Address.city" />
-        </label>
-
-        <label for="bstate">
-            Billing State/Province
-            <select name="bstate" id="bstate" required="required" title="Select a Billing State/Province">
-                <option value="0">- Select State/Province -</option>
-                @foreach (EcommercePlatform.Country country in countries) {
-                    <optgroup label="@country.name">
-                        @foreach (EcommercePlatform.State state in country.getProvinces()) {
-                            if (state.stateID != quebec) {
-                                <option value="@state.stateID" @((cust.Address.state == state.stateID) ? "selected=selected" : "")>@(String.Format("{0} - {1}", state.abbr, state.state1))</option>
-                            }
-                        }
-                    </optgroup>
-                }
-            </select>
-        </label>
-        <label for="bzip">
-            Billing Postal Code
-            <input type="text" name="bzip" id="bzip" class="placeholder" placeholder="Enter the billing postal code" required="required" title="Billing Postal Code is required" value="@cust.Address.postal_code" />
-        </label>
-        <label for="bresidential">
-            <input type="checkbox" name="bresidential" id="bresidential" value="true" checked="checked" />
-            Residential Address?
-        </label>
-    </fieldset>
-
-    <fieldset class="shipping left">
-        <legend>Shipping Information</legend>
-        <label for="sfirst">
-            Shipping First Name
-            <input type="text" name="sfirst" id="sfirst" class="placeholder" placeholder="Enter the shipping first name" required="required" title="First Name on shipping address is required" value="@cust.Address1.first" />
-        </label>
-
-        <label for="slast">
-            Shipping Last Name
-            <input type="text" name="slast" id="slast" class="placeholder" placeholder="Enter the shipping last name" required="required" title="Last Name on shipping address is required" value="@cust.Address1.last" />
-        </label>
-
-        <label for="sstreet1">
-            Shipping Street 1
-            <input type="text" name="sstreet1" id="sstreet1" class="placeholder" placeholder="Enter the shipping street" required="required" title="Shipping street is required" value="@cust.Address1.street1" />
-        </label>
-        <label for="sstreet2">
-            Shipping Street 2
-            <input type="text" name="sstreet2" id="sstreet2" class="placeholder" placeholder="Enter additional info for shipping street" value="@cust.Address1.street2" />
-        </label>
-
-        <label for="scity">
-            Shipping City
-            <input type="text" name="scity" id="scity" class="placeholder" placeholder="Enter the shipping city" required="required" title="Shipping city is required" value="@cust.Address1.city" />
-        </label>
-
-        <label for="sstate">
-            Shipping State/Province
-            <select name="sstate" id="sstate" required="required" title="Select a Shipping State/Province">
-                <option value="0">- Select State/Province -</option>
-                @foreach (EcommercePlatform.Country country in countries) {
-                    <optgroup label="@country.name">
-                        @foreach (EcommercePlatform.State state in country.getProvinces()) {
-                            if (state.stateID != quebec) {
-                                <option value="@state.stateID" @((cust.Address1.state == state.stateID) ? "selected=selected" : "")>@(String.Format("{0} - {1}", state.abbr, state.state1))</option>
-                            }
-                        }
-                    </optgroup>
-                }
-            </select>
-        </label>
-        <label for="szip">
-            Shipping Postal Code
-            <input type="text" name="szip" id="szip" class="placeholder" placeholder="Enter the shipping postal code" required="required" title="Shipping Postal Code is required" value="@cust.Address1.postal_code" />
-        </label>
-        <label for="sresidential">
-            <input type="checkbox" name="sresidential" id="sresidential" value="true" checked="checked" />
-            Residential Address?
-        </label>
-    </fieldset>*@
-
     <fieldset class="left">
         <legend>Offers/Newsletter</legend>
         <label for="receiveOffers">
@@ -178,5 +75,5 @@
         </label>
     </fieldset>
     <div class="clearfix"></div>
-    <input type="submit" name="btnSubmit" id="btnSignup" value="@((ViewBag.setup)?"Sign Up":"Save")" />
+    <input type="submit" name="btnSubmit" id="btnSignup" value="@((ViewBag.setup)?"Continue":"Save")" />
 </form>
