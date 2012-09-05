@@ -13,12 +13,6 @@
         <Variable name="WaRoleType" value="IISWebRole" />
       </Environment>
     </Task>
-    <Task commandLine="RemoteForwarderAgent.exe" executionContext="elevated" relativePath="plugins\RemoteForwarder">
-      <Environment>
-        <Variable name="RdModuleName" value="RemoteForwarder" />
-        <Variable name="WaRoleType" value="IISWebRole" />
-      </Environment>
-    </Task>
     <Task commandLine="Startup.cmd" executionContext="elevated" relativePath="approot\bin">
       <Environment>
         <Variable name="WaRoleType" value="IISWebRole" />
@@ -35,7 +29,6 @@
     <Setting name="AccountUsername" nameSpace="Microsoft.WindowsAzure.Plugins.RemoteAccess" />
     <Setting name="AccountEncryptedPassword" nameSpace="Microsoft.WindowsAzure.Plugins.RemoteAccess" />
     <Setting name="AccountExpiration" nameSpace="Microsoft.WindowsAzure.Plugins.RemoteAccess" />
-    <Setting name="Enabled" nameSpace="Microsoft.WindowsAzure.Plugins.RemoteForwarder" />
   </ConfigurationSettings>
   <Properties>
     <Property name="RoleType" value="Web" />

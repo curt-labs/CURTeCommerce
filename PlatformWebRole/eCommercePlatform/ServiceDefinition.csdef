@@ -14,10 +14,6 @@
       <InputEndpoint name="Endpoint1" protocol="http" port="80" />
       <InputEndpoint name="Https" protocol="https" port="443" certificate="NoBarSSLCert" />
     </Endpoints>
-    <Imports>
-      <Import moduleName="RemoteAccess" />
-      <Import moduleName="RemoteForwarder" />
-    </Imports>
     <ConfigurationSettings>
       <Setting name="StorageConnectionString" />
       <Setting name="AccountKey" />
@@ -33,8 +29,12 @@
       <Certificate name="NoBarSSLCert" storeLocation="LocalMachine" storeName="CA" />
     </Certificates>
     <Startup>
-      <Task commandLine="Startup.cmd" executionContext="elevated" taskType="simple"></Task>
+      <Task commandLine="Startup.cmd" executionContext="elevated" taskType="simple">
+      </Task>
     </Startup>
+    <Imports>
+      <Import moduleName="RemoteAccess" />
+    </Imports>
   </WebRole>
   <WorkerRole name="FTPServerRole">
     <Endpoints>
@@ -52,9 +52,14 @@
     <Certificates>
       <Certificate name="HitchDepot" storeLocation="LocalMachine" storeName="CA" />
     </Certificates>
+    <Imports>
+      <Import moduleName="RemoteAccess" />
+      <Import moduleName="RemoteForwarder" />
+    </Imports>
   </WorkerRole>
   <WorkerRole name="TaskScheduler" vmsize="Small">
     <Imports>
+      <Import moduleName="RemoteAccess" />
     </Imports>
     <Endpoints>
       <InternalEndpoint name="Endpoint1" protocol="tcp" />
