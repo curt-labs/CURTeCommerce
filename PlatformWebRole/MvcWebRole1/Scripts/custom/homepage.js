@@ -20,7 +20,6 @@ $(function () {
 
     $('#lookup').find('select').attr('disabled', 'disabled');
     $('#lookup').find('select:first').removeAttr('disabled');
-
     $('#reset_lookup').click(function () { resetLookup(); });
 
     $('#mount').change(function () {
