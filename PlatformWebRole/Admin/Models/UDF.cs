@@ -81,6 +81,15 @@ namespace Admin.Models {
             return str;
         }
 
+        public static string getRemoteIP() {
+            string ipaddress = "";
+            ipaddress = HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+            if (String.IsNullOrEmpty(ipaddress)) {
+                ipaddress = HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"];
+            }
+            return ipaddress;
+        }
+
         public static string RemoveAccent(string txt = "") {
             byte[] bytes = System.Text.Encoding.GetEncoding("Cyrillic").GetBytes(txt);
             return System.Text.Encoding.ASCII.GetString(bytes);

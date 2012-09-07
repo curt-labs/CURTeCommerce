@@ -34,5 +34,11 @@
         <classShapeMoniker Id="a6c25a5a-180d-409c-bddc-42ec51dc72d5" />
       </nodes>
     </associationConnector>
+    <classShape Id="9fe8143a-ee1a-4aa3-8a47-79c47116ad66" absoluteBounds="3.875, 3.75, 2, 1.1939925130208333">
+      <DataClassMoniker Name="/EcommercePlatformDataContext/FTPFirewall" />
+      <nestedChildShapes>
+        <elementListCompartment Id="bc862731-2819-4ea1-b19c-1b3e3e49497d" absoluteBounds="3.8899999999999997, 4.21, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

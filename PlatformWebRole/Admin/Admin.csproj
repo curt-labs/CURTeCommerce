@@ -124,6 +124,7 @@
     <Compile Include="Controllers\BugController.cs" />
     <Compile Include="Controllers\ContactManagerController.cs" />
     <Compile Include="Controllers\ContentManagerController.cs" />
+    <Compile Include="Controllers\FTPController.cs" />
     <Compile Include="Controllers\TaxesController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\SchedulerController.cs" />
@@ -750,12 +751,6 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Startup.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="bin\tls.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Content\less\bootstrap\adaptive.less" />
     <None Include="Content\less\bootstrap\bootstrap.less" />
     <None Include="Content\less\bootstrap\forms.less" />
@@ -826,6 +821,7 @@
     <Content Include="Views\Invoice\List.cshtml" />
     <Content Include="Views\Invoice\Print.cshtml" />
     <Content Include="Views\Invoice\UnPrinted.cshtml" />
+    <Content Include="Views\FTP\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

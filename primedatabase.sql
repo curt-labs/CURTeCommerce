@@ -16,7 +16,7 @@ insert into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('Blog','/
 insert into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('Customers','/Admin/Customers',0,'View Customers',1,'/Admin/Content/img/module_icons/MemberCard.png');
 insert into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('Banners','/Admin/Banner',0,'Banner Management',1,'/Admin/Content/img/module_icons/Desktop.png');
 insert into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('Reporting','/Admin/Reporting',0,'Reporting Tools',1,'/Admin/Content/img/module_icons/FormatNumber.png');
-insert into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('FTP','/Admin/FTP',0,'FTP Access',0,NULL);
+insert into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('FTP','/Admin/FTP',0,'FTP Access',1,NULL);
 insert into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('Task Scheduler','/Admin/Scheduler',0,'Task Scheduler',1,'/Admin/Content/img/module_icons/SiteMap.png');
 insert into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('Invoices','/Admin/Invoice',0,'View Invoices',1,'/Admin/Content/img/module_icons/Inbox.png');
 GO
@@ -188,6 +188,7 @@ INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('North Carolina','NC',
 INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('North Dakota','ND',1,0);
 INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('Northern Mariana Islands','MP',1,0);
 INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('Ohio','OH',1,0);
+INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('Oklahoma','OK',1,0);
 INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('Oregon','OR',1,0);
 INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('Pennsylvania','PA',1,0);
 INSERT INTO States (state,abbr,countryID,taxRate) VALUES ('Puerto Rico','PR',1,0);

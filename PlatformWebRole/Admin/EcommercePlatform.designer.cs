@@ -135,6 +135,9 @@ namespace Admin
     partial void InsertShipment(Shipment instance);
     partial void UpdateShipment(Shipment instance);
     partial void DeleteShipment(Shipment instance);
+    partial void InsertFTPFirewall(FTPFirewall instance);
+    partial void UpdateFTPFirewall(FTPFirewall instance);
+    partial void DeleteFTPFirewall(FTPFirewall instance);
     #endregion
 		
 		public EcommercePlatformDataContext() : 
@@ -444,6 +447,14 @@ namespace Admin
 			get
 			{
 				return this.GetTable<Shipment>();
+			}
+		}
+		
+		public System.Data.Linq.Table<FTPFirewall> FTPFirewalls
+		{
+			get
+			{
+				return this.GetTable<FTPFirewall>();
 			}
 		}
 	}
@@ -9702,6 +9713,92 @@ namespace Admin
 						this._order_id = default(int);
 					}
 					this.SendPropertyChanged("Cart");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.FTPFirewall")]
+	public partial class FTPFirewall : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _ipaddress;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnipaddressChanging(string value);
+    partial void OnipaddressChanged();
+    #endregion
+		
+		public FTPFirewall()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ipaddress", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
+		public string ipaddress
+		{
+			get
+			{
+				return this._ipaddress;
+			}
+			set
+			{
+				if ((this._ipaddress != value))
+				{
+					this.OnipaddressChanging(value);
+					this.SendPropertyChanging();
+					this._ipaddress = value;
+					this.SendPropertyChanged("ipaddress");
+					this.OnipaddressChanged();
 				}
 			}
 		}

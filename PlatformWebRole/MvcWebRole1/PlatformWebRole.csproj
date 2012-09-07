@@ -487,7 +487,10 @@
     <Content Include="bin\Startup.cmd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="bin\tls.ps1">
+    <Content Include="bin\cipherorder.reg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="bin\tls.reg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Content\audio\bitches_please.ogg" />

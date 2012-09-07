@@ -126,6 +126,7 @@
     <Compile Include="Ftp\XPwdCommandHandler.cs" />
     <Compile Include="Ftp\XRmdCommandHandler.cs" />
     <Compile Include="General\ArrayHelpers.cs" />
+    <Compile Include="General\Firewall.cs" />
     <Compile Include="General\LoadedClass.cs" />
     <Compile Include="General\Profiles.cs" />
     <Compile Include="General\SocketHelpers.cs" />

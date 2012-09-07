@@ -360,9 +360,9 @@ namespace EcommercePlatform.Models {
         private static string getAPIPath() {
             Settings settings = new Settings();
             string API = settings.Get("CURTAPIDOMAIN");
-            if (isSecure()) {
+            /*if (isSecure()) {
                 return API.Replace("http:", "https:");
-            }
+            }*/
             return API;
         }
         private static bool isSecure() {

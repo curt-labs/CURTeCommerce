@@ -40,6 +40,21 @@ namespace Admin.Controllers {
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
+        public dynamic Save(int id = 0, string email = "", string fname = "", string lname = "") {
+            string error = "";
+            try {
+                Customer cust = new Customer { ID = id };
+                cust.Get();
+                cust.Update(email, fname, lname);
+
+            } catch (Exception e) {
+                error = e.Message;
+            }
+
+            return RedirectToAction("Info", "Customers", new { id = id });
+        }
+        
+        [AcceptVerbs(HttpVerbs.Post)]
         public dynamic Suspension(int id = 0, bool ajax = false) {
             string error = "";
             try{

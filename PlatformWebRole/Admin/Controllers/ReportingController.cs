@@ -58,6 +58,7 @@ namespace Admin.Controllers {
             if (invoice.InvoiceCodes.Count > loopcount) {
                 loopcount = invoice.InvoiceCodes.Count;
             }
+            List<InvoiceCode> codes = invoice.InvoiceCodes.OrderBy(x => x.code).ToList<InvoiceCode>();
             for (int i = 0; i < loopcount; i++) {
                 string iline = invoice.number + "|" + String.Format("{0:MM-dd-yyyy}", invoice.dateAdded) + "|" + invoice.orderID + "|" + invoice.curtOrder + "|" + invoice.invoiceType + "|" + invoice.remitTo + "|" + invoice.billToCurrency + "|" + invoice.subtotal + "|" + invoice.salesTax + "|" + invoice.total + "|" + invoice.discount + "|" + invoice.discountTotal + "|" + invoice.termsType + "|" + invoice.termsDescription + "|" + invoice.discountPercent + "|" + String.Format("{0:MM-dd-yyyy}", invoice.discountDueDate) + "|" + invoice.discountDueDays + "|" + String.Format("{0:MM-dd-yyyy}", invoice.netDueDate) + "|" + invoice.netDueDays + "|" + invoice.BillTo.first + " " + invoice.BillTo.last + "|" + invoice.BillTo.street1 + "|" + invoice.BillTo.city + "|" + invoice.BillTo.State1.abbr + "|" + invoice.BillTo.postal_code + "|" + invoice.BillTo.State1.Country.abbr + "|" + invoice.ShipTo.first + " " + invoice.ShipTo.last + "|" + invoice.ShipTo.street1 + "|" + invoice.ShipTo.street2 + "|" + invoice.ShipTo.city + "|" + invoice.ShipTo.State1.abbr + "|" + invoice.ShipTo.postal_code + "|" + invoice.ShipTo.State1.Country.abbr + "|" + invoice.ShipTo.street2 + "|";
                 try {
@@ -66,7 +67,7 @@ namespace Admin.Controllers {
                     iline += "||||";
                 }
                 try {
-                    iline += invoice.InvoiceCodes[i].type + "|" + invoice.InvoiceCodes[i].code + "|" + invoice.InvoiceCodes[i].value + "|" + invoice.InvoiceCodes[i].description;
+                    iline += codes[i].type + "|" + codes[i].code + "|" + codes[i].value + "|" + codes[i].description;
                 } catch {
                     iline += "|||";
                 }
@@ -149,6 +150,7 @@ namespace Admin.Controllers {
                 if (invoice.InvoiceCodes.Count > loopcount) {
                     loopcount = invoice.InvoiceCodes.Count;
                 }
+                List<InvoiceCode> codes = invoice.InvoiceCodes.OrderBy(x => x.code).ToList<InvoiceCode>();
                 for (int i = 0; i < loopcount; i++) {
                     string iline = invoice.number + "|" + String.Format("{0:MM-dd-yyyy}", invoice.dateAdded) + "|" + invoice.orderID + "|" + invoice.curtOrder + "|" + invoice.invoiceType + "|" + invoice.remitTo + "|" + invoice.billToCurrency + "|" + invoice.subtotal + "|" + invoice.salesTax + "|" + invoice.total + "|" + invoice.discount + "|" + invoice.discountTotal + "|" + invoice.termsType + "|" + invoice.termsDescription + "|" + invoice.discountPercent + "|" + String.Format("{0:MM-dd-yyyy}", invoice.discountDueDate) + "|" + invoice.discountDueDays + "|" + String.Format("{0:MM-dd-yyyy}", invoice.netDueDate) + "|" + invoice.netDueDays + "|" + invoice.BillTo.first + " " + invoice.BillTo.last + "|" + invoice.BillTo.street1 + "|" + invoice.BillTo.city + "|" + invoice.BillTo.State1.abbr + "|" + invoice.BillTo.postal_code + "|" + invoice.BillTo.State1.Country.abbr + "|" + invoice.ShipTo.first + " " + invoice.ShipTo.last + "|" + invoice.ShipTo.street1 + "|" + invoice.ShipTo.street2 + "|" + invoice.ShipTo.city + "|" + invoice.ShipTo.State1.abbr + "|" + invoice.ShipTo.postal_code + "|" + invoice.ShipTo.State1.Country.abbr + "|" + invoice.ShipTo.street2 + "|";
                     try {
@@ -157,7 +159,7 @@ namespace Admin.Controllers {
                         iline += "||||";
                     }
                     try {
-                        iline += invoice.InvoiceCodes[i].type + "|" + invoice.InvoiceCodes[i].code + "|" + invoice.InvoiceCodes[i].value + "|" + invoice.InvoiceCodes[i].description;
+                        iline += codes[i].type + "|" + codes[i].code + "|" + codes[i].value + "|" + codes[i].description;
                     } catch {
                         iline += "|||";
                     }

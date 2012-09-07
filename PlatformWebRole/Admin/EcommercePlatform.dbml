@@ -445,4 +445,10 @@
       <Association Name="Cart_Shipment" Member="Cart" AccessModifier="Internal" ThisKey="order_id" OtherKey="ID" Type="Cart" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.FTPFirewall" Member="FTPFirewalls">
+    <Type Name="FTPFirewall">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ipaddress" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
 </Database>

@@ -6,6 +6,7 @@ using System.Threading;
 using AzureFtpServer.Ftp.FileSystem;
 using AzureFtpServer.General;
 using Microsoft.WindowsAzure.ServiceRuntime;
+using System.Net;
 
 namespace AzureFtpServer.Ftp
 {
@@ -124,14 +125,21 @@ namespace AzureFtpServer.Ftp
                         }
                         else
                         {
-                            socket.NoDelay = false;
 
-                            m_nId ++;
+                            IPEndPoint ipend = (IPEndPoint)socket.Client.RemoteEndPoint;
+                            IPAddress ip = ipend.Address;
+                            if (FirewallModel.allowConnection(ip.ToString())) {
+                                socket.NoDelay = false;
 
-                            FtpServerMessageHandler.SendMessage(m_nId, "New connection");
+                                m_nId++;
 
-                            SendAcceptMessage(socket);
-                            InitialiseSocketHandler(socket);
+                                FtpServerMessageHandler.SendMessage(m_nId, "New connection");
+
+                                SendAcceptMessage(socket);
+                                InitialiseSocketHandler(socket);
+                            } else {
+                                socket.Close();
+                            }
                         }
                     }
                 }

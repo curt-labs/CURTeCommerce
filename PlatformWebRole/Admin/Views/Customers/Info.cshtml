@@ -37,19 +37,20 @@
 </ul>
 <div class="tab_container">
     <div class="tab_content" id="basic">
-        <form class="admin_form">
+        <form class="admin_form" action="/Admin/Customers/Save/@cust.ID" method="post">
             <label>
                 E-Mail Address
-                <input type="text" readonly="readonly" value="@cust.email" />
+                <input type="text" name="email" value="@cust.email" />
             </label>
             <label>
                 First Name
-                <input type="text" readonly="readonly" value="@cust.fname" />
+                <input type="text" name="fname" value="@cust.fname" />
             </label>
             <label>
                 Last Name
-                <input type="text" readonly="readonly" value="@cust.lname" />
+                <input type="text" name="lname" value="@cust.lname" />
             </label>
+            <input type="submit" class="button" value="Save" />
         </form>    
     </div>
     <div class="tab_content" id="billing">

@@ -1011,3 +1011,9 @@ CREATE TABLE Shipment (
 	weight varchar(25) NULL
 )
 GO
+
+CREATE TABLE FTPFirewall (
+	ID int IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	ipaddress varchar(255) NOT NULL
+)
+GO

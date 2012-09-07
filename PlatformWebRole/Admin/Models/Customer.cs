@@ -87,6 +87,43 @@ namespace Admin {
             SendNotification();
         }
 
+        internal void Update(string email, string fname, string lname) {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+
+            Customer c = db.Customers.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<Customer>();
+            // Make sure we don't have an account with this e-mail address
+            if (email != this.email) {
+                // Make sure we don't have an account with this e-mail address
+                if (Customer.CheckCustomerEmail(email)) {
+                    throw new Exception("An account using the E-Mail address you provided already exists.");
+                }
+                c.email = email;
+            }
+
+            // We are going to make an attempt at saving the Customer record
+            if (fname != this.fname) {
+                c.fname = fname;
+            }
+            if (lname != this.lname) {
+                c.lname = lname;
+            }
+
+            db.SubmitChanges();
+        }
+
+        public static bool CheckCustomerEmail(string email = null) {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            if (email == null) {
+                return true;
+            } else {
+                bool exists = false;
+                if (db.Customers.Where(x => x.email.Equals(email)).Count() > 0) {
+                    exists = true;
+                }
+                return exists;
+            }
+        }
+
         internal void SaveAddresses(Address billing, Address shipping) {
 
             this.billingID = billing.ID;

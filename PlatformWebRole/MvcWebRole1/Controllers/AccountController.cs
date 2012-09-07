@@ -67,6 +67,16 @@ namespace EcommercePlatform.Controllers {
                 cust.GetFromStorage();
 
                 #region Basic Information
+                string email = cust.email;
+                if (Request.Form["email"] != null && Request.Form["email"].Length > 0) {
+                    email = Request.Form["email"];
+                }
+                if (email != cust.email) {
+                    // Make sure we don't have an account with this e-mail address
+                    if (Customer.CheckCustomerEmail(email)) {
+                        throw new Exception("An account using the E-Mail address you provided already exists.");
+                    }
+                }
                 string fname = cust.fname;
                 if(Request.Form["fname"] != null && Request.Form["fname"].Length > 0){
                     fname = Request.Form["fname"];
@@ -95,7 +105,7 @@ namespace EcommercePlatform.Controllers {
                 } else {
                     receiveNewsletter = 0;
                 }
-                cust.Update(fname,lname,phone,receiveOffers,receiveNewsletter);
+                cust.Update(email,fname,lname,phone,receiveOffers,receiveNewsletter);
                 #endregion
 
                 TempData["error"] = "You're account has been successfully updated.";
