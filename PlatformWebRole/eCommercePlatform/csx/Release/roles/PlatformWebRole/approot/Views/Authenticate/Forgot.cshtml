@@ -29,7 +29,7 @@
                         <input type="email" name="email" id="login_email" class="placeholder" placeholder="Enter your e-mail address" required="required" title="You must enter your E-Mail to retrieve your password" />
                     </label>
                 </fieldset>
-                <input type="submit" name="btnSubmit" id="btnLogin" value="Get Password" />
+                <input type="submit" name="btnSubmit" id="btnForgot" value="Get Password" />
                 <a href="/Authenticate" title="Log In" class="forgot">Log In</a>
             </form>
         </div>
@@ -47,8 +47,4 @@
     </div>
 </div>
 
-@if(HttpContext.Current.IsDebuggingEnabled){
-    <script defer src="/Scripts/custom/auth.js" type="text/javascript"></script>
-}else{
-    <script defer src="/Scripts/custom/auth.min.js"></script>
-}
+<script defer src="/Scripts/custom/auth.js" type="text/javascript"></script>

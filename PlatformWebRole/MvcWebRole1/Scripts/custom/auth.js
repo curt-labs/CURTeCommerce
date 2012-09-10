@@ -33,6 +33,10 @@
         showLoader('Logging you in...');
     });
 
+    $(document).on('click', '#btnForgot', function () {
+        showLoader('Sending Password Email...');
+    });
+
     $(window).scroll(function () {
         if ($('div.signup').css('display') != 'block') {
             $('div.right article.scroller').css('margin-top', $(this).scrollTop());

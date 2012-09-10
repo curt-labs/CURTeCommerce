@@ -138,6 +138,9 @@ namespace Admin
     partial void InsertFTPFirewall(FTPFirewall instance);
     partial void UpdateFTPFirewall(FTPFirewall instance);
     partial void DeleteFTPFirewall(FTPFirewall instance);
+    partial void InsertInvoiceAddress(InvoiceAddress instance);
+    partial void UpdateInvoiceAddress(InvoiceAddress instance);
+    partial void DeleteInvoiceAddress(InvoiceAddress instance);
     #endregion
 		
 		public EcommercePlatformDataContext() : 
@@ -457,6 +460,14 @@ namespace Admin
 				return this.GetTable<FTPFirewall>();
 			}
 		}
+		
+		public System.Data.Linq.Table<InvoiceAddress> InvoiceAddresses
+		{
+			get
+			{
+				return this.GetTable<InvoiceAddress>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Address")]
@@ -497,10 +508,6 @@ namespace Admin
 		
 		private EntityRef<State> _State1;
 		
-		private EntityRef<Invoice> _Invoice;
-		
-		private EntityRef<Invoice> _Invoice1;
-		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -536,8 +543,6 @@ namespace Admin
 			this._Customers = new EntitySet<Customer>(new Action<Customer>(this.attach_Customers), new Action<Customer>(this.detach_Customers));
 			this._Customers1 = new EntitySet<Customer>(new Action<Customer>(this.attach_Customers1), new Action<Customer>(this.detach_Customers1));
 			this._State1 = default(EntityRef<State>);
-			this._Invoice = default(EntityRef<Invoice>);
-			this._Invoice1 = default(EntityRef<Invoice>);
 			OnCreated();
 		}
 		
@@ -552,10 +557,6 @@ namespace Admin
 			{
 				if ((this._ID != value))
 				{
-					if ((this._Invoice.HasLoadedOrAssignedValue || this._Invoice1.HasLoadedOrAssignedValue))
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
 					this.OnIDChanging(value);
 					this.SendPropertyChanging();
 					this._ID = value;
@@ -883,74 +884,6 @@ namespace Admin
 						this._state = default(int);
 					}
 					this.SendPropertyChanged("State1");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Invoice_Address", Storage="_Invoice", ThisKey="ID", OtherKey="billTo", IsForeignKey=true)]
-		internal Invoice Invoice
-		{
-			get
-			{
-				return this._Invoice.Entity;
-			}
-			set
-			{
-				Invoice previousValue = this._Invoice.Entity;
-				if (((previousValue != value) 
-							|| (this._Invoice.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Invoice.Entity = null;
-						previousValue.BillTo = null;
-					}
-					this._Invoice.Entity = value;
-					if ((value != null))
-					{
-						value.BillTo = this;
-						this._ID = value.billTo;
-					}
-					else
-					{
-						this._ID = default(int);
-					}
-					this.SendPropertyChanged("Invoice");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Invoice_Address1", Storage="_Invoice1", ThisKey="ID", OtherKey="shipTo", IsForeignKey=true)]
-		internal Invoice Invoice1
-		{
-			get
-			{
-				return this._Invoice1.Entity;
-			}
-			set
-			{
-				Invoice previousValue = this._Invoice1.Entity;
-				if (((previousValue != value) 
-							|| (this._Invoice1.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Invoice1.Entity = null;
-						previousValue.ShipTo = null;
-					}
-					this._Invoice1.Entity = value;
-					if ((value != null))
-					{
-						value.ShipTo = this;
-						this._ID = value.shipTo;
-					}
-					else
-					{
-						this._ID = default(int);
-					}
-					this.SendPropertyChanged("Invoice1");
 				}
 			}
 		}
@@ -8367,13 +8300,13 @@ namespace Admin
 		
 		private bool _printed;
 		
-		private EntityRef<Address> _BillTo;
-		
-		private EntityRef<Address> _ShipTo;
-		
 		private EntitySet<InvoiceItem> _InvoiceItems;
 		
 		private EntitySet<InvoiceCode> _InvoiceCodes;
+		
+		private EntityRef<InvoiceAddress> _BillTo;
+		
+		private EntityRef<InvoiceAddress> _ShipTo;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -8433,10 +8366,10 @@ namespace Admin
 		
 		public Invoice()
 		{
-			this._BillTo = default(EntityRef<Address>);
-			this._ShipTo = default(EntityRef<Address>);
 			this._InvoiceItems = new EntitySet<InvoiceItem>(new Action<InvoiceItem>(this.attach_InvoiceItems), new Action<InvoiceItem>(this.detach_InvoiceItems));
 			this._InvoiceCodes = new EntitySet<InvoiceCode>(new Action<InvoiceCode>(this.attach_InvoiceCodes), new Action<InvoiceCode>(this.detach_InvoiceCodes));
+			this._BillTo = default(EntityRef<InvoiceAddress>);
+			this._ShipTo = default(EntityRef<InvoiceAddress>);
 			OnCreated();
 		}
 		
@@ -8940,64 +8873,6 @@ namespace Admin
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Invoice_Address", Storage="_BillTo", ThisKey="billTo", OtherKey="ID", IsUnique=true, IsForeignKey=false)]
-		public Address BillTo
-		{
-			get
-			{
-				return this._BillTo.Entity;
-			}
-			set
-			{
-				Address previousValue = this._BillTo.Entity;
-				if (((previousValue != value) 
-							|| (this._BillTo.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._BillTo.Entity = null;
-						previousValue.Invoice = null;
-					}
-					this._BillTo.Entity = value;
-					if ((value != null))
-					{
-						value.Invoice = this;
-					}
-					this.SendPropertyChanged("BillTo");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Invoice_Address1", Storage="_ShipTo", ThisKey="shipTo", OtherKey="ID", IsUnique=true, IsForeignKey=false)]
-		public Address ShipTo
-		{
-			get
-			{
-				return this._ShipTo.Entity;
-			}
-			set
-			{
-				Address previousValue = this._ShipTo.Entity;
-				if (((previousValue != value) 
-							|| (this._ShipTo.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._ShipTo.Entity = null;
-						previousValue.Invoice1 = null;
-					}
-					this._ShipTo.Entity = value;
-					if ((value != null))
-					{
-						value.Invoice1 = this;
-					}
-					this.SendPropertyChanged("ShipTo");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Invoice_InvoiceItem", Storage="_InvoiceItems", ThisKey="id", OtherKey="invoiceID")]
 		public EntitySet<InvoiceItem> InvoiceItems
 		{
@@ -9021,6 +8896,64 @@ namespace Admin
 			set
 			{
 				this._InvoiceCodes.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Invoice_InvoiceAddress", Storage="_BillTo", ThisKey="billTo", OtherKey="ID", IsUnique=true, IsForeignKey=false)]
+		public InvoiceAddress BillTo
+		{
+			get
+			{
+				return this._BillTo.Entity;
+			}
+			set
+			{
+				InvoiceAddress previousValue = this._BillTo.Entity;
+				if (((previousValue != value) 
+							|| (this._BillTo.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._BillTo.Entity = null;
+						previousValue.Invoice = null;
+					}
+					this._BillTo.Entity = value;
+					if ((value != null))
+					{
+						value.Invoice = this;
+					}
+					this.SendPropertyChanged("BillTo");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Invoice_InvoiceAddress1", Storage="_ShipTo", ThisKey="shipTo", OtherKey="ID", IsUnique=true, IsForeignKey=false)]
+		public InvoiceAddress ShipTo
+		{
+			get
+			{
+				return this._ShipTo.Entity;
+			}
+			set
+			{
+				InvoiceAddress previousValue = this._ShipTo.Entity;
+				if (((previousValue != value) 
+							|| (this._ShipTo.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._ShipTo.Entity = null;
+						previousValue.Invoice1 = null;
+					}
+					this._ShipTo.Entity = value;
+					if ((value != null))
+					{
+						value.Invoice1 = this;
+					}
+					this.SendPropertyChanged("ShipTo");
+				}
 			}
 		}
 		
@@ -9799,6 +9732,338 @@ namespace Admin
 					this._ipaddress = value;
 					this.SendPropertyChanged("ipaddress");
 					this.OnipaddressChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.InvoiceAddress")]
+	public partial class InvoiceAddress : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _first;
+		
+		private string _last;
+		
+		private string _street1;
+		
+		private string _street2;
+		
+		private string _city;
+		
+		private string _state;
+		
+		private string _postal_code;
+		
+		private string _country;
+		
+		private EntityRef<Invoice> _Invoice;
+		
+		private EntityRef<Invoice> _Invoice1;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnfirstChanging(string value);
+    partial void OnfirstChanged();
+    partial void OnlastChanging(string value);
+    partial void OnlastChanged();
+    partial void Onstreet1Changing(string value);
+    partial void Onstreet1Changed();
+    partial void Onstreet2Changing(string value);
+    partial void Onstreet2Changed();
+    partial void OncityChanging(string value);
+    partial void OncityChanged();
+    partial void OnstateChanging(string value);
+    partial void OnstateChanged();
+    partial void Onpostal_codeChanging(string value);
+    partial void Onpostal_codeChanged();
+    partial void OncountryChanging(string value);
+    partial void OncountryChanged();
+    #endregion
+		
+		public InvoiceAddress()
+		{
+			this._Invoice = default(EntityRef<Invoice>);
+			this._Invoice1 = default(EntityRef<Invoice>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					if ((this._Invoice.HasLoadedOrAssignedValue || this._Invoice1.HasLoadedOrAssignedValue))
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_first", DbType="VarChar(255)")]
+		public string first
+		{
+			get
+			{
+				return this._first;
+			}
+			set
+			{
+				if ((this._first != value))
+				{
+					this.OnfirstChanging(value);
+					this.SendPropertyChanging();
+					this._first = value;
+					this.SendPropertyChanged("first");
+					this.OnfirstChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_last", DbType="VarChar(255)")]
+		public string last
+		{
+			get
+			{
+				return this._last;
+			}
+			set
+			{
+				if ((this._last != value))
+				{
+					this.OnlastChanging(value);
+					this.SendPropertyChanging();
+					this._last = value;
+					this.SendPropertyChanged("last");
+					this.OnlastChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_street1", DbType="VarChar(500) NOT NULL", CanBeNull=false)]
+		public string street1
+		{
+			get
+			{
+				return this._street1;
+			}
+			set
+			{
+				if ((this._street1 != value))
+				{
+					this.Onstreet1Changing(value);
+					this.SendPropertyChanging();
+					this._street1 = value;
+					this.SendPropertyChanged("street1");
+					this.Onstreet1Changed();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_street2", DbType="VarChar(400)")]
+		public string street2
+		{
+			get
+			{
+				return this._street2;
+			}
+			set
+			{
+				if ((this._street2 != value))
+				{
+					this.Onstreet2Changing(value);
+					this.SendPropertyChanging();
+					this._street2 = value;
+					this.SendPropertyChanged("street2");
+					this.Onstreet2Changed();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_city", DbType="VarChar(500) NOT NULL", CanBeNull=false)]
+		public string city
+		{
+			get
+			{
+				return this._city;
+			}
+			set
+			{
+				if ((this._city != value))
+				{
+					this.OncityChanging(value);
+					this.SendPropertyChanging();
+					this._city = value;
+					this.SendPropertyChanged("city");
+					this.OncityChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_state", DbType="VarChar(25) NOT NULL", CanBeNull=false)]
+		public string state
+		{
+			get
+			{
+				return this._state;
+			}
+			set
+			{
+				if ((this._state != value))
+				{
+					this.OnstateChanging(value);
+					this.SendPropertyChanging();
+					this._state = value;
+					this.SendPropertyChanged("state");
+					this.OnstateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_postal_code", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
+		public string postal_code
+		{
+			get
+			{
+				return this._postal_code;
+			}
+			set
+			{
+				if ((this._postal_code != value))
+				{
+					this.Onpostal_codeChanging(value);
+					this.SendPropertyChanging();
+					this._postal_code = value;
+					this.SendPropertyChanged("postal_code");
+					this.Onpostal_codeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_country", DbType="VarChar(100)")]
+		public string country
+		{
+			get
+			{
+				return this._country;
+			}
+			set
+			{
+				if ((this._country != value))
+				{
+					this.OncountryChanging(value);
+					this.SendPropertyChanging();
+					this._country = value;
+					this.SendPropertyChanged("country");
+					this.OncountryChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Invoice_InvoiceAddress", Storage="_Invoice", ThisKey="ID", OtherKey="billTo", IsForeignKey=true)]
+		internal Invoice Invoice
+		{
+			get
+			{
+				return this._Invoice.Entity;
+			}
+			set
+			{
+				Invoice previousValue = this._Invoice.Entity;
+				if (((previousValue != value) 
+							|| (this._Invoice.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Invoice.Entity = null;
+						previousValue.BillTo = null;
+					}
+					this._Invoice.Entity = value;
+					if ((value != null))
+					{
+						value.BillTo = this;
+						this._ID = value.billTo;
+					}
+					else
+					{
+						this._ID = default(int);
+					}
+					this.SendPropertyChanged("Invoice");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Invoice_InvoiceAddress1", Storage="_Invoice1", ThisKey="ID", OtherKey="shipTo", IsForeignKey=true)]
+		internal Invoice Invoice1
+		{
+			get
+			{
+				return this._Invoice1.Entity;
+			}
+			set
+			{
+				Invoice previousValue = this._Invoice1.Entity;
+				if (((previousValue != value) 
+							|| (this._Invoice1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Invoice1.Entity = null;
+						previousValue.ShipTo = null;
+					}
+					this._Invoice1.Entity = value;
+					if ((value != null))
+					{
+						value.ShipTo = this;
+						this._ID = value.shipTo;
+					}
+					else
+					{
+						this._ID = default(int);
+					}
+					this.SendPropertyChanged("Invoice1");
 				}
 			}
 		}

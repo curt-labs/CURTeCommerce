@@ -1017,3 +1017,16 @@ CREATE TABLE FTPFirewall (
 	ipaddress varchar(255) NOT NULL
 )
 GO
+
+CREATE TABLE InvoiceAddress (
+	ID int IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	first varchar(255) NULL,
+	last varchar(255) NULL,
+	street1 varchar(500) NOT NULL,
+	street2 varchar(400) NULL,
+	city varchar(500) NOT NULL,
+	state varchar(25) NOT NULL,
+	postal_code varchar(100) NOT NULL,
+	country varchar(100) NULL
+)
+GO

@@ -32,7 +32,14 @@ namespace EcommercePlatform.Controllers {
 
         [RequireHttps]
         public ActionResult Checkout() {
-            return RedirectToAction("Billing");
+            Customer customer = ViewBag.customer;
+            customer.GetFromStorage();
+            if (customer.Cart.payment_id == 0) {
+                return RedirectToAction("Billing");
+            } else {
+                UDF.ExpireCart(customer.ID);
+                return RedirectToAction("Index");
+            }
         }
 
         [RequireHttps]
@@ -47,15 +54,20 @@ namespace EcommercePlatform.Controllers {
                 return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
             }
 
-            customer.BindAddresses();
+            if (customer.Cart.payment_id == 0) {
+                customer.BindAddresses();
 
-            List<Address> addresses = customer.GetAddresses();
-            ViewBag.addresses = addresses;
+                List<Address> addresses = customer.GetAddresses();
+                ViewBag.addresses = addresses;
 
-            List<Country> countries = UDF.GetCountries();
-            ViewBag.countries = countries;
+                List<Country> countries = UDF.GetCountries();
+                ViewBag.countries = countries;
 
-            return View();
+                return View();
+            } else {
+                UDF.ExpireCart(customer.ID);
+                return RedirectToAction("Index");
+            }
         }
 
         [RequireHttps]
@@ -70,38 +82,43 @@ namespace EcommercePlatform.Controllers {
                 return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
             }
 
-            customer.BindAddresses();
+            if (customer.Cart.payment_id == 0) {
+                customer.BindAddresses();
 
-            List<Address> addresses = customer.GetAddresses();
-            ViewBag.addresses = addresses;
+                List<Address> addresses = customer.GetAddresses();
+                ViewBag.addresses = addresses;
 
-            List<Country> countries = UDF.GetCountries();
-            ViewBag.countries = countries;
+                List<Country> countries = UDF.GetCountries();
+                ViewBag.countries = countries;
 
-            if (customer.Cart.ship_to == 0 && customer.Cart.bill_to != 0) {
-                RedirectToAction("ChooseShipping", new {id = customer.Cart.bill_to});
-            }
-
-            List<string> shipping_types = CURTAPI.GetShippingTypes();
-            ViewBag.shipping_types = shipping_types;
-
-            ShippingResponse shippingresponse = new ShippingResponse();
-            if (customer.Cart.ship_to != 0) {
-                if (TempData["shipping_response"] != null) {
-                    try {
-                        shippingresponse = (ShippingResponse)TempData["shipping_response"];
-                    } catch (Exception) { }
+                if (customer.Cart.ship_to == 0 && customer.Cart.bill_to != 0) {
+                    RedirectToAction("ChooseShipping", new {id = customer.Cart.bill_to});
                 }
-                if (shippingresponse == null || shippingresponse.Result == null) {
-                    string type = "";
-                    if (customer.Cart.shipping_type != null) {
-                        type = customer.Cart.shipping_type;
+
+                List<string> shipping_types = CURTAPI.GetShippingTypes();
+                ViewBag.shipping_types = shipping_types;
+
+                ShippingResponse shippingresponse = new ShippingResponse();
+                if (customer.Cart.ship_to != 0) {
+                    if (TempData["shipping_response"] != null) {
+                        try {
+                            shippingresponse = (ShippingResponse)TempData["shipping_response"];
+                        } catch (Exception) { }
                     }
-                    shippingresponse = getShipping();
+                    if (shippingresponse == null || shippingresponse.Result == null) {
+                        string type = "";
+                        if (customer.Cart.shipping_type != null) {
+                            type = customer.Cart.shipping_type;
+                        }
+                        shippingresponse = getShipping();
+                    }
                 }
+                ViewBag.shippingresponse = shippingresponse;
+                return View();
+            } else {
+                UDF.ExpireCart(customer.ID);
+                return RedirectToAction("Index");
             }
-            ViewBag.shippingresponse = shippingresponse;
-            return View();
         }
 
         public ActionResult Add(int id = 0, int qty = 1) {
@@ -112,10 +129,15 @@ namespace EcommercePlatform.Controllers {
             customer.GetFromStorage();
 
             // Add the item to the cart
-            customer.Cart.Add(id,qty);
+            if (customer.Cart.payment_id == 0) {
+                customer.Cart.Add(id,qty);
 
-            // Serialize the Customer back to where it came from
-            return RedirectToAction("Index");
+                // Serialize the Customer back to where it came from
+                return RedirectToAction("Index");
+            } else {
+                UDF.ExpireCart(customer.ID);
+                return RedirectToAction("Index");
+            }
         }
 
         public string AddAjax(int id = 0, int qty = 0) {
@@ -124,7 +146,11 @@ namespace EcommercePlatform.Controllers {
 
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
-            customer.Cart.Add(id, qty);
+            if (customer.Cart.payment_id == 0) {
+                customer.Cart.Add(id, qty);
+            } else {
+                UDF.ExpireCart(customer.ID);
+            }
 
             return getCart();
         }
@@ -137,7 +163,11 @@ namespace EcommercePlatform.Controllers {
                 // Retrieve Customer from Sessions/Cookie
                 customer.GetFromStorage();
 
-                customer.Cart.Update(id, qty);
+                if (customer.Cart.payment_id == 0) {
+                    customer.Cart.Update(id, qty);
+                } else {
+                    UDF.ExpireCart(customer.ID);
+                }
             } catch (Exception e) {
                 if (e.Message.ToLower().Contains("a potentially dangerous")) {
                     throw new HttpException(403, "Forbidden");
@@ -153,7 +183,11 @@ namespace EcommercePlatform.Controllers {
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
 
-            customer.Cart.Remove(id);
+            if (customer.Cart.payment_id == 0) {
+                customer.Cart.Remove(id);
+            } else {
+                UDF.ExpireCart(customer.ID);
+            }
             return RedirectToAction("Index");
         }
 
@@ -164,7 +198,11 @@ namespace EcommercePlatform.Controllers {
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
 
-            customer.Cart.Remove(id);
+            if (customer.Cart.payment_id == 0) {
+                customer.Cart.Remove(id);
+            } else {
+                UDF.ExpireCart(customer.ID);
+            }
 
             return Response.Cookies["cart"].Value;
         }
@@ -194,12 +232,17 @@ namespace EcommercePlatform.Controllers {
             }
 
 
-            if (customer.billingID == 0) {
-                customer.SetBillingDefaultAddress(id);
-            }
-            customer.Cart.SetBilling(id);
+            if (customer.Cart.payment_id == 0) {
+                if (customer.billingID == 0) {
+                    customer.SetBillingDefaultAddress(id);
+                }
+                customer.Cart.SetBilling(id);
 
-            return RedirectToAction("billing");
+                return RedirectToAction("billing");
+            } else {
+                UDF.ExpireCart(customer.ID);
+                return RedirectToAction("index");
+            }
         }
         
         //[RequireHttps]
@@ -212,36 +255,41 @@ namespace EcommercePlatform.Controllers {
                     return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
                 }
 
-                Address billing = new Address();
-                // Build out our Billing object
-                billing = new Address {
-                    first = Request.Form["bfirst"],
-                    last = Request.Form["blast"],
-                    street1 = Request.Form["bstreet1"],
-                    street2 = Request.Form["bstreet2"],
-                    city = Request.Form["bcity"],
-                    postal_code = Request.Form["bzip"],
-                    residential = (Request.Form["bresidential"] == null) ? false : true,
-                    active = true
-                };
-                try {
-                    billing.state = Convert.ToInt32(Request.Form["bstate"]);
-                } catch (Exception) {
-                    throw new Exception("You must select a billing state/province.");
-                }
-                billing.Save(customer.ID);
-                if (customer.billingID == 0) {
-                    customer.SetBillingDefaultAddress(billing.ID);
-                }
-                if (customer.shippingID == 0) {
-                    customer.SetShippingDefaultAddress(billing.ID);
-                }
+                if (customer.Cart.payment_id == 0) {
+                    Address billing = new Address();
+                    // Build out our Billing object
+                    billing = new Address {
+                        first = Request.Form["bfirst"],
+                        last = Request.Form["blast"],
+                        street1 = Request.Form["bstreet1"],
+                        street2 = Request.Form["bstreet2"],
+                        city = Request.Form["bcity"],
+                        postal_code = Request.Form["bzip"],
+                        residential = (Request.Form["bresidential"] == null) ? false : true,
+                        active = true
+                    };
+                    try {
+                        billing.state = Convert.ToInt32(Request.Form["bstate"]);
+                    } catch (Exception) {
+                        throw new Exception("You must select a billing state/province.");
+                    }
+                    billing.Save(customer.ID);
+                    if (customer.billingID == 0) {
+                        customer.SetBillingDefaultAddress(billing.ID);
+                    }
+                    if (customer.shippingID == 0) {
+                        customer.SetShippingDefaultAddress(billing.ID);
+                    }
 
-                // Retrieve Customer from Sessions/Cookie
+                    // Retrieve Customer from Sessions/Cookie
 
-                customer.Cart.SetBilling(billing.ID);
-                if (customer.Cart.ship_to == 0) {
-                    customer.Cart.SetShipping(billing.ID);
+                    customer.Cart.SetBilling(billing.ID);
+                    if (customer.Cart.ship_to == 0) {
+                        customer.Cart.SetShipping(billing.ID);
+                    }
+                } else {
+                    UDF.ExpireCart(customer.ID);
+                    return RedirectToAction("index");
                 }
             } catch { }
 
@@ -259,12 +307,17 @@ namespace EcommercePlatform.Controllers {
                 return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
             }
 
-            if (customer.shippingID == 0) {
-                customer.SetShippingDefaultAddress(id);
-            }
-            customer.Cart.SetShipping(id);
+            if (customer.Cart.payment_id == 0) {
+                if (customer.shippingID == 0) {
+                    customer.SetShippingDefaultAddress(id);
+                }
+                customer.Cart.SetShipping(id);
 
-            return RedirectToAction("Shipping");
+                return RedirectToAction("Shipping");
+            } else {
+                UDF.ExpireCart(customer.ID);
+                return RedirectToAction("index");
+            }
         }
 
         //[RequireHttps]
@@ -375,29 +428,34 @@ namespace EcommercePlatform.Controllers {
             if (!customer.LoggedIn()) {
                 return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
             }
+            if (customer.Cart.payment_id == 0) {
 
-            decimal shipping_price = 0;
-            string shiptype = "";
-            try {
-                string[] typesplit = shipping_type.Split('|');
-                shiptype = typesplit[0];
-                shipping_price = Convert.ToDecimal(typesplit[1]);
-                customer.Cart.setShippingType(shiptype, shipping_price);
+                decimal shipping_price = 0;
+                string shiptype = "";
+                try {
+                    string[] typesplit = shipping_type.Split('|');
+                    shiptype = typesplit[0];
+                    shipping_price = Convert.ToDecimal(typesplit[1]);
+                    customer.Cart.setShippingType(shiptype, shipping_price);
 
-                // We need to calculate the tax now that we know the shipping state
-                customer.Cart.SetTax();
+                    // We need to calculate the tax now that we know the shipping state
+                    customer.Cart.SetTax();
 
-                if (customer.Cart.Validate()) {
-                    return RedirectToAction("Index", "Payment");
-                } else if (customer.Cart.bill_to == 0) {
-                    return RedirectToAction("Billing");
-                } else if (customer.Cart.ship_to == 0) {
-                    return RedirectToAction("Shipping");
-                } else {
-                    return RedirectToAction("Index");
+                    if (customer.Cart.Validate()) {
+                        return RedirectToAction("Index", "Payment");
+                    } else if (customer.Cart.bill_to == 0) {
+                        return RedirectToAction("Billing");
+                    } else if (customer.Cart.ship_to == 0) {
+                        return RedirectToAction("Shipping");
+                    } else {
+                        return RedirectToAction("Index");
+                    }
+                } catch {
+                    return RedirectToAction("Checkout", "Cart");
                 }
-            } catch {
-                return RedirectToAction("Checkout", "Cart");
+            } else {
+                UDF.ExpireCart(customer.ID);
+                return RedirectToAction("Index");
             }
         }
 

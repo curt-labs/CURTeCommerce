@@ -92,8 +92,8 @@ namespace EcommercePlatform.Models {
                             ReadInvoice(editext);
                             BlobManagement.MoveBlob(blob, "edi/archive", "edi/in");
                         } catch (Exception e) {
-                            string[] tos = new string [] {"jjaniuk@curtmfg.com"};
-                            UDF.SendEmail(tos, "Error in Invoice Read", false, e.Message + " " + e.StackTrace, false);
+                            //string[] tos = new string [] {"jjaniuk@curtmfg.com"};
+                            //UDF.SendEmail(tos, "Error in Invoice Read", false, e.Message + " " + e.StackTrace, false);
                         }
                     } else if (blob.Name.ToLower().Contains("asn")) {
                         // ship notification
@@ -127,7 +127,7 @@ namespace EcommercePlatform.Models {
             itdcodes.Add("ZZ","Mutually Defined");
 
             Invoice inv = new Invoice();
-            Address address = new Address();
+            InvoiceAddress address = new InvoiceAddress();
             char billorship = 'b';
             List<string> edilines = editext.Split('~').ToList<string>();
             foreach (string line in edilines) {
@@ -170,7 +170,7 @@ namespace EcommercePlatform.Models {
                                 break;
                             case "BT":
                                 billorship = 'b';
-                                address = new Address();
+                                address = new InvoiceAddress();
                                 string[] namesplit = lineelements[2].Split(' ');
                                 address.first = namesplit[0];
                                 try {
@@ -181,7 +181,7 @@ namespace EcommercePlatform.Models {
                                 break;
                             case "ST":
                                 billorship = 's';
-                                address = new Address();
+                                address = new InvoiceAddress();
                                 namesplit = lineelements[2].Split(' ');
                                 address.first = namesplit[0];
                                 try {
@@ -204,7 +204,7 @@ namespace EcommercePlatform.Models {
                         break;
                     case "N4":
                         address.city = lineelements[1];
-                        address.state = new State().getStateIDByAbbr(lineelements[2]);
+                        address.state = lineelements[2];
                         address.postal_code = lineelements[3];
                         address.MatchOrSave();
                         if (billorship == 'b')

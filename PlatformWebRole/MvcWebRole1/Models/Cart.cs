@@ -22,38 +22,50 @@ namespace EcommercePlatform
         }
 
         public void Add(int partID = 0, int quantity = 1) {
-            APIPart part = CURTAPI.GetPart(partID);
-            string upcval = part.attributes.Where(x => x.key.ToLower().Equals("upc")).Select(x => x.value).FirstOrDefault();
-            string weight = part.attributes.Where(x => x.key.ToLower().Equals("weight")).Select(x => x.value).FirstOrDefault();
-            CartItem i = new CartItem(partID, quantity, Convert.ToDecimal(part.listPrice.Replace("$", "")), part.shortDesc, upcval, Convert.ToDecimal(weight));
+            if (this.payment_id == 0) {
+                APIPart part = CURTAPI.GetPart(partID);
+                string upcval = part.attributes.Where(x => x.key.ToLower().Equals("upc")).Select(x => x.value).FirstOrDefault();
+                string weight = part.attributes.Where(x => x.key.ToLower().Equals("weight")).Select(x => x.value).FirstOrDefault();
+                CartItem i = new CartItem(partID, quantity, Convert.ToDecimal(part.listPrice.Replace("$", "")), part.shortDesc, upcval, Convert.ToDecimal(weight));
 
-            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-            try {
-                CartItem item = db.CartItems.Where(x => x.partID == partID).Where(x => x.order_id == this.ID).First<CartItem>();
-                item.quantity += quantity;
-            } catch {
-                i.order_id = this.ID;
-                db.CartItems.InsertOnSubmit(i);
-            };
-            db.SubmitChanges();
+                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+                try {
+                    CartItem item = db.CartItems.Where(x => x.partID == partID).Where(x => x.order_id == this.ID).First<CartItem>();
+                    item.quantity += quantity;
+                } catch {
+                    i.order_id = this.ID;
+                    db.CartItems.InsertOnSubmit(i);
+                };
+                db.SubmitChanges();
+            } else {
+                UDF.ExpireCart(this.cust_id);
+            }
         }
 
         public void Update(int partID = 0, int quantity = 0) {
-            if (quantity > 0) {
-                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-                CartItem i = db.CartItems.Where(x => x.order_id == this.ID).Where(x => x.partID == partID).First<CartItem>();
-                i.quantity = quantity;
-                db.SubmitChanges();
+            if (this.payment_id == 0) {
+                if (quantity > 0) {
+                    EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+                    CartItem i = db.CartItems.Where(x => x.order_id == this.ID).Where(x => x.partID == partID).First<CartItem>();
+                    i.quantity = quantity;
+                    db.SubmitChanges();
+                } else {
+                    Remove(partID);
+                }
             } else {
-                Remove(partID);
+                UDF.ExpireCart(this.cust_id);
             }
         }
 
         public void Remove(int partID = 0) {
-            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-            CartItem i = db.CartItems.Where(x => x.order_id == this.ID).Where(x => x.partID == partID).First<CartItem>();
-            db.CartItems.DeleteOnSubmit(i);
-            db.SubmitChanges();
+            if (this.payment_id == 0) {
+                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+                CartItem i = db.CartItems.Where(x => x.order_id == this.ID).Where(x => x.partID == partID).First<CartItem>();
+                db.CartItems.DeleteOnSubmit(i);
+                db.SubmitChanges();
+            } else {
+                UDF.ExpireCart(this.cust_id);
+            }
         }
 
         public void RemoveCart() {
@@ -64,15 +76,19 @@ namespace EcommercePlatform
         }
 
         public void UpdateCart(int cust_id = 0) {
-            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-            Cart c = db.Carts.Where(x => x.ID.Equals(this.ID)).First<Cart>();
-            c.cust_id = cust_id;
-            try {
-                Customer cust = db.Customers.Where(x => x.ID == cust_id).First<Customer>();
-                c.ship_to = cust.shippingID;
-                c.bill_to = cust.billingID;
-            } catch { }
-            db.SubmitChanges();
+            if (this.payment_id == 0) {
+                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+                Cart c = db.Carts.Where(x => x.ID.Equals(this.ID)).First<Cart>();
+                c.cust_id = cust_id;
+                try {
+                    Customer cust = db.Customers.Where(x => x.ID == cust_id).First<Customer>();
+                    c.ship_to = cust.shippingID;
+                    c.bill_to = cust.billingID;
+                } catch { }
+                db.SubmitChanges();
+            } else {
+                UDF.ExpireCart(this.cust_id);
+            }
         }
 
         public Cart Save() {
@@ -91,17 +107,21 @@ namespace EcommercePlatform
         }
 
         public void Empty() {
-            if (this.cust_id > 0) {
-                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-                List<CartItem> items = new List<CartItem>();
-                try {
-                    items = db.CartItems.Where(x => x.order_id == this.ID).ToList<CartItem>();
-                    db.CartItems.DeleteAllOnSubmit(items);
-                    db.SubmitChanges();
-                } catch { };
-            }
-            foreach (CartItem i in this.CartItems) {
-                this.CartItems.Remove(i);
+            if (this.payment_id == 0) {
+                if (this.cust_id > 0) {
+                    EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+                    List<CartItem> items = new List<CartItem>();
+                    try {
+                        items = db.CartItems.Where(x => x.order_id == this.ID).ToList<CartItem>();
+                        db.CartItems.DeleteAllOnSubmit(items);
+                        db.SubmitChanges();
+                    } catch { };
+                }
+                foreach (CartItem i in this.CartItems) {
+                    this.CartItems.Remove(i);
+                }
+            } else {
+                UDF.ExpireCart(this.cust_id);
             }
         }
 

@@ -178,6 +178,7 @@
     <Compile Include="Models\ContactManagement.cs" />
     <Compile Include="Models\ContentManagement.cs" />
     <Compile Include="Models\ContentPage.cs" />
+    <Compile Include="Models\InvoiceAddress.cs" />
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\GoogleCheckout.cs" />
@@ -580,6 +581,7 @@
     <Content Include="Views\Cart\Shipping.cshtml" />
     <Content Include="Views\Account\Addresses.cshtml" />
     <Content Include="Views\_404\Http404.cshtml" />
+    <Content Include="Views\Account\Password.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

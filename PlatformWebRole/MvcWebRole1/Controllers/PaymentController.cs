@@ -25,6 +25,10 @@ namespace EcommercePlatform.Controllers {
                 return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
             }
 
+            if (customer.Cart.payment_id > 0) {
+                UDF.ExpireCart(customer.ID);
+                return RedirectToAction("Index", "Cart");
+            }
             // Create Cart object from customer
             customer.BindAddresses();
             Cart cart = customer.Cart;
@@ -59,6 +63,10 @@ namespace EcommercePlatform.Controllers {
                 return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
             }
 
+            if (customer.Cart.payment_id > 0) {
+                UDF.ExpireCart(customer.ID);
+                return RedirectToAction("Index", "Cart");
+            }
             customer.BindAddresses();
 
             decimal amount = customer.Cart.getTotal();
@@ -134,6 +142,11 @@ namespace EcommercePlatform.Controllers {
                 return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
             }
 
+            if (customer.Cart.payment_id > 0) {
+                UDF.ExpireCart(customer.ID);
+                return RedirectToAction("Index", "Cart");
+            }
+
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             Settings settings = ViewBag.settings;
             CheckoutShoppingCartRequest req = gButton.CreateRequest();
@@ -203,6 +216,10 @@ namespace EcommercePlatform.Controllers {
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
                 return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
+            }
+            if (customer.Cart.payment_id > 0) {
+                UDF.ExpireCart(customer.ID);
+                return RedirectToAction("Index", "Cart");
             }
             Paypal p = new Paypal();
             string token = p.ECSetExpressCheckout(customer.Cart);

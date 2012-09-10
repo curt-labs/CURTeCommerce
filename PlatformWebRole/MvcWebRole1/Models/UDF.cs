@@ -29,6 +29,16 @@ namespace EcommercePlatform.Models {
             }
         }
 
+        public static Cart ExpireCart(int cust_id) {
+            Cart new_cart = new Cart().Save();
+            new_cart.UpdateCart(cust_id);
+            DateTime cookexp = HttpContext.Current.Request.Cookies["hdcart"].Expires;
+            HttpCookie cook = new HttpCookie("hdcart", new_cart.ID.ToString());
+            cook.Expires = cookexp;
+            HttpContext.Current.Response.Cookies.Add(cook);
+            return new_cart;
+        }
+
         public static List<Country> GetCountries() {
             try {
                 EcommercePlatformDataContext db = new EcommercePlatformDataContext();

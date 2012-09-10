@@ -8,6 +8,7 @@ using EcommercePlatform.Models;
 namespace EcommercePlatform.Controllers {
     public class AccountController : CustomerAuthController {
 
+        [RequireHttps]
         public ActionResult Index() {
 
             // Instantiate our Customer object
@@ -27,6 +28,7 @@ namespace EcommercePlatform.Controllers {
             return View();
         }
 
+        [RequireHttps]
         public ActionResult Orders() {
             Customer cust = new Customer();
             cust.GetFromStorage();
@@ -36,6 +38,42 @@ namespace EcommercePlatform.Controllers {
             return View();
         }
 
+        [RequireHttps]
+        public ActionResult Password(string message = "") {
+            ViewBag.message = message;
+            Customer cust = new Customer();
+            cust.GetFromStorage();
+            ViewBag.cust = cust;
+            return View();
+        }
+
+        [RequireHttps,AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult ResetPassword() {
+            Customer cust = new Customer();
+            cust.GetFromStorage();
+            string message = "";
+            try {
+                string current = Request.Form["current"];
+                string newpw = Request.Form["new"];
+                string confirm = Request.Form["confirm"];
+
+                if (String.IsNullOrEmpty(current) || String.IsNullOrEmpty(newpw) || String.IsNullOrEmpty(confirm)) {
+                    throw new Exception("You must enter all password fields. Try Again");
+                }
+
+                cust.ValidateCurrentPassword(current);
+
+                cust.ValidatePasswords(newpw, confirm);
+                cust.UpdatePassword();
+                message = "Your password was successfully updated.";
+
+            } catch (Exception e) {
+                message = e.Message;
+            }
+            return RedirectToAction("Password", new { message = message });
+        }
+
+        [RequireHttps]
         public ActionResult Addresses() {
             Customer cust = ViewBag.customer;
             List<Address> addresses = cust.GetAddresses();
@@ -47,6 +85,7 @@ namespace EcommercePlatform.Controllers {
             return View();
         }
 
+        [RequireHttps]
         public ActionResult Order(int id = 0) {
             Customer cust = new Customer();
             cust.ID = ViewBag.customer.ID;
@@ -60,6 +99,7 @@ namespace EcommercePlatform.Controllers {
             return View();
         }
 
+        [RequireHttps]
         public ActionResult Save() {
 
             Customer cust = new Customer();
@@ -120,6 +160,7 @@ namespace EcommercePlatform.Controllers {
             }
         }
 
+        [RequireHttps]
         public ActionResult AddAddress() {
             try {
                 // Create Customer
@@ -156,7 +197,8 @@ namespace EcommercePlatform.Controllers {
             return RedirectToAction("Addresses");
 
         }
-        
+
+        [RequireHttps]
         public ActionResult DeleteAddress(int id = 0) {
             Customer cust = new Customer();
             cust.GetFromStorage();
@@ -168,6 +210,7 @@ namespace EcommercePlatform.Controllers {
             return RedirectToAction("Addresses");
         }
 
+        [RequireHttps]
         public ActionResult SetBillingDefault(int id = 0) {
             Customer cust = new Customer();
             cust.GetFromStorage();
@@ -179,6 +222,7 @@ namespace EcommercePlatform.Controllers {
             return RedirectToAction("Addresses");
         }
 
+        [RequireHttps]
         public ActionResult SetShippingDefault(int id = 0) {
             Customer cust = new Customer();
             cust.GetFromStorage();

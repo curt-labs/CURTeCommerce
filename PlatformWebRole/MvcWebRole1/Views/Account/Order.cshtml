@@ -13,7 +13,7 @@
 @if (order == null) {
     <p class="error">There seems to have been an issue while looking up the order that you request.</p>
 } else {
-
+    <h1>My Account - Order #@order.payment_id</h1>
     <ul class="tabs">
         <li>
             <a href="#order" title="Order Information">Order</a>
@@ -31,7 +31,7 @@
     <div class="tab_container">
         <div class="tab_content" id="order">
             <p><strong>Order ID:</strong> @order.payment_id</p>
-            <p><strong>Paid by:</strong> @payment.PaymentTypes.name on @String.Format("{0:M/d/yyyy} at {0:h:mm tt}",payment.created)</p>
+            <p><strong>Paid by:</strong> @payment.PaymentTypes.name on @String.Format("{0:M/d/yyyy} at {0:h:mm tt}", payment.created)</p>
             <p><strong>Payment Status:</strong> @payment.status</p>
             <div class="address">
                 <span>Billing Address</span>
@@ -65,21 +65,21 @@
                     <img src="@item.GetImage()" alt="CURT Part #@item.partID" />
                     <a href="/part/@item.partID" title="View Details" class="title">@item.shortDesc</a>
                     <div class="info">
-                        <span>@String.Format("{0:C}",item.price)</span>
+                        <span>@String.Format("{0:C}", item.price)</span>
                         <span>@item.quantity</span>
                     </div>
                 </article>
             }
             <article class="totals">
                 <span class="label">SubTotal</span>
-                <span class="value">@String.Format("{0:C}",order.GetSubTotal())</span>
+                <span class="value">@String.Format("{0:C}", order.GetSubTotal())</span>
                 <span class="label">Shipping</span>
-                <span class="value">@String.Format("{0:C}",order.shipping_price)</span>
+                <span class="value">@String.Format("{0:C}", order.shipping_price)</span>
                 <span class="label">Tax</span>
-                <span class="value">@String.Format("{0:C}",order.tax)</span>
+                <span class="value">@String.Format("{0:C}", order.tax)</span>
                 <hr />
                 <span class="label">Total</span>
-                <span class="value">@String.Format("{0:C}",order.getTotal())</span>
+                <span class="value">@String.Format("{0:C}", order.getTotal())</span>
             </article>
             <div class="clearfix"></div>
         </div>

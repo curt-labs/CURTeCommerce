@@ -391,4 +391,17 @@
       <Association Name="Cart_Shipment" Member="Cart" AccessModifier="Internal" ThisKey="order_id" OtherKey="ID" Type="Cart" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.InvoiceAddress" Member="InvoiceAddresses">
+    <Type Name="InvoiceAddress">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="first" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="last" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="street1" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="street2" Type="System.String" DbType="VarChar(400)" CanBeNull="true" />
+      <Column Name="city" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="state" Type="System.String" DbType="VarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="postal_code" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="country" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+    </Type>
+  </Table>
 </Database>

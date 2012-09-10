@@ -88,7 +88,7 @@ namespace EcommercePlatform.Controllers {
                 if(redirect != null && redirect.Length != 0 && !redirect.ToUpper().Contains("AUTHENTICATE")){
                     return Redirect(redirect);
                 }else{
-                    return Redirect("/Account");
+                    return RedirectToAction("Index","Index");
                 }
             } catch (Exception e) {
                 TempData["error"] = e.Message;
@@ -270,7 +270,7 @@ namespace EcommercePlatform.Controllers {
         public ActionResult ForgotPassword(string email = "") {
             try {
                 Customer cust = new Customer();
-                cust.GetCustomerByEmail(email);
+                cust = cust.GetCustomerByEmail(email);
 
                 cust.ResetPassword();
 

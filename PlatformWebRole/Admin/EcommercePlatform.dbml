@@ -18,8 +18,6 @@
       <Association Name="Address_Customer" Member="Customers" AccessModifier="Internal" ThisKey="ID" OtherKey="billingID" Type="Customer" />
       <Association Name="Address_Customer1" Member="Customers1" AccessModifier="Internal" ThisKey="ID" OtherKey="shippingID" Type="Customer" />
       <Association Name="State_Address" Member="State1" ThisKey="state" OtherKey="stateID" Type="State" IsForeignKey="true" />
-      <Association Name="Invoice_Address" Member="Invoice" AccessModifier="Internal" ThisKey="ID" OtherKey="billTo" Type="Invoice" IsForeignKey="true" />
-      <Association Name="Invoice_Address1" Member="Invoice1" AccessModifier="Internal" ThisKey="ID" OtherKey="shipTo" Type="Invoice" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Testimonial" Member="Testimonials">
@@ -406,10 +404,10 @@
       <Column Name="paid" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="created" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="printed" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="Invoice_Address" Member="BillTo" ThisKey="billTo" OtherKey="ID" Type="Address" Cardinality="One" />
-      <Association Name="Invoice_Address1" Member="ShipTo" ThisKey="shipTo" OtherKey="ID" Type="Address" Cardinality="One" />
       <Association Name="Invoice_InvoiceItem" Member="InvoiceItems" ThisKey="id" OtherKey="invoiceID" Type="InvoiceItem" />
       <Association Name="Invoice_InvoiceCode" Member="InvoiceCodes" ThisKey="id" OtherKey="invoiceID" Type="InvoiceCode" />
+      <Association Name="Invoice_InvoiceAddress" Member="BillTo" ThisKey="billTo" OtherKey="ID" Type="InvoiceAddress" Cardinality="One" />
+      <Association Name="Invoice_InvoiceAddress1" Member="ShipTo" ThisKey="shipTo" OtherKey="ID" Type="InvoiceAddress" Cardinality="One" />
     </Type>
   </Table>
   <Table Name="dbo.InvoiceItem" Member="InvoiceItems">
@@ -449,6 +447,21 @@
     <Type Name="FTPFirewall">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="ipaddress" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InvoiceAddress" Member="InvoiceAddresses">
+    <Type Name="InvoiceAddress">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="first" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="last" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="street1" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="street2" Type="System.String" DbType="VarChar(400)" CanBeNull="true" />
+      <Column Name="city" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="state" Type="System.String" DbType="VarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="postal_code" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="country" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Association Name="Invoice_InvoiceAddress" Member="Invoice" AccessModifier="Internal" ThisKey="ID" OtherKey="billTo" Type="Invoice" IsForeignKey="true" />
+      <Association Name="Invoice_InvoiceAddress1" Member="Invoice1" AccessModifier="Internal" ThisKey="ID" OtherKey="shipTo" Type="Invoice" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

@@ -33,8 +33,8 @@
                 <h3>Ship To</h3>
                 <p>@invoice.ShipTo.first @invoice.ShipTo.last<br />
                 @invoice.ShipTo.street1<br />
-                @invoice.ShipTo.city @invoice.ShipTo.State1.abbr @invoice.ShipTo.postal_code<br />
-                @invoice.ShipTo.State1.Country.name</p>
+                @invoice.ShipTo.city @invoice.ShipTo.state @invoice.ShipTo.postal_code<br />
+                @invoice.ShipTo.country</p>
                 <span style="clear:both;"></span>
             </div>
             <div id="billto">
@@ -44,8 +44,8 @@
                 @if (invoice.BillTo.street2 != "") {
                     @invoice.BillTo.street2<br />
                 }
-                @invoice.BillTo.city @invoice.BillTo.State1.abbr @invoice.BillTo.postal_code<br />
-                @invoice.BillTo.State1.Country.name</p>
+                @invoice.BillTo.city @invoice.BillTo.state @invoice.BillTo.postal_code<br />
+                @invoice.BillTo.country</p>
                 <span style="clear:both;"></span>
             </div>
         </div>
