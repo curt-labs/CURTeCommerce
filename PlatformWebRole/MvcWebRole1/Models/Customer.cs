@@ -376,15 +376,15 @@ namespace EcommercePlatform {
 
         internal void SendValidation() {
             if (this.isValidated == 1) {
-                throw new Exception("Accound is already validated.");
+                throw new Exception("Account is already validated.");
             }
             Settings settings = new Settings();
             string[] tos = { this.email };
             StringBuilder sb = new StringBuilder();
 
-            sb.Append("<p>A new account with this e-mail address was created from <a href='" + settings.Get("SiteURL") + "' title='" + settings.Get("SiteName") + ">" + settings.Get("SiteName") + "</a>.</p>");
+            sb.Append("<p>A new account with this e-mail address was created from <a href='" + settings.Get("SiteURL") + "' title='" + settings.Get("SiteName") + "'>" + settings.Get("SiteName") + "</a>.</p>");
             sb.Append("<hr />");
-            sb.AppendFormat("<p>To <a href='" + settings.Get("SiteURL") + "Authenticate/Validate?id={0}&validator={1}' title='Validate' target='_blank'>validate</a> your account for <a href='" + settings.Get("SiteURL") + "' title='" + settings.Get("SiteName") + "'>" + settings.Get("SiteName") + "</a>, please use the link provided below.</p>", this.ID, this.validator);
+            sb.AppendFormat("<p>To <a href='" + settings.Get("SiteURL") + "Authenticate/Validate?id={0}&validator={1}' title='Validate' target='_blank'>Validate</a> your account for <a href='" + settings.Get("SiteURL") + "' title='" + settings.Get("SiteName") + "'>" + settings.Get("SiteName") + "</a>, please use the link provided below.</p>", this.ID, this.validator);
             sb.AppendFormat("<a href='" + settings.Get("SiteURL") + "Authenticate/Validate?id={0}&validator={1}'>" + settings.Get("SiteURL") + "Authenticate/Validate?id={0}&validator={1}</a><hr />", this.ID, this.validator);
             sb.Append("<hr /><br />");
             sb.Append("<p style='font-size:11px'>If you feel this was a mistake please disregard this e-mail.</p>");

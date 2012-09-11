@@ -111,7 +111,7 @@ namespace EcommercePlatform.Models {
                 bool enableSSL = (settings.Get("SMTPSSL") == "true") ? true : false;
                 client.EnableSsl = enableSSL;
 
-                mail.From = new MailAddress(settings.Get("SMTPUserName"));
+                mail.From = new MailAddress(settings.Get("NoReplyEmailAddress"));
                 foreach (string recip in to) {
                     mail.To.Add(recip);
                 }

@@ -20,15 +20,14 @@
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Endpoint1" protocol="http" port="80" localPort="80" />
-      <InputEndpoint name="Https" protocol="https" port="443" certificate="NoBarSSLCert" localPort="443" />
+      <InputEndpoint name="Https" protocol="https" port="443" certificate="CurtSSL" localPort="443" />
       <InternalEndpoint name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Rdp" protocol="tcp">
         <FixedPortRange min="3389" max="3389" />
       </InternalEndpoint>
     </Endpoints>
     <Certificates>
+      <Certificate name="CurtSSL" storeLocation="LocalMachine" storeName="CA" />
       <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" storeLocation="LocalMachine" storeName="My" />
-      <Certificate name="NewSSLCert" storeLocation="LocalMachine" storeName="CA" />
-      <Certificate name="NoBarSSLCert" storeLocation="LocalMachine" storeName="CA" />
     </Certificates>
   </WebRole>
   <WorkerRole name="FTPServerRole">
@@ -57,7 +56,6 @@
       </InternalEndpoint>
     </Endpoints>
     <Certificates>
-      <Certificate name="HitchDepot" storeLocation="LocalMachine" storeName="CA" />
       <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" storeLocation="LocalMachine" storeName="My" />
     </Certificates>
   </WorkerRole>
