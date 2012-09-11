@@ -21,7 +21,7 @@
     </Sites>
     <Endpoints>
       <InputEndpoint name="Endpoint1" protocol="http" port="80" />
-      <InputEndpoint name="Https" protocol="https" port="443" certificate="NoBarSSLCert" />
+      <InputEndpoint name="Https" protocol="https" port="443" certificate="CurtSSL" />
     </Endpoints>
     <ConfigurationSettings>
       <Setting name="StorageConnectionString" />
@@ -34,8 +34,7 @@
       <Setting name="UseAsyncMethods" />
     </ConfigurationSettings>
     <Certificates>
-      <Certificate name="NewSSLCert" storeLocation="LocalMachine" storeName="CA" />
-      <Certificate name="NoBarSSLCert" storeLocation="LocalMachine" storeName="CA" />
+      <Certificate name="CurtSSL" storeLocation="LocalMachine" storeName="CA" />
     </Certificates>
     <Startup>
       <Task commandLine="Startup.cmd" executionContext="elevated" taskType="simple"></Task>
@@ -57,9 +56,7 @@
       <Setting name="UseHttps" />
       <Setting name="UseAsyncMethods" />
     </ConfigurationSettings>
-    <Certificates>
-      <Certificate name="HitchDepot" storeLocation="LocalMachine" storeName="CA" />
-    </Certificates>
+    <Certificates></Certificates>
     <Imports>
       <Import moduleName="RemoteAccess" />
       <Import moduleName="RemoteForwarder" />

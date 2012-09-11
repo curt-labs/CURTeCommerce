@@ -83,36 +83,37 @@
 <body>
     <header>
         <div id="top_bar">
-            <nav>
+            <div id="top_bar_cont">
                 <a href="/" id="scroll_logo" title="@settings.Get("SiteName")">
                     <img src="@settings.Get("HeaderLogoScroll")" alt="@settings.Get("SiteName")" />
                 </a>
-                <span class="phone">Call Us: <span>@settings.Get("PhoneNumber")</span></span>
-                <ul>
-                    <li>
-                        <a href="/Categories" title="Shop">Shop</a>
-                    </li>
-                    <li>
-                        <a href="/info" title="Hitches 101">Hitches 101</a>
-                    </li>
-                    <li>
-                        <a href="/faq" title="Frequently Asked Questions">FAQ</a>
-                    </li>
-                    <li>
-                        <a href="/Locations" title="Locations">Locations</a>
-                    </li>
-                    <li>
-                        <a href="/Contact" title="Contact Us">Contact Us</a>
-                    </li>
-                </ul>
-                <div class="error_display">
-                    <span class="error_heading">
-                        Error:
-                        <span class="err"></span>
-                        <span class="close">X</span>
-                    </span>
-                </div>
-            </nav>
+                <nav>
+                    <ul>
+                        <li>
+                            <a href="/Categories" title="Shop">Shop</a>
+                        </li>
+                        <li>
+                            <a href="/info" title="Hitches 101">Hitches 101</a>
+                        </li>
+                        <li>
+                            <a href="/faq" title="Frequently Asked Questions">FAQ</a>
+                        </li>
+                        <li>
+                            <a href="/Locations" title="Locations">Locations</a>
+                        </li>
+                        <li>
+                            <a href="/Contact" title="Contact Us">Contact Us</a>
+                        </li>
+                    </ul>
+                    <div class="error_display">
+                        <span class="error_heading">
+                            Error:
+                            <span class="err"></span>
+                            <span class="close">X</span>
+                        </span>
+                    </div>
+                </nav>
+            </div>
             <div class="sub_menu">
                 <div class="sub_menu_container">
                     <form method="get" action="/Search" class="search">
@@ -131,6 +132,7 @@
                     @if (customer != null && customer.ID > 0) {
                         <a href="/Authenticate/Logout" title="Log Out of your Account" class="sub_link">Log Out</a>
                     }
+                    <span class="phone">Call Us: @settings.Get("PhoneNumber")</span>
                 </div>
             </div>
         </div>

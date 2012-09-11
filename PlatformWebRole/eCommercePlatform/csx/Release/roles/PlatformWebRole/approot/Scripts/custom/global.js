@@ -279,7 +279,6 @@ $(function () {
     }
 
     if (animate_logo) {
-        $('header').css('height', '130px').css('margin-bottom', '0px').css('margin-top', '90px');
         $('header').find('.logo').show();
         if ($(window).width() < 1020) {
             $('#top_bar').css('position', 'absolute');
@@ -287,15 +286,16 @@ $(function () {
             $('#top_bar').css('position', 'fixed');
         }
 
-        $('#scroll_logo').css('visibility', 'hidden');
+        $('#scroll_logo').css('display', 'none');
         $(window).scroll(function () {
             var top = $(this).scrollTop();
-            if (top > 120) {
-                $('#scroll_logo').css('visibility', 'visible');
-                $('header').find('.logo').hide();
+            console.log(top);
+            if (top > 80) {
+                $('#scroll_logo').fadeIn('fast');
+                $('header').find('.logo').fadeOut();
             } else {
-                $('#scroll_logo').css('visibility', 'hidden');
-                $('header').find('.logo').show();
+                $('#scroll_logo').fadeOut();
+                $('header').find('.logo').fadeIn('fast');
             }
         });
 

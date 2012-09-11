@@ -29,7 +29,7 @@
 
 .purchase .price {
     font-size: 28px;
-    color: #FA241A;
+    color: #F15922;
     font-weight: bold;
     text-align: right;
     display: block;
@@ -64,14 +64,14 @@
 .purchase form input {
     vertical-align: top;
     margin: 6px 0px;
-    background: #FA241A;
-    background: -moz-linear-gradient(top, #FA241A 30%, #BF3504 98%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(30%,#FA241A), color-stop(98%,#BF3504));
-    background: -webkit-linear-gradient(top, #FA241A 30%,#BF3504 98%);
-    background: -o-linear-gradient(top, #FA241A 30%,#BF3504 98%);
-    background: -ms-linear-gradient(top, #FA241A 30%,#BF3504 98%);
-    background: linear-gradient(top, #FA241A 30%,#BF3504 98%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FA241A', endColorstr='#bf3504',GradientType=0 );
+    background: #F15922;
+    background: -moz-linear-gradient(top, #F15922 30%, #FA241A 98%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(30%,#F15922), color-stop(98%,#FA241A));
+    background: -webkit-linear-gradient(top, #F15922 30%,#FA241A 98%);
+    background: -o-linear-gradient(top, #F15922 30%,#FA241A 98%);
+    background: -ms-linear-gradient(top, #F15922 30%,#FA241A 98%);
+    background: linear-gradient(top, #F15922 30%,#FA241A 98%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F15922', endColorstr='#FA241A',GradientType=0 );
     border-radius: 4px;
     color: white;
     text-decoration: none;
@@ -440,14 +440,14 @@
 }
 
 .part_container .part_listing .right_col a.add_cart{
-    background: #F23805; /* Old browsers */
-    background: -moz-linear-gradient(top, #F23805 30%, #BF0411 98%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(30%,#F23805), color-stop(98%,#BF0411)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #F23805 30%,#BF0411 98%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #F23805 30%,#BF0411 98%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #F23805 30%,#BF0411 98%); /* IE10+ */
-    background: linear-gradient(top, #F23805 30%,#BF0411 98%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F23805', endColorstr='#BF0411',GradientType=0 ); /* IE6-9 */
+    background: #F15922; /* Old browsers */
+    background: -moz-linear-gradient(top, #F15922 30%, #F23805 98%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(30%,#F15922), color-stop(98%,#F23805)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #F15922 30%,#F23805 98%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #F15922 30%,#F23805 98%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #F15922 30%,#F23805 98%); /* IE10+ */
+    background: linear-gradient(top, #F15922 30%,#F23805 98%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F15922', endColorstr='#F23805',GradientType=0 ); /* IE6-9 */
 }
 
 .part_container .part_listing .right_col a.add_cart:hover,.part_container .part_listing .right_col a.add_cart:active{

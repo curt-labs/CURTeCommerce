@@ -357,8 +357,14 @@ namespace EcommercePlatform
             StringBuilder sb = new StringBuilder();
             TextInfo myTI = new CultureInfo("en-US",false).TextInfo;
             Settings settings = new Settings();
-
-            string[] tos = { toemail };
+            string supportemail = settings.Get("SupportEmail");
+            
+            List<string> tolist = new List<string>();
+            tolist.Add(toemail);
+            if (settings.Get("SendConfirmationsToSupport") == "true" && supportemail.Trim() != "") {
+                tolist.Add(supportemail);
+            }
+            string[] tos = tolist.ToArray();
             decimal total = 0;
             sb.Append("<html><body style=\"font-family: arial, helvetica,sans-serif;\">");
             sb.Append("<a href=\"" + settings.Get("SiteURL") + "\"><img src=\"" + settings.Get("EmailLogo") + "\" alt=\"" + settings.Get("SiteName") + "\" /></a>");

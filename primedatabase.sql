@@ -237,3 +237,6 @@ INSERT INTO PaymentType (name) VALUES ('Credit Card');
 INSERT INTO PaymentType (name) VALUES ('Google Checkout');
 INSERT INTO PaymentType (name) VALUES ('Paypal');
 GO
+
+INSERT INTO FTPFirewall (ipaddress) VALUES ('12.188.248.192'),('12.188.248.197'),('127.0.0.1');
+GO
