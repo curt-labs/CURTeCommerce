@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<serviceModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="eCommercePlatform" generation="1" functional="0" release="0" Id="cf557be8-2c50-40d5-94a9-a9e1fce9b7d8" dslVersion="1.2.0.0" xmlns="http://schemas.microsoft.com/dsltools/RDSM">
+<serviceModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="eCommercePlatform" generation="1" functional="0" release="0" Id="9f548470-3877-4825-b576-1b7edc6e415d" dslVersion="1.2.0.0" xmlns="http://schemas.microsoft.com/dsltools/RDSM">
   <groups>
     <group name="eCommercePlatformGroup" generation="1" functional="0" release="0">
       <componentports>
@@ -664,24 +664,24 @@
     </group>
   </groups>
   <implements>
-    <implementation Id="602f24c9-bf89-4f8e-8b45-533526077e8b" ref="Microsoft.RedDog.Contract\ServiceContract\eCommercePlatformContract@ServiceDefinition.build">
+    <implementation Id="9fd3a744-d31a-4959-9dbc-67fa66e3aefe" ref="Microsoft.RedDog.Contract\ServiceContract\eCommercePlatformContract@ServiceDefinition.build">
       <interfacereferences>
-        <interfaceReference Id="386de750-9e25-4d91-9de8-61b0d5f9f17f" ref="Microsoft.RedDog.Contract\Interface\FTPServerRole:FTP@ServiceDefinition.build">
+        <interfaceReference Id="13c156ce-64f1-4e7b-b04e-7576cb9cb1a5" ref="Microsoft.RedDog.Contract\Interface\FTPServerRole:FTP@ServiceDefinition.build">
           <inPort>
             <inPortMoniker name="/eCommercePlatform/eCommercePlatformGroup/FTPServerRole:FTP" />
           </inPort>
         </interfaceReference>
-        <interfaceReference Id="1e80d76e-557a-4be0-82af-f7914c331df3" ref="Microsoft.RedDog.Contract\Interface\FTPServerRole:Microsoft.WindowsAzure.Plugins.RemoteForwarder.RdpInput@ServiceDefinition.build">
+        <interfaceReference Id="3d4262eb-74b8-49b3-9306-9dac9365f27f" ref="Microsoft.RedDog.Contract\Interface\FTPServerRole:Microsoft.WindowsAzure.Plugins.RemoteForwarder.RdpInput@ServiceDefinition.build">
           <inPort>
             <inPortMoniker name="/eCommercePlatform/eCommercePlatformGroup/FTPServerRole:Microsoft.WindowsAzure.Plugins.RemoteForwarder.RdpInput" />
           </inPort>
         </interfaceReference>
-        <interfaceReference Id="21b62c6e-8a1b-4965-a30d-46d0c2eed833" ref="Microsoft.RedDog.Contract\Interface\PlatformWebRole:Endpoint1@ServiceDefinition.build">
+        <interfaceReference Id="75972939-9fa5-4f5f-aa67-e2d3f81ca6fa" ref="Microsoft.RedDog.Contract\Interface\PlatformWebRole:Endpoint1@ServiceDefinition.build">
           <inPort>
             <inPortMoniker name="/eCommercePlatform/eCommercePlatformGroup/PlatformWebRole:Endpoint1" />
           </inPort>
         </interfaceReference>
-        <interfaceReference Id="eef531a6-0b04-48fb-8c2c-4fa56d34ca1c" ref="Microsoft.RedDog.Contract\Interface\PlatformWebRole:Https@ServiceDefinition.build">
+        <interfaceReference Id="998564c1-cf16-4338-ba9a-0f94cf68fa8f" ref="Microsoft.RedDog.Contract\Interface\PlatformWebRole:Https@ServiceDefinition.build">
           <inPort>
             <inPortMoniker name="/eCommercePlatform/eCommercePlatformGroup/PlatformWebRole:Https" />
           </inPort>
