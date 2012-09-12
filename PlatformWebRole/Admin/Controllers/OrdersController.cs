@@ -16,9 +16,18 @@ using AuthorizeNet.Helpers;
 namespace Admin.Controllers {
     public class OrdersController : BaseController {
 
-        public ActionResult Index() {
-            List<Orders> orders = new Orders().GetAll();
+        public ActionResult Index(int page = 1, int perpage = 10) {
+            int count = new Orders().Count();
+            int pages = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(count) / perpage));
+            if (page > pages) {
+                page = pages;
+            }
+            List<Orders> orders = new Orders().GetOrdersByPage(page, perpage);
             ViewBag.orders = orders;
+            ViewBag.page = page;
+            ViewBag.pages = pages;
+            ViewBag.perpage = perpage;
+            ViewBag.count = count;
             return View();
         }
 
@@ -43,10 +52,12 @@ namespace Admin.Controllers {
             return RedirectToAction("Items", new { id = id });
         }
 
-        public ActionResult Add() {
-            List<Customer> customers = new Customer().GetAll().OrderBy(x => x.lname).ToList<Customer>();
-            ViewBag.customers = customers;
+        [NoValidation]
+        public string Search(string searchtext = "") {
+            return Orders.Search(searchtext);
+        }
 
+        public ActionResult Add() {
             List<Country> countries = UDF.GetCountries();
 
             Customer cust = new Customer();

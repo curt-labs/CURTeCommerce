@@ -24,6 +24,9 @@
         shippingresponse = new Admin.Models.ShippingResponse();
     }
 
+    Admin.Models.Settings settings = ViewBag.settings ?? new Admin.Models.Settings();
+    List<string> freeshippingtypes = settings.Get("FreeShippingType").Split(',').ToList<string>();
+
     string error = ViewBag.error;
     string shipping_type = "";
     ViewBag.Title = "| Add Order";
@@ -68,17 +71,16 @@
         </div>
         <form action="/Admin/Orders/Step4" method="post" id="shipping_type" class="admin_form">
             <fieldset>
-                @if (shippingresponse.Result != null) {
-                    int shipcount = 0;
-                    for (int i = shippingresponse.Result.Count - 1; i >= 0; i--) {
-                        Admin.Models.ShipmentRateDetails rate = shippingresponse.Result[i];
-                        if (rate.ServiceType != null) {
+                @if (shippingresponse != null && shippingresponse.Status != "ERROR" && shippingresponse.Result != null && shippingresponse.Result.Count > 0) {
+                        int shipcount = 0;
+                        for (int i = shippingresponse.Result.Count - 1; i >= 0; i--) {
                             shipcount++;
+                            Admin.Models.ShipmentRateDetails rate = shippingresponse.Result[i];
                             <label for="shipping_@(shipcount)">
-                                @if (cart.HasFreeShipping() && rate.ServiceType == ViewBag.settings.Get("FreeShippingType")) {
+                                @if (cart.HasFreeShipping() && freeshippingtypes.Contains(rate.ServiceType)) {
                                     shipping_type = rate.ServiceType;
                                     <input type="radio" name="shipping_type" id="shipping_@(shipcount)" value="@rate.ServiceType|0" @((shipcount == 1) ? "checked=checked" : "") />
-                                    <span class="rate">Free Shipping - @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rate.ServiceType.Replace("_", " ").ToLower()) (1 - 3) Business Days</span>
+                                    <span class="rate">Free Shipping - @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rate.ServiceType.Replace("_", " ").ToLower())</span>
                                 } else {
                                     shipping_type = rate.ServiceType;
                                     <input type="radio" name="shipping_type" id="shipping_@(shipcount)" value="@rate.ServiceType|@rate.Rates.FirstOrDefault().NetCharge.Key" @((shipcount == 1) ? "checked=checked" : "") />
@@ -86,7 +88,11 @@
                                 }
                             </label>
                         }
-                    }
+                        <input type="submit" class="button" id="btnChooseShippingType" value="Proceed to Payment" />
+                } else if (shippingresponse.Status == "ERROR") {
+                    <p>There was a problem with FedEx: @shippingresponse.Status_Description</p>
+                } else {
+                        <p>There was a problem with FedEx. Please try again.</p>
                 }
                 <input type="hidden" name="id" id="customerID" value="@customer.ID" />
                 <input type="submit" class="button" id="btnChooseShippingType" value="Choose" />

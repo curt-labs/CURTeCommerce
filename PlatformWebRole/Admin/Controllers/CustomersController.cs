@@ -3,14 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Admin.Models;
 
 namespace Admin.Controllers {
     public class CustomersController : BaseController {
 
-        public ActionResult Index() {
+        public ActionResult Index(int page = 1, int perpage = 10) {
 
-            List<Customer> custs = new Customer().GetAll();
+            int count = new Customer().Count();
+            int pages = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(count) / perpage));
+            if (page > pages) {
+                page = pages;
+            }
+            List<AdminCustomer> custs = new Customer().GetCustomersByPage(page, perpage);
             ViewBag.custs = custs;
+            ViewBag.page = page;
+            ViewBag.pages = pages;
+            ViewBag.perpage = perpage;
+            ViewBag.count = count;
 
             string error = "";
             if (TempData["error"] != null) {
@@ -52,6 +62,11 @@ namespace Admin.Controllers {
             }
 
             return RedirectToAction("Info", "Customers", new { id = id });
+        }
+
+        [NoValidation]
+        public string Search(string searchtext = "") {
+            return AdminCustomer.Search(searchtext);
         }
         
         [AcceptVerbs(HttpVerbs.Post)]

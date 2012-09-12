@@ -1,9 +1,4 @@
 ﻿@{
-    List<Admin.Customer> customers = ViewBag.customers;
-    if (customers == null) {
-        customers = new List<Admin.Customer>();
-    }
-
     List<string> errors = ViewBag.errors;
     if (errors == null) {
         errors = new List<string>();
@@ -66,17 +61,12 @@
         </ul>
     }
     <h3>Select a customer OR add a New Customer</h3>
-    <form action="/Admin/Orders/Step2" method="post" class="admin_form">
-        <label for="customerID">
-            Select a Customer<br />
-            <select name="id" id="customerID" required title="A Customer is Required" >
-                <option value="">- Select a Customer -</option>
-                @foreach(Admin.Customer cust in customers) {
-                    <option value="@cust.ID">@cust.fname @cust.lname (@cust.email)</option>
-                }
-            </select>
-            <input type="submit" id="btnChoose" class="button" value="Choose" />
+    <form action="/Admin/Orders/Step2" method="post" class="admin_form" id="OrderStep2">
+        <label for="customersearch">
+            Search for a Customer<br />
+            <input type="text" id="customersearch" placeholder="Search by name or email" />
         </label>
+        <input type="hidden" id="customerID" name="id" />
         <input type="button" id="newCustomer" class="button" value="New Customer" />
     </form>
     <form action="/Admin/Orders/Step1New" method="post" class="admin_form" id="newCustomerForm" style="display: none;">

@@ -208,6 +208,12 @@ namespace Admin.Models {
             }
             return folderpath;
         }
+
+        public static string getURLWithoutQueryString() {
+            string url = "";
+            url = HttpContext.Current.Request.Url.AbsolutePath;
+            return url;
+        }
     }
 
     public static class UDE {

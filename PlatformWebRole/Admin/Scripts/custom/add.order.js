@@ -1,5 +1,36 @@
-﻿var addPart,updateTotal, emptyCart, removePart, newCustomer, toTitleCase;
+﻿var addPart,updateTotal, emptyCart, removePart, newCustomer, toTitleCase, searchCustomers;
 $(function () {
+    $("#customersearch").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/Admin/Customers/Search",
+                dataType: "json",
+                data: {
+                    searchtext: request.term
+                },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return {
+                            label: item.fname + " " + item.lname + " (" + item.email + ")",
+                            value: item.fname + " " + item.lname + " (" + item.email + ")",
+                            id: item.ID
+                        }
+                    }));
+                }
+            });
+        },
+        minLength: 2,
+        select: function (event, ui) {
+            $('#customerID').attr('value', ui.item.id);
+            $('#OrderStep2').submit();
+        },
+        open: function () {
+            $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+        },
+        close: function () {
+            $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+        }
+    });
 
     $(document).on('click', '#same', function () {
         if ($(this).is(':checked')) {
@@ -66,6 +97,10 @@ $(function () {
 
     $('label[for=shipping_types]').show();
 });
+
+searchCustomers = function (data) {
+    console.log(data);
+}
 
 addPart = (function (event) {
     event.preventDefault();

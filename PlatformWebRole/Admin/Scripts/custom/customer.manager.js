@@ -14,9 +14,40 @@ $(function () {
         });
     };
 
-    customerTable = $('.customerTable').dataTable({ 'bJQueryUI': true });
-    //cartItemTable = $('#cart table').dataTable({ 'bJQueryUI': true });
+    $(document).on('change', '#tableperpage', function () {
+        $('#formperpage').submit();
+    });
 
+    $("#tablesearch").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/Admin/Customers/Search",
+                dataType: "json",
+                data: {
+                    searchtext: request.term
+                },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return {
+                            label: item.fname + " " + item.lname + " (" + item.email + ")",
+                            value: item.fname + " " + item.lname + " (" + item.email + ")",
+                            id: item.ID
+                        }
+                    }));
+                }
+            });
+        },
+        minLength: 2,
+        select: function (event, ui) {
+            window.location.href = "/Admin/Customers/Info/" + ui.item.id
+        },
+        open: function () {
+            $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+        },
+        close: function () {
+            $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+        }
+    });
     $(document).on('click', 'a.suspension', function (e) {
         e.preventDefault();
         var id = $(this).data('id');

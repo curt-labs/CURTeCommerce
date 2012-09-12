@@ -9,12 +9,51 @@ namespace Admin {
     partial class Customer {
         public string plainpassword { get; set; }
 
-        internal List<Customer> GetAll() {
+        internal List<AdminCustomer> GetAll() {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-            List<Customer> custs = db.Customers.OrderBy(x => x.dateAdded).ToList<Customer>();
+            List<AdminCustomer> custs = (from c in db.Customers
+                                         orderby c.dateAdded
+                                         select new AdminCustomer {
+                                             ID = c.ID,
+                                             fname = c.fname,
+                                             lname = c.lname,
+                                             phone = c.phone,
+                                             email = c.email,
+                                             created = c.dateAdded,
+                                             status = (c.isSuspended == 1) ? "Suspended" : "Active",
+                                             ordercount = c.Carts.Where(x => x.payment_id > 0).Count()
+                                         }).ToList<AdminCustomer>();
             if (custs == null) {
-                custs = new List<Customer>();
+                custs = new List<AdminCustomer>();
             }
+            return custs;
+        }
+
+        internal List<AdminCustomer> GetCustomersByPage(int page = 1, int perpage = 10) {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            
+            List<AdminCustomer> custs = (from c in db.Customers
+                                         orderby c.lname
+                                         select new AdminCustomer {
+                                             ID = c.ID,
+                                             fname = c.fname,
+                                             lname = c.lname,
+                                             phone = c.phone,
+                                             email = c.email,
+                                             created = c.dateAdded,
+                                             status = (c.isSuspended == 1) ? "Suspended" : "Active",
+                                             ordercount = c.Carts.Where(x => x.payment_id > 0).Count()
+                                         }).Skip(perpage * (page - 1)).Take(perpage).ToList<AdminCustomer>();
+            if (custs == null) {
+                custs = new List<AdminCustomer>();
+            }
+            return custs;
+        }
+
+        internal int Count() {
+            int custs = 0;
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            custs = db.Customers.Count();
             return custs;
         }
 

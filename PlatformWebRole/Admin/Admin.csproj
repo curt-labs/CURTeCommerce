@@ -165,6 +165,7 @@
     <Compile Include="Models\ContactManagement.cs" />
     <Compile Include="Models\ContentManagement.cs" />
     <Compile Include="Models\ContentPage.cs" />
+    <Compile Include="Models\AdminCustomer.cs" />
     <Compile Include="Models\InvoiceCount.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\State.cs" />
@@ -305,6 +306,7 @@
     <Content Include="Content\img\module_icons\PostageStamp.png" />
     <Content Include="Content\img\module_icons\Question.png" />
     <Content Include="Content\img\module_icons\Quill.png" />
+    <Content Include="Content\img\module_icons\Shield.png" />
     <Content Include="Content\img\module_icons\ShoppingCart.png" />
     <Content Include="Content\img\module_icons\SiteMap.png" />
     <Content Include="Content\img\module_icons\Users.png" />
