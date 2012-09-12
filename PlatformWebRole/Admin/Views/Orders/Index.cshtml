@@ -4,6 +4,7 @@
     int perpage = ViewBag.perpage ?? 10;
     int count = ViewBag.count ?? 0;
     int pagestart = ((page - 1) * perpage) + 1;
+    pagestart = (pagestart < 0) ? 1 : pagestart;
     int pageend = ((page - 1) * perpage) + perpage;
     int pages = ViewBag.pages ?? Convert.ToInt32(Math.Ceiling(Convert.ToDouble(count) / perpage));
     string evenodd = "even";

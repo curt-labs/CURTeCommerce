@@ -22,7 +22,10 @@ namespace Admin.Controllers {
             if (page > pages) {
                 page = pages;
             }
-            List<Orders> orders = new Orders().GetOrdersByPage(page, perpage);
+            List<Orders> orders = new List<Orders>();
+            if (page > 0) {
+                orders = new Orders().GetOrdersByPage(page, perpage);
+            }
             ViewBag.orders = orders;
             ViewBag.page = page;
             ViewBag.pages = pages;

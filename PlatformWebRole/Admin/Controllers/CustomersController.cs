@@ -15,7 +15,10 @@ namespace Admin.Controllers {
             if (page > pages) {
                 page = pages;
             }
-            List<AdminCustomer> custs = new Customer().GetCustomersByPage(page, perpage);
+            List<AdminCustomer> custs = new List<AdminCustomer>();
+            if (page > 0) {
+                custs = new Customer().GetCustomersByPage(page, perpage);
+            }
             ViewBag.custs = custs;
             ViewBag.page = page;
             ViewBag.pages = pages;
