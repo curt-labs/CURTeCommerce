@@ -1004,7 +1004,7 @@ GO
 
 CREATE TABLE Shipment (
 	ID int IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	order_id varchar(255) NULL,
+	order_id int NOT NULL,
 	shipment_number varchar(255) NULL,
 	tracking_number varchar(255) NULL,
 	dateShipped datetime NULL,

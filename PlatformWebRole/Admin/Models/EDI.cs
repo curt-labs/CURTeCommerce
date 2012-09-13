@@ -15,14 +15,15 @@ namespace Admin.Models {
                 try {
                     Settings settings = new Settings();
                     Cart order = new Cart().Get(id);
+                    string ponumber = settings.Get("EDIPOPreface") + order.payment_id.ToString();
                     if (order.CartItems.Count > 0) {
                         CloudBlob blob = null;
                         string edicontent = "";
                         int linecount = 1;
                         // linecount is just for the PO section and doesn't include the head or tail
                         // next two lines are head
-                        edicontent += "ISA*00*          *00*          *12*" + settings.Get("EDIPhone") + "     *01*809988975      *" + String.Format("{0:yyMMdd}*{0:hhmm}", DateTime.Now) + "*U*00401*" + order.payment_id.ToString("000000000") + "*0*P*>~" + Environment.NewLine;
-                        edicontent += "GS*PO*" + settings.Get("EDIPhone") + "*809988975*" + String.Format("{0:yyyyMMdd}*{0:hhmm}", DateTime.Now) + "*" + order.payment_id.ToString("000000000") + "*X*004010~" + Environment.NewLine;
+                        edicontent += "ISA*00*          *00*          *12*" + settings.Get("EDIPhone") + "     *01*809988975      *" + String.Format("{0:yyMMdd}*{0:hhmm}", DateTime.Now) + "*U*00401*" + ponumber + "*0*P*>~" + Environment.NewLine;
+                        edicontent += "GS*PO*" + settings.Get("EDIPhone") + "*809988975*" + String.Format("{0:yyyyMMdd}*{0:hhmm}", DateTime.Now) + "*" + ponumber + "*X*004010~" + Environment.NewLine;
                         // begin PO section
                         edicontent += "ST*850*" + order.payment_id + "~" + Environment.NewLine;
                         linecount++;
@@ -63,8 +64,8 @@ namespace Admin.Models {
                         edicontent += "SE*" + linecount + "*" + order.payment_id + "~" + Environment.NewLine;
                         // end PO section
                         // begin Tail section
-                        edicontent += "GE*1*" + order.payment_id.ToString("000000000") + "~" + Environment.NewLine;
-                        edicontent += "IEA*1*" + order.payment_id.ToString("000000000") + "~";
+                        edicontent += "GE*1*" + ponumber + "~" + Environment.NewLine;
+                        edicontent += "IEA*1*" + ponumber + "~";
 
                         // write file
                         DiscountBlobContainer blobcontainer = BlobManagement.GetContainer("edi");

@@ -39,7 +39,13 @@ namespace Admin
 
         internal void LoadOrder() {
             try {
-                this.order = new Cart().GetByPayment(Convert.ToInt32(this.orderID));
+                Settings settings = new Settings();
+                string EDIPOPreface = settings.Get("EDIPOPreface");
+                string oid = this.orderID;
+                if (EDIPOPreface != "") {
+                    oid = oid.Replace(EDIPOPreface, "");
+                }
+                this.order = new Cart().GetByPayment(Convert.ToInt32(oid));
             } catch {
                 this.order = null;
             }
