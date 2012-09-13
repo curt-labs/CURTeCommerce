@@ -19,6 +19,7 @@
     <p class="void">VOID</p>
 } else {
     <a class="button" href="/Admin/Orders/Void/@order.payment_id" id="void">Void Order</a>
+    <a class="button" href="/Admin/Orders/RegeneratePO/@order.payment_id">Regenerate Purchase Order</a>
 }
 <ul class="tabs">
     <li>
@@ -56,7 +57,7 @@
         </div>
         <div class="left">
             <span class="title">Order Total</span>
-            <span class="subdata"><span>Subtotal</span>@String.Format("{0:C}",order.GetSubTotal())</span>
+            <span class="subdata"><span>Subtotal</span>@String.Format("{0:C}", order.GetSubTotal())</span>
             <span class="subdata"><span>Shipping</span>@String.Format("{0:C}", order.shipping_price)</span>
             <span class="subdata last"><span>Tax</span>@String.Format("{0:C}", order.tax)</span>
             <span class="data">@String.Format("{0:C}", order.getTotal())</span>
@@ -109,7 +110,7 @@
         @if (order.Shipments.Count > 0 && order.Shipments[0].dateShipped != null) {
             <label>
                 Shipping Date
-                <input type="text" value="@String.Format("{0: M/d/yyyy}",order.Shipments[0].dateShipped)" readonly />
+                <input type="text" value="@String.Format("{0: M/d/yyyy}", order.Shipments[0].dateShipped)" readonly />
             </label>
         }
         <h3>Shipping Address</h3>

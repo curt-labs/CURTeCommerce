@@ -48,6 +48,15 @@ namespace Admin.Controllers {
             return View();
         }
 
+        [NoValidation]
+        public ActionResult RegeneratePO(int id = 0) {
+            EDI edi = new EDI();
+            Cart order = new Cart();
+            order = order.GetByPayment(id);
+            edi.CreatePurchaseOrder(order.ID);
+            return RedirectToAction("Items", new { id = id });
+        }
+
         public ActionResult Void(int id = 0) {
             Cart order = new Cart();
             order = order.GetByPayment(id);
