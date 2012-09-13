@@ -12,6 +12,8 @@
 <link href="/Admin/Content/css/invoice.manager.css" rel="stylesheet" type="text/css" />
 <link href="/Admin/Content/css/invoice.manager.print.css" rel="stylesheet" type="text/css" media="print" />
 @foreach(Admin.Invoice invoice in invoices) {
+    freight = 0;
+    misccharges = 0;
     <div class="invoice">
         <div class="iheader">
             <img src="/Admin/Content/img/invoicelogo.png" alt="CURT Manufacturing: The FIRST Name in Towing Products" class="curtlogo" />
