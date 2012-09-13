@@ -16,7 +16,7 @@ insert into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('Blog','/
 insert into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('Customers','/Admin/Customers',0,'View Customers',1,'/Admin/Content/img/module_icons/MemberCard.png');
 insert into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('Banners','/Admin/Banner',0,'Banner Management',1,'/Admin/Content/img/module_icons/Desktop.png');
 insert into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('Reporting','/Admin/Reporting',0,'Reporting Tools',1,'/Admin/Content/img/module_icons/FormatNumber.png');
-insert into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('FTP','/Admin/FTP',0,'FTP Access',1,NULL);
+insert into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('FTP','/Admin/FTP',0,'FTP Access',1,'/Admin/Content/img/module_icons/Shield.png');
 insert into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('Task Scheduler','/Admin/Scheduler',0,'Task Scheduler',1,'/Admin/Content/img/module_icons/SiteMap.png');
 insert into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('Invoices','/Admin/Invoice',0,'View Invoices',1,'/Admin/Content/img/module_icons/Inbox.png');
 GO
