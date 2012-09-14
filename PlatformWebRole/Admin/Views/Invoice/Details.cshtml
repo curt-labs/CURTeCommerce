@@ -7,6 +7,17 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     decimal freight = 0;
     decimal misccharges = 0;
+    Admin.InvoiceCode TradeDiscount = new Admin.InvoiceCode();
+    List<Admin.InvoiceCode> codes = invoice.InvoiceCodes.ToList<Admin.InvoiceCode>();
+    int codeindex = codes.FindIndex(
+        delegate(Admin.InvoiceCode ic) {
+            return ic.description.ToUpper().Contains("TRADE DISCOUNT");
+        });
+    if(codeindex > -1) {
+        TradeDiscount = codes[codeindex];
+        codes.RemoveAt(codeindex);
+    }
+    
 }
 <link href="/Admin/Content/css/invoice.manager.css" rel="stylesheet" type="text/css" />
 <link href="/Admin/Content/css/invoice.manager.print.css" rel="stylesheet" type="text/css" media="print" />
@@ -149,7 +160,7 @@
                     <td class="totals">@String.Format("{0:C}", (invoice.InvoiceItems[i].quantity * invoice.InvoiceItems[i].price))</td>
                 </tr>
             }
-            @foreach (Admin.InvoiceCode code in invoice.InvoiceCodes) {
+            @foreach (Admin.InvoiceCode code in codes) {
                 <tr>
                     <td></td>
                     <td class="desc">@code.description</td>
@@ -192,7 +203,7 @@
             <td class="litem">Net Sales</td>
             <td class="totals">@String.Format("{0:C}",invoice.subtotal)</td>
             <td class="discountlabel">Trade Discount</td>
-            <td class="discountamount" colspan="2">@String.Format("{0:C}",0)</td>
+            <td class="discountamount" colspan="2">@String.Format("{0:C}",((TradeDiscount != null && TradeDiscount.value != null) ? TradeDiscount.value : 0))</td>
         </tr>
         <tr>
             <td class="litem">Misc Charges</td>
