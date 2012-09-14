@@ -25,15 +25,11 @@ namespace Admin.Models {
             return invoice;
         }
 
-        public static List<Invoice> GetInvoicesSinceTime(DateTime? lastRan) {
+        public static List<Invoice> GetInvoicesByDateRange(DateTime start, DateTime end) {
             List<Invoice> invoices = new List<Invoice>();
             try {
                 EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-                if (lastRan != null) {
-                    invoices = db.Invoices.Where(x => x.created >= lastRan).ToList<Invoice>();
-                } else {
-                    invoices = db.Invoices.ToList<Invoice>();
-                }
+                invoices = db.Invoices.Where(x => x.created > start && x.created <= end).ToList<Invoice>();
             } catch { };
 
             return invoices;

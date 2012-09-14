@@ -131,15 +131,20 @@ namespace Admin.Controllers {
         }
 
         [NoValidation]
-        public void AutomatedInvoiceReport(string lastRan = "") {
-            DateTime? last = null;
-            if (lastRan != "") {
-                string dtstring = lastRan.Substring(0, 2) + "-" + lastRan.Substring(2, 2) + "-" + lastRan.Substring(4, 4);
-                dtstring += " " + lastRan.Substring(8, 2) + ":" + lastRan.Substring(10, 2) + ":" + lastRan.Substring(12, 2);
-                last = Convert.ToDateTime(dtstring);
+        public void AutomatedInvoiceReport(string startdate = "", string enddate = "") {
+            DateTime start = new DateTime();
+            DateTime end = new DateTime();
+            if (startdate == "") {
+                start = DateTime.Now.AddDays(-1);
+            } else {
+                start = Convert.ToDateTime(startdate);
             }
-
-            List<Invoice> invoices = Reporting.GetInvoicesSinceTime(last);
+            if (enddate == "") {
+                end = DateTime.Now;
+            } else {
+                end = Convert.ToDateTime(enddate);
+            }
+            List<Invoice> invoices = Reporting.GetInvoicesByDateRange(start, end);
 
             foreach (Invoice invoice in invoices) {
 
