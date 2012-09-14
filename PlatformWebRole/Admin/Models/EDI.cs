@@ -25,9 +25,9 @@ namespace Admin.Models {
                         edicontent += "ISA*00*          *00*          *12*" + settings.Get("EDIPhone") + "     *01*809988975      *" + String.Format("{0:yyMMdd}*{0:hhmm}", DateTime.Now) + "*U*00401*" + order.payment_id.ToString("000000000") + "*0*P*>~" + Environment.NewLine;
                         edicontent += "GS*PO*" + settings.Get("EDIPhone") + "*809988975*" + String.Format("{0:yyyyMMdd}*{0:hhmm}", DateTime.Now) + "*" + order.payment_id.ToString("000000000") + "*X*004010~" + Environment.NewLine;
                         // begin PO section
-                        edicontent += "ST*850*" + order.payment_id + "~" + Environment.NewLine;
+                        edicontent += "ST*850*000000001~" + Environment.NewLine;
                         linecount++;
-                        edicontent += "BEG*00*DS*" + order.payment_id + "**" + String.Format("{0:yyyyMMdd}", order.Payment.created) + "~" + Environment.NewLine;
+                        edicontent += "BEG*00*DS*" + ponumber + "**" + String.Format("{0:yyyyMMdd}", order.Payment.created) + "~" + Environment.NewLine;
                         linecount++;
                         edicontent += "CUR*BT*USD~" + Environment.NewLine;
                         linecount++;
@@ -61,7 +61,7 @@ namespace Admin.Models {
                         linecount++;
                         edicontent += "CTT*" + order.CartItems.Count + "*" + order.getCount() + "~" + Environment.NewLine;
                         linecount++;
-                        edicontent += "SE*" + linecount + "*" + order.payment_id + "~" + Environment.NewLine;
+                        edicontent += "SE*" + linecount + "*000000001~" + Environment.NewLine;
                         // end PO section
                         // begin Tail section
                         edicontent += "GE*1*" + order.payment_id.ToString("000000000") + "~" + Environment.NewLine;
