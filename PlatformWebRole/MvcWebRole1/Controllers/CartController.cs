@@ -458,6 +458,5 @@ namespace EcommercePlatform.Controllers {
                 return RedirectToAction("Index");
             }
         }
-
     }
 }
