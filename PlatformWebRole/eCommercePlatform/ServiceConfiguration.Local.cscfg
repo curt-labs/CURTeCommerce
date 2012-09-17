@@ -62,4 +62,17 @@
       <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="AD624655A0D3DBE776DB9E860965BED30BD96330" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
+  <Role name="Admin">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="curtplatform" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBnQYJKoZIhvcNAQcDoIIBjjCCAYoCAQAxggFOMIIBSgIBADAyMB4xHDAaBgNVBAMME1dpbmRvd3MgQXp1cmUgVG9vbHMCEHZsq2DtrV6wQhr2sJFlhgQwDQYJKoZIhvcNAQEBBQAEggEAh3CdheXFgDf1e24hQm5lzaQaQJ1Mq6vqXleRyR311i4076lvYguECstVUnWvj0M3nlLZtRzRD9G793yEmjeScZMTFfNTyBfzGB0F0Z20+I1dr/OA95Mni3t1gmnoEDmRFnIZQROYf6QaaIzAWSuHDMXx/Q+cObRiQCONRh5qiE7c+YShi0A4EWIASqo7RdHf11mEcn6OvC8gV7+Io30Mr+O90cfCRqE6l9/wPvIly9qKFt3Z55w7Ti7GtKgkDSIPUlziFiptGnSqXAmAV+JVsd1YCYDgwRaytEOMm/ZOo8A6AL4+sBxLwedwq3WUz9RFQ7YsLMtRflnRlIkV9azZmzAzBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECJl/Z3y8qhAlgBAx1+b/EtKry63t7eTmZMF8" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2013-09-05T23:59:59.0000000-06:00" />
+      <Setting name="StorageConnectionString" value="DefaultEndpointsProtocol=http;AccountName=curtplatform;AccountKey=0rAk0pTnb2/zOto3yugtlpfGhrTVVwkdFXas++1xWxuhylrh7ZAK1CheInjI/7nMy+fMuKklodm7wXLaMzsLBw==" />
+    </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="AD624655A0D3DBE776DB9E860965BED30BD96330" thumbprintAlgorithm="sha1" />
+    </Certificates>
+  </Role>
 </ServiceConfiguration>

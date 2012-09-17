@@ -41,6 +41,14 @@
     <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Admin\Admin.csproj">
+      <Name>Admin</Name>
+      <Project>{212fcded-61df-4a5f-acaf-80df3050351d}</Project>
+      <Private>True</Private>
+      <RoleType>Web</RoleType>
+      <RoleName>Admin</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
     <ProjectReference Include="..\MvcWebRole1\PlatformWebRole.csproj">
       <Name>PlatformWebRole</Name>
       <Project>{836dba86-bd2c-4f45-b3bd-4f8543fe2dd9}</Project>

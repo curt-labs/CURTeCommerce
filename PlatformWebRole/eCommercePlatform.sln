@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlatformWebRole", "MvcWebRo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin", "Admin\Admin.csproj", "{212FCDED-61DF-4A5F-ACAF-80DF3050351D}"
 EndProject
-Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "Admin.Azure", "Admin.Azure\Admin.Azure.ccproj", "{E5B99277-72AC-4CC1-8C5C-8DEF8C770587}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureFtpServer", "AzureFtpServer\AzureFtpServer.csproj", "{A6520CEB-6E55-4C9D-B581-64E432DB16D0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FTPServerRole", "WorkerRole1\FTPServerRole.csproj", "{19D55950-ED17-46EF-85BC-78690CD6AE4E}"
@@ -17,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskScheduler", "TaskSchedu
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 8
+		SccNumberOfProjects = 7
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://s-foundation:8080/tfs/defaultcollection
 		SccLocalPath0 = .
@@ -30,18 +28,15 @@ Global
 		SccProjectUniqueName3 = Admin\\Admin.csproj
 		SccProjectName3 = ../Admin/Admin
 		SccLocalPath3 = Admin
-		SccProjectUniqueName4 = Admin.Azure\\Admin.Azure.ccproj
-		SccProjectName4 = Admin.Azure
-		SccLocalPath4 = Admin.Azure
-		SccProjectUniqueName5 = AzureFtpServer\\AzureFtpServer.csproj
-		SccProjectName5 = AzureFtpServer
-		SccLocalPath5 = AzureFtpServer
-		SccProjectUniqueName6 = WorkerRole1\\FTPServerRole.csproj
-		SccProjectName6 = WorkerRole1
-		SccLocalPath6 = WorkerRole1
-		SccProjectUniqueName7 = TaskScheduler\\TaskScheduler.csproj
-		SccProjectName7 = TaskScheduler
-		SccLocalPath7 = TaskScheduler
+		SccProjectUniqueName4 = AzureFtpServer\\AzureFtpServer.csproj
+		SccProjectName4 = AzureFtpServer
+		SccLocalPath4 = AzureFtpServer
+		SccProjectUniqueName5 = WorkerRole1\\FTPServerRole.csproj
+		SccProjectName5 = WorkerRole1
+		SccLocalPath5 = WorkerRole1
+		SccProjectUniqueName6 = TaskScheduler\\TaskScheduler.csproj
+		SccProjectName6 = TaskScheduler
+		SccLocalPath6 = TaskScheduler
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,10 +55,6 @@ Global
 		{212FCDED-61DF-4A5F-ACAF-80DF3050351D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{212FCDED-61DF-4A5F-ACAF-80DF3050351D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{212FCDED-61DF-4A5F-ACAF-80DF3050351D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E5B99277-72AC-4CC1-8C5C-8DEF8C770587}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E5B99277-72AC-4CC1-8C5C-8DEF8C770587}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E5B99277-72AC-4CC1-8C5C-8DEF8C770587}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E5B99277-72AC-4CC1-8C5C-8DEF8C770587}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A6520CEB-6E55-4C9D-B581-64E432DB16D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A6520CEB-6E55-4C9D-B581-64E432DB16D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6520CEB-6E55-4C9D-B581-64E432DB16D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
