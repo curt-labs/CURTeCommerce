@@ -22,7 +22,7 @@
     @Html.Raw(page.content)
     <p>You can print this page for your records.</p>
     <p><strong>Order ID:</strong> @order.payment_id</p>
-    <p><strong>Paid by:</strong> @payment.PaymentTypes.name on @String.Format("{0:M/d/yyyy} at {0:h:mm tt}",payment.created)</p>
+    <p><strong>Paid by:</strong> @payment.PaymentTypes.name on @String.Format("{0:M/d/yyyy} at {0:h:mm tt}", payment.created.ToLocalTime())</p>
     <div class="address">
         <span>Billing Address</span>
         @order.Billing.first @order.Billing.last<br />

@@ -31,7 +31,7 @@
     <div class="tab_container">
         <div class="tab_content" id="order">
             <p><strong>Order ID:</strong> @order.payment_id</p>
-            <p><strong>Paid by:</strong> @payment.PaymentTypes.name on @String.Format("{0:M/d/yyyy} at {0:h:mm tt}", payment.created)</p>
+            <p><strong>Paid by:</strong> @payment.PaymentTypes.name on @String.Format("{0:M/d/yyyy} at {0:h:mm tt}", payment.created.ToLocalTime())</p>
             <p><strong>Payment Status:</strong> @payment.status</p>
             <div class="address">
                 <span>Billing Address</span>
