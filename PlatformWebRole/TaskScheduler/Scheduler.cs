@@ -10,8 +10,8 @@ namespace TaskScheduler {
             Trace.WriteLine("Running Scheduled Tasks", "Information");
             int interval = (int)intervalValue;
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-            DateTime now = DateTime.Now;
-            DateTime past = DateTime.Now.AddMilliseconds(-interval);
+            DateTime now = DateTime.Now.ToUniversalTime();
+            DateTime past = DateTime.Now.AddMilliseconds(-interval).ToUniversalTime();
             List<ScheduledTask> tasks = db.ScheduledTasks.Where(x => (x.runtime != null && x.runtime.Value.TimeOfDay > past.TimeOfDay && x.runtime.Value.TimeOfDay <= now.TimeOfDay) || (x.runtime == null && (x.lastRan == null || x.lastRan.Value.AddMinutes(Convert.ToDouble(x.interval)).TimeOfDay <= now.TimeOfDay))).ToList<ScheduledTask>();
             Trace.WriteLine("Running " + tasks.Count + " Tasks", "Information");
             Logger.log("Running " + tasks.Count + " Tasks");

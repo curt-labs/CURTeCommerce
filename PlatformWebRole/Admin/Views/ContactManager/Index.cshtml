@@ -41,7 +41,7 @@
                     <tr>
                         <td>@inq.name</td>
                         <td>@inq.ContactType.label</td>
-                        <td>@Convert.ToDateTime(inq.dateAdded)</td>
+                        <td>@Convert.ToDateTime(inq.dateAdded.ToLocalTime())</td>
                         <td><img src="/Admin/Content/img/@((inq.followedUp == 0) ? "red_cross.png" : "Checkmark.svg")" alt="@((inq.followedUp == 0)?"Needs follw-up":"Follwed Up")" /></td>
                         <td>
                             <a href="javascript:void(0)" title="View Message" data-id="@inq.ID" class="viewMessage">View Message</a>

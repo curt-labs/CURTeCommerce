@@ -20,14 +20,13 @@ namespace Admin {
 
         public void Run() {
             string url = this.url;
-            url += "?lastRan=" + ((this.lastRan != null) ? String.Format("{0:MMddyyyyHHmmss}", this.lastRan) : "");
             WebClient wc = new WebClient();
             wc.Proxy = null;
             wc.DownloadString(url);
 
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             ScheduledTask t = db.ScheduledTasks.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<ScheduledTask>();
-            t.lastRan = DateTime.Now;
+            t.lastRan = DateTime.Now.ToUniversalTime();
             db.SubmitChanges();
         }
 

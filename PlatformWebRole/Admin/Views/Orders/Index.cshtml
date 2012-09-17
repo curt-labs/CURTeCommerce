@@ -57,7 +57,7 @@
                     <td>@order.orderID</td>
                     <td>@order.customerName</td>
                     <td>@order.itemcount</td>
-                    <td>@String.Format("{0:M/d/yyyy h:mm tt}", order.orderDate)</td>
+                    <td>@String.Format("{0:M/d/yyyy h:mm tt}", order.orderDate.ToLocalTime())</td>
                     <td>@order.PaymentMethod</td>
                     <td>@order.status</td>
                     <td>@String.Format("{0:C}", order.total)</td>

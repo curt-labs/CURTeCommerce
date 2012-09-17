@@ -88,6 +88,7 @@ namespace Admin.Controllers {
         public void DailyOrderReport() {
             DateTime start = DateTime.Now.AddDays(-1);
             DateTime end = DateTime.Now;
+            Settings settings = new Settings();
 
             List<Cart> orders = Reporting.GetOrdersByDateRange(start, end);
 
@@ -110,7 +111,6 @@ namespace Admin.Controllers {
                 System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
                 byte[] fileContents = encoding.GetBytes(writer.ToString());
 
-                Settings settings = ViewBag.settings;
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(settings.Get("FTPServer") + settings.Get("FTPOrderPath") + filename);
                 request.Method = WebRequestMethods.Ftp.UploadFile;
                 request.UseBinary = true;
@@ -134,6 +134,7 @@ namespace Admin.Controllers {
         public void AutomatedInvoiceReport(string startdate = "", string enddate = "") {
             DateTime start = new DateTime();
             DateTime end = new DateTime();
+            Settings settings = new Settings();
             if (startdate == "") {
                 start = DateTime.Now.AddDays(-1);
             } else {
@@ -175,7 +176,6 @@ namespace Admin.Controllers {
                 System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
                 byte[] fileContents = encoding.GetBytes(writer.ToString());
 
-                Settings settings = ViewBag.settings;
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(settings.Get("FTPServer") + settings.Get("FTPInvoicePath") + filename);
                 request.Method = WebRequestMethods.Ftp.UploadFile;
                 request.UseBinary = true;

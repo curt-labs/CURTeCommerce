@@ -25,7 +25,7 @@
 @foreach (Admin.ScheduledTask task in tasks) {
     <div id="task_@(task.ID)" class="task">
         <span class="name">@task.name</span>
-        <span class="runtime">@((task.runtime != null) ? "Daily at " + String.Format("{0:h:mm tt}", task.runtime.Value) : "")</span>
+        <span class="runtime">@((task.runtime != null) ? "Daily at " + String.Format("{0:h:mm tt}", task.runtime.Value.ToLocalTime()) : "")</span>
         <span class="interval">@((task.interval != null) ? "Every " + task.interval + " minutes" : "")</span>
         <span class="url">@task.url</span>
         <span class="runtime">@((task.lastRan != null) ? String.Format("{0:MM-dd-yyyy h:mm tt}", task.lastRan.Value) : "never")</span>

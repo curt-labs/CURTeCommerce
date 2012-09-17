@@ -44,7 +44,7 @@
             </label>
             <label>
                 Date Created
-                <input type="text" value="@Convert.ToDateTime(order.Payment.created)" readonly="readonly" />
+                <input type="text" value="@Convert.ToDateTime(order.Payment.created.ToLocalTime())" readonly="readonly" />
             </label>
             <label>
                 Payment Method
