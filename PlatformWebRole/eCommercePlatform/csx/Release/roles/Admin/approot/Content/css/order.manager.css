@@ -1,0 +1,246 @@
+﻿section {
+    position: relative;
+}
+
+section span.title{
+    margin-bottom: 40px;
+    color: #bf3504;
+    font-size: 16px;
+    display:inline-block;
+}
+
+section a.button{
+    display:inline-block;
+    width: 200px;
+    height: 45px;
+    background:#bf3504;
+    margin: 0px 25px 40px 25px;
+    -moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+    text-align:center;
+    color: white;
+    text-decoration:none;
+    font-size: 24px;
+    font-weight:600;
+    line-height:45px;
+}
+
+table tbody tr td img{
+    width: 20px;
+    margin:auto;
+    display:block;
+}
+
+table tbody tr td:first-child{
+    padding-left:10px;
+}
+
+table tbody tr td:first-child a{
+    color: #bf3504;
+    display: inline-block;
+}
+
+table tbody tr td:last-child{
+    text-align:center;
+}
+
+a.modalClose{
+    color: #2e2e30;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+#order div:nth-child(2){
+    margin-left: 30px;    
+}
+
+#order span.title{
+    display:block;
+    margin-bottom: 5px;
+    border-bottom: 1px solid black;
+    padding: 4px;
+}
+
+#order span.subdata {
+    display:block;
+    text-align:right;
+}
+
+#order span.subdata span {
+    float: left;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+#order span.last {
+    border-bottom: 1px solid black;
+}
+
+#order span.data {
+    margin-bottom: 50px;
+    display:block;
+    text-align:right;
+}
+
+#items article{
+    min-height: 150px;
+    padding: 10px 40px;
+    overflow:hidden;
+    border-bottom: 1px solid #e6e6e6;
+    clear:both;
+}
+
+#items article div{
+    float:left;
+    height: 150px;
+}
+
+#items article div:first-child{
+    display:table-cell;
+    vertical-align: middle;
+    margin-right: 25px;
+}
+
+#items article div:first-child img{
+    width: 150px;
+    display:inline-block;
+    vertical-align:middle;
+}
+
+#items article div:nth-child(2){
+    width: 50%;
+    border-right: 1px solid #e2e2e2;
+    margin-right:25px;    
+}
+
+#items article div:nth-child(2) p{
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+#items article div:last-child{
+    display:table-cell;    
+    vertical-align:middle;
+}
+
+#items article div:last-child span{
+    display:block;
+    font-size: 20px;
+    font-weight: 600;
+    text-align:right;
+    padding: 4px;
+    color: #bf3504;
+    vertical-align:middle;
+}
+
+#items article div:last-child span:last-child{
+    border-top: 2px solid black;
+    color: #38912d;
+}
+
+table#cart {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+table#cart thead th {
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    background:#343434;
+    padding: 8px 30px;
+}
+
+table#cart thead th:first-child {
+    border-radius: 8px 0 0px 0px;
+}
+
+table#cart thead th.last {
+    border-radius: 0 8px 0px 0px;
+}
+
+table#cart tbody tr:hover {
+    background-color: #F3F3F3;
+}
+
+table#cart tbody td {
+    border: 1px solid #ededed;
+    padding: 8px 30px;
+    vertical-align: middle;
+}
+
+table#cart tbody td.smallimg {
+    text-align: center;
+}
+
+table#cart tbody td.smallimg img {
+    height: 50px;
+    width: auto;
+}
+
+table#cart tbody td.quantity {
+    text-align: center;    
+}
+
+table#cart td.price {
+    text-align: right;
+}
+
+table#cart tbody td form {
+    display: inline-block;
+}
+table#cart tbody td input[type='number'] {
+    width: 50px;
+}
+
+table#cart tbody td a.remove {
+    color: #fff;
+    background-color: #E64D2D;
+    text-decoration: none;
+    font-weight: bold;
+    line-height: 1;
+    font-size: 15px;
+    height: 16px;
+    width: 16px;
+    display: inline-block;
+    text-align: center;
+    border-radius: 16px;
+    margin-left: 5px;
+}
+
+table#cart tbody td.quantity input[type='submit'] {
+    font-size: 0;
+    height: 20px;
+    width: 18px;
+    padding: 0;
+    margin: 0;
+    vertical-align: top;
+    background: url('/Content/img/save.png') top left no-repeat;
+    border: none;
+    cursor: pointer;
+}
+
+table#cart tbody td img {
+    max-width: 100px;    
+}
+
+table#cart tfoot td {
+    padding: 8px 30px;
+    vertical-align: middle;
+    border: 1px solid transparent;
+}
+
+table#cart tfoot td:first-child {
+    text-align: right;
+}
+
+.void {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: Maroon;
+    color: #fff;
+    border-radius: 8px;
+    text-align: center;
+    padding: 5px;
+}

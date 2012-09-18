@@ -1,0 +1,124 @@
+﻿@{
+    Admin.Models.PostWithCategories post = ViewBag.post;
+    if (post == null) {
+        post = new Admin.Models.PostWithCategories();   
+    }
+
+    List<Admin.BlogCategory> postcats = post.categories;
+    if(postcats == null) {
+        postcats = new List<Admin.BlogCategory>();
+    }
+
+    int profileid = ViewBag.profile.id;
+    if (post.profileID != 0) {
+        profileid = post.profileID;
+    }
+
+    List<Admin.Profile> authors = ViewBag.authors;
+    if (authors == null) {
+        authors = new List<Admin.Profile>();
+    }
+
+    List<Admin.BlogCategory> categories = ViewBag.categories;
+    if (categories == null) {
+        categories = new List<Admin.BlogCategory>();
+    }
+
+
+    string error = ViewBag.error;
+    if(error == null){
+        error = "";
+    }
+    
+    ViewBag.Title = "Edit Category";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/jquery.multiselect.css" rel="stylesheet" type="text/css" />
+<link href="/Admin/Content/css/blog.manager.css" rel="stylesheet" type="text/css" />
+<link href="/Admin/Content/css/admin_form.css" rel="stylesheet" type="text/css" />
+
+<span class="title">@((post.blogPostID > 0) ? "Edit" : "New") Post</span>
+
+<form class="admin_form" method="post" action="/Admin/Blog/SavePost/@post.blogPostID">
+    @if (error.Length > 0) {
+        <p class="error">@error</p>
+    }
+    <label for="post_title">
+        Title
+        <input type="text" name="post_title" id="post_title" placeholder="Enter the title of the post" title="Post Title is required." value="@((ViewBag.post_title != null && ViewBag.post_title.Length > 0) ? ViewBag.post_title : post.post_title)" required="required" />
+    </label>
+
+    <label for="profileid">
+        Author
+        <br />
+        <select name="profileid" id="profileid">
+            @foreach (Admin.Profile author in authors) {
+                <option value="@author.id" @((author.id == profileid) ? "selected=selected" : "")>@author.first @author.last</option>
+            }
+        </select>
+    </label>
+
+    <label for="content">
+        Content
+        <br />
+        <textarea name="content" class="post_content" rows="10" cols="50" id="content" placeholder="Enter the Post Content">@((ViewBag.content != null && ViewBag.content.Length > 0) ? ViewBag.content : post.post_text )</textarea>
+    </label>
+
+    <label for="categories" style="position: relative;">
+        Categories
+        <br />
+        <select name="categories" id="categories" multiple="true">
+            @foreach (Admin.BlogCategory category in categories)
+            {
+                <option value="@category.blogCategoryID" @((postcats.Any<Admin.BlogCategory>(x => x.blogCategoryID == category.blogCategoryID)) ? "selected=selected" : "")>@category.name</option>
+            }
+        </select>
+    </label>
+
+    <label for="keywords">
+        Keywords
+        <input type="text" name="keywords" id="keywords" placeholder="Enter the keywords" value="@((ViewBag.keywords != null && ViewBag.keywords.Length > 0) ? ViewBag.keywords : post.keywords)" />
+    </label>
+
+    <label for="meta_title">
+        Meta Title
+        <input type="text" name="meta_title" id="meta_title" placeholder="Enter the SEO Title" value="@((ViewBag.meta_title != null && ViewBag.meta_title.Length > 0) ? ViewBag.meta_title : post.meta_title )" />
+    </label>
+
+    <label for="meta_description">
+        Meta Description
+        <input type="text" name="meta_description" id="meta_description" placeholder="Enter the SEO Description" value="@((ViewBag.meta_description != null && ViewBag.meta_description.Length > 0) ? ViewBag.meta_description : post.meta_description )" />
+    </label>
+    @if (post.publishedDate != null) {
+        <label for="published">
+            <span class="subtext">(Published on @post.publishedDate.ToString())</span>
+            <br />Published? <input type="checkbox" name="publish" id="publish" value="true" checked="checked" style="display:inline;" />
+        </label>
+    }
+
+    <input type="submit" name="btnSubmit" id="btnSubmit" value="Save" />
+    @if (post.publishedDate == null)
+    {
+        <input type="button" id="btnSubmitPublish" name="btnSubmitPublish" value="Save & Publish" />
+    }
+    <a href="/Admin/Blog/" id="btnCancel" title="Cancel" class="cancel">Cancel</a>
+</form>
+
+<script defer src="/Admin/Scripts/ckeditor/ckeditor.js"></script>
+<script defer src="/Admin/Scripts/ckeditor/adapters/jquery.js"></script>
+<script defer src="/Admin/Scripts/custom/blog.manager.js"></script>
+<script defer>
+    $(function () {
+        $.getScript("/Admin/Scripts/jquery.multiselect.min.js", function () {
+            $("#categories").multiselect({
+                noneSelectedText: 'Select categories',
+                selectedList: 6
+            });
+        });
+        CKEDITOR.replace('content', {
+            height: '550px',
+            filebrowserBrowseUrl: '/Admin/FileManager/FileBrowser',
+            filebrowserUploadUrl: '/Admin/FileManager/CKUpload'
+        });
+    });
+</script>

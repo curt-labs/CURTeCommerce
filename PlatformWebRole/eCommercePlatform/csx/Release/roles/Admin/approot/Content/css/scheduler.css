@@ -1,0 +1,79 @@
+﻿body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 13px;
+}
+
+article.tools{
+    border-bottom: 2px solid #bf3504;
+    height: 40px;
+    margin-bottom: 20px;
+    padding: 5px 5px 2px 5px;
+    line-height: 40px;
+}
+
+article.tools span.title{
+    font-size: 16px;
+    color: #BF3504;
+}
+
+article.tools span.title span{
+    color: #bf3504;
+    font-size: 13px;
+    font-weight:normal;
+    margin-left: 5px;
+}
+
+p.heading {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+div.task {
+    display: block;
+    padding: 4px 15px;
+    background-color: #eee;
+    border-bottom: 1px solid #ccc;
+}
+
+div.title {
+    background-color: #fff;
+    font-weight: bold;
+}
+
+div.task span {
+	vertical-align: top;
+}
+
+div.task span.name {
+	display: inline-block;
+	width: 125px;
+	padding-right: 10px;
+}
+
+div.task span.runtime {
+	display: inline-block;
+	width: 110px;
+	min-width: 110px;
+	padding-right: 10px;
+}
+
+div.task span.interval {
+	display: inline-block;
+	width: 50px;
+	min-width: 50px;
+	padding-right: 10px;
+}
+
+div.task span.url {
+	display: inline-block;
+	width: 375px;
+	padding-right: 10px;
+	overflow: hidden;
+}
+
+div.task a.delete {
+	float: right;
+	font-size: 16px;
+	font-weight: bold;
+	color: #BF3504;
+}

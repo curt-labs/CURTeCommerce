@@ -1,0 +1,865 @@
+﻿/*
+ * HTML5 ✰ Boilerplate
+ *
+ * What follows is the result of much research on cross-browser styling.
+ * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
+ * Kroc Camen, and the H5BP dev community and team.
+ *
+ * Detailed information about this CSS: h5bp.com/css
+ *
+ * ==|== normalize ==========================================================
+ */
+
+
+/* =============================================================================
+   HTML5 display definitions
+   ========================================================================== */
+
+article, aside, details, figcaption, figure, footer, header, hgroup, nav, section { display: block; }
+audio, canvas, video { display: inline-block; *display: inline; *zoom: 1; }
+audio:not([controls]) { display: none; }
+[hidden] { display: none; }
+
+
+/* =============================================================================
+   Base
+   ========================================================================== */
+
+/*
+ * 1. Correct text resizing oddly in IE6/7 when body font-size is set using em units
+ * 2. Force vertical scrollbar in non-IE
+ * 3. Prevent iOS text size adjust on device orientation change, without disabling user zoom: h5bp.com/g
+ */
+
+html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+
+body { margin: 0; font-size: 1em; line-height: 1.4; }
+
+body, button, input, select, textarea { font-family: Open Sans, sans-serif; color: #222; }
+
+/*
+ * Remove text-shadow in selection highlight: h5bp.com/i
+ * These selection declarations have to be separate
+ * Also: hot pink! (or customize the background color to match your design)
+ */
+
+::-moz-selection { background: #fe57a1; color: #fff; text-shadow: none; }
+::selection { background: #fe57a1; color: #fff; text-shadow: none; }
+
+
+/* =============================================================================
+   Links
+   ========================================================================== */
+
+a { color: #00e; }
+a:visited { color: #551a8b; }
+a:hover { color: #06e; }
+a:focus { outline: thin dotted; }
+
+/* Improve readability when focused and hovered in all browsers: h5bp.com/h */
+a:hover, a:active { outline: 0; }
+
+
+/* =============================================================================
+   Typography
+   ========================================================================== */
+
+abbr[title] { border-bottom: 1px dotted; }
+
+b, strong { font-weight: bold; }
+
+blockquote { margin: 1em 40px; }
+
+dfn { font-style: italic; }
+
+hr { display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0; }
+
+ins { background: #ff9; color: #000; text-decoration: none; }
+
+mark { background: #ff0; color: #000; font-style: italic; font-weight: bold; }
+
+/* Redeclare monospace font family: h5bp.com/j */
+pre, code, kbd, samp { font-family: monospace, serif; _font-family: 'courier new', monospace; font-size: 1em; }
+
+/* Improve readability of pre-formatted text in all browsers */
+pre { white-space: pre; white-space: pre-wrap; word-wrap: break-word; }
+
+q { quotes: none; }
+q:before, q:after { content: ""; content: none; }
+
+small { font-size: 85%; }
+
+/* Position subscript and superscript content without affecting line-height: h5bp.com/k */
+sub, sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; }
+sup { top: -0.5em; }
+sub { bottom: -0.25em; }
+
+
+/* =============================================================================
+   Lists
+   ========================================================================== */
+
+ul, ol { margin: 1em 0; padding: 0 0 0 40px; }
+dd { margin: 0 0 0 40px; }
+nav ul, nav ol { list-style: none; list-style-image: none; margin: 0; padding: 0; }
+
+
+/* =============================================================================
+   Embedded content
+   ========================================================================== */
+
+/*
+ * 1. Improve image quality when scaled in IE7: h5bp.com/d
+ * 2. Remove the gap between images and borders on image containers: h5bp.com/e
+ */
+
+img { border: 0; -ms-interpolation-mode: bicubic; vertical-align: middle; }
+
+/*
+ * Correct overflow not hidden in IE9
+ */
+
+svg:not(:root) { overflow: hidden; }
+
+
+/* =============================================================================
+   Figures
+   ========================================================================== */
+
+figure { margin: 0; }
+
+
+/* =============================================================================
+   Forms
+   ========================================================================== */
+
+form { margin: 0; }
+fieldset { border: 0; margin: 0; padding: 0; }
+
+/* Indicate that 'label' will shift focus to the associated form element */
+label { cursor: pointer; }
+
+/*
+ * 1. Correct color not inheriting in IE6/7/8/9
+ * 2. Correct alignment displayed oddly in IE6/7
+ */
+
+legend { border: 0; *margin-left: -7px; padding: 0; }
+
+/*
+ * 1. Correct font-size not inheriting in all browsers
+ * 2. Remove margins in FF3/4 S5 Chrome
+ * 3. Define consistent vertical alignment display in all browsers
+ */
+
+button, input, select, textarea { font-size: 100%; margin: 0; vertical-align: baseline; *vertical-align: middle; }
+
+/*
+ * 1. Define line-height as normal to match FF3/4 (set using !important in the UA stylesheet)
+ */
+
+button, input { line-height: normal; }
+
+/*
+ * 1. Display hand cursor for clickable form elements
+ * 2. Allow styling of clickable form elements in iOS
+ * 3. Correct inner spacing displayed oddly in IE7 (doesn't effect IE6)
+ */
+
+button, input[type="button"], input[type="reset"], input[type="submit"] { cursor: pointer; -webkit-appearance: button; *overflow: visible; }
+
+/*
+ * Consistent box sizing and appearance
+ */
+
+input[type="checkbox"], input[type="radio"] { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; padding: 0; }
+input[type="search"] { -webkit-appearance: textfield; -moz-box-sizing: content-box; -webkit-box-sizing: content-box; -o-box-sizing: content-box; box-sizing: content-box; }
+input[type="search"]::-webkit-search-decoration { -webkit-appearance: none; }
+
+/*
+ * Remove inner padding and border in FF3/4: h5bp.com/l
+ */
+
+button::-moz-focus-inner, input::-moz-focus-inner { border: 0; padding: 0; }
+
+/*
+ * 1. Remove default vertical scrollbar in IE6/7/8/9
+ * 2. Allow only vertical resizing
+ */
+
+textarea { overflow: auto; vertical-align: top; resize: vertical; }
+
+/* Colors for form validity */
+input:valid, textarea:valid {  }
+input:invalid, textarea:invalid { background-color: #f0dddd; }
+
+.admin_form{
+    background:white;
+    padding: 10px;
+}
+
+.admin_form .error_box{
+    -moz-box-shadow: 0px 3px 3px #bf3504;
+	-webkit-box-shadow: 0px 3px 3px #bf3504;
+	-o-box-shadow: 0px 3px 3px #bf3504;
+	box-shadow: 0px 3px 3px #bf3504;
+    width: 400px;
+    padding: 20px;
+    list-style:none;
+}
+
+.admin_form .error_box li{
+    color: #2e2e30;
+    font-size: 12px;
+}
+
+.admin_form_col{ float:left; padding-right: 15px; }
+
+.admin_form label{
+    display:block;
+    font-size:12px;
+    min-height: 50px;
+    margin: 10px 0px;
+}
+
+.admin_form label input{
+    display:block;
+    margin-top: 4px;
+    font-size: 14px;
+}
+
+.admin_form label input[type=text],.admin_form label input[type=datetime],.admin_form label input[type=email],.admin_form label input[type=password],.admin_form label input[type=tel],.admin_form label input[type=url],.admin_form label input[type=number],.admin_form label select,.admin_form label textarea{
+    width: 500px;
+    border: 1px solid #e8e8e8;
+    padding: 2px 5px 2px 10px;
+}
+
+.admin_form label input[type=text].err,.admin_form label input[type=datetime].err,.admin_form label input[type=email].err,.admin_form label input[type=password].err,.admin_form label input[type=tel].err,.admin_form label input[type=url].err,.admin_form label input[type=number].err,.admin_form label select.err,.admin_form label textarea.err{
+    border: 1px solid #bf3504;
+}
+
+.admin_form span.err_msg{
+    margin-left: 10px;
+    color: #bf3504;
+}
+
+.admin_form input[type=submit]{
+    background: #bf3504;
+    border: 2px solid #C63707;
+    -moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+    color: white;
+    font-size: 20px;
+    padding: 0px 10px;
+}
+
+.admin_form input[type=submit]:hover{
+    background: #c63707;
+}
+
+.admin_form table{ width: 100%; }
+.admin_form a.modalClose {
+    color: #bf3504;
+    margin-left: 10px;
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+
+ul.linktabs{
+    list-style:none;
+    padding:0;
+}
+
+ul.linktabs li{
+    display:inline-block;
+}
+
+ul.linktabs li a{
+    display:block;
+    min-width: 80px;
+    color: #777777;
+    text-decoration:none;
+    border-bottom: 3px solid #777777;
+    text-align:center;
+    padding: 5px;
+    margin: 0px 5px 0px 5px;
+    -ms-transition: 0.3s all ease-in-out;
+	-moz-transition: 0.3s all ease-in-out;
+	-webkit-transition: 0.3s all ease-in-out;
+	-o-transition: 0.3s all ease-in-out;
+	transition: 0.3s all ease-in-out;
+}
+
+ul.linktabs li a.active{
+    border-bottom: 3px solid #bf3504;
+}
+
+ul.tabs{
+    list-style:none;
+    padding:0;
+    position: relative;
+}
+
+ul.tabs li{
+    display:inline-block;
+    position: relative;
+}
+
+ul.tabs li a{
+    display:block;
+    min-width: 80px;
+    color: #777777;
+    text-decoration:none;
+    border-bottom: 3px solid #777777;
+    text-align:center;
+    padding: 5px;
+    margin: 0px 5px 0px 5px;
+    -ms-transition: 0.3s all ease-in-out;
+	-moz-transition: 0.3s all ease-in-out;
+	-webkit-transition: 0.3s all ease-in-out;
+	-o-transition: 0.3s all ease-in-out;
+	transition: 0.3s all ease-in-out;
+}
+
+ul.tabs li a.active{
+    border-bottom: 3px solid #bf3504;
+}
+
+div.tab_container{
+    position:relative;
+}
+
+div.tab_container div.tab_content{
+    display:none;
+    position:absolute;
+    top:0;
+    left:0;
+    width: 100%;
+}
+
+div.tab_container div.tab_content.active{
+    display:block;
+}
+
+/* =============================================================================
+   Tables
+   ========================================================================== */
+
+table { border-collapse: collapse; border-spacing: 0; width: 100%;}
+td { vertical-align: top; }
+
+
+/* ==|== primary styles =====================================================
+   Author:
+   ========================================================================== */
+.error{
+    color: #bf3504;
+    display:block;
+}
+
+.success{
+    color: #09bf61;
+    display:block;
+}
+
+.left{
+    float:left;
+}
+.right{
+    float:right;
+}
+.small{
+    font-size: 11px;
+}
+.mustache{
+    display: none;
+}
+    
+header{
+   height: 34px;
+   background: #2e2e30;
+   padding: 5px 0px 5px 0px;
+   min-width: 990px;
+   width: 100%;
+   -moz-box-shadow: 0px 0px 3px #000000;
+	-webkit-box-shadow: 0px 0px 3px #000000;
+	-o-box-shadow: 0px 0px 3px #000000;
+	box-shadow: 0px 0px 3px #000000;
+   z-index: 50;
+}
+
+header a.title{
+    color: #e8e8e8;
+    font-weight:600;
+    float:left;
+    line-height: 30px;
+    padding-left: 10px;
+    text-decoration:none;
+    -webkit-transition: all 0.3s ease-in-out;
+}
+
+header a.title:hover{
+    color: #bf3504;
+}
+
+header div.global_features{
+    float:right;
+    height:30px;
+    overflow:hidden;
+    max-width: 550px;
+}
+
+header div.global_features div.global_links{
+    float:left;
+}
+
+header div.global_features div.global_links a{
+    color: #e8e8e8;
+    font-size: 11px;
+    vertical-align:bottom;
+    text-decoration:none;
+    line-height: 32px;
+    margin-right: 10px;
+    -webkit-transition: all 0.3s ease-in-out;
+    display:inline-block;
+    height:32px;
+}
+
+header div.global_features div.global_links a:first-child span{
+    height: 32px;
+    width: 24px;
+    display: inline-block;
+    overflow: hidden;
+    margin-right: 5px;
+    vertical-align:middle;
+}
+
+header div.global_features div.global_links a:first-child span img{
+    width: 100%;
+}
+
+header div.global_features div.global_links a:hover, header div.global_features div.global_links a:active{
+    color: #bf3504;
+}
+
+header div.global_features form{
+    float:right;
+    position:relative;
+    display:none;
+}
+
+header div.global_features form input[type=search]{
+    background: #2e2e30;
+    border: 1px inset #000000;
+    -moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+    padding: 2px 10px 2px 5px;
+    height: 24px;
+    display:block;
+    width: 300px;
+    margin: 0px 10px;
+    outline:none;
+    color: #e8e8e8;
+    -webkit-transition: all 0.3s ease-in-out;
+}
+
+header div.global_features form input[type=search]:hover,header div.global_features form input[type=search]:focus{
+    background:#3c3c3d;
+}
+
+header div.global_features form input[type=submit]{
+    background: url('../img/search_button.png') no-repeat;
+    position:absolute;
+    z-index:10;
+    top: 1px;
+    left: 299px;
+    width: 27px;
+    height: 27px;
+    border:none;
+}
+
+div.message_box{
+    position: relative;
+    top: 14px;
+    z-index: 100;
+    text-align: center;
+    display:none;
+}
+
+div.message_box div{
+    background: #f1f79b;
+    display: inline;
+    -moz-box-shadow: 2px 2px 2px #adadad;
+	-webkit-box-shadow: 2px 2px 2px #adadad;
+	-o-box-shadow: 2px 2px 2px #adadad;
+	box-shadow: 2px 2px 2px #adadad;
+    padding:  4px 10px;
+    -moz-border-radius: 0px 0px 4px 4px;
+	-webkit-border-radius: 0px 0px 4px 4px;
+	border-radius: 0px 0px 4px 4px;
+}
+
+div.message_box div span{
+    font-size: 11px;
+    font-weight:600;
+}
+
+div.message_box div a{
+    color: #f1f79b;
+    text-decoration:none;
+    border: 1px solid #2e2e30;
+    display: inline-block;
+    height: 10px;
+    line-height:6px;
+    width: 10px;
+    font-size: 11px;
+    vertical-align:middle;
+    background:#2e2e30;
+    -moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+    margin-left: 10px;
+    -webkit-transition: all 0.3s ease-in-out;
+}
+
+div.message_box div a:hover{
+    background: #bf3504;
+    border:1px solid transparent;
+    color: #2e2e30;
+}
+
+div[role=main]{
+    min-width: 990px;
+}
+
+div[role=main] nav{
+    float:left;
+    width: 198px;
+    padding-top: 30px;
+    min-height: 768px;
+    z-index: 10;
+    border-right:1px solid #969696;
+}
+
+/*nav ul{
+    padding:0;
+    margin:0;
+    margin-left: 15px;
+    list-style:none;
+}
+
+nav ul li{
+    min-height: 30px;
+    font-size: 18px;
+}
+
+nav ul li a, nav ul li a:visited{
+    color: #2e2e30;
+    text-decoration:none;
+    -webkit-transition: all 0.1s ease-in-out;
+    font-weight: 600;
+    margin-top:20px;
+    display:block;
+    width: 100%;
+}
+
+nav ul li a:hover{
+    color: #bf3504;
+}
+
+nav ul li span{
+    float:right;
+    margin-right:20px;
+    margin-top: 5px;
+    width: 0;
+    height: 0;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-left: 6px solid #2e2e30;
+    -webkit-transition: all 0.3s ease-in-out;
+}
+
+nav ul li span.down{
+    border-left: 6px solid #bf3504;
+    -webkit-transform: rotate(90deg);
+     -moz-transform: rotate(90deg);
+      -ms-transform: rotate(90deg);
+       -o-transform: rotate(90deg);
+          transform: rotate(90deg);
+             filter: progid:DXImageTransform.Microsoft.Matrix(
+                     M11=6.123031769111886e-17, M12=-1, M21=1, M22=6.123031769111886e-17, sizingMethod='auto expand');
+               zoom: 1;
+}*/
+
+nav ul li ul{
+    margin-left: 15px;
+    margin-bottom: 10px;
+}
+
+nav ul li ul li{
+    min-height:20px;
+}
+
+nav ul li ul li a{
+    font-size: 12px;
+    font-weight:normal;
+    color: #bf3504;
+    display:block;
+    width:100%;
+}
+
+div[role=main] section{
+    min-height:768px; 
+    padding: 10px 10px 10px 10px;
+    float: left;
+    min-width: 740px;
+    width: 75%;
+}
+
+a.big-module{
+    display:inline-block;
+    width: 150px;
+    margin-right: 10px;
+    background-color:white;
+    -webkit-transition: all 0.5s ease-in-out;
+    text-align:center;
+    padding: 10px;
+    border-radius: 4px;
+    color:black;
+    text-decoration:none;
+}
+
+a.big-module:hover{
+    background-color: #eaeaea;
+}
+
+img.imagefieldvalue {
+    display: block;
+    width: 300px;
+    height: auto;
+}
+
+input.chooseimagefield, input.clearimagefield {
+    display: inline !important;
+    width: auto !important;
+    height: auto !important;
+    margin-right: 5px;
+    padding: 4px 10px;
+}
+
+input.chooseimagefield {
+	background-color: #070;
+	color: #fff;
+	border: 1px solid #0a0;
+}
+
+input.clearimagefield {
+	background-color: #800;
+	color: #fff;
+	border: 1px solid #a00;
+}
+
+input[type="radio"].chooseimageprotocol {
+    display: inline !important;
+    width: auto !important;
+    height: auto !important;
+    margin-right: 40px;
+    position: relative;
+}
+
+input.chooseimageprotocol:after {
+    display: inline;
+    position: absolute;
+    z-index: 1;
+    content: "";
+    left: 15px;
+}
+
+input.protocolhttp:after {
+	content: "http";
+}
+
+input.protocolhttps:after {
+	content: "https";
+}
+
+input.protocolnone:after {
+	content: "none";
+}
+
+#filemanager {
+	display: block;
+	overflow: auto;
+}
+
+#filemanager #loader {
+    display: block;
+    margin: auto;
+    padding: 40px 0 0;
+}
+
+#filemanager #filemanagerfiles {
+	display: block;
+	height: 320px;
+	overflow-y: auto;
+}
+
+#filemanager #filemanagerfiles div.folder {
+	float: left;
+	font-size: 11px;
+	margin: 3px;
+	cursor: pointer;
+	border-radius: 12px;
+	padding: 8px;
+	word-wrap: break-word;
+	line-height: 1.2;
+	height: 140px;
+}
+
+#filemanager #filemanagerfiles div.folder:hover {
+    background-color: #08c;
+}
+
+#filemanager #filemanagerfiles div.folder span.foldericon {
+    display: block;
+    height: 60px;
+    width: 100px;
+    margin: 11px 0 3px 0;
+    padding: 10px 5px 5px;
+    border-radius: 3px;
+    background-color: #EFCC7F;
+    position: relative;
+    border-left: 3px solid #E2BE76;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+#filemanager #filemanagerfiles div.folder span.foldericon::before {
+    content: "";
+    left: 0px;
+    width: 100%;
+    height: 3px;
+    margin-top: -10px;
+    background-color: #E2BE76;
+    border-radius: 10px 10px 0 0;
+    position: absolute;
+    z-index: 5;   
+}
+
+#filemanager #filemanagerfiles div.folder span.foldericon::after {
+    content: "";
+    right: 3px;
+    width: 22px;
+    height: 10px;
+    top: -4px;
+    background-color: #E2BE76;
+    border-radius: 2px;
+    position: absolute;
+    z-index: 5;
+}
+
+#filemanager #filemanagerfiles div.file {
+	float: left;
+	font-size: 11px;
+	margin: 3px;
+	cursor: pointer;
+	border-radius: 12px;
+	padding: 8px;
+	height: 109px;
+	width: 111px;
+	word-wrap: break-word;
+	line-height: 1.2;
+	height: 140px;
+}
+
+#filemanager #filemanagerfiles div.file:hover {
+    background-color: #08c;
+}
+
+#filemanager #filemanagerfiles div.file span.fileicon {
+	display: block;
+	height: 75px;
+	margin: 11px 0 3px;
+    overflow: hidden;
+}
+
+#filemanager #filemanagerfiles div.file span.fileicon img {
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+    width: auto;
+    display: block;
+    margin: auto;
+}
+
+/* ==|== media queries ======================================================
+   PLACEHOLDER Media Queries for Responsive Design.
+   These override the primary ('mobile first') styles
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 480px) {
+  /* Style adjustments for viewports 480px and over go here */
+
+}
+
+@media only screen and (min-width: 768px) {
+  /* Style adjustments for viewports 768px and over go here */
+
+}
+
+
+
+/* ==|== non-semantic helper classes ========================================
+   Please define your styles before this section.
+   ========================================================================== */
+
+/* For image replacement */
+.ir { display: block; border: 0; text-indent: -999em; overflow: hidden; background-color: transparent; background-repeat: no-repeat; text-align: left; direction: ltr; *line-height: 0; }
+.ir br { display: none; }
+
+/* Hide from both screenreaders and browsers: h5bp.com/u */
+.hidden { display: none !important; visibility: hidden; }
+
+/* Hide only visually, but have it available for screenreaders: h5bp.com/v */
+.visuallyhidden { border: 0; clip: rect(0 0 0 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; }
+
+/* Extends the .visuallyhidden class to allow the element to be focusable when navigated to via the keyboard: h5bp.com/p */
+.visuallyhidden.focusable:active, .visuallyhidden.focusable:focus { clip: auto; height: auto; margin: 0; overflow: visible; position: static; width: auto; }
+
+/* Hide visually and from screenreaders, but maintain layout */
+.invisible { visibility: hidden; }
+
+/* Contain floats: h5bp.com/q */
+.clearfix:before, .clearfix:after { content: ""; display: table; }
+.clearfix:after { clear: both; }
+.clearfix {
+    display: block;
+ *zoom: 1; }
+
+
+
+/* ==|== print styles =======================================================
+   Print styles.
+   Inlined to avoid required HTTP connection: h5bp.com/r
+   ========================================================================== */
+
+@media print {
+  * { background: transparent !important; color: black !important; -moz-box-shadow: none !important; -webkit-box-shadow: none !important; -o-box-shadow: none !important; box-shadow: none !important; text-shadow: none !important; filter:none !important; -ms-filter: none !important; } /* Black prints faster: h5bp.com/s */
+  a, a:visited { text-decoration: underline; }
+  a[href]:after { content: " (" attr(href) ")"; }
+  abbr[title]:after { content: " (" attr(title) ")"; }
+  .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after { content: ""; }  /* Don't show links for images, or javascript/internal links */
+  pre, blockquote { border: 1px solid #999; page-break-inside: avoid; }
+  thead { display: table-header-group; } /* h5bp.com/t */
+  tr, img { page-break-inside: avoid; }
+  img { max-width: 100% !important; }
+  @page { margin: 0.5cm; }
+  p, h2, h3 { orphans: 3; widows: 3; }
+  h2, h3 { page-break-after: avoid; }
+}
+

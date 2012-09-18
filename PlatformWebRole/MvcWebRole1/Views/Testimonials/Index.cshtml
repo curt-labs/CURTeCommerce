@@ -8,8 +8,9 @@
     int page = ViewBag.page;
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="/Content/view_sass/testimonials.css" rel="stylesheet" type="text/css" />
+<link href="@settings.Get("PathToCSS")/css/testimonials.css" rel="stylesheet" type="text/css" />
 <div class="content">
     <h2>Testimonials</h2>
     <a href="/Testimonials/Add" id="addTestimonial">Write Your Testimonial</a>

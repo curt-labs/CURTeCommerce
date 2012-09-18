@@ -7,8 +7,9 @@
     
     ViewBag.Title = cat.catTitle;
     Layout = "~/Views/Shared/_Layout.cshtml";
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="/Content/view_sass/category.css" rel="stylesheet" type="text/css" />
+<link href="@settings.Get("PathToCSS")/css/category.css" rel="stylesheet" type="text/css" />
 <span class="title">@cat.catTitle</span>
 
 <img src="@cat.image" alt="@cat.catTitle" onerror="$(this).remove()" class="cat_image" />

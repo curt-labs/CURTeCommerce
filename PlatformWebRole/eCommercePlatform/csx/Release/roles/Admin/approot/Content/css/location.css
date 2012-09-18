@@ -1,0 +1,116 @@
+﻿table tbody tr td:first-child a{
+    text-decoration:none;
+    color: #bf3504;
+}
+
+table tbody tr td:first-child img{
+    width: 24px;
+    vertical-align:middle;
+    margin-left: 5px;
+}
+
+table tbody tr td:first-child a span{
+    text-decoration:underline;
+}
+
+section span.title{
+    margin-bottom: 40px;
+    color: #bf3504;
+    font-size: 16px;
+    display:inline-block;
+}
+
+section a.addLocation{
+    display:inline-block;
+    width: 200px;
+    height: 45px;
+    background:#bf3504;
+    margin: 0px 25px 40px 25px;
+    -moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+    text-align:center;
+    color: white;
+    text-decoration:none;
+    font-size: 24px;
+    font-weight:600;
+    line-height:45px;
+}
+
+div.place_types{
+    border: 2px solid #eaeaea;
+    padding:10px 25px;
+    margin-bottom: 20px;
+    -moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+    -moz-box-shadow: 2px 2px 2px #eaeaea;
+	-webkit-box-shadow: 2px 2px 2px #eaeaea;
+	-o-box-shadow: 2px 2px 2px #eaeaea;
+	box-shadow: 2px 2px 2px #eaeaea;
+    clear:both;
+}
+
+div.place_types span:first-child{
+    display:block;
+    font-weight:600;
+    font-size: 14px;
+}
+
+div.place_types div{
+    width: 40%;
+}
+
+div.place_types label{
+    vertical-align:middle;
+    padding: 0px 10px;
+    height:10px;
+}
+
+div.place_types label input{
+    display:inline;
+    margin-right: 15px;
+    vertical-align:bottom;
+    margin-top: 20px;
+}
+
+div.place_types label:hover{
+    background: #eaeaea;
+}
+
+a.delete{
+    display:inline-block;
+    width: 200px;
+    height: 45px;
+    background:#bf3504;
+    margin: 0px 25px 40px 25px;
+    -moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+    text-align:center;
+    color: white;
+    text-decoration:none;
+    font-size: 24px;
+    font-weight:600;
+    line-height:45px;
+}
+
+a.view-place-listing,a.delete-place-listing,a.view-map{
+    display:inline-block;
+    width: 150px;
+    height: 30px;
+    margin: 0px 25px 40px 25px;
+    -moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+    text-align:center;
+    color: white;
+    text-decoration:none;
+    font-size: 18px;
+    font-weight:600;
+    line-height:30px;
+}
+
+a.view-place-listing,a.view-map{ background:#7bce52; }
+
+a.delete-place-listing{ background:#4877c9; }

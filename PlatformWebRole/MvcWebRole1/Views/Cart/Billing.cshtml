@@ -21,8 +21,9 @@
 
     Layout = "~/Views/Shared/_Layout.cshtml";
     int quebec = 59;
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="/Content/view_sass/cart.css" rel="stylesheet" type="text/css" />
+<link href="@settings.Get("PathToCSS")/css/cart.css" rel="stylesheet" type="text/css" />
 <div class="content">
     <h2>Checkout - Enter Billing</h2>
     @Html.Raw(page.content)

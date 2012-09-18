@@ -1,0 +1,34 @@
+﻿@{
+    List<Admin.FTPFirewall> ipaddresses = ViewBag.ipaddresses ?? new List<Admin.FTPFirewall>();
+    ViewBag.Title = "| Manage FTP Firewall";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Manage FTP Firewall</h2>
+
+<form action="/Admin/FTP/Add" method="post">
+    <input type="text" name="ipaddress" value="" />
+    <input type="submit" value="Add" />
+</form>
+<div class="clearfix"></div>
+<table>
+    <thead>
+        <tr>
+            <th>IP Address</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Admin.FTPFirewall ip in ipaddresses) {
+            <tr>
+                <td>@ip.ipaddress</td>
+                <td><a href="/Admin/FTP/Delete/@ip.ID">Delete</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script type="text/javascript">
+    $(function () {
+        $('table').dataTable({ 'bJQueryUI': true });
+    });
+</script>

@@ -1,0 +1,243 @@
+﻿body {
+   background: white;
+   font-size: 12pt;
+   }
+#menu {
+   display: none;
+   }
+a:link, a:visited {
+   color: #520;
+   background: transparent;
+   font-weight: bold;
+   text-decoration: underline;
+   }
+#content a:link:after, #content a:visited:after {
+   content: " (" attr(href) ") ";
+   font-size: 90%;
+   }
+#content a[href^="/"]:after {
+   content: " (http://www.alistapart.com" attr(href) ") ";
+   }
+   
+div[role="main"] nav {
+    display: none;
+}
+
+header {
+    display: none;
+}
+
+div.buttonarea {
+    display: none;
+}
+
+div[role="main"] section {
+    position: relative;
+    width: 100%;
+}
+
+section span.title{
+    margin-bottom: 40px;
+    color: #bf3504;
+    font-size: 16px;
+    display:inline-block;
+}
+
+section a.button{
+    display:inline-block;
+    width: 200px;
+    height: 45px;
+    background:#bf3504;
+    margin: 0px 25px 40px 25px;
+    -moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+    text-align:center;
+    color: white;
+    text-decoration:none;
+    font-size: 24px;
+    font-weight:600;
+    line-height:45px;
+}
+
+.void {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: Maroon;
+    color: #fff;
+    border-radius: 8px;
+    text-align: center;
+    padding: 5px;
+}
+
+div.invoice {
+    display: block;
+   width: auto;
+   margin: 0 5%;
+   padding: 0;
+   padding-top: 1em;
+   border: 0;
+   float: none !important;
+   color: black;
+   background: transparent none;
+   page-break-after: always;
+   page-break-inside: avoid;
+}
+
+div.invoice div.iheader {
+    display: block;
+}
+
+div.invoice img.curtlogo {
+    float: left;
+}
+
+div.invoice p.remit {
+    float: left;
+    width: 150px;
+    padding: 15px 20px 0;
+}
+
+div.invoice p.remit span {
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+div.invoice div.invoicenumber {
+    float: right;
+    margin-top: 15px;
+    border: 1px solid #000;
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+div.invoice div.invoicenumber span {
+	border-bottom: 1px solid #000;
+	display: block;
+	padding: 2px 4px;
+	margin-bottom: 10px;
+	font-weight: bold;
+}
+
+div.addresses {
+    float: left;
+    width: 300px;
+    border: 1px solid #000;
+}
+
+div.addresses #billto, div.addresses #shipto {
+    display: block;
+    clear: both;
+}
+
+div.addresses #billto {
+	border-top: 1px solid #000;
+}
+
+div.addresses h3 {
+    font-size: 12px;
+    line-height: 1;
+    padding: 3px 4px;
+    border-bottom: 1px solid #000;
+}
+
+div.addresses p {
+    display: block;
+    padding: 5px 20px;
+}
+
+div.dateinfo {
+    float: left;
+    padding-left: 20px;
+    width: 550px;
+}
+
+div.dateinfo .phone {
+    float: left;
+    width: 150px;
+}
+
+div.dateinfo .dates {
+    float: right;
+}
+
+div.dateinfo .dates strong {
+    text-align: right;
+    display: inline-block;
+    width: 55px;
+}
+
+table.invoicetable {
+    margin-top: 15px;
+    width: 100%;
+}
+
+table.invoicetable th {
+	font-size: 14px;
+}
+
+table.invoicetable th, table.invoicetable td {
+    border: 1px solid #000;
+    text-align: center;
+}
+
+table.items tbody td {
+	border-top: 0;
+	border-bottom: 0;
+	padding: 6px;
+}
+
+table.items tbody td.totals {
+    text-align: right;
+}
+
+table.items tbody td.desc {
+    text-align: left;
+	padding: 6px 6px 6px 25px;
+}
+
+table.items tfoot td {
+    padding-top: 20px;
+    border: 1px solid #000;
+    border-top: 0;
+}
+
+table.foottable thead td {
+    border: 0;
+    border-bottom: 1px solid #000;
+}
+
+table.foottable tfoot td {
+    border: 0;
+    border-top: 1px solid #000;
+}
+
+table.foottable td.litem {
+    font-weight: bold;
+}
+
+table.foottable td.totals {
+    border-top: 0;
+    border-bottom: 0;
+    text-align: right;
+    padding-right: 20px;
+}
+
+table.foottable td.discountlabel {
+    border: 0;
+    font-weight: bold;
+}
+
+table.foottable td.discountamount {
+    border: 0;
+    border-right: 1px solid #000;
+}
+
+table.foottable td.amountdue {
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+table.foottable td.amountdueamount {
+    vertical-align: middle;
+}

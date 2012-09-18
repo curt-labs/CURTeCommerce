@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "| Reporting Tools";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    TimeZone zone = TimeZone.CurrentTimeZone;
+}
+<link href="/Admin/Content/css/reporting.css" rel="stylesheet" type="text/css" />
+<span class="title">Reporting Tools</span>
+
+<div class="report">
+    <p>Orders By Date Range</p>
+    <form action="/Admin/Reporting/OrdersByDateRange" method="post">
+        <label for="startdate">
+            Start:
+            <input type="text" class="daterange" name="startdate" id="startdate" placeholder="Select a Start Date" value="@String.Format("{0:MM/dd/yyyy hh:mm tt}",zone.ToLocalTime(DateTime.Now.AddDays(-1)))" />
+        </label>
+        <label for="enddate">
+            End:
+            <input type="text" class="daterange" name="enddate" id="enddate" placeholder="Select an End Date" value="@String.Format("{0:MM/dd/yyyy hh:mm tt}",zone.ToLocalTime(DateTime.Now))" />
+        </label>
+        <input type="submit" class="button" value="Generate" />
+    </form>
+</div>
+
+<div class="report">
+    <p>Invoice By Number (Pipe Delimited Text File)</p>
+    <form action="/Admin/Reporting/InvoiceByID" method="post">
+        <label for="invoiceNumber">
+            Invoice Number:
+            <input type="text" name="invoiceNumber" id="invoiceNumber" placeholder="Enter an Invoice Number" />
+        </label>
+        <input type="submit" class="button" value="Generate" />
+    </form>
+</div>
+
+<script src="/Admin/Scripts/custom/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
+<script src="/Admin/Scripts/custom/reporting.js" type="text/javascript"></script>

@@ -1,0 +1,206 @@
+﻿@{
+    Admin.Cart order = ViewBag.order;
+    if(order == null){
+        order = new Admin.Cart();
+    }
+
+    Admin.Customer cust = ViewBag.customer;
+    if (cust == null) {
+        cust = new Admin.Customer();
+    }
+    string trackingcodes = "";
+
+    ViewBag.Title = "Items";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/order.manager.css" rel="stylesheet" type="text/css" />
+<span class="title">Order #@order.payment_id</span>
+@if (order.voided) {
+    <p class="void">VOID</p>
+} else {
+    <a class="button" href="/Admin/Orders/Void/@order.payment_id" id="void">Void Order</a>
+    <a class="button" href="/Admin/Orders/RegeneratePO/@order.payment_id">Regenerate Purchase Order</a>
+}
+<ul class="tabs">
+    <li>
+        <a href="#order">Summary</a>
+    </li>
+    <li>
+        <a href="#items">Items</a>
+    </li>
+    <li>
+        <a href="#shipping">Shipping</a>
+    </li>
+    <li>
+        <a href="#payment">Payment</a>
+    </li>
+</ul>
+<div class="tab_container">
+    <div class="tab_content admin_form" id="order">
+        <div class="left">
+            <label>
+                Customer
+                <input type="text" value="@(cust.fname + " " + cust.lname)" readonly="readonly" />
+            </label>
+            <label>
+                Date Created
+                <input type="text" value="@Convert.ToDateTime(order.Payment.created.ToLocalTime())" readonly="readonly" />
+            </label>
+            <label>
+                Payment Method
+                <input type="text" value="@order.Payment.PaymentTypes.name" readonly />
+            </label>
+            <label>
+                Status
+                <input type="text" value="@order.Payment.status" readonly />
+            </label>
+        </div>
+        <div class="left">
+            <span class="title">Order Total</span>
+            <span class="subdata"><span>Subtotal</span>@String.Format("{0:C}", order.GetSubTotal())</span>
+            <span class="subdata"><span>Shipping</span>@String.Format("{0:C}", order.shipping_price)</span>
+            <span class="subdata last"><span>Tax</span>@String.Format("{0:C}", order.tax)</span>
+            <span class="data">@String.Format("{0:C}", order.getTotal())</span>
+
+            <span class="title">Number of Items</span>
+            <span class="data">@order.getCount()</span>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="tab_content" id="items">
+        @foreach (Admin.CartItem item in order.CartItems) {
+            <article>
+                <div class="image">
+                    <img src="@item.GetImage()" onerror="$(this).remove()" />
+                </div>
+                <div class="info">
+                    <p>@item.shortDesc</p>
+                    <a href="/Part/@item.partID" target="_blank" title="View Part">View CURT Part #@item.partID</a>
+                </div>
+                <div class="pricing">
+                    <span class="price">@String.Format("{0:C}", item.price)</span>
+                    <span class="qty">x&nbsp;@item.quantity</span>
+                    <span class="total">@String.Format("{0:C}", item.price * item.quantity)</span>
+                </div>
+            </article>
+        }
+    </div>
+    <div class="tab_content admin_form" id="shipping">
+        <h3>Shipping Info</h3>
+        <label>
+            Type
+            <input type="text" value="@((order.shipping_type != null) ? order.shipping_type.Replace("_", " ").ToLower() : "")" readonly />
+        </label>
+        <label>
+            Price
+            <input type="text" value="@String.Format("{0:C}", order.shipping_price)" readonly />
+        </label>
+        @{
+            for (int i = 0; i < order.Shipments.Count; i++) {
+                if (i > 0) {
+                    trackingcodes += ", ";
+                }
+                trackingcodes += order.Shipments[i].tracking_number;
+            }
+        }
+        <label>
+            Tracking Codes
+            <input type="text" value="@trackingcodes" readonly />
+        </label>
+        @if (order.Shipments.Count > 0 && order.Shipments[0].dateShipped != null) {
+            <label>
+                Shipping Date
+                <input type="text" value="@String.Format("{0: M/d/yyyy}", order.Shipments[0].dateShipped)" readonly />
+            </label>
+        }
+        <h3>Shipping Address</h3>
+        <label>
+            Name
+            <input type="text" value="@(order.Shipping.first + " " + order.Shipping.last)" readonly />
+        </label>
+        <label>
+            Street
+            <input type="text" value="@order.Shipping.street1" readonly />
+        </label>
+        <label>
+            Street 2
+            <input type="text" value="@order.Shipping.street2" readonly />
+        </label>
+        <label>
+            City
+            <input type="text" value="@order.Shipping.city" readonly />
+        </label>
+        <label>
+            State/Province
+            <input type="text" value="@(order.Shipping.State1.abbr + " - " + order.Shipping.State1.state1)" readonly />
+        </label>
+        <label>
+            Country
+            <input type="text" value="@(order.Shipping.State1.Country.abbr + " - " + order.Shipping.State1.Country.name)" readonly />
+        </label>
+        <label>
+            Postal Code
+            <input type="text" value="@order.Shipping.postal_code" readonly />
+        </label>
+    </div>
+    <div class="tab_content admin_form" id="payment">
+        <h3>Payment Info</h3>
+        <label>
+            Type
+            <input type="text" value="@order.Payment.PaymentTypes.name" readonly />
+        </label>
+        <label>
+            Payment Date
+            <input type="text" value="@String.Format("{0:M/d/yyyy} at {0:h:mm tt}", order.Payment.created)" readonly />
+        </label>
+        <label>
+            Amount
+            <input type="text" value="@String.Format("{0:C}", order.getTotal())" readonly />
+        </label>
+        <label>
+            Confirmation Code
+            <input type="text" value="@order.Payment.confirmationKey" readonly />
+        </label>
+        <label>
+            Status
+            <input type="text" value="@order.Payment.status" readonly />
+        </label>
+        <h3>Billing Address</h3>
+        <label>
+            Name
+            <input type="text" value="@(order.Billing.first + " " + order.Billing.last)" readonly />
+        </label>
+        <label>
+            Street
+            <input type="text" value="@order.Billing.street1" readonly />
+        </label>
+        <label>
+            Street 2
+            <input type="text" value="@order.Billing.street2" readonly />
+        </label>
+        <label>
+            City
+            <input type="text" value="@order.Billing.city" readonly />
+        </label>
+        <label>
+            State/Province
+            <input type="text" value="@(order.Billing.State1.abbr + " - " + order.Billing.State1.state1)" readonly />
+        </label>
+        <label>
+            Country
+            <input type="text" value="@(order.Billing.State1.Country.abbr + " - " + order.Billing.State1.Country.name)" readonly />
+        </label>
+        <label>
+            Postal Code
+            <input type="text" value="@order.Billing.postal_code" readonly />
+        </label>    </div>
+</div>
+
+<script>
+    $(document).on("click", "#void", function (event) {
+        event.preventDefault();
+        if (confirm("Are you sure you want to void this order?")) {
+            window.location = $(this).attr('href');
+        };
+    });
+</script>

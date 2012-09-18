@@ -2,9 +2,10 @@
     EcommercePlatform.Cart cart = ViewBag.cart;
     bool showShipping = (ViewBag.showShipping != null) ? ViewBag.showShipping : false;
     decimal total = 0;
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
 @if (cart.CartItems.Count > 0) {
-    <link href="/Content/view_sass/cart.css" rel="stylesheet" type="text/css" />
+    <link href="@settings.Get("PathToCSS")/css/cart.css" rel="stylesheet" type="text/css" />
     <table id="cart">
         <thead>
             <tr>

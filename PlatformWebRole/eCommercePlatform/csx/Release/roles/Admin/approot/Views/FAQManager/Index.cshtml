@@ -1,0 +1,101 @@
+﻿@{
+    List<Admin.FAQ> faqs = ViewBag.faqs;
+    if (faqs == null) {
+        faqs = new List<Admin.FAQ>();
+    }
+
+    List<Admin.FaqTopic> topics = ViewBag.topics;
+    if (topics == null) {
+        topics = new List<Admin.FaqTopic>();
+    }
+
+    List<Admin.Models.GroupedModule> modules = ViewBag.modules;
+    if (modules == null) {
+        modules = new List<Admin.Models.GroupedModule>();
+    }
+
+    bool can_edit_questions = false;
+    bool can_edit_topics = false;
+    try {
+        if (modules.Where(x => x.path.ToUpper().Equals("/ADMIN/FAQMANAGER")).FirstOrDefault<Admin.Models.GroupedModule>().subs.Where(x => x.name.ToUpper().Equals("EDIT QUESTIONS")).Count() > 0) {
+            can_edit_questions = true;
+        }
+    } catch (Exception) { }
+    try {
+        if (modules.Where(x => x.path.ToUpper().Equals("/ADMIN/FAQMANAGER")).FirstOrDefault<Admin.Models.GroupedModule>().subs.Where(x => x.name.ToUpper().Equals("EDIT TOPICS")).Count() > 0) {
+            can_edit_topics = true;
+        }
+    } catch (Exception) { }
+
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/faq.manager.css" rel="stylesheet" type="text/css" />
+<span class="title">Manage Frequently Asked Questions</span>
+
+<ul class="tabs">
+    <li>
+        <a href="#topics" title="Manage Topics">Topics</a>
+    </li>
+    <li>
+        <a href="#questions" title="Manage Questions">Questions</a>
+    </li>
+</ul>
+<div class="tab_container">
+    <div class="tab_content" id="topics">
+        @if (can_edit_topics) {
+            <a href="/Admin/FAQManager/EditTopic" class="add" title="Add Topic">Add Topic</a>
+            foreach (Admin.FaqTopic topic in topics) {
+                <article class="topic" id="topic:@topic.ID">
+                    <span class="topic">@topic.topic</span>
+                    <div class="tools">
+                    @if(topic.FAQs.Count > 0){
+                        <a href="javascript:void(0)" title="View Questions" class="viewQuestions">View Questions</a>
+                    }
+                    @if (can_edit_topics) {
+                        <a href="/Admin/FAQManager/EditTopic/@topic.ID" title="Edit">Edit</a>
+                        <a href="/Admin/FAQManager/DeleteTopic/@topic.ID" title="Delete" class="deleteTopic">Remove</a>
+                    }
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="mustache">
+                        @foreach (Admin.FAQ faq in topic.FAQs) {
+                              <article class="faq" id="@faq.ID">
+                                <span class="question">@faq.question</span>
+                                <div class="tools">
+                                    @if (can_edit_questions) {
+                                        <a href="/Admin/FAQManager/EditQuestion/@faq.ID" title="Edit">Edit</a>
+                                        <a href="/Admin/FAQManager/DeleteQuestion/@faq.ID" title="Delete" class="deleteQuestion">Remove</a>
+                                    }
+                                </div>
+                                <div class="clearfix"></div>
+                                <p>@faq.answer</p>
+                            </article> 
+                        }
+                    </div>
+                </article>
+            }
+        }
+    </div>
+    <div class="tab_content" id="questions">
+        @if (can_edit_questions) {
+            <a href="/Admin/FAQManager/EditQuestion" class="add" title="Add Frequently Asked Question">Add Question</a>
+        }
+
+        @foreach (Admin.FAQ faq in faqs) {
+            <article class="faq" id="question:@faq.ID">
+                <span class="question">@faq.question</span>
+                <div class="tools">
+                    @if (can_edit_questions) {
+                        <a href="/Admin/FAQManager/EditQuestion/@faq.ID" title="Edit">Edit</a>
+                        <a href="/Admin/FAQManager/DeleteQuestion/@faq.ID" title="Delete" class="deleteQuestion">Remove</a>
+                    }
+                </div>
+                <div class="clearfix"></div>
+                <p>@faq.answer</p>
+            </article>
+        }
+    </div>
+</div>
+
+<script defer src="/Admin/Scripts/custom/faq.manager.js"></script>

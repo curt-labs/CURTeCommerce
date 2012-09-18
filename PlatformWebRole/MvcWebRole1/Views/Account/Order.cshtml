@@ -5,11 +5,12 @@
     if (payment == null) {
         payment = new EcommercePlatform.Payment();
     }
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 
     ViewBag.Title = "Order";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<link href="/Content/view_sass/account.css" rel="stylesheet" type="text/css" />
+<link href="@settings.Get("PathToCSS")/css/account.css" rel="stylesheet" type="text/css" />
 @if (order == null) {
     <p class="error">There seems to have been an issue while looking up the order that you request.</p>
 } else {

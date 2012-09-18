@@ -3,6 +3,7 @@
     if(cust == null){
         cust = new EcommercePlatform.Customer();
     }
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
     
     string error = ViewBag.error;
     if(error == null){
@@ -13,7 +14,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<link href="/Content/view_sass/account.css" rel="stylesheet" type="text/css" />
+<link href="@settings.Get("PathToCSS")/css/account.css" rel="stylesheet" type="text/css" />
 <h1>My Account - Order History</h1>
 <p class="error">@error</p>
 <ul class="tabs nojs">

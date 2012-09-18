@@ -1,0 +1,425 @@
+﻿section {
+    position: relative;
+}
+
+section span.title{
+    margin-bottom: 40px;
+    color: #bf3504;
+    font-size: 16px;
+    display:inline-block;
+}
+
+section a.button{
+    display:inline-block;
+    width: 200px;
+    height: 45px;
+    background:#bf3504;
+    margin: 0px 25px 40px 25px;
+    -moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+    text-align:center;
+    color: white;
+    text-decoration:none;
+    font-size: 24px;
+    font-weight:600;
+    line-height:45px;
+}
+
+table tbody tr td img{
+    width: 20px;
+    margin:auto;
+    display:block;
+}
+
+table tbody tr td:first-child{
+    padding-left:10px;
+}
+
+table tbody tr td:first-child a{
+    color: #bf3504;
+    display: inline-block;
+}
+
+table tbody tr td:last-child{
+    text-align:center;
+}
+
+a.modalClose{
+    color: #2e2e30;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+#order div:nth-child(2){
+    margin-left: 30px;    
+}
+
+#order span.title{
+    display:block;
+    margin-bottom: 5px;
+    border-bottom: 1px solid black;
+    padding: 4px;
+}
+
+#order span.subdata {
+    display:block;
+    text-align:right;
+}
+
+#order span.subdata span {
+    float: left;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+#order span.last {
+    border-bottom: 1px solid black;
+}
+
+#order span.data {
+    margin-bottom: 50px;
+    display:block;
+    text-align:right;
+}
+
+#items article{
+    min-height: 150px;
+    padding: 10px 40px;
+    overflow:hidden;
+    border-bottom: 1px solid #e6e6e6;
+    clear:both;
+}
+
+#items article div{
+    float:left;
+    height: 150px;
+}
+
+#items article div:first-child{
+    display:table-cell;
+    vertical-align: middle;
+    margin-right: 25px;
+}
+
+#items article div:first-child img{
+    width: 150px;
+    display:inline-block;
+    vertical-align:middle;
+}
+
+#items article div:nth-child(2){
+    width: 50%;
+    border-right: 1px solid #e2e2e2;
+    margin-right:25px;    
+}
+
+#items article div:nth-child(2) p{
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+#items article div:last-child{
+    display:table-cell;    
+    vertical-align:middle;
+}
+
+#items article div:last-child span{
+    display:block;
+    font-size: 20px;
+    font-weight: 600;
+    text-align:right;
+    padding: 4px;
+    color: #bf3504;
+    vertical-align:middle;
+}
+
+#items article div:last-child span:last-child{
+    border-top: 2px solid black;
+    color: #38912d;
+}
+
+table#cart {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+table#cart thead th {
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    background:#343434;
+    padding: 8px 30px;
+}
+
+table#cart thead th:first-child {
+    border-radius: 8px 0 0px 0px;
+}
+
+table#cart thead th.last {
+    border-radius: 0 8px 0px 0px;
+}
+
+table#cart tbody tr:hover {
+    background-color: #F3F3F3;
+}
+
+table#cart tbody td {
+    border: 1px solid #ededed;
+    padding: 8px 30px;
+    vertical-align: middle;
+}
+
+table#cart tbody td.smallimg {
+    text-align: center;
+}
+
+table#cart tbody td.smallimg img {
+    height: 50px;
+    width: auto;
+}
+
+table#cart tbody td.quantity {
+    text-align: center;    
+}
+
+table#cart td.price {
+    text-align: right;
+}
+
+table#cart tbody td form {
+    display: inline-block;
+}
+table#cart tbody td input[type='number'] {
+    width: 50px;
+}
+
+table#cart tbody td a.remove {
+    color: #fff;
+    background-color: #E64D2D;
+    text-decoration: none;
+    font-weight: bold;
+    line-height: 1;
+    font-size: 15px;
+    height: 16px;
+    width: 16px;
+    display: inline-block;
+    text-align: center;
+    border-radius: 16px;
+    margin-left: 5px;
+}
+
+table#cart tbody td.quantity input[type='submit'] {
+    font-size: 0;
+    height: 20px;
+    width: 18px;
+    padding: 0;
+    margin: 0;
+    vertical-align: top;
+    background: url('/Content/img/save.png') top left no-repeat;
+    border: none;
+    cursor: pointer;
+}
+
+table#cart tbody td img {
+    max-width: 100px;    
+}
+
+table#cart tfoot td {
+    padding: 8px 30px;
+    vertical-align: middle;
+    border: 1px solid transparent;
+}
+
+table#cart tfoot td:first-child {
+    text-align: right;
+}
+
+.void {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: Maroon;
+    color: #fff;
+    border-radius: 8px;
+    text-align: center;
+    padding: 5px;
+}
+
+div.invoice {
+    display: block;
+}
+
+div.invoice div.iheader {
+    display: block;
+}
+
+div.invoice img.curtlogo {
+    float: left;
+}
+
+div.invoice p.remit {
+    float: left;
+    width: 150px;
+    padding: 15px 20px 0;
+}
+
+div.invoice p.remit span {
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+div.invoice div.invoicenumber {
+    float: left;
+    margin-top: 15px;
+    border: 1px solid #000;
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+div.invoice div.invoicenumber span {
+	border-bottom: 1px solid #000;
+	display: block;
+	padding: 2px 4px;
+	margin-bottom: 10px;
+	font-weight: bold;
+}
+
+div.addresses {
+    float: left;
+    width: 300px;
+    border: 1px solid #000;
+}
+
+div.addresses #billto, div.addresses #shipto {
+    display: block;
+    clear: both;
+}
+
+div.addresses #billto {
+	border-top: 1px solid #000;
+}
+
+div.addresses h3 {
+    font-size: 12px;
+    line-height: 1;
+    padding: 3px 4px;
+    border-bottom: 1px solid #000;
+}
+
+div.addresses p {
+    display: block;
+    padding: 5px 20px;
+}
+
+div.dateinfo {
+    float: left;
+    padding-left: 20px;
+    width: 370px;
+}
+
+div.dateinfo .phone {
+    float: left;
+    width: 150px;
+}
+
+div.dateinfo .dates {
+    float: right;
+}
+
+div.dateinfo .dates strong {
+    text-align: right;
+    display: inline-block;
+    width: 55px;
+}
+
+table.invoicegroup thead th {
+    border: 1px solid lightGrey;
+    background-color: #E6E6E6;
+	color: #555;
+	font-weight: normal;
+}
+
+table.invoicegroup tbody td {
+    padding: 3px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+table.invoicegroup tbody tr:nth-child(odd) td  {
+    background-color: #E2E4FF;
+}
+
+table.invoicetable {
+    margin-top: 15px;
+    width: 700px;
+}
+
+table.invoicetable th {
+	font-size: 14px;
+}
+
+table.invoicetable th, table.invoicetable td {
+    border: 1px solid #000;
+    text-align: center;
+}
+
+table.items tbody td {
+	border-top: 0;
+	border-bottom: 0;
+	padding: 6px;
+}
+
+table.items tbody td.totals {
+    text-align: right;
+}
+
+table.items tbody td.desc {
+    text-align: left;
+	padding: 6px 6px 6px 25px;
+}
+
+table.items tfoot td {
+    padding-top: 20px;
+    border: 1px solid #000;
+    border-top: 0;
+}
+
+table.foottable thead td {
+    border: 0;
+    border-bottom: 1px solid #000;
+}
+
+table.foottable tfoot td {
+    border: 0;
+    border-top: 1px solid #000;
+}
+
+table.foottable td.litem {
+    font-weight: bold;
+}
+
+table.foottable td.totals {
+    border-top: 0;
+    border-bottom: 0;
+    text-align: right;
+    padding-right: 20px;
+}
+
+table.foottable td.discountlabel {
+    border: 0;
+    font-weight: bold;
+}
+
+table.foottable td.discountamount {
+    border: 0;
+    border-right: 1px solid #000;
+}
+
+table.foottable td.amountdue {
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+table.foottable td.amountdueamount {
+    vertical-align: middle;
+}

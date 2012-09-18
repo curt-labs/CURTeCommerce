@@ -1,0 +1,182 @@
+﻿@{
+    Admin.Customer customer = ViewBag.customer;
+    if (customer == null) {
+        customer = new Admin.Customer();
+    }
+
+    Admin.Cart cart = ViewBag.cart;
+    if (cart == null) {
+        cart = new Admin.Cart();
+    }
+
+    List<Admin.Country> countries = ViewBag.countries;
+    if (countries == null) {
+        countries = new List<Admin.Country>();
+    }
+
+    List<Admin.Address> addresses = ViewBag.addresses;
+    if (addresses == null) {
+        addresses = new List<Admin.Address>();
+    }
+
+    Admin.Models.ShippingResponse shippingresponse = ViewBag.shippingresponse;
+    if (shippingresponse == null) {
+        shippingresponse = new Admin.Models.ShippingResponse();
+    }
+
+    Admin.Models.Settings settings = ViewBag.settings ?? new Admin.Models.Settings();
+    List<string> freeshippingtypes = settings.Get("FreeShippingType").Split(',').ToList<string>();
+
+    string error = ViewBag.error;
+    string shipping_type = "";
+    ViewBag.Title = "| Add Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="/Admin/Scripts/custom/add.order.js"></script>
+<link href="/Admin/Content/css/order.manager.add.css" rel="stylesheet" type="text/css" />
+<link href="/Admin/Content/css/admin_form.css" rel="stylesheet" type="text/css" />
+<span class="title">Add Order</span>
+@if (error != "") { 
+    <span class="error">@error</span>
+}
+<ul class="tabs">
+    <li>
+        Step 1: Customer
+    </li>
+    <li>
+        Step 2: Items
+    </li>
+    <li class="active">
+        Step 3: Shipping
+    </li>
+    <li>
+        Step 4: Billing
+    </li>
+    <li>
+        Step 5: Payment
+    </li>
+</ul>
+<div class="left">
+    <div id="current-shipping-address">
+        <p class="tab-title">Choose @customer.fname @customer.lname's Shipping Address and Option</p>
+        <div class="address main-address">
+            <span>@((cart.Shipping.residential) ? "Residential" : "Commercial")</span>
+            @cart.Shipping.first @cart.Shipping.last<br />
+            @cart.Shipping.street1<br />
+            @if (!String.IsNullOrEmpty(cart.Shipping.street2)) {
+                @cart.Shipping.street2<br />
+            }
+            @cart.Shipping.city, @cart.Shipping.State1.abbr @cart.Shipping.postal_code<br />
+            @cart.Shipping.State1.Country.name
+        </div>
+        <form action="/Admin/Orders/Step4" method="post" id="shipping_type" class="admin_form">
+            <fieldset>
+                @if (shippingresponse != null && shippingresponse.Status != "ERROR" && shippingresponse.Result != null && shippingresponse.Result.Count > 0) {
+                        int shipcount = 0;
+                        for (int i = shippingresponse.Result.Count - 1; i >= 0; i--) {
+                            shipcount++;
+                            Admin.Models.ShipmentRateDetails rate = shippingresponse.Result[i];
+                            <label for="shipping_@(shipcount)">
+                                @if (cart.HasFreeShipping() && freeshippingtypes.Contains(rate.ServiceType)) {
+                                    shipping_type = rate.ServiceType;
+                                    <input type="radio" name="shipping_type" id="shipping_@(shipcount)" value="@rate.ServiceType|0" @((shipcount == 1) ? "checked=checked" : "") />
+                                    <span class="rate">Free Shipping - @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rate.ServiceType.Replace("_", " ").ToLower())</span>
+                                } else {
+                                    shipping_type = rate.ServiceType;
+                                    <input type="radio" name="shipping_type" id="shipping_@(shipcount)" value="@rate.ServiceType|@rate.Rates.FirstOrDefault().NetCharge.Key" @((shipcount == 1) ? "checked=checked" : "") />
+                                    <span class="rate">@String.Format("{0:C}", rate.Rates.First().NetCharge.Key) @rate.Rates.First().NetCharge.Value - @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rate.ServiceType.Replace("_", " ").ToLower())</span>
+                                }
+                            </label>
+                        }
+                        <input type="submit" class="button" id="btnChooseShippingType" value="Proceed to Payment" />
+                } else if (shippingresponse.Status == "ERROR") {
+                    <p>There was a problem with FedEx: @shippingresponse.Status_Description</p>
+                } else {
+                        <p>There was a problem with FedEx. Please try again.</p>
+                }
+                <input type="hidden" name="id" id="customerID" value="@customer.ID" />
+                <input type="submit" class="button" id="btnChooseShippingType" value="Choose" />
+            </fieldset>
+        </form>
+    </div>
+    <form class="admin_form" id="add-shipping-address" method="post" action="/Admin/Orders/AddShippingAddress">
+        <input type="hidden" name="customerID" value="@customer.ID" />
+        <fieldset>
+            <legend>Use a new Address</legend>
+            <label for="sfirst">
+                Shipping First Name
+                <input type="text" name="sfirst" id="sfirst" data-add="false" placeholder="Enter the shipping first name" required="required" title="First Name on shipping address is required" />
+            </label>
+
+            <label for="slast">
+                Shipping Last Name
+                <input type="text" name="slast" id="slast" placeholder="Enter the shipping last name" required="required" title="Last Name on shipping address is required" />
+            </label>
+
+            <label for="sstreet1">
+                Shipping Street 1
+                <input type="text" name="sstreet1" id="sstreet1" placeholder="Enter the shipping street" required="required" title="Shipping street is required" />
+            </label>
+            <label for="sstreet2">
+                Shipping Street 2
+                <input type="text" name="sstreet2" id="sstreet2" placeholder="Enter additional info for shipping street" />
+            </label>
+
+            <label for="scity">
+                Shipping City
+                <input type="text" name="scity" id="scity" placeholder="Enter the shipping city" required="required" title="Shipping city is required" />
+            </label>
+
+            <label for="sstate">
+                Shipping State/Province
+                <select name="sstate" id="sstate" required="required" title="Select a Shipping State/Province">
+                    <option value="0">- Select State/Province -</option>
+                    @foreach (Admin.Country country in countries) {
+                        <optgroup label="@country.name">
+                            @foreach (Admin.State state in country.getProvinces()) {
+                                <option value="@state.stateID">@(String.Format("{0} - {1}", state.abbr, state.state1))</option>
+                            }
+                        </optgroup>
+                    }
+                </select>
+            </label>
+            <label for="szip">
+                Shipping Postal Code
+                <input type="text" name="szip" id="szip" placeholder="Enter the shipping postal code" required="required" title="Shipping Postal Code is required" />
+            </label>
+            <label for="sresidential">
+                <input type="checkbox" name="sresidential" id="sresidential" value="true" checked="checked" />
+                Residential Address?
+            </label>
+        </fieldset>
+        <input type="submit" id="btnAddShippingAddress" class="button" value="Add Address" />
+        <input type="reset" id="btnResetShipping" class="button cancel" value="Cancel" />
+        <div class="clearfix"></div>
+    </form>
+</div>
+<div class="right">
+    <article class="scroller">
+        <span class="banner">Addresses</span>
+        @foreach (Admin.Address a in addresses) {
+            if (!a.ID.Equals(cart.Shipping.ID)) {
+                <div class="address" data-id="@a.ID" id="address-@a.ID">
+                    <span>@((a.residential) ? "Residential" : "Commercial")</span>
+                    @a.first @a.last<br />
+                    @a.street1<br />
+                    @if (!String.IsNullOrEmpty(a.street2)) {
+                        @a.street2<br />
+                    }
+                    @a.city, @a.State1.abbr @a.postal_code<br />
+                    @a.State1.Country.name
+                    <a href="/Admin/Orders/ChooseShipping/@customer.ID?address=@a.ID" class="button">Choose</a>
+                </div>
+            }
+        }
+        <a href="javascript: void;" class="new-address button" id="new-shipping-address">New Address</a>
+    </article>
+</div>
+<div class="clearfix"></div>
+<div id="footnav">
+    <a id="previous" href="/Admin/Orders/Step2/@customer.ID" class="button">Back to Items</a>
+    <div class="clearfix"></div>
+</div>

@@ -1,0 +1,27 @@
+﻿@{
+    Admin.FaqTopic topic = ViewBag.topic;
+    if(topic == null){
+        topic = new Admin.FaqTopic();   
+    }
+
+    string error = ViewBag.error;
+    if(error == null){
+        error = "";
+    }
+    
+    ViewBag.Title = "Edit Topic";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<span class="title">Edit Topic</span>
+
+<form class="admin_form" method="post" action="/Admin/FAQManager/SaveTopic/@topic.ID">
+    @if (error.Length > 0) {
+        <p class="error">@error</p>
+    }
+    <label for="topic">
+        Topic Name
+        <input type="text" name="topic" id="topic" placeholder="Enter the topic..." value="@topic.topic" required="required" title="You must enter a name for this topic" />
+    </label>
+
+    <input type="submit" name="btnSubmit" id="btnSubmit" value="Save" />
+</form>

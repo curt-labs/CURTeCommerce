@@ -1,0 +1,79 @@
+﻿@{
+    List<Admin.Models.Orders> orders = ViewBag.orders ?? new List<Admin.Models.Orders>();
+    int page = ViewBag.page ?? 1;
+    int perpage = ViewBag.perpage ?? 10;
+    int count = ViewBag.count ?? 0;
+    int pagestart = ((page - 1) * perpage) + 1;
+    pagestart = (pagestart < 0) ? 1 : pagestart;
+    int pageend = ((page - 1) * perpage) + perpage;
+    int pages = ViewBag.pages ?? Convert.ToInt32(Math.Ceiling(Convert.ToDouble(count) / perpage));
+    string evenodd = "even";
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/order.manager.css" rel="stylesheet" type="text/css" />
+<span class="title">Manage Orders</span>
+<a href="/Admin/Orders/Add" class="button" title="Add Order">Add Order</a>
+
+<div class="dataTables_wrapper">
+    <div class="fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix">
+        <div class="dataTables_length">
+            <form id="formperpage" action="@Admin.Models.UDF.getURLWithoutQueryString()" method="get">
+                <input type="hidden" name="page" value="@page" />
+                <label>Show 
+                    <select name="perpage" size="1" id="tableperpage">
+                        <option value="10" @((perpage == 10) ? "selected='selected'" : "")>10</option>
+                        <option value="25" @((perpage == 25) ? "selected='selected'" : "")>25</option>
+                        <option value="50" @((perpage == 50) ? "selected='selected'" : "")>50</option>
+                        <option value="100" @((perpage == 100) ? "selected='selected'" : "")>100</option>
+                    </select>
+                     entries
+                </label>
+            </form>
+        </div>
+        <div class="dataTables_filter"><label>Search: <input type="text" id="tablesearch"></label></div>
+    </div>
+    <table class="orderTable">
+        <thead>
+            <tr>
+                <th class="ui-state-default">Order #</th>
+                <th class="ui-state-default">Customer</th>
+                <th class="ui-state-default">Number of Items</th>
+                <th class="ui-state-default">Order Date</th>
+                <th class="ui-state-default">Payment Method</th>
+                <th class="ui-state-default">Status</th>
+                <th class="ui-state-default">Order Total</th>
+                <th class="ui-state-default"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Admin.Models.Orders order in orders) {
+                if (evenodd == "odd") {
+                    evenodd = "even";
+                } else {
+                    evenodd = "odd";
+                }
+                <tr class="@evenodd">
+                    <td>@order.orderID</td>
+                    <td>@order.customerName</td>
+                    <td>@order.itemcount</td>
+                    <td>@String.Format("{0:M/d/yyyy h:mm tt}", order.orderDate.ToLocalTime())</td>
+                    <td>@order.PaymentMethod</td>
+                    <td>@order.status</td>
+                    <td>@String.Format("{0:C}", order.total)</td>
+                    <td>
+                        <a class="btn" href="/Admin/Orders/Items/@order.orderID">View</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix">
+        <div class="dataTables_info">Showing @pagestart to @pageend of @count entries</div>
+        <div class="dataTables_paginate fg-buttonset ui-buttonset fg-buttonset-multi ui-buttonset-multi paging_two_button">
+            <a @((page > 1) ? "href=" + Admin.Models.UDF.getURLWithoutQueryString() + "?perpage=" + perpage + "&page=" + (page - 1) : "") class="fg-button ui-button ui-state-default ui-corner-left @((page <= 1) ? "ui-state-disabled" : "")" title="Previous"><span class="ui-icon ui-icon-circle-arrow-w"></span></a>
+            <a @((page < pages) ? "href=" + Admin.Models.UDF.getURLWithoutQueryString() + "?perpage=" + perpage + "&page=" + (page + 1) : "") class="fg-button ui-button ui-state-default ui-corner-right @((page >= pages) ? "ui-state-disabled" : "")" title="Next"><span class="ui-icon ui-icon-circle-arrow-e"></span></a>
+        </div>
+    </div>
+</div>
+<script src="/Admin/Scripts/custom/order.manager.js"></script>

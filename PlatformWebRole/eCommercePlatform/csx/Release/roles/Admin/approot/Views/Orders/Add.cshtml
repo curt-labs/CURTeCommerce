@@ -1,0 +1,194 @@
+﻿@{
+    List<string> errors = ViewBag.errors;
+    if (errors == null) {
+        errors = new List<string>();
+    }
+
+    Admin.Customer customer = ViewBag.cust;
+    if (customer == null) {
+        customer = new Admin.Customer();
+    }
+
+    Admin.Address billing = ViewBag.billing;
+    if (billing == null) {
+        billing = new Admin.Address();
+    }
+
+    Admin.Address shipping = ViewBag.shipping;
+    if (shipping == null) {
+        shipping = new Admin.Address();
+    }
+
+    List<Admin.Country> countries = ViewBag.countries;
+    if (countries == null) {
+        countries = new List<Admin.Country>();
+    }
+    string error = ViewBag.error;
+    ViewBag.Title = "| Add Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="/Admin/Scripts/custom/add.order.js"></script>
+<link href="/Admin/Content/css/order.manager.add.css" rel="stylesheet" type="text/css" />
+<link href="/Admin/Content/css/admin_form.css" rel="stylesheet" type="text/css" />
+<span class="title">Add Order</span>
+@if (error != "") { 
+    <span class="error">@error</span>
+}
+
+<ul class="tabs">
+    <li class="active">
+        Step 1: Customer
+    </li>
+    <li>
+        Step 2: Items
+    </li>
+    <li>
+        Step 3: Shipping
+    </li>
+    <li>
+        Step 4: Billing
+    </li>
+    <li>
+        Step 5: Payment
+    </li>
+</ul>
+<div class="admin_form" id="customer">
+    @if (errors != null && errors.Count > 0) {
+        <ul class="error_box">
+            @foreach (string e in errors) {
+                <li>@e</li>
+            }
+        </ul>
+    }
+    <h3>Select a customer OR add a New Customer</h3>
+    <form action="/Admin/Orders/Step2" method="post" class="admin_form" id="OrderStep2">
+        <label for="customersearch">
+            Search for a Customer<br />
+            <input type="text" id="customersearch" placeholder="Search by name or email" />
+        </label>
+        <input type="hidden" id="customerID" name="id" />
+        <input type="button" id="newCustomer" class="button" value="New Customer" />
+    </form>
+    <form action="/Admin/Orders/Step1New" method="post" class="admin_form" id="newCustomerForm" style="display: none;">
+        <fieldset class="left">
+            <legend>Basic Information</legend>
+            <label for="signup_email">
+                E-Mail Address
+                <input type="email" name="email" id="signup_email" placeholder="Enter your e-mail address" required="required" title="E-Mail Address is required" />
+            </label>
+            <label for="fname">
+                First Name
+                <input type="text" name="fname" id="fname" placeholder="Enter your first name" required="required" title="First name is required" />
+            </label>
+            <label for="lname">
+                Last Name
+                <input type="text" name="lname" id="lname" placeholder="Enter your last name" required="required" title="Last name is required" />
+            </label>
+            <label for="phone">
+                Phone Number
+                <input type="tel" name="phone" id="phone" placeholder="Enter your phone number" />
+            </label>
+        </fieldset>
+            
+        <fieldset class="billing left">
+            <legend>Billing Information</legend>
+
+            <label for="bfirst">
+                Billing First Name
+                <input type="text" name="bfirst" id="bfirst" placeholder="Enter the billing first name" required="required" title="Last Name on billing address is required" />
+            </label>
+
+            <label for="blast">
+                Billing Last Name
+                <input type="text" name="blast" id="blast" placeholder="Enter the billing last name" required="required" title="Last name on billing address is required" />
+            </label>
+
+            <label for="bstreet1">
+                Billing Street 1
+                <input type="text" name="bstreet1" id="bstreet1" placeholder="Enter the billing street" required="required" title="Billing street is required" />
+            </label>
+            <label for="bstreet2">
+                Billing Street 2
+                <input type="text" name="bstreet2" id="bstreet2" placeholder="Enter additional info for billing street" />
+            </label>
+
+            <label for="bcity">
+                Billing City
+                <input type="text" name="bcity" id="bcity" placeholder="Enter the billing city" required="required" title="Billing city is required" />
+            </label>
+
+            <label for="bstate">
+                Billing State/Province
+                <select name="bstate" id="bstate" required="required" title="Select a Billing State/Province">
+                    <option value="0">- Select State/Province -</option>
+                    @foreach (Admin.Country country in countries) {
+                        <optgroup label="@country.name">
+                            @foreach (Admin.State state in country.getProvinces()) {
+                                <option value="@state.stateID">@(String.Format("{0} - {1}", state.abbr, state.state1))</option>
+                            }
+                        </optgroup>
+                    }
+                </select>
+            </label>
+            <label for="bzip">
+                Billing Postal Code
+                <input type="text" name="bzip" id="bzip" placeholder="Enter the billing postal code" required="required" title="Billing Postal Code is required" />
+            </label>
+            <label for="bresidential">
+                <input type="checkbox" name="bresidential" id="bresidential" value="true" checked="checked" />
+                Residential Address?
+            </label>
+        </fieldset>
+
+        <fieldset class="shipping left">
+            <legend>Shipping Information</legend>
+            <label for="sfirst">
+                Shipping First Name
+                <input type="text" name="sfirst" id="sfirst" data-add="true" placeholder="Enter the shipping first name" required="required" title="First Name on shipping address is required" />
+            </label>
+
+            <label for="slast">
+                Shipping Last Name
+                <input type="text" name="slast" id="slast" placeholder="Enter the shipping last name" required="required" title="Last Name on shipping address is required" />
+            </label>
+
+            <label for="sstreet1">
+                Shipping Street 1
+                <input type="text" name="sstreet1" id="sstreet1" placeholder="Enter the shipping street" required="required" title="Shipping street is required" />
+            </label>
+            <label for="sstreet2">
+                Shipping Street 2
+                <input type="text" name="sstreet2" id="sstreet2" placeholder="Enter additional info for shipping street" />
+            </label>
+
+            <label for="scity">
+                Shipping City
+                <input type="text" name="scity" id="scity" placeholder="Enter the shipping city" required="required" title="Shipping city is required" />
+            </label>
+
+            <label for="sstate">
+                Shipping State/Province
+                <select name="sstate" id="sstate" required="required" title="Select a Shipping State/Province">
+                    <option value="0">- Select State/Province -</option>
+                    @foreach (Admin.Country country in countries) {
+                        <optgroup label="@country.name">
+                            @foreach (Admin.State state in country.getProvinces()) {
+                                <option value="@state.stateID">@(String.Format("{0} - {1}", state.abbr, state.state1))</option>
+                            }
+                        </optgroup>
+                    }
+                </select>
+            </label>
+            <label for="szip">
+                Shipping Postal Code
+                <input type="text" name="szip" id="szip" placeholder="Enter the shipping postal code" required="required" title="Shipping Postal Code is required" />
+            </label>
+            <label for="sresidential">
+                <input type="checkbox" name="sresidential" id="sresidential" value="true" checked="checked" />
+                Residential Address?
+            </label>
+        </fieldset>
+        <br />
+        <input type="submit" id="submitCustomer" value="Add Customer" />
+    </form>
+</div>

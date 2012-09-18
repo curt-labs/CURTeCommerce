@@ -1,0 +1,14 @@
+﻿html {
+    display: block;
+    position: relative;
+}
+
+body {
+    width: 100%;
+    min-width: 0px;
+}
+
+ul#galleries li.lifile:hover {
+    cursor: pointer;
+    background-color: #ccc;
+}

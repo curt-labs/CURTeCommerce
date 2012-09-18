@@ -13,8 +13,9 @@
         
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="/Content/view_sass/testimonials.css" rel="stylesheet" type="text/css" />
+<link href="@settings.Get("PathToCSS")/css/testimonials.css" rel="stylesheet" type="text/css" />
 
 <span class="heading">Submit Your Testimonial</span>
 

@@ -1,0 +1,129 @@
+﻿@{
+    Admin.Customer customer = ViewBag.customer;
+    if (customer == null) {
+        customer = new Admin.Customer();
+    }
+
+    Admin.Cart cart = ViewBag.cart;
+    if (cart == null) {
+        cart = new Admin.Cart();
+    }
+
+    List<Admin.Country> countries = ViewBag.countries;
+    if (countries == null) {
+        countries = new List<Admin.Country>();
+    }
+
+    List<Admin.Address> addresses = ViewBag.addresses;
+    if (addresses == null) {
+        addresses = new List<Admin.Address>();
+    }
+
+    string shipping_type = "";
+    ViewBag.Title = "| Add Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="/Admin/Scripts/custom/add.order.js"></script>
+<link href="/Admin/Content/css/order.manager.add.css" rel="stylesheet" type="text/css" />
+<link href="/Admin/Content/css/admin_form.css" rel="stylesheet" type="text/css" />
+<span class="title">Add Order</span>
+<ul class="tabs">
+    <li>
+        Step 1: Customer
+    </li>
+    <li>
+        Step 2: Items
+    </li>
+    <li>
+        Step 3: Shipping
+    </li>
+    <li>
+        Step 4: Billing
+    </li>
+    <li class="active">
+        Step 5: Payment
+    </li>
+</ul>
+<p class="tab-title">Enter @customer.fname @customer.lname's Payment Information</p>
+<table id="cart" data-custid="@customer.ID" data-cartid="@cart.ID">
+    <thead>
+        <tr>
+            <th>Part #</th>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th class="last">Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Admin.CartItem ci in cart.CartItems) {
+            <tr id="part_@(ci.partID)">
+                <td>@ci.partID</td>
+                <td>@ci.shortDesc</td>
+                <td class="quantity"><span>@ci.quantity</span></td>
+                <td class="price">@String.Format("{0:C}", (ci.price * ci.quantity))</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" class="shippingtype">(@cart.shipping_type.Replace("_"," ").ToLower()) Shipping:</td>
+            <td class="price">@((cart.shipping_price == 0) ? "Free!" : String.Format("{0:C}", cart.shipping_price))</td>
+        </tr>
+        <tr>
+            <td colspan="3" class="shippingtype">Tax:</td>
+            <td class="price">@String.Format("{0:C}",cart.tax)</td>
+        </tr>
+        <tr>
+            <td colspan="3"><strong>Total</strong></td>
+            <td class="price"><strong>@String.Format("{0:C}", cart.getTotal())</strong></td>
+        </tr>
+    </tfoot>
+</table>
+@if (ViewBag.message != null && ViewBag.message != "") {
+    <p class="message">@ViewBag.message</p>
+}
+<form class="admin_form" id="ccform" action="/Admin/Orders/Authorize/@customer.ID" method="post">
+    <fieldset>
+        <legend>Enter your Credit Card Information OR Choose a Payment Type</legend>
+        <div class="left">
+            <label for="first">
+                First Name on Card
+                <input type="text" id="first" name="first" placeholder="Enter your First Name" autocomplete="off" value="@ViewBag.Cart.Billing.first" required title="First Name on Card is required"/>
+            </label>
+            <label for="last">
+                Last Name on Card
+                <input type="text" id="last" name="last" placeholder="Enter your Last Name" autocomplete="off" value="@ViewBag.Cart.Billing.last" required title="Last Name on Card is required" />
+            </label>
+            <label for="cardnumber">
+                Credit Card Number
+                <input type="text" id="cardnumber" name="cardnumber" placeholder="Enter your Credit Card Number" value="" autocomplete="off" required title="Credit Card Number is required" />
+            </label>
+            <label for="expiration">
+                Expiration Date<br />
+                <select name="expiremonth" id="expiremonth" required title="Expiration Date is required">
+                    @foreach (int month in ViewBag.months) {
+                        <option value="@month" @((DateTime.Now.Month == month) ? "selected=selected" : "" )>@month</option>
+                    }
+                </select>
+                <span id="monthsep">/</span>
+                <select name="expireyear" id="expireyear" required title="Expiration Date is required">
+                    @foreach (int year in ViewBag.yearlist) {
+                        <option value="@year.ToString().Substring(2)">@year</option>
+                    }
+                </select>
+                <span class="clearfix"></span>
+            </label>
+            <label for="cvv">
+                CVV
+                <input type="text" id="cvv" name="cvv" autocomplete="off" required title="CVV Code is required" />
+            </label>
+        </div>
+        <div class="clearfix"></div>
+        <input type="submit" class="button" id="paymentSubmit" value="Submit" />
+    </fieldset>
+</form>
+
+<div id="footnav">
+    <a id="previous" href="/Admin/Orders/Step4/@customer.ID" class="button">Back to Billing</a>
+    <div class="clearfix"></div>
+</div>

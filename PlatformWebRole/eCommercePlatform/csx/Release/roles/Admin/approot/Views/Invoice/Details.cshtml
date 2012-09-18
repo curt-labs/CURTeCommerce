@@ -1,0 +1,246 @@
+﻿@{
+    Admin.Invoice invoice = ViewBag.invoice ?? new Admin.Invoice();
+    Admin.Models.Settings settings = ViewBag.settings ?? new Admin.Models.Settings();
+    Admin.Cart order = ViewBag.order ?? new Admin.Cart();
+
+    ViewBag.Title = "Invoice #" + invoice.number;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    decimal freight = 0;
+    decimal misccharges = 0;
+    Admin.InvoiceCode TradeDiscount = new Admin.InvoiceCode();
+    List<Admin.InvoiceCode> codes = invoice.InvoiceCodes.ToList<Admin.InvoiceCode>();
+    int codeindex = codes.FindIndex(
+        delegate(Admin.InvoiceCode ic) {
+            return ic.description.ToUpper().Contains("TRADE DISCOUNT");
+        });
+    if(codeindex > -1) {
+        TradeDiscount = codes[codeindex];
+        codes.RemoveAt(codeindex);
+    }
+    
+}
+<link href="/Admin/Content/css/invoice.manager.css" rel="stylesheet" type="text/css" />
+<link href="/Admin/Content/css/invoice.manager.print.css" rel="stylesheet" type="text/css" media="print" />
+<div class="buttonarea">
+    <span class="title">Invoice #@invoice.number</span>
+    @if (invoice.paid) {
+        <p class="void">Reconciled</p>
+    } else {
+        <a class="button" href="/Admin/Invoice/Paid/@invoice.id" id="pay">Reconcile</a>
+    }
+    <a class="button" href="#" data-id="@invoice.id" id="printinvoice">Print</a>
+</div>
+<div class="invoice">
+    <div class="iheader">
+        <img src="/Admin/Content/img/invoicelogo.png" alt="CURT Manufacturing: The FIRST Name in Towing Products" class="curtlogo" />
+        <p class="remit">
+           <span>PLEASE REMIT TO: </span><br />
+           CURT Manufacturing LLC<br />
+           Box 88006<br />
+           Milwaukee, WI 53288
+        </p>
+        <div class="invoicenumber">
+            <span>INVOICE</span>
+            @invoice.number
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+    <p class="small">6208 Industrial Dr, Eau Claire, WI 54701&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; www.curtmfg.com</p>
+    <div class="addresses">
+        <div id="shipto">
+            <h3>Ship To</h3>
+            <p>@invoice.ShipTo.first @invoice.ShipTo.last<br />
+            @invoice.ShipTo.street1<br />
+            @invoice.ShipTo.city @invoice.ShipTo.state @invoice.ShipTo.postal_code<br />
+            @invoice.ShipTo.country</p>
+            <span style="clear:both;"></span>
+        </div>
+        <div id="billto">
+            <h3>Sold To</h3>
+            <p>@invoice.BillTo.first @invoice.BillTo.last<br />
+            @invoice.BillTo.street1<br />
+            @if (invoice.BillTo.street2 != "") {
+                @invoice.BillTo.street2<br />
+            }
+            @invoice.BillTo.city @invoice.BillTo.state @invoice.BillTo.postal_code<br />
+            @invoice.BillTo.country</p>
+            <span style="clear:both;"></span>
+        </div>
+    </div>
+    <div class="dateinfo">
+        <p class="phone small">
+            Phone (715) 831-8713<br />
+            1-877-CURTMFG<br />
+            Fax (715) 831-8712
+        </p>
+        <div class="dates">
+            <p><strong>Date:</strong> @String.Format("{0:MM/dd/yyyy}", invoice.dateAdded)</p>
+            <p><strong>Due On:</strong> @String.Format("{0:MM/dd/yyyy}", invoice.netDueDate)</p>
+        </div>
+        <div style="clear:both;"></div>
+        <br />
+        <br />
+        <p><strong>Currency:</strong> @invoice.billToCurrency</p>
+        <p><strong>Terms:</strong> @invoice.termsType - @invoice.termsDescription</p>
+        <div style="clear:both;"></div>
+    </div>
+    <div style="clear:both;"></div>
+    <table class="invoicetable">
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Order</th>
+                <th>P.O. Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@settings.Get("CURTAccount")</td>
+                <td>@invoice.curtOrder</td>
+                <td>@invoice.orderID</td>
+            </tr>
+        </tbody>
+    </table>
+    @if (order != null && order.ID != 0 && order.Shipments.Count > 0) {
+        <table class="invoicetable">
+            <thead>
+                <tr>
+                    <th>Ship No.</th>
+                    <th>Shipping Type</th>
+                    <th>Ship Date</th>
+                    <th>Ship Weight</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@order.Shipments[0].shipment_number</td>
+                    <td>@order.shipping_type</td>
+                    <td>@String.Format("{0:M/dd/yyyy}", order.Shipments[0].dateShipped)</td>
+                    <td>@order.Shipments[0].weight</td>
+                </tr>
+            </tbody>
+        </table>
+    }
+    <table class="invoicetable items">
+        <thead>
+            <tr>
+                <th>Line No.</th>
+                <th>Item Number / Description</th>
+                <th>U/M</th>
+                <th>Quantity / Price</th>
+                <th>Net Sales Amt</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td class="desc">GST BUSINESS NUMBER:<br />
+                    89223 4907 RT0001<br />
+                    FEIN 27-4036974<br />
+                    ORDER ONLINE AT:<br />
+                    ORDERS.CURTMFG.COM<br />
+                    @if (order != null && order.ID != 0 && order.Shipments.Count > 0) {
+                        <text>Tracking Numbers:</text><br />
+                        foreach (Admin.Shipment shipment in order.Shipments) {
+                             @shipment.tracking_number<br />
+                        }
+                    }
+                    <br />
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            @for (int i = 0; i < invoice.InvoiceItems.Count; i++) {
+                <tr>
+                    <td>@((i + 1).ToString("000"))</td>
+                    <td class="desc">@invoice.InvoiceItems[i].partID<br />@invoice.InvoiceItems[i].description</td>
+                    <td>EA</td>
+                    <td class="desc">@invoice.InvoiceItems[i].quantity<br />@invoice.InvoiceItems[i].price</td>
+                    <td class="totals">@String.Format("{0:C}", (invoice.InvoiceItems[i].quantity * invoice.InvoiceItems[i].price))</td>
+                </tr>
+            }
+            @foreach (Admin.InvoiceCode code in codes) {
+                <tr>
+                    <td></td>
+                    <td class="desc">@code.description</td>
+                    <td></td>
+                    <td class="desc"></td>
+                    <td class="totals">@String.Format("{0:C}", code.value)</td>
+                </tr>
+                if (code.description.Trim().ToUpper().Equals("FREIGHT")) {
+                    freight += code.value;
+                } else {
+                    misccharges += code.value;
+                }
+            }
+            @if (invoice.salesTax != null) {
+                <tr>
+                    <td></td>
+                    <td class="desc">GOODS AND SERVICES TAX</td>
+                    <td></td>
+                    <td class="desc"></td>
+                    <td class="totals">@String.Format("{0:C}", invoice.salesTax)</td>
+                </tr>
+            }
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </tbody>
+    </table>
+    <table class="invoicetable foottable">
+        <thead>
+            <tr><td colspan="5"></td></tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="litem">Net Sales</td>
+            <td class="totals">@String.Format("{0:C}",invoice.subtotal)</td>
+            <td class="discountlabel">Trade Discount</td>
+            <td class="discountamount" colspan="2">@String.Format("{0:C}",((TradeDiscount != null && TradeDiscount.value != null) ? TradeDiscount.value : 0))</td>
+        </tr>
+        <tr>
+            <td class="litem">Misc Charges</td>
+            <td class="totals">@String.Format("{0:C}",misccharges)</td>
+            <td class="discountlabel">Terms Discount</td>
+            <td class="discountamount" colspan="2">@String.Format("{0:C}",invoice.discount ?? 0)</td>
+        </tr>
+        <tr>
+            <td class="litem">Frieght</td>
+            <td class="totals">@String.Format("{0:C}",freight)</td>
+            <td class="discountlabel"></td>
+            <td class="amountdue" rowspan="2">Amount Due</td>
+            <td class="amountdueamount" rowspan="2">@String.Format("{0:C}",invoice.total ?? 0)</td>
+        </tr>
+        <tr>
+            <td class="litem">Taxes</td>
+            <td class="totals">@String.Format("{0:C}", invoice.salesTax ?? 0)</td>
+            <td class="discountlabel"></td>
+        </tr>
+        </tbody>
+        <tfoot>
+            <tr><td colspan="5"></td></tr>
+        </tfoot>
+    </table>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $(document).on('click', '#printinvoice', function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            $.post('/Admin/Invoice/PrintInvoice/' + id, function (data) {
+                console.log(data);
+                if (data == "success") {
+                    window.print();
+                }
+            });
+        });
+    });
+</script>

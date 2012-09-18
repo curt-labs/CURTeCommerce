@@ -1,0 +1,130 @@
+﻿@{
+    List<Admin.Models.PostWithCategories> posts = ViewBag.posts;
+    if (posts == null) {
+        posts = new List<Admin.Models.PostWithCategories>();
+    }
+
+    List<Admin.BlogCategory> categories = ViewBag.categories;
+    if (categories == null) {
+        categories = new List<Admin.BlogCategory>();
+    }
+
+    List<Admin.Models.CommentWithPost> comments = ViewBag.comments;
+    if (comments == null) {
+        comments = new List<Admin.Models.CommentWithPost>();
+    }
+
+    List<Admin.Models.GroupedModule> modules = ViewBag.modules;
+    if (modules == null) {
+        modules = new List<Admin.Models.GroupedModule>();
+    }
+
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/blog.manager.css" rel="stylesheet" type="text/css" />
+<span class="title">Manage Blog</span>
+
+<ul class="tabs">
+    <li>
+        <a href="#posts" title="Manage Posts">Posts</a>
+    </li>
+    <li>
+        <a href="#categories" title="Manage Categories">Categories</a>
+    </li>
+    <li>
+        <a href="#blogcomments" title="Manage Comments">Comments</a>
+    </li>
+</ul>
+<div class="tab_container">
+    <div class="tab_content" id="posts">
+        <a href="/Admin/Blog/EditPost" class="add" title="Add Post">Add Post</a>
+        <table id="postTable">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Created</th>
+                    <th>Published</th>
+                    <th>Approved<br>Comments</th>
+                    <th>UnApproved<br>Comments</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Admin.Models.PostWithCategories post in posts) {
+                    <tr>
+                        <td>@post.post_title</td>
+                        <td>@post.createdDate.ToString()</td>
+                        <td>@((post.publishedDate == null) ? "Not Published" : String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", post.publishedDate))</td>
+                        <td style="text-align: center;">@post.comments.Count()</td>
+                        <td style="text-align: center;">@post.mod_comments.Count()</td>
+                        <td>
+                            @if (post.publishedDate != null)
+                            {
+                                <a href="/Blog/Post/@(String.Format("{0:M-dd-yyyy}", post.publishedDate))/@(Server.UrlEncode(post.slug))" title="View">View</a> <text>|</text>
+                            }
+                            <a href="/Admin/Blog/EditPost/@post.blogPostID" title="Edit">Edit</a> | 
+                            <a href="/Admin/Blog/DeletePost/@post.blogPostID" title="Delete" class="delete_post">Delete</a>
+                            @if (post.comments.Count() > 0 || post.mod_comments.Count() > 0) {
+                                <text>|</text> <a href="/Admin/Blog/PostComments/@post.blogPostID" title="Moderate Comments">Comments</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="tab_content" id="categories">
+        <a href="/Admin/Blog/EditCategory" class="add" title="Add Blog Category">Add Category</a>
+
+        <table id="categoryTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Admin.BlogCategory category in categories) {
+                    <tr>
+                        <td>@category.name</td>
+                        <td>
+                            <a href="/Admin/Blog/EditCategory/@category.blogCategoryID" title="Edit">Edit</a> | 
+                            <a href="/Admin/Blog/DeleteCategory/@category.blogCategoryID" title="Delete Category" data-id="@category.blogCategoryID" class="delete_category">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="tab_content" id="blogcomments">
+        <table id="commentTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Created</th>
+                    <th>Approved</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Admin.Comment comment in comments) {
+                    <tr>
+                        <td>@comment.name</td>
+                        <td>@comment.email</td>
+                        <td>@comment.createdDate.ToString()</td>
+                        <td>@((comment.approved == true) ? "Yes" : "No")</td>
+                        <td>
+                            <a href="/Admin/Blog/ViewComment/@comment.commentID" title="View">View</a> | 
+                            <a href="/Admin/Blog/ApproveComment/@comment.commentID" title="Approve">Approve</a> | 
+                            <a href="/Admin/Blog/DeleteComment/@comment.commentID" title="Delete" data-id="@comment.commentID" class="delete_comment">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script defer src="/Admin/Scripts/custom/blog.manager.js"></script>

@@ -1,0 +1,130 @@
+﻿@{
+    List<Admin.ContactInquiry> inquiries = ViewBag.inquiries;
+    if(inquiries == null){
+        inquiries = new List<Admin.ContactInquiry>();
+    }
+
+    List<Admin.ContactType> types = ViewBag.types;
+    if (types == null) {
+        types = new List<Admin.ContactType>();
+    }
+    
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/contact.manager.css" rel="stylesheet" type="text/css" />
+
+<span class="title">Contact Management</span>
+<ul class="tabs">
+    <li>
+        <a href="#inquiries" title="View Inquiries">View Inquiries</a>
+    </li>
+    <li>
+        <a href="#types" title="View Types">View Types</a>
+    </li>
+</ul>
+<div class="tab_container">
+    <div class="tab_content" id="inquiries">
+        <span class="title small">Contact Inquiries</span>
+        <table class="inquiryTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Contact Type</th>
+                    <th>Date</th>
+                    <th>Follow Up</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Admin.ContactInquiry inq in inquiries) {
+                    <tr>
+                        <td>@inq.name</td>
+                        <td>@inq.ContactType.label</td>
+                        <td>@Convert.ToDateTime(inq.dateAdded.ToLocalTime())</td>
+                        <td><img src="/Admin/Content/img/@((inq.followedUp == 0) ? "red_cross.png" : "Checkmark.svg")" alt="@((inq.followedUp == 0)?"Needs follw-up":"Follwed Up")" /></td>
+                        <td>
+                            <a href="javascript:void(0)" title="View Message" data-id="@inq.ID" class="viewMessage">View Message</a>
+                            <span> | </span>
+                            <a href="javascript:void(0)" title="Remove Inquiry" data-id="@inq.ID" class="removeMessage">Remove</a>
+                            @if (inq.followedUp == 0) {
+                                <span> | </span>
+                                <a href="javascript:void(0)" title="Mark Responded" data-id="@inq.ID" class="responded">Mark Responded</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="tab_content" id="types">
+        <span class="title small">Contact Types</span>
+        <a href="javascript:void(0)" title="Add Contact Type" class="add addType">Add Type</a>
+        <table class="typeTable">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>E-Mail</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Admin.ContactType type in types) {
+                    <tr>
+                        <td>@type.label</td>
+                        <td>@type.email</td>
+                        <td><a href="/Admin/ContactManager/DeleteType/@type.ID" title="Delete @type.label" class="deleteType">Remove</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="mustache">
+    <div class="mustache-add_type">
+        <div class="admin_form">
+            <span class="title">Add Contact Type</span>
+            <label for="label">
+                Title
+                <input type="text" id="label" placeholder="Enter the title of the contact type" />
+            </label>
+
+            <label for="email">
+                E-Mail Address
+                <input type="text" id="email" placeholder="Enter the email location of the contact type" />
+            </label>
+            <input type="submit" id="btnAddType" value="Add Type" />
+            <a href="javascript:$.modal.close()" title="Close" class="modalClose">Close</a>
+        </div>
+    </div>
+    <div class="mustache-view_message">
+        <form class="admin_form">
+            <label>
+                Name
+                <input type="text" value="{{name}}" disabled="disabled" />
+            </label>
+            <label>
+                Phone
+                <input type="text" value="{{phone}}" disabled="disabled" />
+            </label>
+            <label>
+                E-Mail
+                <input type="text" value="{{email}}" disabled="disabled" />
+            </label>
+            <label>
+                Contact Type
+                <input type="text" value="{{ContactType}}" disabled="disabled" />
+            </label>
+            <label>
+                Date Added
+                <input type="text" value="{{dateAdded}}" disabled="disabled" />
+            </label>
+            <label>
+                Name<br />
+                <textarea rows="5" cols="40" disabled="disabled">{{message}}</textarea>
+            </label>
+            <input type="submit" class="modalClose" value="Close" />
+        </form>
+    </div>
+</div>
+<script defer src="/Admin/Scripts/custom/contact.manager.js"></script>

@@ -1,0 +1,201 @@
+﻿section span.title{
+    margin-bottom: 40px;
+    color: #bf3504;
+    font-size: 16px;
+    display:inline-block;
+}
+
+section a.add{
+    display:inline-block;
+    width: 200px;
+    height: 45px;
+    background:#bf3504;
+    margin: 0px 25px 40px 25px;
+    -moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+    text-align:center;
+    color: white;
+    text-decoration:none;
+    font-size: 24px;
+    font-weight:600;
+    line-height:45px;
+}
+
+table tbody tr td:last-child{
+    text-align:center;
+}
+
+table tbody tr td:last-child a{
+    color: #bf3504;
+    display: inline-block;
+}
+
+ul.file_tabs{
+    width: 250px;
+    float:left;
+    list-style:none;
+    padding:0;
+    margin:0;
+    box-shadow: -3px 3px 3px #e6e6e6;
+    z-index:1;
+}
+
+ul.file_tabs li{
+    height: 47px;
+    border-bottom: 1px solid #e6e6e6;
+    border-right: 1px solid #e6e6e6;
+    -webkit-transition: all 0.2s ease-in-out;
+    border-top: 1px solid transparent;
+    background: #f2f2f2;
+}
+
+ul.file_tabs li a{
+    display:block;
+    color: #2e2e30;
+    text-decoration:none;
+    height:47px;
+    line-height:37px;
+    padding: 0px 5px 0px 10px;
+    -webkit-transition: all 0.2s ease-in-out;
+}
+
+ul.file_tabs li:hover{
+    background:#bf3504;
+}
+
+ul.file_tabs li.active{
+    border-right: 1px solid white;
+    border-top:1px solid #777;
+    border-left: 5px solid #bf3504;
+    -moz-box-shadow: -3px 3px 3px #777;
+	-webkit-box-shadow: -3px 3px 3px #777;
+	-o-box-shadow: -3px 3px 3px #777;
+	box-shadow: -3px 3px 3px #777;
+    background:white;
+    zoom:1;
+    z-index:20000;
+    position:relative;
+}
+
+ul.file_tabs li:hover a{
+    color:white;
+}
+
+ul.file_tabs li.active:hover a{
+    color: #2e2e30;
+}
+
+div.file_tab_container{
+    float:left;
+    -moz-box-shadow: -2px 2px 2px #777;
+	-webkit-box-shadow: -2px 2px 2px #777;
+	-o-box-shadow: -2px 2px 2px #777;
+	box-shadow: -2px 2px 2px #777;
+    padding: 20px;
+    z-index:1000;
+    zoom: 1;
+    border: 1px solid #777;
+    border-left:none;
+    position:relative;
+    width:600px;
+}
+
+div.file_tab_container div.tab_content{
+    display: none;
+    position: absolute;
+    top:0;
+    left:0;
+    margin:20px;
+}
+
+div.file_tab_container div.active{
+    display: block;
+}
+
+div.file_tab_container div.tab_content article{
+    float:left;
+    width: 600px;
+    height:50px;
+    border-bottom: 1px solid #eaeaea;
+    line-height: 50px;
+}
+
+div.file_tab_container div.tab_content article img{
+    width: 40px;
+    max-height:40px;
+    vertical-align:middle;
+    margin-right:15px;
+}
+
+div.file_tab_container div.tab_content article div{
+    float:right;
+    height: 50px;
+    line-height: 50px;
+}
+
+div.file_tab_container div.tab_content article a{
+    color: #bf3504;
+}
+
+div.page_list{
+    width: 100%;
+    height: 500px;
+    overflow-y:auto;
+}
+
+div.page_list article{
+    height:40px;
+    border-bottom: 1px solid #e6e6e6;
+    line-height:40px;
+    font-size:12px;
+    padding: 0px 20px;
+    -webkit-transition:all 0.3s ease-in-out;
+    cursor:pointer;
+}
+
+div.page_list article:hover{
+    background:#bf3504;
+    color:white;
+}
+
+div.page_list article span.check{
+    background: url('/Admin/Content/img/Checkmark.svg') center;
+    display: none;
+    float:right;
+    height:40px;
+    width: 40px;   
+    -moz-background-size: 20px 20px;
+	-webkit-background-size: 20px 20px;
+	-o-background-size: 20px 20px;
+	background-size: 20px 20px;
+    background-repeat: no-repeat;
+}
+
+div.page_list article input[type=checkbox]{
+    display:none;
+}
+
+div.page_list a.modalClose{
+    float:right;
+    margin-right:10px;
+    color: black;
+    font-size: 12px;
+    line-height:90px;
+}
+
+div.page_list input[type=button]{
+    border: 1px solid #bf3514;
+    background:#bf3504;
+    color:white;
+    border-radius:2px;
+    margin-top: 20px;
+    float:right;
+    font-size: 16px;
+    padding: 4px 8px;
+    -webkit-transition: all 0.3s ease-in-out;
+}
+
+div.page_list input[type=button]:hover{
+    background: #aa2a00;
+}

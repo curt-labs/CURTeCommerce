@@ -1,0 +1,77 @@
+﻿@{
+    List<Admin.Models.StrippedContent> pages = ViewBag.pages;
+    if(pages == null){
+        pages = new List<Admin.Models.StrippedContent>();
+    }
+
+    List<Admin.Models.GroupedModule> modules = ViewBag.modules;
+    if (modules == null) {
+        modules = new List<Admin.Models.GroupedModule>();
+    }
+
+    string[] fixed_pages_array = ViewBag.fixed_pages;
+    List<string> fixed_pages = new List<string>();
+    if (fixed_pages_array == null) {
+        fixed_pages_array = new string[] { };
+    }
+    fixed_pages = new List<string>(fixed_pages_array);
+
+    bool can_add = false;
+    try {
+        if (modules.Where(x => x.path.ToUpper().Equals("/ADMIN/CONTENTMANAGER")).FirstOrDefault<Admin.Models.GroupedModule>().subs.Where(x => x.name.ToUpper().Equals("ADD")).Count() > 0) {
+            can_add = true;
+        }
+    } catch (Exception) { }
+
+    bool can_delete = false;
+    try {
+        if (modules.Where(x => x.path.ToUpper().Equals("/ADMIN/CONTENTMANAGER")).FirstOrDefault<Admin.Models.GroupedModule>().subs.Where(x => x.name.ToUpper().Equals("DELETE")).Count() > 0) {
+            can_delete = true;
+        }
+    } catch (Exception) { }
+        
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/content.manager.css" rel="stylesheet" type="text/css" />
+<span class="title">Content Pages</span>
+@if (can_add) {
+    <a href="/Admin/ContentManager/Edit" title="Add Page" class="add">Add Page</a>
+}
+<div class="clearfix"></div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Path</th>
+            <th>Referencing Page</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Admin.Models.StrippedContent page in pages) {
+            <tr>
+                <td>@page.Title</td>
+                <td>@(String.Format("http://{0}{1}/Page/{2}", Request.Url.Host, (Request.Url.IsDefaultPort ? "" : ":" + Request.Url.Port), page.Title))</td>
+                <td>
+                    @if (page.parent != null) {
+                        <span>@page.parent.Title&nbsp;</span>
+                    }
+                </td>
+                <td>
+                    @if (can_add) {
+                        <a href="/Admin/ContentManager/Edit/@page.ID" title="Edit @page.Title">Edit</a>
+                        if (can_delete && !fixed_pages.Contains(page.Title.ToLower())) {
+                            <text>|</text>
+                            <a href="/Admin/ContentManager/Delete/@page.ID" class="deletePage" title="Delete @page.Title">Delete</a>
+                        }
+                    } else {
+                        <a href="@(String.Format("http://{0}{1}/Page/{2}", Request.Url.Host, (Request.Url.IsDefaultPort ? "" : ":" + Request.Url.Port), page.Title))" title="View @page.Title" target="_blank">View Page</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script defer src="/Admin/Scripts/custom/content.manager.js"></script>

@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RoleModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PlatformWebRole" version="1.6.21103.1459" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
+  <Startup>
+    <Task commandLine="RemoteAccessAgent.exe" executionContext="elevated" taskType="background" relativePath="plugins\RemoteAccess">
+      <Environment>
+        <Variable name="RdModuleName" value="RemoteAccess" />
+        <Variable name="WaRoleType" value="IISWebRole" />
+      </Environment>
+    </Task>
+    <Task commandLine="RemoteAccessAgent.exe /blockStartup" executionContext="elevated" relativePath="plugins\RemoteAccess">
+      <Environment>
+        <Variable name="RdModuleName" value="RemoteAccess" />
+        <Variable name="WaRoleType" value="IISWebRole" />
+      </Environment>
+    </Task>
+    <Task commandLine="Startup.cmd" executionContext="elevated" relativePath="approot\bin">
+      <Environment>
+        <Variable name="WaRoleType" value="IISWebRole" />
+      </Environment>
+    </Task>
+  </Startup>
+  <Runtime>
+    <EntryPoint>
+      <NetFxEntryPoint assemblyName="EcommercePlatform.dll" />
+    </EntryPoint>
+  </Runtime>
+  <ConfigurationSettings>
+    <Setting name="Enabled" nameSpace="Microsoft.WindowsAzure.Plugins.RemoteAccess" />
+    <Setting name="AccountUsername" nameSpace="Microsoft.WindowsAzure.Plugins.RemoteAccess" />
+    <Setting name="AccountEncryptedPassword" nameSpace="Microsoft.WindowsAzure.Plugins.RemoteAccess" />
+    <Setting name="AccountExpiration" nameSpace="Microsoft.WindowsAzure.Plugins.RemoteAccess" />
+  </ConfigurationSettings>
+  <Properties>
+    <Property name="RoleType" value="Web" />
+    <Property name="RoleName" value="PlatformWebRole" />
+    <Property name="ProjectName" value="PlatformWebRole" />
+    <Property name="Configuration" value="Debug" />
+    <Property name="Platform" value="AnyCPU" />
+    <Property name="OutputDir" value="C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\obj\Debug\PlatformWebRole\" />
+    <Property name="EntryPoint" value="EcommercePlatform.dll" />
+    <Property name="SourceDir" value="C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\MvcWebRole1\" />
+    <Property name="RoleTargetFramework" value="v4.0" />
+    <Property name="SitePhysicalPath" value="C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\MvcWebRole1\" />
+    <Property name="OriginalItemSpec" value="C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\eCommercePlatform.ccproj" />
+    <Property name="MSBuildSourceProjectFile" value="C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\eCommercePlatform.ccproj" />
+    <Property name="MSBuildSourceTargetName" value="ResolveSingleWebRoleReference" />
+    <Property name="TargetFrameworkVersion" value="v4.0" />
+    <Property name="TargetRuntimeVersion" value="v4.0" />
+  </Properties>
+  <Sites>
+    <Site name="Web" physicalDirectory="C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\MvcWebRole1\">
+      <VirtualApplication name="Admin" physicalDirectory="C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\Admin" />
+      <Bindings>
+        <Binding name="Endpoint1" endpointName="Endpoint1" />
+        <Binding name="Endpoint2" endpointName="Https" />
+      </Bindings>
+    </Site>
+  </Sites>
+</RoleModel>

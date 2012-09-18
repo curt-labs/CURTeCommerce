@@ -8,7 +8,7 @@
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<link href="/Content/view_sass/auth.css" rel="stylesheet" type="text/css" />
+<link href="@settings.Get("PathToCSS")/css/auth.css" rel="stylesheet" type="text/css" />
 @if(error.Length > 0){
     <p class="error">@Html.Raw(error)</p>
 }

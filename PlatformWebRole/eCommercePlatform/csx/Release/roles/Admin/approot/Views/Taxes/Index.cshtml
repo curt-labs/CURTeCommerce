@@ -1,0 +1,26 @@
+﻿@{
+    List<Admin.Country> countries = ViewBag.countries ?? new List<Admin.Country>();
+    
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/taxes.manager.css" rel="stylesheet" type="text/css" />
+<span class="title">Taxes</span>
+<p>Rates are in percentages (i.e. 5.25%)</p>
+
+@foreach (Admin.Country country in countries) {
+    <h2>@country.name</h2>
+    <ul class="taxProvinces">
+        @foreach (Admin.State state in country.getProvinces()) {
+            <li>
+                <label for="state-@state.stateID">
+                    <span>@state.state1</span>
+                    <input type="number" id="state-@state.stateID" data-id="@state.stateID" step=".1" value="@state.taxRate" />
+                </label>
+                <button type="button" class="setStateRate" data-id="@state.stateID">Save</button>
+            </li>
+        }
+    </ul>
+}
+
+<script type="text/javascript" src="/Admin/Scripts/custom/taxes.manager.js"></script>

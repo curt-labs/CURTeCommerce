@@ -1,0 +1,73 @@
+﻿@{
+    Admin.Customer customer = ViewBag.customer;
+    if (customer == null) {
+        customer = new Admin.Customer();
+    }
+
+    Admin.Cart cart = ViewBag.cart;
+    if (cart == null) {
+        cart = new Admin.Cart();
+    }
+
+    ViewBag.Title = "| Add Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="/Admin/Scripts/custom/add.order.js"></script>
+<link href="/Admin/Content/css/order.manager.add.css" rel="stylesheet" type="text/css" />
+<link href="/Admin/Content/css/admin_form.css" rel="stylesheet" type="text/css" />
+<span class="title">Add Order</span>
+
+<ul class="tabs">
+    <li>
+        Step 1: Customer
+    </li>
+    <li class="active">
+        Step 2: Items
+    </li>
+    <li>
+        Step 3: Shipping
+    </li>
+    <li>
+        Step 4: Billing
+    </li>
+    <li>
+        Step 5: Payment
+    </li>
+</ul>
+<p>Add Items to @customer.fname @customer.lname's Cart</p>
+<fieldset class="items left">
+    <input type="text" id="partid" placeholder="Enter a Part #" />
+    <button id="addPart" class="button">Add</button>
+    <button id="emptyCart" class="button cancel">Empty</button>
+</fieldset>
+<table id="cart" data-custid="@customer.ID" data-cartid="@cart.ID">
+    <thead>
+        <tr>
+            <th>Part #</th>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th class="last">Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Admin.CartItem ci in cart.CartItems) {
+            <tr id="part_@(ci.partID)">
+                <td>@ci.partID</td>
+                <td>@ci.shortDesc</td>
+                <td class="quantity"><span>@ci.quantity</span><a href="javascript:void(0)" data-id="@ci.partID" class="remove" title="Remove Item From Cart">&times;</a></td>
+                <td class="price">@String.Format("{0:C}", (ci.price * ci.quantity))</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3"><strong>Subtotal</strong></td>
+            <td class="price"><strong>@String.Format("{0:C}", cart.GetSubTotal())</strong></td>
+        </tr>
+    </tfoot>
+</table>
+<div id="footnav">
+    <a id="previous" href="/Admin/Orders/Add" class="button">Back to Customer</a>
+    <a id="continue" href="/Admin/Orders/Step3/@customer.ID" class="button">Continue to Shipping</a>
+    <div class="clearfix"></div>
+</div>

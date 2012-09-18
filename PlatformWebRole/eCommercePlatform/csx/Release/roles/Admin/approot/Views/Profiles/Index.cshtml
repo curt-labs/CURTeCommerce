@@ -1,0 +1,61 @@
+﻿@{
+    List<Admin.Profile> profs = ViewBag.profiles;
+    if (profs == null) {
+        profs = new List<Admin.Profile>();
+    }
+
+    List<Admin.Models.GroupedModule> modules = ViewBag.modules;
+    if (modules == null) {
+        modules = new List<Admin.Models.GroupedModule>();
+    }
+
+    ViewBag.Title = "| Manage Profiles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/profiles.css" rel="stylesheet" type="text/css">
+
+<h2>Manage Profiles</h2>
+
+@if (modules.Where(x => x.path.ToUpper().Equals("/ADMIN/PROFILES") && x.hasAccess.Equals(1)).FirstOrDefault<Admin.Models.GroupedModule>().subs.Where(x => x.name.Equals("Add")).Count() > 0) {
+    <a href="/Admin/Profiles/Add" class="add_profile" title="Add Profile">Add Profile</a>
+}
+<div class="clearfix"></div>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>E-Mail</th>
+            <th>Username</th>
+            <th>Date Added</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Admin.Profile p in profs) {
+            <tr>
+                <td>
+                    @if (modules.Where(x => x.path.Equals("/Admin/Profiles")).FirstOrDefault<Admin.Models.GroupedModule>().subs.Where(x => x.name.Equals("Edit")).Count() > 0) {
+                        <a href="/Admin/Profiles/Edit/@p.id" title="Edit @(p.first + " " + p.last)">
+                            @if (p.image != null && p.image.Length > 0) {
+                                <img src="@p.image" alt="@(p.first + " " + p.last)" />
+                            }
+                            <span>@(p.first + " " + p.last)</span>
+                        </a>
+                    } else {
+                        if (p.image != null && p.image.Length > 0) {
+                                <img src="@p.image" alt="@(p.first + " " + p.last)" />
+                        }
+                        <span>@(p.first + " " + p.last)</span>
+                    }
+                </td>
+                <td>@p.email</td>
+                <td>@p.username</td>
+                <td>@Convert.ToDateTime(p.date_added)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script type="text/javascript">
+    $(function () {
+        $('table').dataTable({ 'bJQueryUI': true });
+    });
+</script>

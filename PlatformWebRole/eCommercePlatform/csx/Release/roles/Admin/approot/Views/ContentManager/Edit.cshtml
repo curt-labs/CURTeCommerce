@@ -1,0 +1,188 @@
+﻿@{
+    Admin.ContentPage page = ViewBag.page;
+    if (page == null || page.ID == 0) {
+        page = new Admin.ContentPage();
+        page.Title = "New Page";
+    }
+
+    string[] fixed_pages_array = ViewBag.fixed_pages;
+    List<string> fixed_pages = new List<string>();
+    if(fixed_pages_array == null){
+        fixed_pages_array = new string[]{};
+    }
+    fixed_pages = new List<string>(fixed_pages_array);
+
+    Admin.ContentPage parent_page = ViewBag.parent_page;
+    if (parent_page == null) {
+        parent_page = new Admin.ContentPage();
+    }
+
+    List<Admin.ContentPage> sub_pages = ViewBag.sub_pages;
+    if (sub_pages == null) {
+        sub_pages = new List<Admin.ContentPage>();
+    }
+
+    List<Admin.Models.GroupedModule> modules = ViewBag.modules;
+    if (modules == null) {
+        modules = new List<Admin.Models.GroupedModule>();
+    }
+
+    bool can_delete = false;
+    try {
+        if (modules.Where(x => x.path.ToUpper().Equals("/ADMIN/CONTENTMANAGER")).FirstOrDefault<Admin.Models.GroupedModule>().subs.Where(x => x.name.ToUpper().Equals("DELETE")).Count() > 0) {
+            can_delete = true;
+        }
+    } catch (Exception) { }
+
+    ViewBag.Title = "Edit " + page.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/content.manager.css" rel="stylesheet" type="text/css" />
+<link href="/Admin/Content/css/admin_form.css" rel="stylesheet" type="text/css" />
+
+<span class="title">Edit @page.Title</span>
+@if (can_delete && !fixed_pages.Contains(page.Title.ToLower())) {
+    <a href="/Admin/ContentManager/Delete/@page.ID" title="Delete Page" class="add deletePage">Delete Page</a>
+}
+<ul class="tabs">
+    <li>
+        <a href="#info" title="Page Info">Page Info</a>
+    </li>
+    @if (page.ID > 0) { // Display menu options
+        <li>
+            <a href="#options" title="Menu Options">Options</a>
+        </li>
+    }
+</ul>
+
+<div class="tab_container">
+    <div class="tab_content" id="info">
+        <form action="/Admin/ContentManager/Save/@page.ID" method="post" class="admin_form">
+            <label for="title">
+                Page Title
+                <input type="text" name="title" id="title" placeholder="Enter the title of this page" value="@page.Title" @((fixed_pages.Contains(page.Title.ToLower()))?"readonly=readonly":"") />
+            </label>
+
+            <label for="visible">
+                Visible to the Public
+                <input type="checkbox" name="visible" id="visible" value="1" @((page.visible == 1) ? "checked=checked" : "") />
+            </label>
+
+            <textarea cols="60" rows="1" name="content" id="content">@page.content</textarea><br />
+            <label for="metaTitle">
+                Meta Title
+                <input type="text" name="metaTitle" id="metaTitle" placeholder="Enter the meta title of this page (optional)" value="@page.metaTitle" />
+            </label>
+
+            <label for="metaDescription">
+                Meta Description
+                <input type="text" name="metaDescription" id="metaDescription" placeholder="Enter the meta description of this page (optional)" value="@page.metaDescription" />
+            </label>
+
+            <input type="submit" id="btnSubmit" value="Save" />
+        </form>
+    </div>
+    @if (page.ID > 0) {
+        <div class="tab_content" id="options">
+            <span class="title">Parent Pages</span>
+            <a href="javascript:void(0)" title="Nest Page" class="add addParent" data-count="@((parent_page.ID != 0) ? 1 : 0)">Add to Parent</a>
+            <span class="small">Parent Pages will list this page in their menu.</span>
+            <div class="clearfix"></div>
+            <table id="parentTable">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Path</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if(parent_page.ID != 0) {
+                        <tr>
+                            <td>@parent_page.Title</td>
+                            <td>
+                                @(String.Format("http://{0}{1}/Page/{2}", Request.Url.Host, (Request.Url.IsDefaultPort ? "" : ":" + Request.Url.Port), parent_page.Title))
+                            </td>
+                            <td>
+                                <a href="@(String.Format("http://{0}{1}/Page/{2}", Request.Url.Host, (Request.Url.IsDefaultPort ? "" : ":" + Request.Url.Port), parent_page.Title))" title="View @parent_page.Title" target="_blank">View Page</a>
+                                <span> | </span>
+                                <a href="/Admin/ContentManager/Edit/@parent_page.ID" title="Edit @parent_page.Title">Edit</a>
+                                <span> | </span>
+                                <a href="/Admin/ContentManager/RemoveRelationship?id=@page.ID&parent=@parent_page.ID" title="Remove Relationship" class="removeParent">Remove Relationship</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <span class="title">Sub Pages</span>
+            <a href="javascript:void(0)" title="Sub Page" class="add addSub" data-id="@page.ID">Add Subpage</a>
+            <span class="small">Subpages will be listed in the menu for this page.</span>
+            <div class="clearfix"></div>
+            <table id="subTable">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Path</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Admin.ContentPage sub in sub_pages) {
+                        <tr>
+                            <td>@sub.Title</td>
+                            <td>
+                                @(String.Format("http://{0}{1}/Page/{2}", Request.Url.Host, (Request.Url.IsDefaultPort ? "" : ":" + Request.Url.Port), sub.Title))
+                            </td>
+                            <td>
+                                <a href="@(String.Format("http://{0}{1}/Page/{2}", Request.Url.Host, (Request.Url.IsDefaultPort ? "" : ":" + Request.Url.Port), sub.Title))" title="View @sub.Title" target="_blank">View Page</a>
+                                <span> | </span>
+                                <a href="/Admin/ContentManager/Edit/@sub.ID" title="Edit @sub.Title">Edit</a>
+                                <span> | </span>
+                                <a href="/Admin/ContentManager/RemoveRelationship?parent=@page.ID&id=@sub.ID" title="Remove Relationship" class="removeParent">Remove Relationship</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+<div class="mustache">
+    <div class="mustache-page_list">
+        <div class="page_list">
+            {{#pages}}
+                <article>
+                    {{Title}}
+                    <input type="checkbox" class="page_select" value="{{ID}}" />
+                    <span class="check"></span>
+                </article>
+            {{/pages}}
+            <input type="button" class="addPages" id="{{pageType}}" data-pageID="@page.ID" value="{{button}}" />
+            <input type="hidden" class="listType" value="{{listType}}" />
+            <a href="javascript:$.modal.close()" title="Close" class="modalClose">Close</a>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="mustache-new_parent_col2">
+        @(String.Format("http://{0}{1}/Page/", Request.Url.Host, (Request.Url.IsDefaultPort ? "" : ":" + Request.Url.Port))){{Title}}
+    </div>
+    <div class="mustache-new_parent_col3">
+        <a href="@(String.Format("http://{0}{1}/Page/", Request.Url.Host, (Request.Url.IsDefaultPort ? "" : ":" + Request.Url.Port))){{Title}}" title="View {{Title}}" target="_blank">View Page</a>
+        <span> | </span>
+        <a href="/Admin/ContentManager/Edit/{{ID}}" title="Edit {{Title}}">Edit</a>
+        <span> | </span>
+        <a href="/Admin/ContentManager/RemoveRelationship?id=@page.ID&parent={{ID}}" title="Remove Relationship" class="removeParent">Remove Relationship</a>
+    </div>
+    <div class="mustache-new_sub_col3">
+        <a href="@(String.Format("http://{0}{1}/Page/", Request.Url.Host, (Request.Url.IsDefaultPort ? "" : ":" + Request.Url.Port))){{Title}}" title="View {{Title}}" target="_blank">View Page</a>
+        <span> | </span>
+        <a href="/Admin/ContentManager/Edit/{{ID}}" title="Edit {{Title}}">Edit</a>
+        <span> | </span>
+        <a href="/Admin/ContentManager/RemoveRelationship?parent=@page.ID&id={{ID}}" title="Remove Relationship" class="removeParent">Remove Relationship</a>
+    </div>
+</div>
+<script defer src="/Admin/Scripts/ckeditor/ckeditor.js"></script>
+<script defer src="/Admin/Scripts/ckeditor/adapters/jquery.js"></script>
+<script defer src="/Admin/Scripts/mustache.js"></script>
+<script defer src="/Admin/Scripts/custom/content.manager.js"></script>

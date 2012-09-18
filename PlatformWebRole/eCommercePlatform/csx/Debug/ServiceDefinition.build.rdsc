@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<serviceContract xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" dslVersion="1.0.0.0" name="eCommercePlatformContract" xmlns="http://schemas.microsoft.com/dsltools/Contracts">
+  <elements>
+    <interface name="Admin:Endpoint1" url="http://*:8080" />
+    <interface name="FTPServerRole:FTP" url="tcp://*:21" />
+    <interface name="FTPServerRole:Microsoft.WindowsAzure.Plugins.RemoteForwarder.RdpInput" url="tcp://*:3389" />
+    <interface name="PlatformWebRole:Endpoint1" url="http://*:80" />
+    <interface name="PlatformWebRole:Https" url="https://*:443" />
+  </elements>
+</serviceContract>

@@ -16,8 +16,9 @@
     if (_err == null) {
         _err = ""; 
     }
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="/Content/view_sass/new_review.css" rel="stylesheet" type="text/css" />
+<link href="@settings.Get("PathToCSS")/css/new_review.css" rel="stylesheet" type="text/css" />
 
 <section class="new_review">
     <h3>Add a new review</h3>

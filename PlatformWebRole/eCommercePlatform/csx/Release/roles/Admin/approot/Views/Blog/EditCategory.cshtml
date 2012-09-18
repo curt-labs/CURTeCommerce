@@ -1,0 +1,27 @@
+﻿@{
+    Admin.BlogCategory category = ViewBag.category;
+    if (category == null) {
+        category = new Admin.BlogCategory();   
+    }
+
+    string error = ViewBag.error;
+    if(error == null){
+        error = "";
+    }
+    
+    ViewBag.Title = "Edit Category";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<span class="title">@((category.blogCategoryID > 0) ? "Edit" : "New") Category</span>
+
+<form class="admin_form" method="post" action="/Admin/Blog/SaveCategory/@category.blogCategoryID">
+    @if (error.Length > 0) {
+        <p class="error">@error</p>
+    }
+    <label for="name">
+        Category Name
+        <input type="text" name="name" id="name" placeholder="Enter the category..." value="@category.name" required="required" title="You must enter a name for this category" />
+    </label>
+
+    <input type="submit" name="btnSubmit" id="btnSubmit" value="Save" />
+</form>

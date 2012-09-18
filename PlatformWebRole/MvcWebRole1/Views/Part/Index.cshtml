@@ -35,10 +35,10 @@
         connectors = new List<EcommercePlatform.Models.APIPart>();
     }
     bool first_image = true;
-    EcommercePlatform.Models.Settings settings = ViewBag.settings;
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
 <link href="/Content/DataTables/media/css/demo_table.css" rel="stylesheet" type="text/css" />
-<link href="/Content/view_sass/part.css" rel="stylesheet" type="text/css" />
+<link href="@settings.Get("PathToCSS")/css/part.css" rel="stylesheet" type="text/css" />
 <link href="/Content/shadowbox/shadowbox.css" rel="stylesheet" type="text/css" />
 
 @if (year.Length > 0 && make.Length > 0 && model.Length > 0 && style.Length > 0) {

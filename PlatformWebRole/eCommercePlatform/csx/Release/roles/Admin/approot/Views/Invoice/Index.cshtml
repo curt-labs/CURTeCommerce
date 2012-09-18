@@ -1,0 +1,32 @@
+﻿@{
+    IOrderedQueryable<Admin.Models.InvoiceCount> invoices = ViewBag.invoices;
+
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/invoice.manager.css" rel="stylesheet" type="text/css" />
+<span class="title">Invoices</span>
+
+@if (invoices != null) {
+    <table class="invoicegroup">
+        <thead>
+            <tr>
+                <th>Date Added</th>
+                <th>Invoices</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Admin.Models.InvoiceCount invoice in invoices) {
+                <tr>
+                    <td>@String.Format("{0:MM/dd/yyyy}", invoice.invoiceDate)</td>
+                    <td>@invoice.invoiceCount</td>
+                    <td>
+                        <a class="btn" href="/Admin/Invoice/List?date=@String.Format("{0:MM-dd-yyyy}", invoice.invoiceDate)">View All</a>
+                        <a class="btn" href="/Admin/Invoice/Print?date=@String.Format("{0:MM-dd-yyyy}", invoice.invoiceDate)">Print All</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

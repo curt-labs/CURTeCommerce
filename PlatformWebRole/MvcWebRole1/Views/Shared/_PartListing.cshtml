@@ -7,8 +7,9 @@
     int tab_count = 0;
     int item_count = 0;
     decimal part_group_height = part_count * 330;
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="/Content/view_sass/part_listing.css" rel="stylesheet" type="text/css" />
+<link href="@settings.Get("PathToCSS")/css/part_listing.css" rel="stylesheet" type="text/css" />
 <link href="/Content/shadowbox/shadowbox.css" rel="stylesheet" type="text/css" />
 
 <div class="part_tab_container">

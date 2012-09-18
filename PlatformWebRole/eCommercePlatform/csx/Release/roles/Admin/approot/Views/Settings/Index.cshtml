@@ -1,0 +1,54 @@
+﻿@{
+    List<string> errors = ViewBag.errors ?? new List<string>();
+    List<Admin.SettingGroup> groups = ViewBag.groups ?? new List<Admin.SettingGroup>();
+
+    ViewBag.Title = "| Site Settings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" media="all" href="/Admin/Content/css/admin_form.css" />
+<link rel="stylesheet" type="text/css" media="all" href="/Admin/Content/css/setting.manager.css" />
+<article class="tools">
+    <span class="title">Site Settings</span>
+    <div class="actions">
+        <a href="javascript:void(0)" title="Create Group" id="AddGroup">Create Group</a>
+    </div>
+</article>
+<div class="clearfix"></div>
+<form action="/Admin/Settings/Save" method="post" class="admin_form">
+    @if (groups.Count == 0) {
+        <p id="nogroups">There are currently no settings. Please add some settings</p>
+    }
+    @if (errors != null && errors.Count > 0) {
+        <ul class="error_box">
+            @foreach (string e in errors) {
+                <li>@e</li>
+            }
+        </ul>
+    }
+    <input type="submit" id="btnSubmit" value="Save" />
+    <ul class="tabs">
+        @foreach (Admin.SettingGroup g in groups) {
+            <li>
+                <a href="#@g.settingGroupID" id="tab-@g.settingGroupID" data-id="@g.settingGroupID" title="@g.name">@g.name</a>
+            </li>
+        }
+    </ul>
+
+    <div class="tab_container">
+        @foreach (Admin.SettingGroup g in groups) {
+            <div class="tab_content" id="@g.settingGroupID">
+                @if (g.Settings.Count > 0) {
+                    foreach (Admin.Setting setting in g.Settings.OrderBy(x => x.name).ToList<Admin.Setting>()) {
+                        <label for="@setting.name">
+                            <span>@setting.name</span>
+                            <input type="text" name="@setting.name" id="@setting.name" @((setting.isImage) ? "class=imagefield" : "") value="@setting.value" />
+                        </label>
+                    }
+                }
+                <a class="addSetting" data-group="@g.settingGroupID" href="javascript:void(0);"><span>+</span> Add Setting</a>
+            </div>
+        }
+    </div>
+</form>
+
+<script src="/Admin/Scripts/custom/setting.manager.js" type="text/javascript"></script>

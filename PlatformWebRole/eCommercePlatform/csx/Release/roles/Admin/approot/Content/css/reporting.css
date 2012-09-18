@@ -1,0 +1,33 @@
+﻿section span.title{
+    margin-bottom: 40px;
+    color: #bf3504;
+    font-size: 16px;
+    display:inline-block;
+}
+
+.report {
+    display: block;
+    padding: 10px;
+    border-bottom: 1px dotted #ccc;
+}
+
+.report p {
+    font-weight: bold;
+    margin: 0;
+}
+.report form {
+    padding-left: 10px;
+}
+
+.report label {
+    font-size: 11px;
+    font-weight: bold;
+}
+
+/* css for timepicker */
+.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+.ui-timepicker-div dl { text-align: left; }
+.ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
+.ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
+.ui-timepicker-div td { font-size: 90%; }
+.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }

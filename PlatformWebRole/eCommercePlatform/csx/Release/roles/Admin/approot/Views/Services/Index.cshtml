@@ -1,0 +1,54 @@
+﻿@{
+    List<Admin.Service> services = ViewBag.services;
+    if (services == null) {
+        services = new List<Admin.Service>();
+    }
+
+    List<Admin.Models.GroupedModule> modules = ViewBag.modules;
+    if (modules == null) {
+        modules = new List<Admin.Models.GroupedModule>();
+    }
+
+    bool can_edit = false;
+    try {
+        if (modules.Where(x => x.path.ToUpper().Equals("/ADMIN/SERVICES")).FirstOrDefault<Admin.Models.GroupedModule>().subs.Where(x => x.name.ToUpper().Equals("EDIT")).Count() > 0) {
+            can_edit = true;
+        }
+    } catch (Exception) { }
+    
+    ViewBag.Title = "| Manage Services";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/services.css" rel="stylesheet" type="text/css" />
+@if (can_edit) {
+    <span class="title">Manage Services</span>
+    <a href="/Admin/Services/Edit/0" title="Add Service" class="addService">Add Service</a>
+} else {
+    <span class="title">View Services</span>
+}
+<table id="indexTable">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Locations Offered</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Admin.Service serv in services) {
+            <tr>
+                <td>
+                    @if (can_edit) {
+                        <a href="/Admin/Services/Edit/@serv.ID" title="Edit @serv.title">@serv.title</a>
+                    } else {
+                        @serv.title
+                    }
+                </td>
+                <td>@(String.Format("{0:C}",serv.price) + ((serv.hourly == "1")?"/hr":""))</td>
+                <td>@serv.LocationServices.Count</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="/Admin/Scripts/custom/services.js" type="text/javascript"></script>
