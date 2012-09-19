@@ -6,8 +6,9 @@
     }
     ViewBag.Title = "Enter Payment";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="/Content/view_sass/cart.css" rel="stylesheet" type="text/css" />
+<link href="@settings.Get("PathToCSS")/css/cart.css" rel="stylesheet" type="text/css" />
 <div class="content">
     <h2>Enter Payment</h2>
     @Html.Raw(page.content)

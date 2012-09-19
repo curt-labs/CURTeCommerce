@@ -1,6 +1,7 @@
 ﻿@{
     EcommercePlatform.Customer cust = ViewBag.cust ?? new EcommercePlatform.Customer();
     string error = ViewBag.error ?? "";
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
     List<EcommercePlatform.Address> addresses = ViewBag.addresses ?? new List<EcommercePlatform.Address>();
     List<EcommercePlatform.Country> countries = ViewBag.countries ?? new List<EcommercePlatform.Country>();
     int quebec = 59;
@@ -9,7 +10,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<link href="/Content/view_sass/account.css" rel="stylesheet" type="text/css" />
+<link href="@settings.Get("PathToCSS")/css/account.css" rel="stylesheet" type="text/css" />
 <h1>My Account - Addresses</h1>
 <p class="error">@error</p>
 <ul class="tabs nojs">

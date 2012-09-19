@@ -11,9 +11,10 @@
     
     ViewBag.Title = "Topic";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
 
-<link href="/Content/view_sass/faq.css" rel="stylesheet" type="text/css" />
+<link href="@settings.Get("PathToCSS")/css/faq.css" rel="stylesheet" type="text/css" />
 <div class="faq-topics">
     <span>Topics</span>
     <ul>

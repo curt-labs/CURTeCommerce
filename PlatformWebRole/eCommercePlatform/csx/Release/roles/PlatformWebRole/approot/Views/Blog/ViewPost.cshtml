@@ -25,8 +25,9 @@
     }
     string message = Request.QueryString.Get("message");
     string errors = Request.QueryString.Get("err");
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="/Content/view_sass/blog.css" rel="stylesheet" type="text/css" />
+<link href="@settings.Get("PathToCSS")/css/blog.css" rel="stylesheet" type="text/css" />
 
 @Html.Partial("_BlogNavigation")
 

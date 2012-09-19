@@ -17,8 +17,9 @@
     } else {
         Layout = null;
     }
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="/Content/view_sass/share-email.css" rel="stylesheet" type="text/css" />
+<link href="@settings.Get("PathToCSS")/css/share-email.css" rel="stylesheet" type="text/css" />
 
 @if (ViewBag.error != null && ViewBag.error.Length > 0) {
     <p class="error">@ViewBag.error</p>

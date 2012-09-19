@@ -15,8 +15,9 @@
     
     ViewBag.Title = "Locations";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="/Content/view_sass/locations.css" rel="stylesheet" type="text/css" />
+<link href="@settings.Get("PathToCSS")/css/locations.css" rel="stylesheet" type="text/css" />
 
 @if(error != null){
     <p class="success">@error</p>

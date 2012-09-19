@@ -26,9 +26,10 @@
 
     ViewBag.Title = cat.catTitle + " Parts";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
 <input type="hidden" id="catID" value="@cat.catID" />
-<link href="/Content/view_sass/category.css" rel="stylesheet" type="text/css" />
+<link href="@settings.Get("PathToCSS")/css/category.css" rel="stylesheet" type="text/css" />
 
 @{Html.RenderPartial("_PartListing");}
 

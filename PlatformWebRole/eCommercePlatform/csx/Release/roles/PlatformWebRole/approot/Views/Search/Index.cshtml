@@ -26,9 +26,10 @@
     
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
 <input type="hidden" id="searchTerm" value="@term" />
-<link href="/Content/view_sass/search.css" rel="stylesheet" type="text/css" />
+<link href="@settings.Get("PathToCSS")/css/search.css" rel="stylesheet" type="text/css" />
 
 <span class="search_results">Your search for "<strong>@term</strong>" returned ( @((parts.Values != null && parts.Values.FirstOrDefault() != null)?parts.Values.FirstOrDefault().Count:0) ) results</span>
 @{Html.RenderPartial("_PartListing");}

@@ -128,7 +128,7 @@ $(function () {
         $.getJSON('/GlobalFunctions/GetCountries', function (countries) {
             if (countries !== undefined && countries.length > 0) {
                 var html;
-                html = '<link href="/Content/view_sass/share-email.css" media="all" rel="stylesheet" />';
+                html = '<link href="/Content/css/share-email.css" media="all" rel="stylesheet" />';
                 html += '<span class="share-heading">Enter your address for a start location.</span>';
                 html += '<form class="share-form">';
                 html += '<input type="hidden" id="destination" value="' + loc + '" />';
