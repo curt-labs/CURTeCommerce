@@ -45,8 +45,10 @@ namespace EcommercePlatform.Models {
     public class APIPart {
         private List<APIAttribute> _content = new List<APIAttribute>();
         private List<APIAttribute> _attributes = new List<APIAttribute>();
+        private List<APIAttribute> _vehicleattributes = new List<APIAttribute>();
         private List<APIAttribute> _pricing = new List<APIAttribute>();
         private List<APIReview> _reviews = new List<APIReview>();
+        private List<APIVideo> _videos = new List<APIVideo>();
         List<APIImage> _images = new List<APIImage>();
         private int _partID = 0;
         private int _custPartID = 0;
@@ -156,6 +158,16 @@ namespace EcommercePlatform.Models {
                 }
             }
         }
+        public List<APIAttribute> vehicleAttributes {
+            get {
+                return this._vehicleattributes;
+            }
+            set {
+                if (value != null && value != this._vehicleattributes) {
+                    this._vehicleattributes = value;
+                }
+            }
+        }
         public List<APIAttribute> content {
             get {
                 return this._content;
@@ -193,6 +205,16 @@ namespace EcommercePlatform.Models {
             set {
                 if (value != null && value != this._images) {
                     this._images = value;
+                }
+            }
+        }
+        public List<APIVideo> videos {
+            get {
+                return this._videos;
+            }
+            set {
+                if (value != null && value != this._videos) {
+                    this._videos = value;
                 }
             }
         }
@@ -328,6 +350,15 @@ namespace EcommercePlatform.Models {
         public int width { get; set; }
         public int partID { get; set; }
         public char sort { get; set; }
+    }
+
+    public class APIVideo {
+        public int videoID { get; set; }
+        public bool isPrimary { get; set; }
+        public int typeID { get; set; }
+        public string type { get; set; }
+        public string typeicon { get; set; }
+        public string youTubeVideoID { get; set; }
     }
 
     public class JSONAPICategory {

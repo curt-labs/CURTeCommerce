@@ -191,6 +191,7 @@ namespace EcommercePlatform.Models {
         }
 
         internal static List<APIPart> GetPartsByList(string partlist = "", string year = "", string make = "", string model = "", string style = "") {
+            try {
                 Settings settings = new Settings();
                 WebClient wc = new WebClient();
                 wc.Proxy = null;
@@ -207,7 +208,6 @@ namespace EcommercePlatform.Models {
                 }
                 List<APIPart> parts = JsonConvert.DeserializeObject<List<APIPart>>(wc.DownloadString(url));
                 return parts;
-            try {
             } catch (Exception) {
                 return new List<APIPart>();
             }
