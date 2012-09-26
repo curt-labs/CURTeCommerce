@@ -35,7 +35,7 @@
     <Property name="EntryPoint" value="Admin.dll" />
     <Property name="SourceDir" value="C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\Admin\" />
     <Property name="RoleTargetFramework" value="v4.0" />
-    <Property name="SitePhysicalPath" value="C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\Admin\" />
+    <Property name="SitePhysicalPath" value="C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\obj\Release\Admin\" />
     <Property name="OriginalItemSpec" value="C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\eCommercePlatform.ccproj" />
     <Property name="MSBuildSourceProjectFile" value="C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\eCommercePlatform.ccproj" />
     <Property name="MSBuildSourceTargetName" value="ResolveSingleWebRoleReference" />
@@ -43,7 +43,7 @@
     <Property name="TargetRuntimeVersion" value="v4.0" />
   </Properties>
   <Sites>
-    <Site name="Web" physicalDirectory="C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\Admin\">
+    <Site name="Web" physicalDirectory="C:\Users\jjaniuk\Projects\eCommercePlatform\PlatformWebRole\eCommercePlatform\obj\Release\Admin\">
       <Bindings>
         <Binding name="Endpoint1" endpointName="Endpoint1" />
       </Bindings>

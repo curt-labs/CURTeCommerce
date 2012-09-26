@@ -35,6 +35,9 @@
 <div class="content">
     <h2>Checkout - Enter Shipping</h2>
     @Html.Raw(page.content)
+    @if (ViewBag.error != null && ViewBag.error != "") {
+        <p style="font-weight: bold; color: Red;">@ViewBag.error</p>
+    }
 
     <ul class="tabs nojs">
         <li>

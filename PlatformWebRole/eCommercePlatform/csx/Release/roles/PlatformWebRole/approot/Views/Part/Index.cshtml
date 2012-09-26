@@ -19,11 +19,7 @@
         vehicles = new List<EcommercePlatform.Models.FullVehicle>();
     }
 
-    EcommercePlatform.Models.APIAttribute yt_attribute = part.content.Where(x => x.key.ToUpper().Contains("VIDEO")).FirstOrDefault<EcommercePlatform.Models.APIAttribute>();
-    string yt_video = "";
-    if(yt_attribute != null){
-        yt_video = yt_attribute.value;
-    }
+    EcommercePlatform.Models.APIVideo installVideo = part.videos.Where(x => x.type.Contains("Installation")).FirstOrDefault<EcommercePlatform.Models.APIVideo>();
     
     string year = (ViewBag.year != null)?ViewBag.year:"";
     string make = (ViewBag.make != null) ? ViewBag.make : "";
@@ -139,8 +135,8 @@
         </a>
     }
     
-    @if (yt_video != null && yt_video.Length > 0) {
-        <a href="@yt_video" target="_blank" title="Install Video" class="install_link">
+    @if (installVideo != null && installVideo.youTubeVideoID.Length > 0) {
+        <a href="http://www.youtube.com/watch?v=@installVideo.youTubeVideoID" target="_blank" title="Install Video" class="install_link">
             <img src="/Content/img/youtube.png" alt="Installation Video" />
             Install Video
         </a>
@@ -221,10 +217,8 @@
         @if (part.content.Count > 0) {
             <div class="part_content" id="info">
                 <ul>
-                    @foreach (EcommercePlatform.Models.APIAttribute content_piece in part.content.Where(x => !x.key.Equals("installVideo") && !x.key.Equals("installationSheet")).OrderBy(x => x.key)) {
-                        if (!content_piece.key.ToUpper().Contains("VIDEO")) {
-                            <li>@content_piece.value</li>
-                        }
+                    @foreach (EcommercePlatform.Models.APIAttribute content_piece in part.content.Where(x => !x.key.Equals("installationSheet")).OrderBy(x => x.key)) {
+                        <li>@content_piece.value</li>
                     }
                 </ul>
                 <div class="clearfix"></div>
