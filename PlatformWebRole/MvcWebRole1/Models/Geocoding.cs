@@ -15,19 +15,20 @@ namespace EcommercePlatform.Models {
             try {
                 EcommercePlatformDataContext db = new EcommercePlatformDataContext();
                 string abbr = "";
-                if (stateID == 0) {
+                if (stateID != 0) {
                     abbr = db.States.Where(x => x.stateID.Equals(stateID)).Select(x => x.abbr).FirstOrDefault<string>();
                 } else {
                     abbr = StateProvidence;
                 }
 
-                StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/geocode/json?address=");
-                sb.Append(address + " " + city + ", " + abbr + " " + zip + " " + countryCode);
-                sb.Append("&sensor=false");
+                string url = "https://maps.googleapis.com/maps/api/geocode/json?address=";
+                url += HttpUtility.UrlEncode(address.Trim() + " " + city + ", " + abbr + " " + zip + " " + countryCode);
+                url += "&sensor=false";
 
                 WebClient wc = new WebClient();
                 wc.Proxy = null;
-                GeocodingResponse geo = new JavaScriptSerializer().Deserialize<GeocodingResponse>(wc.DownloadString(sb.ToString()));
+                string resp = wc.DownloadString(url);
+                GeocodingResponse geo = new JavaScriptSerializer().Deserialize<GeocodingResponse>(resp);
 
                 return geo;
             } catch (Exception) {

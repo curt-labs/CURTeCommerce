@@ -47,6 +47,10 @@ namespace EcommercePlatform.Controllers {
             // Create Customer
             Customer customer = ViewBag.customer;
 
+            // Get the contact ContentPage
+            ContentPage page = ContentManagement.GetPageByTitle("billing");
+            ViewBag.page = page;
+
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
 
@@ -71,12 +75,17 @@ namespace EcommercePlatform.Controllers {
         }
 
         [RequireHttps]
-        public ActionResult Shipping() {
+        public ActionResult Shipping(string error = "") {
 
             Customer customer = ViewBag.customer;
+            ViewBag.error = error;
 
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
+
+            // Get the contact ContentPage
+            ContentPage page = ContentManagement.GetPageByTitle("shipping");
+            ViewBag.page = page;
 
             if (!customer.LoggedIn()) {
                 return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
@@ -86,20 +95,18 @@ namespace EcommercePlatform.Controllers {
                 customer.BindAddresses();
 
                 List<Address> addresses = customer.GetAddresses();
-                ViewBag.addresses = addresses;
+                List<Address> shippingaddresses = addresses.Where(x => !isPOBox(x)).ToList<Address>();
+                ViewBag.addresses = shippingaddresses;
 
                 List<Country> countries = UDF.GetCountries();
                 ViewBag.countries = countries;
 
-                if (customer.Cart.ship_to == 0 && customer.Cart.bill_to != 0) {
-                    RedirectToAction("ChooseShipping", new {id = customer.Cart.bill_to});
+                if (customer.Cart.ship_to == 0 && customer.Cart.bill_to != 0 && !isPOBox(customer.Cart.Billing)) {
+                    RedirectToAction("ChooseShipping", new { id = customer.Cart.bill_to });
                 }
 
-                List<string> shipping_types = CURTAPI.GetShippingTypes();
-                ViewBag.shipping_types = shipping_types;
-
                 ShippingResponse shippingresponse = new ShippingResponse();
-                if (customer.Cart.ship_to != 0) {
+                if (customer.Cart.ship_to != 0 && !isPOBox(customer.Cart.Shipping)) {
                     if (TempData["shipping_response"] != null) {
                         try {
                             shippingresponse = (ShippingResponse)TempData["shipping_response"];
@@ -121,6 +128,16 @@ namespace EcommercePlatform.Controllers {
             }
         }
 
+        internal bool isPOBox(Address shipto) {
+            if (shipto.street1.Contains("PO ") ||
+                shipto.street1.Contains("P.O. ") ||
+                shipto.street2.Contains("PO ") ||
+                shipto.street2.Contains("P.O. ")) {
+                return true;
+            }
+            return false;
+        }
+        
         public ActionResult Add(int id = 0, int qty = 1) {
             // Create Customer
             Customer customer = new Customer();
@@ -277,14 +294,14 @@ namespace EcommercePlatform.Controllers {
                     if (customer.billingID == 0) {
                         customer.SetBillingDefaultAddress(billing.ID);
                     }
-                    if (customer.shippingID == 0) {
+                    if (customer.shippingID == 0 && !isPOBox(billing)) {
                         customer.SetShippingDefaultAddress(billing.ID);
                     }
 
                     // Retrieve Customer from Sessions/Cookie
 
                     customer.Cart.SetBilling(billing.ID);
-                    if (customer.Cart.ship_to == 0) {
+                    if (customer.Cart.ship_to == 0 && !isPOBox(billing)) {
                         customer.Cart.SetShipping(billing.ID);
                     }
                 } else {
@@ -322,6 +339,7 @@ namespace EcommercePlatform.Controllers {
 
         //[RequireHttps]
         public ActionResult AddShippingAddress() {
+            string error = "";
             try {
                 // Create Customer
                 Customer customer = new Customer();
@@ -348,16 +366,19 @@ namespace EcommercePlatform.Controllers {
                 } catch (Exception) {
                     throw new Exception("You must select a shipping state/province.");
                 }
+                if (isPOBox(shipping)) {
+                    throw new Exception("You cannot ship to a PO Box.");
+                }
                 //shipping.GeoLocate();
                 shipping.Save(customer.ID);
 
                 // Retrieve Customer from Sessions/Cookie
                 customer.Cart.SetShipping(shipping.ID);
-            } catch(Exception e) {
-                TempData["error"] = e.Message;
+            } catch (Exception e) {
+                error = e.Message;
             }
 
-            return RedirectToAction("shipping");
+            return RedirectToAction("shipping", new { error = error });
         }
 
         public ActionResult UpgradeShipping(string type = ""){
