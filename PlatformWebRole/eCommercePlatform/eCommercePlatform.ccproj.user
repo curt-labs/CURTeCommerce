@@ -7,5 +7,6 @@
     <DeploymentPromptBeforeDeleting>False</DeploymentPromptBeforeDeleting>
     <WebRoleHttpsSkipLaunchInBrowser>
     </WebRoleHttpsSkipLaunchInBrowser>
+    <WebRoleSkipLaunchInBrowser>Admin</WebRoleSkipLaunchInBrowser>
   </PropertyGroup>
 </Project>

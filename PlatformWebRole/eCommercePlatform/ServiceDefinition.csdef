@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ServiceDefinition name="eCommercePlatform" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
-  <WebRole name="PlatformWebRole" vmsize="Medium" enableNativeCodeExecution="true">
+  <WebRole name="PlatformWebRole" vmsize="ExtraSmall" enableNativeCodeExecution="true">
     <Sites>
       <Site name="Web">
         <VirtualApplication name="Admin" physicalDirectory="../Admin" />
@@ -35,7 +35,7 @@
       <Import moduleName="RemoteAccess" />
     </Imports>
   </WebRole>
-  <WorkerRole name="FTPServerRole">
+  <WorkerRole name="FTPServerRole" vmsize="ExtraSmall">
     <Endpoints>
       <InputEndpoint name="FTP" port="21" protocol="tcp" />
     </Endpoints>
@@ -55,7 +55,7 @@
       <Import moduleName="RemoteForwarder" />
     </Imports>
   </WorkerRole>
-  <WorkerRole name="TaskScheduler" vmsize="Small">
+  <WorkerRole name="TaskScheduler" vmsize="ExtraSmall">
     <Imports>
       <Import moduleName="RemoteAccess" />
     </Imports>
@@ -69,7 +69,7 @@
       <Setting name="StorageConnectionString" />
     </ConfigurationSettings>
   </WorkerRole>
-  <WebRole name="Admin" vmsize="Small">
+  <WebRole name="Admin" vmsize="ExtraSmall">
     <Sites>
       <Site name="Web">
         <Bindings>
