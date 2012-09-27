@@ -473,7 +473,7 @@ namespace EcommercePlatform
 
         internal void SetTax() {
             decimal tax = 0;
-            tax = Math.Round(((this.GetSubTotal() + this.shipping_price) * (this.Billing.State1.taxRate / 100)),2);
+            tax = Math.Round(((this.GetSubTotal() + this.shipping_price) * (this.Shipping.State1.taxRate / 100)),2);
 
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             Cart c = db.Carts.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<Cart>();
