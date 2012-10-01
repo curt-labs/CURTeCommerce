@@ -97,5 +97,16 @@ namespace Admin {
             return this;
         }
 
+        internal bool isPOBox() {
+            try {
+                if (this.street1.Contains("PO ") ||
+                    this.street1.Contains("P.O. ") ||
+                    this.street2.Contains("PO ") ||
+                    this.street2.Contains("P.O. ")) {
+                    return true;
+                }
+            } catch { }
+            return false;
+        }
     }
 }

@@ -95,18 +95,18 @@ namespace EcommercePlatform.Controllers {
                 customer.BindAddresses();
 
                 List<Address> addresses = customer.GetAddresses();
-                List<Address> shippingaddresses = addresses.Where(x => !isPOBox(x)).ToList<Address>();
+                List<Address> shippingaddresses = addresses.Where(x => !x.isPOBox()).ToList<Address>();
                 ViewBag.addresses = shippingaddresses;
 
                 List<Country> countries = UDF.GetCountries();
                 ViewBag.countries = countries;
 
-                if (customer.Cart.ship_to == 0 && customer.Cart.bill_to != 0 && !isPOBox(customer.Cart.Billing)) {
+                if (customer.Cart.ship_to == 0 && customer.Cart.bill_to != 0 && !customer.Cart.Billing.isPOBox()) {
                     RedirectToAction("ChooseShipping", new { id = customer.Cart.bill_to });
                 }
 
                 ShippingResponse shippingresponse = new ShippingResponse();
-                if (customer.Cart.ship_to != 0 && !isPOBox(customer.Cart.Shipping)) {
+                if (customer.Cart.ship_to != 0 && !customer.Cart.Shipping.isPOBox()) {
                     if (TempData["shipping_response"] != null) {
                         try {
                             shippingresponse = (ShippingResponse)TempData["shipping_response"];
@@ -128,16 +128,6 @@ namespace EcommercePlatform.Controllers {
             }
         }
 
-        internal bool isPOBox(Address shipto) {
-            if (shipto.street1.Contains("PO ") ||
-                shipto.street1.Contains("P.O. ") ||
-                shipto.street2.Contains("PO ") ||
-                shipto.street2.Contains("P.O. ")) {
-                return true;
-            }
-            return false;
-        }
-        
         public ActionResult Add(int id = 0, int qty = 1) {
             // Create Customer
             Customer customer = new Customer();
@@ -294,14 +284,14 @@ namespace EcommercePlatform.Controllers {
                     if (customer.billingID == 0) {
                         customer.SetBillingDefaultAddress(billing.ID);
                     }
-                    if (customer.shippingID == 0 && !isPOBox(billing)) {
+                    if (customer.shippingID == 0 && !billing.isPOBox()) {
                         customer.SetShippingDefaultAddress(billing.ID);
                     }
 
                     // Retrieve Customer from Sessions/Cookie
 
                     customer.Cart.SetBilling(billing.ID);
-                    if (customer.Cart.ship_to == 0 && !isPOBox(billing)) {
+                    if (customer.Cart.ship_to == 0 && !billing.isPOBox()) {
                         customer.Cart.SetShipping(billing.ID);
                     }
                 } else {
@@ -366,7 +356,7 @@ namespace EcommercePlatform.Controllers {
                 } catch (Exception) {
                     throw new Exception("You must select a shipping state/province.");
                 }
-                if (isPOBox(shipping)) {
+                if (shipping.isPOBox()) {
                     throw new Exception("You cannot ship to a PO Box.");
                 }
                 //shipping.GeoLocate();
