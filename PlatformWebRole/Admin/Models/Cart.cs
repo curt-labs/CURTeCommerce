@@ -202,6 +202,10 @@ namespace Admin
 
         public bool HasFreeShipping() {
             try {
+                List<int> excludedStates = new List<int> { 2, 15 };
+                if (this.Shipping != null && this.Shipping.state != null && excludedStates.Contains(this.Shipping.state)) {
+                    return false;
+                }
                 Settings settings = new Settings();
                 decimal freeship = Convert.ToDecimal(settings.Get("FreeShippingAmount"));
                 decimal total = 0;

@@ -227,6 +227,12 @@ namespace EcommercePlatform
 
         public bool HasFreeShipping() {
             try {
+                List<int> excludedStates = new List<int> { 2, 15 };
+                BindAddresses();
+                if (excludedStates.Contains(this.Shipping.state)) {
+                    return false;
+                }
+
                 Settings settings = new Settings();
                 decimal freeship = Convert.ToDecimal(settings.Get("FreeShippingAmount"));
                 decimal total = 0;
