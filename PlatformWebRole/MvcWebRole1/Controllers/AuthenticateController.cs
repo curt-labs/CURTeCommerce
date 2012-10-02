@@ -15,9 +15,10 @@ namespace EcommercePlatform.Controllers {
         /// </summary>
         /// <param name="error">Error message from login</param>
         /// <returns>View page</returns>
-        public ActionResult Index(string referrer = "") {
+        [RequireHttps]
+        public ActionResult Index(string referrer = "", int checkout = 0) {
 
-            if(referrer == "" && Request.UrlReferrer != null && Request.UrlReferrer.Host != null && Request.UrlReferrer.Host.Contains(Request.Url.Host)){
+            if (referrer == "" && Request.UrlReferrer != null && Request.UrlReferrer.Host != null && Request.UrlReferrer.Host.Contains(Request.Url.Host)) {
                 referrer = Request.UrlReferrer.AbsoluteUri;
             }
 
@@ -42,11 +43,12 @@ namespace EcommercePlatform.Controllers {
             ViewBag.countries = countries;
             ViewBag.error = TempData["error"];
             ViewBag.referrer = referrer;
+            ViewBag.checkout = checkout;
             return View();
         }
 
         [RequireHttps]
-        public ActionResult Login(string email = "", string password = "", int remember = 0, string redirect = "") {
+        public ActionResult Login(string email = "", string password = "", int remember = 0, int checkout = 0, string redirect = "") {
             try {
                 /**
                  * Store any Customer object from Session/Cookie into a tmp object
@@ -85,16 +87,19 @@ namespace EcommercePlatform.Controllers {
                 }
                 Response.Cookies.Add(cook);
 
-                if(redirect != null && redirect.Length != 0 && !redirect.ToUpper().Contains("AUTHENTICATE")){
+                if (checkout == 1) {
+                    return RedirectToAction("Checkout", "Cart");
+                } else if (redirect != null && redirect.Length != 0 && !redirect.ToUpper().Contains("AUTHENTICATE")) {
                     return Redirect(redirect);
-                }else{
-                    return RedirectToAction("Index","Index");
+                } else {
+                    return RedirectToAction("Index", "Index");
                 }
             } catch (Exception e) {
                 TempData["error"] = e.Message;
                 return Redirect("/Authenticate/Index");
             }
         }
+
 
         public ActionResult Logout() {
             try {
@@ -112,7 +117,7 @@ namespace EcommercePlatform.Controllers {
         }
 
         [RequireHttps]
-        public ActionResult Signup() {
+        public ActionResult Signup(int checkout = 0) {
             Customer cust = new Customer();
             Settings settings = ViewBag.settings;
             /*Address billing = new Address();
@@ -197,8 +202,8 @@ namespace EcommercePlatform.Controllers {
                 }*/
                 #endregion
 
-                string[] nullables = new string[] { "phone", "issuspended", "receivenewsletter", "receiveoffers", "isvalidated", "billingid", "shippingid", "Address", "Address1" , "cart", "id", "orders" };
-                UDF.Sanitize(cust,nullables);
+                string[] nullables = new string[] { "phone", "issuspended", "receivenewsletter", "receiveoffers", "isvalidated", "billingid", "shippingid", "Address", "Address1", "cart", "id", "orders" };
+                UDF.Sanitize(cust, nullables);
 
                 cust.Save();
                 /*billing.Save(cust.ID);
@@ -212,7 +217,7 @@ namespace EcommercePlatform.Controllers {
                 cust.Address1 = shipping;*/
 
                 if (loginAfterRegistration) {
-                    return RedirectToAction("login", new { email = cust.email, password = Request.Form["password"], remember = 0, redirect = referrer });
+                    return RedirectToAction("login", new { email = cust.email, password = Request.Form["password"], remember = 0, checkout = checkout, redirect = referrer });
                 } else {
                     TempData["error"] = "You're account has been successfully created. Please check your e-mail to confirm your account.";
                     return Redirect("/Authenticate");
@@ -225,7 +230,7 @@ namespace EcommercePlatform.Controllers {
                 /*TempData["billing"] = billing;
                 TempData["shipping"] = shipping;*/
                 TempData["error"] = e.Message;
-                return Redirect(String.Format("/Authenticate/Index?#{0}","signup"));
+                return Redirect(String.Format("/Authenticate/Index?#{0}", "signup"));
             }
         }
 

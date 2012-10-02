@@ -24,6 +24,7 @@
 }
 <form class="simple-form" method="post" action="https://@Request.Url.Host@((ViewBag.setup)?"/Authenticate/Signup":"/Account/Save")">
     <input type="hidden" name="redirect" value="@referrer" />
+    <input type="hidden" name="checkout" value="@(ViewBag.checkout ?? 0)" />
     <fieldset class="left">
         <legend>Basic Information</legend>
         @if (ViewBag.setup) {

@@ -35,7 +35,7 @@ namespace EcommercePlatform.Controllers {
             Customer customer = ViewBag.customer;
             customer.GetFromStorage();
             if (customer.Cart.payment_id == 0) {
-                return RedirectToAction("Billing");
+                return RedirectToAction("Billing", new { checkout = 1 });
             } else {
                 UDF.ExpireCart(customer.ID);
                 return RedirectToAction("Index");
@@ -43,7 +43,7 @@ namespace EcommercePlatform.Controllers {
         }
 
         [RequireHttps]
-        public ActionResult Billing() {
+        public ActionResult Billing(int checkout = 0) {
             // Create Customer
             Customer customer = ViewBag.customer;
 
@@ -55,7 +55,7 @@ namespace EcommercePlatform.Controllers {
             customer.GetFromStorage();
 
             if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
+                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout", checkout = 1 });
             }
 
             if (customer.Cart.payment_id == 0) {
@@ -73,6 +73,7 @@ namespace EcommercePlatform.Controllers {
                 return RedirectToAction("Index");
             }
         }
+
 
         [RequireHttps]
         public ActionResult Shipping(string error = "") {

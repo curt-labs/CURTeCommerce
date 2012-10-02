@@ -47,6 +47,7 @@
                 <fieldset>
                     <legend>Enter Credentials</legend>
                     <input type="hidden" name="redirect" value="@ViewBag.referrer" />
+                    <input type="hidden" name="checkout" value="@(ViewBag.checkout ?? 0)" />
                     <label for="login_email">
                         E-Mail
                         <input type="email" name="email" id="login_email" class="placeholder" placeholder="Enter your e-mail address" required="required" title="You must enter your E-Mail to login" />

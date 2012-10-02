@@ -316,8 +316,18 @@ namespace EcommercePlatform {
                 }
                 HttpContext.Current.Response.Cookies.Add(cook);
             } else {
-                cart = new Cart().Get(cartID);
-                custID = cart.cust_id;
+                try {
+                    cart = new Cart().Get(cartID);
+                    custID = cart.cust_id;
+                } catch {
+                    cart = cart.Save();
+                    cartID = cart.ID;
+                    HttpCookie cook = new HttpCookie("hdcart", cartID.ToString());
+                    if (this.remember) {
+                        cook.Expires = DateTime.Now.AddDays(30);
+                    }
+                    HttpContext.Current.Response.Cookies.Add(cook);
+                }
             }
 
             Customer customer = new Customer();
