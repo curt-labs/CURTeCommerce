@@ -3,7 +3,6 @@
   <elements>
     <interface name="Admin:Endpoint1" url="http://*:8080" />
     <interface name="FTPServerRole:FTP" url="tcp://*:21" />
-    <interface name="FTPServerRole:Microsoft.WindowsAzure.Plugins.RemoteForwarder.RdpInput" url="tcp://*:3389" />
     <interface name="PlatformWebRole:Endpoint1" url="http://*:80" />
     <interface name="PlatformWebRole:Https" url="https://*:443" />
   </elements>

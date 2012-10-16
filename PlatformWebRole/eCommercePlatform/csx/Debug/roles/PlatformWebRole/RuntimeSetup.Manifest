@@ -5,7 +5,6 @@
   <Operation type="Path" path="diagnostics\x64" />
   <PermissionLevels>
     <StoredCert name="Stored0CurtSSL" permissionLevel="limitedOrElevated" />
-    <StoredCert name="Stored1Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" permissionLevel="elevated" />
   </PermissionLevels>
   <AdditionalRoleIdentities>
     <Identity username="NetworkService" domain="NT AUTHORITY" />

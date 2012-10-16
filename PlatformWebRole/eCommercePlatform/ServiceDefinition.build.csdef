@@ -39,9 +39,7 @@
     <Startup>
       <Task commandLine="Startup.cmd" executionContext="elevated" taskType="simple"></Task>
     </Startup>
-    <Imports>
-      <Import moduleName="RemoteAccess" />
-    </Imports>
+    <Imports></Imports>
   </WebRole>
   <WorkerRole name="FTPServerRole" vmsize="ExtraSmall">
     <Endpoints>
@@ -57,15 +55,10 @@
       <Setting name="UseAsyncMethods" />
     </ConfigurationSettings>
     <Certificates></Certificates>
-    <Imports>
-      <Import moduleName="RemoteAccess" />
-      <Import moduleName="RemoteForwarder" />
-    </Imports>
+    <Imports></Imports>
   </WorkerRole>
   <WorkerRole name="TaskScheduler" vmsize="ExtraSmall">
-    <Imports>
-      <Import moduleName="RemoteAccess" />
-    </Imports>
+    <Imports></Imports>
     <Endpoints>
       <InternalEndpoint name="Endpoint1" protocol="tcp" />
     </Endpoints>
@@ -87,9 +80,7 @@
     <Endpoints>
       <InputEndpoint name="Endpoint1" protocol="http" port="8080" />
     </Endpoints>
-    <Imports>
-      <Import moduleName="RemoteAccess" />
-    </Imports>
+    <Imports></Imports>
     <ConfigurationSettings>
       <Setting name="StorageConnectionString" />
     </ConfigurationSettings>

@@ -32,7 +32,6 @@
       </Task>
     </Startup>
     <Imports>
-      <Import moduleName="RemoteAccess" />
     </Imports>
   </WebRole>
   <WorkerRole name="FTPServerRole" vmsize="ExtraSmall">
@@ -51,13 +50,10 @@
     <Certificates>
     </Certificates>
     <Imports>
-      <Import moduleName="RemoteAccess" />
-      <Import moduleName="RemoteForwarder" />
     </Imports>
   </WorkerRole>
   <WorkerRole name="TaskScheduler" vmsize="ExtraSmall">
     <Imports>
-      <Import moduleName="RemoteAccess" />
     </Imports>
     <Endpoints>
       <InternalEndpoint name="Endpoint1" protocol="tcp" />
@@ -81,7 +77,6 @@
       <InputEndpoint name="Endpoint1" protocol="http" port="8080" />
     </Endpoints>
     <Imports>
-      <Import moduleName="RemoteAccess" />
     </Imports>
     <ConfigurationSettings>
       <Setting name="StorageConnectionString" />
