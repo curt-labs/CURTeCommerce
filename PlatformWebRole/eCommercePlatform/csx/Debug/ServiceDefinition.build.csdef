@@ -1,11 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ServiceDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="eCommercePlatform" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
-  <WebRole name="Admin">
+  <WebRole name="Admin" vmsize="ExtraSmall">
     <LocalResources>
       <LocalStorage name="DiagnosticStore" sizeInMB="4096" cleanOnRoleRecycle="false" />
     </LocalResources>
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" />
@@ -22,7 +21,7 @@
       <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" storeLocation="LocalMachine" storeName="My" />
     </Certificates>
   </WebRole>
-  <WebRole name="PlatformWebRole" vmsize="Medium">
+  <WebRole name="PlatformWebRole" vmsize="ExtraSmall">
     <LocalResources>
       <LocalStorage name="DiagnosticStore" sizeInMB="4096" cleanOnRoleRecycle="false" />
     </LocalResources>
@@ -42,18 +41,17 @@
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Endpoint1" protocol="http" port="80" localPort="80" />
-      <InputEndpoint name="Https" protocol="https" port="443" certificate="NoBarSSLCert" localPort="443" />
+      <InputEndpoint name="Https" protocol="https" port="443" certificate="CurtSSL" localPort="443" />
       <InternalEndpoint name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Rdp" protocol="tcp">
         <FixedPortRange min="3389" max="3389" />
       </InternalEndpoint>
     </Endpoints>
     <Certificates>
+      <Certificate name="CurtSSL" storeLocation="LocalMachine" storeName="CA" />
       <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" storeLocation="LocalMachine" storeName="My" />
-      <Certificate name="NewSSLCert" storeLocation="LocalMachine" storeName="CA" />
-      <Certificate name="NoBarSSLCert" storeLocation="LocalMachine" storeName="CA" />
     </Certificates>
   </WebRole>
-  <WorkerRole name="FTPServerRole">
+  <WorkerRole name="FTPServerRole" vmsize="ExtraSmall">
     <LocalResources>
       <LocalStorage name="DiagnosticStore" sizeInMB="4096" cleanOnRoleRecycle="false" />
     </LocalResources>
@@ -79,11 +77,10 @@
       </InternalEndpoint>
     </Endpoints>
     <Certificates>
-      <Certificate name="HitchDepot" storeLocation="LocalMachine" storeName="CA" />
       <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" storeLocation="LocalMachine" storeName="My" />
     </Certificates>
   </WorkerRole>
-  <WorkerRole name="TaskScheduler">
+  <WorkerRole name="TaskScheduler" vmsize="ExtraSmall">
     <LocalResources>
       <LocalStorage name="DiagnosticStore" sizeInMB="4096" cleanOnRoleRecycle="false" />
     </LocalResources>
