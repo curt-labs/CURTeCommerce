@@ -37,6 +37,7 @@ namespace EcommercePlatform
                     db.CartItems.InsertOnSubmit(i);
                 };
                 db.SubmitChanges();
+                clearShippingType();
             } else {
                 UDF.ExpireCart(this.cust_id);
             }
@@ -52,6 +53,7 @@ namespace EcommercePlatform
                 } else {
                     Remove(partID);
                 }
+                clearShippingType();
             } else {
                 UDF.ExpireCart(this.cust_id);
             }
@@ -63,6 +65,7 @@ namespace EcommercePlatform
                 CartItem i = db.CartItems.Where(x => x.order_id == this.ID).Where(x => x.partID == partID).First<CartItem>();
                 db.CartItems.DeleteOnSubmit(i);
                 db.SubmitChanges();
+                clearShippingType();
             } else {
                 UDF.ExpireCart(this.cust_id);
             }
@@ -120,6 +123,7 @@ namespace EcommercePlatform
                 foreach (CartItem i in this.CartItems) {
                     this.CartItems.Remove(i);
                 }
+                clearShippingType();
             } else {
                 UDF.ExpireCart(this.cust_id);
             }
@@ -178,6 +182,20 @@ namespace EcommercePlatform
             }
             this.shipping_type = shipping_type;
             this.shipping_price = shipping_price;
+        }
+
+        public void clearShippingType() {
+            if (this.cust_id > 0) {
+                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+                try {
+                    Cart cart = db.Carts.Where(x => x.ID == this.ID).First<Cart>();
+                    cart.shipping_price = 0;
+                    cart.shipping_type = null;
+                    db.SubmitChanges();
+                } catch { }
+            }
+            this.shipping_type = null;
+            this.shipping_price = 0;
         }
 
         internal void GetBilling() {
@@ -350,7 +368,7 @@ namespace EcommercePlatform
 
         public bool Validate() {
             bool valid = false;
-            if (this.bill_to > 0 && this.ship_to > 0 && this.GetSubTotal() > 0) {
+            if (this.bill_to > 0 && this.ship_to > 0 && this.GetSubTotal() > 0 && this.shipping_type != null && this.CartItems.Count > 0) {
                 valid = true;
             }
             return valid;

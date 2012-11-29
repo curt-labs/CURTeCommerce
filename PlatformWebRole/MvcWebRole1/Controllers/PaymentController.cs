@@ -25,6 +25,10 @@ namespace EcommercePlatform.Controllers {
                 return RedirectToAction("Index", "Authenticate");
             }
 
+            if (!customer.Cart.Validate()) {
+                return RedirectToAction("Index", "Cart");
+            }
+
             if (customer.Cart.payment_id > 0) {
                 UDF.ExpireCart(customer.ID);
                 return RedirectToAction("Index", "Cart");
@@ -61,6 +65,9 @@ namespace EcommercePlatform.Controllers {
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
                 return RedirectToAction("Index", "Authenticate");
+            }
+            if (!customer.Cart.Validate()) {
+                return RedirectToAction("Index", "Cart");
             }
 
             if (customer.Cart.payment_id > 0) {
@@ -142,6 +149,10 @@ namespace EcommercePlatform.Controllers {
                 return RedirectToAction("Index", "Authenticate");
             }
 
+            if (!customer.Cart.Validate()) {
+                return RedirectToAction("Index", "Cart");
+            }
+
             if (customer.Cart.payment_id > 0) {
                 UDF.ExpireCart(customer.ID);
                 return RedirectToAction("Index", "Cart");
@@ -216,6 +227,9 @@ namespace EcommercePlatform.Controllers {
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
                 return RedirectToAction("Index", "Authenticate");
+            }
+            if (!customer.Cart.Validate()) {
+                return RedirectToAction("Index", "Cart");
             }
             if (customer.Cart.payment_id > 0) {
                 UDF.ExpireCart(customer.ID);
