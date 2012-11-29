@@ -22,7 +22,7 @@ namespace EcommercePlatform.Controllers {
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
+                return RedirectToAction("Index", "Authenticate");
             }
 
             if (customer.Cart.payment_id > 0) {
@@ -36,7 +36,7 @@ namespace EcommercePlatform.Controllers {
             // Get the parts from this Cart
             cart.GetParts();
 
-            ViewBag.showShipping = true;
+            ViewBag.showTotal = true;
             ViewBag.cart = cart;
             ViewBag.message = message;
             List<int> months = new List<int>();
@@ -60,7 +60,7 @@ namespace EcommercePlatform.Controllers {
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
+                return RedirectToAction("Index", "Authenticate");
             }
 
             if (customer.Cart.payment_id > 0) {
@@ -139,7 +139,7 @@ namespace EcommercePlatform.Controllers {
             Customer customer = ViewBag.customer;
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
+                return RedirectToAction("Index", "Authenticate");
             }
 
             if (customer.Cart.payment_id > 0) {
@@ -215,7 +215,7 @@ namespace EcommercePlatform.Controllers {
             Customer customer = ViewBag.customer;
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
+                return RedirectToAction("Index", "Authenticate");
             }
             if (customer.Cart.payment_id > 0) {
                 UDF.ExpireCart(customer.ID);
@@ -241,7 +241,7 @@ namespace EcommercePlatform.Controllers {
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
+                return RedirectToAction("Index", "Authenticate");
             }
 
             // Create Cart object from customer
@@ -251,7 +251,8 @@ namespace EcommercePlatform.Controllers {
             // Get the parts from this Cart
             cart.GetParts();
 
-            ViewBag.showShipping = true;
+            ViewBag.showTotal = true;
+            ViewBag.showQty = false;
             ViewBag.cart = cart;
             ViewBag.message = TempData["message"];
             Paypal p = new Paypal();
@@ -268,7 +269,7 @@ namespace EcommercePlatform.Controllers {
             Customer customer = ViewBag.customer;
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
+                return RedirectToAction("Index", "Authenticate");
             }
             decimal total = customer.Cart.getTotal();
             Paypal p = new Paypal();

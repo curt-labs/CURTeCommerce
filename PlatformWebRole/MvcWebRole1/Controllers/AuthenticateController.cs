@@ -16,11 +16,7 @@ namespace EcommercePlatform.Controllers {
         /// <param name="error">Error message from login</param>
         /// <returns>View page</returns>
         [RequireHttps]
-        public ActionResult Index(string referrer = "", int checkout = 0) {
-
-            if (referrer == "" && Request.UrlReferrer != null && Request.UrlReferrer.Host != null && Request.UrlReferrer.Host.Contains(Request.Url.Host)) {
-                referrer = Request.UrlReferrer.AbsoluteUri;
-            }
+        public ActionResult Index() {
 
             List<Country> countries = UDF.GetCountries();
 
@@ -42,13 +38,11 @@ namespace EcommercePlatform.Controllers {
             ViewBag.shipping = shipping;*/
             ViewBag.countries = countries;
             ViewBag.error = TempData["error"];
-            ViewBag.referrer = referrer;
-            ViewBag.checkout = checkout;
             return View();
         }
 
         [RequireHttps]
-        public ActionResult Login(string email = "", string password = "", int remember = 0, int checkout = 0, string redirect = "") {
+        public ActionResult Login(string email = "", string password = "", int remember = 0) {
             try {
                 /**
                  * Store any Customer object from Session/Cookie into a tmp object
@@ -87,13 +81,7 @@ namespace EcommercePlatform.Controllers {
                 }
                 Response.Cookies.Add(cook);
 
-                if (checkout == 1) {
-                    return RedirectToAction("Checkout", "Cart");
-                } else if (redirect != null && redirect.Length != 0 && !redirect.ToUpper().Contains("AUTHENTICATE")) {
-                    return Redirect(redirect);
-                } else {
-                    return RedirectToAction("Index", "Index");
-                }
+                return RedirectToAction("Index", "Cart");
             } catch (Exception e) {
                 TempData["error"] = e.Message;
                 return Redirect("/Authenticate/Index");
@@ -117,7 +105,7 @@ namespace EcommercePlatform.Controllers {
         }
 
         [RequireHttps]
-        public ActionResult Signup(int checkout = 0) {
+        public ActionResult Signup() {
             Customer cust = new Customer();
             Settings settings = ViewBag.settings;
             /*Address billing = new Address();
@@ -128,7 +116,6 @@ namespace EcommercePlatform.Controllers {
             }
             try {
                 #region Object Instantiation
-                string referrer = Request.Form["redirect"];
                 // Build out our Customer object
                 cust = new Customer {
                     email = Request.Form["email"],
@@ -217,7 +204,7 @@ namespace EcommercePlatform.Controllers {
                 cust.Address1 = shipping;*/
 
                 if (loginAfterRegistration) {
-                    return RedirectToAction("login", new { email = cust.email, password = Request.Form["password"], remember = 0, checkout = checkout, redirect = referrer });
+                    return RedirectToAction("login", new { email = cust.email, password = Request.Form["password"], remember = 0 });
                 } else {
                     TempData["error"] = "You're account has been successfully created. Please check your e-mail to confirm your account.";
                     return Redirect("/Authenticate");

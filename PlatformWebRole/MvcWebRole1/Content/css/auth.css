@@ -46,4 +46,19 @@ label[for=receiveOffers] input, label[for=receiveNewsletter] input{ float:right 
 #login a.forgot:hover,#forgot a.forgot:hover{
     text-decoration:underline;
 }
-    
+
+#landing {
+    display: block;
+}
+
+#landing .button {
+    display: inline-block;
+    margin: 10px 0;
+    font-size: 16px;
+    padding: 10px 15px;
+}
+
+#landing span {
+    display: block;
+    padding: 10px;
+}

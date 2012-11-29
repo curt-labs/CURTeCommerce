@@ -162,6 +162,7 @@ namespace EcommercePlatform
             foreach (EcommercePlatform.CartItem item in this.CartItems) {
                 total += (item.quantity * item.price);
             }
+            total += this.shipping_price;
             return total;
         }
 
@@ -390,10 +391,10 @@ namespace EcommercePlatform
                 total += (item.quantity * item.price);
             }
             sb.Append("</tbody><tfoot style=\"font-size: 12px;\">");
-            sb.Append("<tr><td colspan=\"2\" style=\"border-top: 1px solid #222; text-align: right;\"><strong>SubTotal:<strong></td>");
-            sb.AppendFormat("<td style=\"border-top: 1px solid #222; text-align:right;\"><strong>{0}</strong></td></tr>", String.Format("{0:C}", this.GetSubTotal()));
-            sb.AppendFormat("<tr><td colspan=\"2\" style=\"text-align: right;\">({0}) Shipping:</td>", myTI.ToTitleCase(this.shipping_type.Replace("_", " ")));
-            sb.AppendFormat("<td style=\"text-align:right;\">{0}</td></tr>", (this.shipping_price == 0) ? "Free" : String.Format("{0:C}", this.shipping_price));
+            sb.AppendFormat("<tr><td colspan=\"2\" style=\"border-top: 1px solid #222; text-align: right;\">({0}) Shipping:</td>", myTI.ToTitleCase(this.shipping_type.Replace("_", " ")));
+            sb.AppendFormat("<td style=\"border-top: 1px solid #222; text-align:right;\">{0}</td></tr>", (this.shipping_price == 0) ? "Free" : String.Format("{0:C}", this.shipping_price));
+            sb.Append("<tr><td colspan=\"2\" style=\"text-align: right;\"><strong>SubTotal:<strong></td>");
+            sb.AppendFormat("<td style=\"text-align:right;\"><strong>{0}</strong></td></tr>", String.Format("{0:C}", this.GetSubTotal()));
             sb.Append("<tr><td colspan=\"2\" style=\"text-align: right;\">Tax:</td>");
             sb.AppendFormat("<td style=\"text-align:right;\">{0}</td></tr>", String.Format("{0:C}", this.tax));
             sb.Append("<tr><td colspan=\"2\" style=\"text-align: right;\"><strong>Total:<strong></td>");
@@ -479,7 +480,7 @@ namespace EcommercePlatform
 
         internal void SetTax() {
             decimal tax = 0;
-            tax = Math.Round(((this.GetSubTotal() + this.shipping_price) * (this.Shipping.State1.taxRate / 100)),2);
+            tax = Math.Round((this.GetSubTotal() * (this.Shipping.State1.taxRate / 100)),2);
 
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             Cart c = db.Carts.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<Cart>();

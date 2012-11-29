@@ -89,7 +89,7 @@ namespace EcommercePlatform.Controllers {
             ViewBag.page = page;
 
             if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
+                return RedirectToAction("Index", "Authenticate");
             }
 
             if (customer.Cart.payment_id == 0) {
@@ -236,7 +236,7 @@ namespace EcommercePlatform.Controllers {
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
+                return RedirectToAction("Index", "Authenticate");
             }
 
 
@@ -260,7 +260,7 @@ namespace EcommercePlatform.Controllers {
                 Customer customer = new Customer();
                 customer.GetFromStorage();
                 if (!customer.LoggedIn()) {
-                    return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
+                    return RedirectToAction("Index", "Authenticate");
                 }
 
                 if (customer.Cart.payment_id == 0) {
@@ -312,7 +312,7 @@ namespace EcommercePlatform.Controllers {
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
+                return RedirectToAction("Index", "Authenticate");
             }
 
             if (customer.Cart.payment_id == 0) {
@@ -336,7 +336,7 @@ namespace EcommercePlatform.Controllers {
                 Customer customer = new Customer();
                 customer.GetFromStorage();
                 if (!customer.LoggedIn()) {
-                    return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
+                    return RedirectToAction("Index", "Authenticate");
                 }
 
 
@@ -383,7 +383,7 @@ namespace EcommercePlatform.Controllers {
                 // Retrieve Customer from Sessions/Cookie
                 customer.GetFromStorage();
                 if (!customer.LoggedIn()) {
-                    return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
+                    return RedirectToAction("Index", "Authenticate");
                 }
 
                 decimal shipping_price = Convert.ToDecimal(rate.NetCharge.Key);
@@ -438,7 +438,7 @@ namespace EcommercePlatform.Controllers {
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
             if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout" });
+                return RedirectToAction("Index", "Authenticate");
             }
             if (customer.Cart.payment_id == 0) {
 

@@ -63,12 +63,12 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="2">Subtotal:</td>
-                <td class="price">@String.Format("{0:C}", order.GetSubTotal())</td>
-            </tr>
-            <tr>
                 <td colspan="2" class="shippingtype">(@order.shipping_type.Replace("_"," ").ToLower()) Shipping:</td>
                 <td class="price">@String.Format("{0:C}", order.shipping_price)</td>
+            </tr>
+            <tr>
+                <td colspan="2">Subtotal:</td>
+                <td class="price">@String.Format("{0:C}", order.GetSubTotal())</td>
             </tr>
             <tr>
                 <td colspan="2">Tax:</td>

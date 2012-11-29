@@ -534,7 +534,6 @@
     <Content Include="Views\Testimonials\Add.cshtml" />
     <Content Include="Views\Testimonials\Index.cshtml" />
     <Content Include="Views\Shared\_Cart.cshtml" />
-    <Content Include="Views\Shared\_CartNoQty.cshtml" />
     <Content Include="Views\Shared\_CustomerForm.cshtml" />
     <Content Include="Views\Shared\_PartListing.cshtml" />
     <None Include="EcommercePlatform.dbml">

@@ -191,7 +191,7 @@ $(function () {
                 }
             });
             cartstr += '</tbody><tfoot><td colspan="2">Subtotal:</td><td class="price">$' + total.toFixed(2) + '</td><td></td></tfoot></table>';
-            cartstr += '<a href="/Cart/Checkout" class="button">Checkout</a>';
+            cartstr += '<a href="/Cart" class="button">View Cart & Checkout</a>';
             $('#cartCount').html(count);
             $('#cartbox').append(cartstr);
         } else {
