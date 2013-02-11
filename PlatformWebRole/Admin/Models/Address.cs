@@ -7,6 +7,7 @@ using System.Text;
 using System.Reflection;
 using Newtonsoft.Json;
 using System.Data.Linq;
+using System.Transactions;
 
 namespace Admin {
     partial class Address {
@@ -34,15 +35,18 @@ namespace Admin {
 
         internal void Update(string first, string last, string street1, string street2, string city, int state_id, string zip, bool residential = false) {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-            this.first = first;
-            this.last = last;
-            this.street1 = street1;
-            this.street2 = street2;
-            this.city = city;
-            this.state = state_id;
-            this.postal_code = zip;
-            this.residential = residential;
-            db.SubmitChanges();
+            Address a = db.Addresses.Where(x => x.ID.Equals(this.ID)).FirstOrDefault();
+            if (a != null && a.ID > 0) {
+                a.first = first;
+                a.last = last;
+                a.street1 = street1;
+                a.street2 = street2;
+                a.city = city;
+                a.state = state_id;
+                a.postal_code = zip;
+                a.residential = residential;
+                db.SubmitChanges();
+            }
         }
 
         internal Address Get(int id = 0) {
@@ -51,11 +55,19 @@ namespace Admin {
             return a;
         }
 
-        internal void Delete(int id = 0) {
+        internal bool Delete(int id = 0) {
+            bool success = false;
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-            Address a = db.Addresses.Where(x => x.ID == id).Where(x => x.active == true).First<Address>();
-            a.active = false;
-            db.SubmitChanges();
+            using (TransactionScope ts = new TransactionScope()) {
+                try {
+                    Address a = db.Addresses.Where(x => x.ID == id).Where(x => x.active == true).First<Address>();
+                    a.active = false;
+                    db.SubmitChanges();
+                    success = true;
+                    ts.Complete();
+                } catch { }
+            }
+            return success;
         }
 
         internal bool Equals(Address address) {

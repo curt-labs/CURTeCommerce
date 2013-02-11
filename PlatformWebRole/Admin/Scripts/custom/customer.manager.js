@@ -1,4 +1,4 @@
-﻿var customerTable, cartItemTable, toggleSuspended;
+﻿var customerTable, cartItemTable, toggleSuspended, clearAddressForm;
 
 $(function () {
 
@@ -13,6 +13,62 @@ $(function () {
             showMessage('There was an error while processing your request.');
         });
     };
+
+    $(document).on('click', '#addaddressbtn', function (e) {
+        e.preventDefault();
+        $('#addAddress').slideDown('fast');
+    });
+
+    $(document).on('click', '.edit', function (e) {
+        e.preventDefault();
+        var idstr = $(this).data('id');
+        $.getJSON('/Admin/Customers/GetAddress/' + idstr, function (address) {
+            if (address != null && address.ID > 0) {
+                $('#addressID').val(address.ID);
+                $('#first').val(address.first);
+                $('#last').val(address.last);
+                $('#street1').val(address.street1);
+                $('#street2').val(address.street2);
+                $('#city').val(address.city);
+                $('#state').val(address.state);
+                $('#postalcode').val(address.postal_code);
+                $('#residential').attr('checked', false);
+                if (address.residential) {
+                    $('#residential').attr('checked', true);
+                }
+            }
+            $('#addAddress').slideDown('fast');
+        });
+    });
+
+    $(document).on('click', '.delete', function (e) {
+        e.preventDefault();
+        var idstr = $(this).data('id');
+        if (confirm("Are you sure you want to delete this address?")) {
+            $.post('/Admin/Customers/DeleteAddress/' + idstr, function (data) {
+                if (data.success) {
+                    $('#address_' + idstr).fadeOut('fast', function () {
+                        $(this).remove();
+                    });
+                } else {
+                    showMessage("There was a problem removing the address.");
+                }
+            }, 'json');
+        }
+    });
+
+    $(document).on('click', '.setdefault', function (e) {
+        e.preventDefault();
+        var href = $(this).attr('href');
+        if (confirm("Set this address as default?")) {
+            window.location = href;
+        }
+    });
+
+    $(document).on('click', '#btnResetAddress', function () {
+        clearForm('#addressform');
+        $('#addAddress').slideUp('fast');
+    });
 
     $(document).on('change', '#tableperpage', function () {
         $('#formperpage').submit();
@@ -66,3 +122,14 @@ $(function () {
         }
     });
 });
+
+clearForm = function (idstr) {
+    var fields = $(idstr).find("input:not([type=submit]):not([type=reset])");
+    $(fields).each(function (i, obj) {
+        if ($(obj).attr('type') == 'checkbox') {
+            $(obj).attr('checked', $(obj).data('default') == 'checked')
+        } else {
+            $(obj).attr('value', $(obj).data('default'));
+        }
+    });
+}

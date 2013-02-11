@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using Admin.Models;
 using System.Text;
+using System.Transactions;
 
 namespace Admin {
     partial class Customer {
@@ -126,7 +127,7 @@ namespace Admin {
             SendNotification();
         }
 
-        internal void Update(string email, string fname, string lname) {
+        internal void Update(string email, string fname, string lname, string phone) {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
 
             Customer c = db.Customers.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<Customer>();
@@ -146,6 +147,9 @@ namespace Admin {
             if (lname != this.lname) {
                 c.lname = lname;
             }
+            if (phone != this.phone) {
+                c.phone = phone;
+            }
 
             db.SubmitChanges();
         }
@@ -161,6 +165,27 @@ namespace Admin {
                 }
                 return exists;
             }
+        }
+
+        public bool SetDefaultAddress(int id, string type = "billing") {
+            bool success = false;
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            using (TransactionScope ts = new TransactionScope()) {
+                try {
+                    Customer c = db.Customers.Where(x => x.ID.Equals(this.ID)).FirstOrDefault();
+                    if (type == "billing") {
+                        c.billingID = id;
+                    } else {
+                        c.shippingID = id;
+                    }
+                    db.SubmitChanges();
+
+                    success = true;
+
+                    ts.Complete();
+                } catch { }
+            }
+            return success;
         }
 
         internal void SaveAddresses(Address billing, Address shipping) {
@@ -208,6 +233,21 @@ namespace Admin {
             this.plainpassword = "";
         }
 
+        internal void SendChangedPasswordNotification() {
+            string[] tos = { this.email };
+            StringBuilder sb = new StringBuilder();
+            Settings settings = new Settings();
+
+            sb.Append("<p>Your password has been changed for your account at <a href='" + settings.Get("SiteURL") + "' title='" + settings.Get("SiteName") + "'>" + settings.Get("SiteName") + "</a>.</p>");
+            sb.Append("<hr />");
+            sb.AppendFormat("<p><strong>Password:</strong> {0}</p>", this.plainpassword);
+            sb.Append("<hr /><br />");
+            sb.Append("<p style='font-size:11px'>If you feel this was a mistake please disregard this e-mail.</p>");
+
+            UDF.SendEmail(tos, "Password Change for your account at " + settings.Get("SiteName"), true, sb.ToString());
+            this.plainpassword = "";
+        }
+
         internal void GeneratePassword() {
             try {
                 PasswordGenerator pw = new PasswordGenerator();
@@ -215,6 +255,35 @@ namespace Admin {
                 this.plainpassword = new_pass;
                 this.password = UDF.EncryptString(new_pass);
             } catch (Exception) {}
+        }
+
+        internal void ValidatePasswords(string pass1, string pass2) {
+            if (pass1 == null || pass1.Trim().Length == 0) {
+                throw new Exception("Password is required.");
+            } else {
+                if (pass1.Trim().Length < 6) {
+                    throw new Exception("Password must be at least 6 characters long.");
+                }
+                pass1 = pass1.Trim();
+            }
+            if (pass2 == null || pass2.Trim().Length == 0) {
+                throw new Exception("You must enter confirmation password.");
+            } else {
+                pass2 = pass2.Trim();
+            }
+            if (pass1 != pass2) {
+                throw new Exception("Passwords must match.");
+            } else {
+                this.password = UDF.EncryptString(pass1);
+            }
+        }
+
+        internal void UpdatePassword() {
+            Customer tmp = new Customer();
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            tmp = db.Customers.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<Customer>();
+            tmp.password = this.password;
+            db.SubmitChanges();
         }
 
     }
