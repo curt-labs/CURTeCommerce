@@ -30,7 +30,7 @@ namespace Admin.Models {
             }
         }
 
-        internal static void Save(int id, string name, string phone, string fax, string email, string address, string city, int stateID, int zip, int isPrimary, int google_places, int foursquare, out Location loc, out List<string> errors) {
+        internal static void Save(int id, string name, string phone, string fax, string email, string address, string city, int stateID, string zip, int isPrimary, int google_places, int foursquare, out Location loc, out List<string> errors) {
 
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             Dictionary<List<string>, Location> response = new Dictionary<List<string>, Location>();
@@ -48,7 +48,7 @@ namespace Admin.Models {
             if (address.Length == 0) { throw new Exception(); } else { loc.address = address; }
             if (city.Length == 0) { throw new Exception(); } else { loc.city = city; }
             if (stateID == 0) { throw new Exception(); } else { loc.stateID = stateID; }
-            if (zip == 0) { throw new Exception(); } else { loc.zip = zip; }
+            if (zip == "") { throw new Exception(); } else { loc.zip = zip; }
             loc.isPrimary = isPrimary;
             loc.fax = fax;
 

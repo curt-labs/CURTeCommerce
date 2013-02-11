@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ecom_platform" Class="EcommercePlatformDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=d49echki7t.database.windows.net;Initial Catalog=ecom_platform;Persist Security Info=True;User ID=hitchdepotusa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="ecom_platformConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=srjbmn26rz.database.windows.net;Initial Catalog=EcommercePlatform;Persist Security Info=True;User ID=discounthitch" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="ecom_platformConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Address" Member="Addresses">
     <Type Name="Address">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -216,7 +216,7 @@
       <Column Name="address" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
       <Column Name="city" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
       <Column Name="stateID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="zip" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="zip" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
       <Column Name="isPrimary" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="latitude" Type="System.Decimal" DbType="Decimal(18,8) NOT NULL" CanBeNull="false" />
       <Column Name="longitude" Type="System.Decimal" DbType="Decimal(18,8) NOT NULL" CanBeNull="false" />

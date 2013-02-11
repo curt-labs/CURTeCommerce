@@ -52,7 +52,7 @@ namespace Admin.Controllers {
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Save(int id = 0, string name = "", string phone = "", string fax = "", string email = "", string address = "", string city = "", int stateID = 0, int zip = 0, int isPrimary = 0, int google_places = 0, int foursquare = 0) {
+        public ActionResult Save(int id = 0, string name = "", string phone = "", string fax = "", string email = "", string address = "", string city = "", int stateID = 0, string zip = "", int isPrimary = 0, int google_places = 0, int foursquare = 0) {
             Location loc = new Location();
             List<string> errors = new List<string>();
             try {

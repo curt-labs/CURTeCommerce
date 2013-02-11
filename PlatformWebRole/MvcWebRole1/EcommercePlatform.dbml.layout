@@ -147,7 +147,7 @@
         <classShapeMoniker Id="a13f0b39-2107-46ec-9a66-4e76df6388b0" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.625 : 2.06814697265625); (3.5 : 2.06814697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.625 : 2.06814697265625); (3.5 : 2.06814697265625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/EcommercePlatformDataContext/BlogPost/BlogPost_BlogPost_BlogCategory" />
       <nodes>
         <classShapeMoniker Id="30f4328c-76fe-4a99-a463-9b8eedbe491f" />
