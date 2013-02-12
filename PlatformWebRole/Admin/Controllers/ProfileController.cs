@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Admin.Models;
 using Admin.Controllers;
 using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 
 namespace Admin.Controllers {
     public class ProfileController : BaseController {
@@ -40,6 +41,7 @@ namespace Admin.Controllers {
                 string p2 = (Request.Form["p2"] != null) ? Request.Form["p2"].Trim() : "";
                 string email = (Request.Form["email"] != null) ? Request.Form["email"] : "";
                 string bio = (Request.Form["bio"] != null) ? Request.Form["bio"] : "";
+                string timezone = (Request.Form["timezone"] != null) ? Request.Form["timezone"] : "UTC";
                 HttpPostedFileBase file = (Request.Files[0] != null)?Request.Files[0]:null;
 
                 // Validate the form
@@ -53,7 +55,7 @@ namespace Admin.Controllers {
                 if (errors.Count > 0) {
                     throw new Exception();
                 }
-                Profiles.Add(id, username, p1, email, first, last, file, bio);
+                Profiles.Add(id, username, p1, email, first, last, file, bio, timezone);
                 if (!ulist) {
                     return RedirectToAction("Index", "Profile", new { saved = true });
                 }
@@ -62,6 +64,26 @@ namespace Admin.Controllers {
                 List<int> mods = (Request.Form["mod"] != null)?Request.Form["mod"].Split(',').Select(x => int.Parse(x)).ToList<int>():new List<int>();
                 Profiles.DeleteProfileModules(p.id);
                 Profiles.AddModules(p.id, mods);
+                Profile vp = ViewBag.profile;
+                if (vp.id == id) {
+                    Profile serial_prof = new Profile {
+                        id = p.id,
+                        username = p.username,
+                        password = "Ya'll suckas got ketchuped!",
+                        email = p.email,
+                        first = p.first,
+                        last = p.last,
+                        date_added = p.date_added,
+                        image = p.image,
+                        bio = p.bio,
+                        timezone = p.timezone
+                    };
+                    string jsonProf = JsonConvert.SerializeObject(serial_prof);
+                    HttpCookie acct = new HttpCookie("acct");
+                    acct.Value = jsonProf;
+                    acct.Expires = DateTime.Now.AddDays(30);
+                    Response.Cookies.Add(acct);
+                }
                 return RedirectToAction("Index", "Profiles");
             } catch (Exception e) {
                 errors.Add(e.Message);

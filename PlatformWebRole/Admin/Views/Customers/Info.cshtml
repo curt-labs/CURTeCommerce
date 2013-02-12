@@ -6,6 +6,8 @@
     List<Admin.Country> countries = ViewBag.countries ?? new List<Admin.Country>();
     string message = ViewBag.message ?? "";
     string error = ViewBag.error ?? "";
+    Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
+    TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
 
     ViewBag.Title = "View";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -191,7 +193,7 @@
                             <tr>
                                 <td>@order.payment_id</td>
                                 <td>@order.getCount()</td>
-                                <td>@String.Format("{0:M/d/yyyy} at {0:h:mm tt}", order.Payment.created.ToLocalTime())</td>
+                                <td>@String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.Payment.created, tz))</td>
                                 <td>@String.Format("{0:C}", order.getTotal())</td>
                                 <td>@order.Payment.PaymentTypes.name</td>
                                 <td><a href="/Admin/Orders/Items/@order.payment_id" class="btn">View Items</a></td>

@@ -110,7 +110,7 @@ namespace Admin.Controllers {
                 return RedirectToAction("Index", "FAQManager");
             } catch (Exception e) {
                 TempData["faq"] = new_faq;
-                TempData["error"] = e.Message;
+                TempData["error"] = e.Message + ". " + e.StackTrace;
                 return RedirectToAction("EditQuestion", "FAQManager", new { id = id });
             }
         }

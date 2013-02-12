@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Admin.Models;
 using System.Web.Script.Serialization;
 using System.Web.Routing;
+using Newtonsoft.Json;
 
 namespace Admin.Controllers {
     public class BaseController : Controller {
@@ -24,7 +25,7 @@ namespace Admin.Controllers {
 
                 // Deserialize cookie value
                 Profile p = new Profile();
-                p = new JavaScriptSerializer().Deserialize<Profile>(acct.Value);
+                p = JsonConvert.DeserializeObject<Profile>(acct.Value);
 
                 // Validate the cookie data
                 if (p == null || p.email == null || p.email.Length == 0 || p.id == 0) {

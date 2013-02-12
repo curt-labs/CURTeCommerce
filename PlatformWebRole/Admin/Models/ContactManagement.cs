@@ -92,7 +92,7 @@ namespace Admin {
         public string email { get; set; }
         public string message { get; set; }
         public string type { get; set; }
-        public DateTime dateAdded { get; set; }
+        public string dateAdded { get; set; }
         public int followedUp { get; set; }
     }
 }

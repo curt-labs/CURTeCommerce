@@ -17,13 +17,13 @@ namespace EcommercePlatform.Models {
                 List<Archive> archives = new List<Archive>();
 
                 archives = (from p in db.BlogPosts
-                            where p.publishedDate.Value != null && p.publishedDate.Value <= DateTime.Now && p.active.Equals(true) 
+                            where p.publishedDate.Value != null && p.publishedDate.Value <= DateTime.UtcNow && p.active.Equals(true) 
                             orderby p.publishedDate.Value.Year descending, p.publishedDate.Value.Month descending
                             select new Archive
                             {
-                                monthnum = Convert.ToInt16(Convert.ToDateTime(p.publishedDate).Month.ToString()),
-                                month = Convert.ToDateTime(p.publishedDate).Month.ToString(),
-                                year = Convert.ToDateTime(p.publishedDate).Year.ToString()
+                                monthnum = p.publishedDate.Value.Month,
+                                month = p.publishedDate.Value.Month.ToString(),
+                                year = p.publishedDate.Value.Year.ToString()
                             }).Distinct().ToList<Archive>();
 
                 archives = (from a in archives

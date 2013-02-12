@@ -34,7 +34,7 @@ namespace EcommercePlatform.Models {
                     first_name = first_name,
                     last_name = last_name,
                     location = location,
-                    dateAdded = DateTime.Now,
+                    dateAdded = DateTime.UtcNow,
                     approved = false,
                     active = true,
                 };

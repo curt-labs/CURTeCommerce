@@ -47,8 +47,10 @@ namespace Admin {
                 if (tmp != null && tmp._ID > 0) {
                     throw new Exception("Question exists, try again.");
                 }*/
-
-                this._order = db.FAQs.Select(x => x.order).Max();
+                this._order = 1;
+                if (db.FAQs.Where(x => x.topic.Equals(this.topic)).Any()) {
+                    this._order = db.FAQs.Select(x => x.order).Max();
+                }
                 db.FAQs.InsertOnSubmit(this);
             } else { // Update existing
                 FAQ exist = db.FAQs.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<FAQ>();
@@ -97,7 +99,7 @@ namespace Admin {
             } catch (Exception) {
                 this._ID = 0;
                 this._topic = "";
-                this._dateAdded = DateTime.Now;
+                this._dateAdded = DateTime.UtcNow;
                 this._FAQs = new System.Data.Linq.EntitySet<FAQ>();
             }
         }
@@ -117,7 +119,7 @@ namespace Admin {
                 if (tmp != null && tmp.ID > 0) {
                     throw new Exception("Topic exists, try again.");
                 }
-                this._dateAdded = DateTime.Now;
+                this._dateAdded = DateTime.UtcNow;
                 db.FaqTopics.InsertOnSubmit(this);
 
             } else { // Update existing

@@ -7,7 +7,7 @@ namespace EcommercePlatform.Models {
     public class BrowserConsole {
         public static void log(string message = "", string dataType = "string", bool includeTimestamp = true, bool includeScript = true) {
             string log = "";
-            string timestamp = String.Format("{0:h:mm:ss.fff tt}", DateTime.Now) + " | ";
+            string timestamp = String.Format("{0:h:mm:ss.fff tt}", DateTime.UtcNow) + " | ";
             if (dataType == "json") {
                 log = "$.parseJSON(\"" + message + "\")";
                 if (includeTimestamp) {

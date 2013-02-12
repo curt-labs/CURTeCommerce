@@ -17,8 +17,11 @@ namespace Admin.Controllers {
 
         [AcceptVerbs(HttpVerbs.Post)]
         public void OrdersByDateRange(string startdate = "", string enddate = "") {
-            DateTime start = Convert.ToDateTime(startdate);
-            DateTime end = Convert.ToDateTime(enddate);
+            Profile p = ViewBag.profile;
+            TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(p.timezone ?? "UTC");
+
+            DateTime start = TimeZoneInfo.ConvertTimeToUtc(Convert.ToDateTime(startdate), tz);
+            DateTime end = TimeZoneInfo.ConvertTimeToUtc(Convert.ToDateTime(enddate), tz);
 
             List<Cart> orders = Reporting.GetOrdersByDateRange(start,end);
 
@@ -132,18 +135,21 @@ namespace Admin.Controllers {
 
         [NoValidation]
         public void AutomatedInvoiceReport(string startdate = "", string enddate = "") {
+            Profile p = ViewBag.profile;
+            TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(p.timezone ?? "UTC");
+
             DateTime start = new DateTime();
             DateTime end = new DateTime();
             Settings settings = new Settings();
             if (startdate == "") {
-                start = DateTime.Now.AddDays(-1);
+                start = DateTime.UtcNow.AddDays(-1);
             } else {
-                start = Convert.ToDateTime(startdate);
+                start = TimeZoneInfo.ConvertTimeToUtc(Convert.ToDateTime(startdate), tz);
             }
             if (enddate == "") {
-                end = DateTime.Now;
+                end = DateTime.UtcNow;
             } else {
-                end = Convert.ToDateTime(enddate);
+                end = TimeZoneInfo.ConvertTimeToUtc(Convert.ToDateTime(enddate), tz);
             }
             List<Invoice> invoices = Reporting.GetInvoicesByDateRange(start, end);
 

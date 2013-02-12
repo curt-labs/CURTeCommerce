@@ -15,7 +15,7 @@ namespace EcommercePlatform
         public string paypalToken { get; set; }
 
         partial void OnCreated() {
-            this.date_created = DateTime.Now;
+            this.date_created = DateTime.UtcNow;
             this.ship_to = 0;
             this.bill_to = 0;
             this.voided = false;
@@ -99,7 +99,7 @@ namespace EcommercePlatform
             try {
                 Cart c = new Cart {
                     cust_id = 0,
-                    date_created = DateTime.Now,
+                    date_created = DateTime.UtcNow,
                     shipping_price = 0
                 };
                 db.Carts.InsertOnSubmit(c);
@@ -317,7 +317,7 @@ namespace EcommercePlatform
             PaymentType ptype = db.PaymentTypes.Where(x => x.name.ToLower() == type.ToLower()).FirstOrDefault();
             Payment p = new Payment {
                 type = ptype.ID,
-                created = DateTime.Now,
+                created = DateTime.UtcNow,
                 confirmationKey = confirmKey,
                 status = status
             };

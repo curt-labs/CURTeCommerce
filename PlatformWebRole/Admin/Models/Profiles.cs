@@ -77,12 +77,12 @@ namespace Admin.Models {
             }
         }
 
-        public static Profile Add(int id = 0, string username = "", string password = "", string email = "", string first = "", string last = "", HttpPostedFileBase file = null, string bio = "") {
+        public static Profile Add(int id = 0, string username = "", string password = "", string email = "", string first = "", string last = "", HttpPostedFileBase file = null, string bio = "", string timezone = "UTC") {
             try {
                 EcommercePlatformDataContext db = new EcommercePlatformDataContext();
                 string filename = "";
                 Profile p = new Profile();
-                p.date_added = DateTime.Now;
+                p.date_added = DateTime.UtcNow;
                 if (id > 0) {
                     p = db.Profiles.Where(x => x.id.Equals(id)).FirstOrDefault<Profile>();
                 }
@@ -91,6 +91,7 @@ namespace Admin.Models {
                 p.first = first;
                 p.last = last;
                 p.bio = bio;
+                p.timezone = timezone;
                 //p.image = filename;
                 if (password.Length > 0) {
                     p.password = Crypto.EncryptString(password);

@@ -33,7 +33,7 @@ namespace EcommercePlatform.Models
                 List<PostWithCategories> posts = new List<PostWithCategories>();
 
                 posts = (from p in db.BlogPosts
-                         where p.publishedDate.Value <= DateTime.Now && p.active.Equals(true)
+                         where p.publishedDate.Value <= DateTime.UtcNow && p.active.Equals(true)
                          orderby p.publishedDate descending
                          select new PostWithCategories
                          {

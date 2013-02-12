@@ -104,7 +104,7 @@ namespace Admin.Controllers {
                     fname = Request.Form["fname"],
                     lname = Request.Form["lname"],
                     phone = Request.Form["phone"],
-                    dateAdded = DateTime.Now,
+                    dateAdded = DateTime.UtcNow,
                     isSuspended = 0,
                     isValidated = 1,
                     validator = Guid.NewGuid()
@@ -269,7 +269,7 @@ namespace Admin.Controllers {
                 months.Add(i);
             }
             List<int> yearlist = new List<int>();
-            for (int i = DateTime.Now.Year; i <= (DateTime.Now.Year + 20); i++) {
+            for (int i = DateTime.UtcNow.Year; i <= (DateTime.UtcNow.Year + 20); i++) {
                 yearlist.Add(i);
             }
             ViewBag.months = months;

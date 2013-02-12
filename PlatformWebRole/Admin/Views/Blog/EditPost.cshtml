@@ -1,34 +1,17 @@
 ﻿@{
-    Admin.Models.PostWithCategories post = ViewBag.post;
-    if (post == null) {
-        post = new Admin.Models.PostWithCategories();   
-    }
-
-    List<Admin.BlogCategory> postcats = post.categories;
-    if(postcats == null) {
-        postcats = new List<Admin.BlogCategory>();
-    }
-
-    int profileid = ViewBag.profile.id;
+    Admin.Models.PostWithCategories post = ViewBag.post ?? new Admin.Models.PostWithCategories();
+    List<Admin.BlogCategory> postcats = post.categories ?? new List<Admin.BlogCategory>();
+    Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
+    TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
+    int profileid = profile.id;
     if (post.profileID != 0) {
         profileid = post.profileID;
     }
 
-    List<Admin.Profile> authors = ViewBag.authors;
-    if (authors == null) {
-        authors = new List<Admin.Profile>();
-    }
+    List<Admin.Profile> authors = ViewBag.authors ?? new List<Admin.Profile>();
+    List<Admin.BlogCategory> categories = ViewBag.categories ?? new List<Admin.BlogCategory>();
 
-    List<Admin.BlogCategory> categories = ViewBag.categories;
-    if (categories == null) {
-        categories = new List<Admin.BlogCategory>();
-    }
-
-
-    string error = ViewBag.error;
-    if(error == null){
-        error = "";
-    }
+    string error = ViewBag.error ?? "";
     
     ViewBag.Title = "Edit Category";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -91,7 +74,7 @@
     </label>
     @if (post.publishedDate != null) {
         <label for="published">
-            <span class="subtext">(Published on @post.publishedDate.ToString())</span>
+            <span class="subtext">(Published on @TimeZoneInfo.ConvertTimeFromUtc(post.publishedDate.Value, tz).ToString())</span>
             <br />Published? <input type="checkbox" name="publish" id="publish" value="true" checked="checked" style="display:inline;" />
         </label>
     }

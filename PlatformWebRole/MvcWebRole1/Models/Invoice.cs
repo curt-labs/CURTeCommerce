@@ -12,7 +12,7 @@ namespace EcommercePlatform {
 
         public void Save(List<InvoiceItem> items, List<InvoiceCode> codes) {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-            this.created = DateTime.Now;
+            this.created = DateTime.UtcNow;
             this.paid = false;
             try {
                 Invoice i = db.Invoices.Where(x => x.curtOrder.Equals(this.curtOrder)).First<Invoice>();

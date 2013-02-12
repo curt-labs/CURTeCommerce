@@ -1,35 +1,10 @@
 ﻿@{
-    Admin.Service serv = ViewBag.service;
-    if (serv == null) {
-        serv = new Admin.Service();
-        serv.ID = 0;
-    }
-
-    List<Admin.Location> locations = ViewBag.locations;
-    if (locations == null) {
-        locations = new List<Admin.Location>();   
-    }
-
-    List<Admin.Location> all_locations = ViewBag.all_locations;
-    if (all_locations == null) {
-        all_locations = new List<Admin.Location>();
-    }
-
-    List<string> errors = ViewBag.errors;
-    if (errors == null) {
-        errors = new List<string>();
-    }
-
-    bool failed = ViewBag.failed;
-    if (failed == null) {
-        failed = false;
-    }
-
-    List<Admin.Models.GroupedModule> modules = ViewBag.modules;
-    if (modules == null) {
-        modules = new List<Admin.Models.GroupedModule>();
-    }
-
+    Admin.Service serv = ViewBag.service ?? new Admin.Service { ID = 0 };
+    List<Admin.Location> locations = ViewBag.locations ?? new List<Admin.Location>();
+    List<Admin.Location> all_locations = ViewBag.all_locations ?? new List<Admin.Location>();
+    List<string> errors = ViewBag.errors ?? new List<string>();
+    bool failed = ViewBag.failed ?? false;
+    List<Admin.Models.GroupedModule> modules = ViewBag.modules ?? new List<Admin.Models.GroupedModule>();
     bool can_delete = false;
     try {
         if (modules.Where(x => x.path.ToUpper().Equals("/ADMIN/SERVICES")).FirstOrDefault<Admin.Models.GroupedModule>().subs.Where(x => x.name.ToUpper().Equals("DELETE")).Count() > 0) {

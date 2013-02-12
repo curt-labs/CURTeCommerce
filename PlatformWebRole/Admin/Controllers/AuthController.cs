@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Admin.Models;
 using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 
 namespace Admin.Controllers {
     public class AuthController : Controller {
@@ -47,9 +48,10 @@ namespace Admin.Controllers {
                     last = p.last,
                     date_added = p.date_added,
                     image = p.image,
-                    bio = p.bio
+                    bio = p.bio,
+                    timezone = p.timezone
                 };
-                string jsonProf = new JavaScriptSerializer().Serialize(serial_prof);
+                string jsonProf = JsonConvert.SerializeObject(serial_prof);
                 HttpCookie acct = new HttpCookie("acct");
                 acct.Value = jsonProf;
                 acct.Expires = DateTime.Now.AddDays(30);

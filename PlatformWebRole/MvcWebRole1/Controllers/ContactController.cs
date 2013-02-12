@@ -48,7 +48,7 @@ namespace EcommercePlatform.Controllers {
                     email = email,
                     contact_type = contact_type,
                     message = message,
-                    dateAdded = DateTime.Now,
+                    dateAdded = DateTime.UtcNow,
                     followedUp = 0
                 };
                 bool recaptchavalid = ReCaptcha.ValidateCaptcha(Request.Form["recaptcha_challenge_field"], Request.Form["recaptcha_response_field"], remoteip);
@@ -77,7 +77,7 @@ namespace EcommercePlatform.Controllers {
                     email = email,
                     contact_type = 0,
                     message = message,
-                    dateAdded = DateTime.Now,
+                    dateAdded = DateTime.UtcNow,
                     followedUp = 0
                 };
                 bool recaptchavalid = ReCaptcha.ValidateCaptcha(recaptcha_challenge_field, recaptcha_response_field, remoteip);

@@ -17,7 +17,7 @@ namespace EcommercePlatform.Models {
             Newsletter nw = new Newsletter {
                 Name = name,
                 Email = email,
-                DateAdded = DateTime.Now,
+                DateAdded = DateTime.UtcNow,
                 Unsubscribe = Guid.NewGuid()
             };
             db.Newsletters.InsertOnSubmit(nw);

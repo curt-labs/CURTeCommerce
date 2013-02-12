@@ -287,6 +287,7 @@
       <Column Name="date_added" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="image" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
       <Column Name="bio" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="timezone" Type="System.String" DbType="varchar(100)" CanBeNull="false" />
       <Association Name="Profile_ProfileModule" Member="ProfileModules" ThisKey="id" OtherKey="profileID" Type="ProfileModule" />
     </Type>
   </Table>

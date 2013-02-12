@@ -1,22 +1,9 @@
 ﻿@{
-    Admin.Profile prof = ViewBag.prof;
-    if (prof == null) {
-        prof = new Admin.Profile();
-        prof.id = 0;
-    }
-
+    Admin.Profile prof = ViewBag.prof ?? new Admin.Profile { id = 0 };
+    List<TimeZoneInfo> timezones = ViewBag.timezones ?? new List<TimeZoneInfo>();
     List<Admin.Models.GroupedModule> user_modules = ViewBag.user_modules;
-    
-    List<Admin.Models.GroupedModule> listed_modules = ViewBag.listed_modules;
-    if (listed_modules == null) {
-        listed_modules = new List<Admin.Models.GroupedModule>();
-    }
-    
-    List<Admin.Models.GroupedModule> modules = ViewBag.modules;
-    if (modules == null) {
-        modules = new List<Admin.Models.GroupedModule>();
-    }
-
+    List<Admin.Models.GroupedModule> listed_modules = ViewBag.listed_modules ?? new List<Admin.Models.GroupedModule>();
+    List<Admin.Models.GroupedModule> modules = ViewBag.modules ?? new List<Admin.Models.GroupedModule>();
     bool saved = (ViewBag.saved != null) ? ViewBag.saved : false;
     bool failed = (ViewBag.failed != null) ? ViewBag.failed : false;
     bool hide_modules = (ViewBag.hide_modules != null) ? ViewBag.hide_modules : false;
@@ -83,6 +70,15 @@
         <label for="email">
             E-Mail
             <input type="email" name="email" id="email" value="@prof.email" placeholder="Enter your e-mail address.." required="required" title="E-Mail is required" />
+        </label>
+
+        <label for="timezone">
+            Timezone
+            <select name="timezone" id="timezone">
+                @foreach (TimeZoneInfo z in timezones) {
+                    <option value="@z.Id" @((prof.timezone == z.Id) ? "selected=selected" : "")>@z.DisplayName</option>
+                }
+            </select>
         </label>
 
         @if (prof.image != null && prof.image.Length > 0) {

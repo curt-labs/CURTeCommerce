@@ -1,13 +1,8 @@
 ﻿@{
-    List<Admin.Profile> profs = ViewBag.profiles;
-    if (profs == null) {
-        profs = new List<Admin.Profile>();
-    }
-
-    List<Admin.Models.GroupedModule> modules = ViewBag.modules;
-    if (modules == null) {
-        modules = new List<Admin.Models.GroupedModule>();
-    }
+    List<Admin.Profile> profs = ViewBag.profiles ?? new List<Admin.Profile>();
+    List<Admin.Models.GroupedModule> modules = ViewBag.modules ?? new List<Admin.Models.GroupedModule>();
+    Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
+    TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
 
     ViewBag.Title = "| Manage Profiles";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -49,7 +44,7 @@
                 </td>
                 <td>@p.email</td>
                 <td>@p.username</td>
-                <td>@Convert.ToDateTime(p.date_added)</td>
+                <td>@String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(p.date_added.Value, tz))</td>
             </tr>
         }
     </tbody>

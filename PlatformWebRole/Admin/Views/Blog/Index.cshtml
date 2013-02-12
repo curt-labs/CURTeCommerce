@@ -1,23 +1,10 @@
 ﻿@{
-    List<Admin.Models.PostWithCategories> posts = ViewBag.posts;
-    if (posts == null) {
-        posts = new List<Admin.Models.PostWithCategories>();
-    }
-
-    List<Admin.BlogCategory> categories = ViewBag.categories;
-    if (categories == null) {
-        categories = new List<Admin.BlogCategory>();
-    }
-
-    List<Admin.Models.CommentWithPost> comments = ViewBag.comments;
-    if (comments == null) {
-        comments = new List<Admin.Models.CommentWithPost>();
-    }
-
-    List<Admin.Models.GroupedModule> modules = ViewBag.modules;
-    if (modules == null) {
-        modules = new List<Admin.Models.GroupedModule>();
-    }
+    List<Admin.Models.PostWithCategories> posts = ViewBag.posts ?? new List<Admin.Models.PostWithCategories>();
+    List<Admin.BlogCategory> categories = ViewBag.categories ?? new List<Admin.BlogCategory>();
+    List<Admin.Models.CommentWithPost> comments = ViewBag.comments ?? new List<Admin.Models.CommentWithPost>();
+    List<Admin.Models.GroupedModule> modules = ViewBag.modules ?? new List<Admin.Models.GroupedModule>();
+    Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
+    TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
 
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -54,8 +41,8 @@
                 @foreach (Admin.Models.PostWithCategories post in posts) {
                     <tr>
                         <td>@post.post_title</td>
-                        <td>@post.createdDate.ToString()</td>
-                        <td>@((post.publishedDate == null) ? "Not Published" : String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", post.publishedDate))</td>
+                        <td>@String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(post.createdDate, tz))</td>
+                        <td>@((post.publishedDate == null) ? "Not Published" : String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(post.publishedDate.Value, tz)))</td>
                         <td style="text-align: center;">@post.comments.Count()</td>
                         <td style="text-align: center;">@post.mod_comments.Count()</td>
                         <td>
@@ -113,7 +100,7 @@
                     <tr>
                         <td>@comment.name</td>
                         <td>@comment.email</td>
-                        <td>@comment.createdDate.ToString()</td>
+                        <td>@String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(comment.createdDate, tz))</td>
                         <td>@((comment.approved == true) ? "Yes" : "No")</td>
                         <td>
                             <a href="/Admin/Blog/ViewComment/@comment.commentID" title="View">View</a> | 

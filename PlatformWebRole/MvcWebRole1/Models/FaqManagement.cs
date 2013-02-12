@@ -38,7 +38,7 @@ namespace EcommercePlatform {
             } else {
                 this.ID = 0;
                 this.topic = "";
-                this.dateAdded = DateTime.Now;
+                this.dateAdded = DateTime.UtcNow;
             }
         }
 

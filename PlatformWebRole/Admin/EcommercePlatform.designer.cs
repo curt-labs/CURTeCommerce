@@ -6244,6 +6244,8 @@ namespace Admin
 		
 		private string _bio;
 		
+		private string _timezone;
+		
 		private EntitySet<ProfileModule> _ProfileModules;
 		
     #region Extensibility Method Definitions
@@ -6268,6 +6270,8 @@ namespace Admin
     partial void OnimageChanged();
     partial void OnbioChanging(string value);
     partial void OnbioChanged();
+    partial void OntimezoneChanging(string value);
+    partial void OntimezoneChanged();
     #endregion
 		
 		public Profile()
@@ -6452,6 +6456,26 @@ namespace Admin
 					this._bio = value;
 					this.SendPropertyChanged("bio");
 					this.OnbioChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_timezone", DbType="varchar(100)", CanBeNull=false)]
+		public string timezone
+		{
+			get
+			{
+				return this._timezone;
+			}
+			set
+			{
+				if ((this._timezone != value))
+				{
+					this.OntimezoneChanging(value);
+					this.SendPropertyChanging();
+					this._timezone = value;
+					this.SendPropertyChanged("timezone");
+					this.OntimezoneChanged();
 				}
 			}
 		}

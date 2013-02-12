@@ -38,6 +38,8 @@ namespace Admin.Controllers {
 
         [NoValidation]
         public string Get(int id) {
+            Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
+            TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
             try {
                 ContactInquiry inq = new ContactInquiry{ ID = id };
                 ContactInquiry resp = inq.Get();
@@ -48,7 +50,7 @@ namespace Admin.Controllers {
                     message = resp.message,
                     email = resp.email,
                     type = (resp.ContactType != null && resp.ContactType.label != null) ? resp.ContactType.label : "N/A",
-                    dateAdded = resp.dateAdded,
+                    dateAdded = String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(resp.dateAdded, tz)),
                     followedUp = resp.followedUp
                 };
 

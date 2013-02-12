@@ -45,9 +45,10 @@ namespace Admin.Controllers {
                     name = name,
                     url = url
                 };
+                Profile p = ViewBag.profile;
+                TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(p.timezone ?? "UTC");
                 if (runtime.Trim() != "") {
-                    DateTime rtime = Convert.ToDateTime(runtime).ToUniversalTime();
-                    s.runtime = rtime;
+                    s.runtime = TimeZoneInfo.ConvertTimeToUtc(Convert.ToDateTime(runtime), tz);
                 } else if(interval > 1) {
                     s.interval = interval;
                 }

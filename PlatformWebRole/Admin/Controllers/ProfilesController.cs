@@ -34,6 +34,8 @@ namespace Admin.Controllers {
                 Profile prof = Profiles.GetProfile(id);
                 ViewBag.prof = prof;
 
+                ViewBag.timezones = UDF.GetTimeZones();
+
                 // Get the modules for this profile
                 List<GroupedModule> user_mods = Profiles.GetProfileModules(prof.id);
                 ViewBag.user_modules = user_mods;

@@ -26,7 +26,7 @@ namespace Admin {
 
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             ScheduledTask t = db.ScheduledTasks.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<ScheduledTask>();
-            t.lastRan = DateTime.Now.ToUniversalTime();
+            t.lastRan = DateTime.UtcNow;
             db.SubmitChanges();
         }
 

@@ -1,9 +1,8 @@
 ﻿@{
-    List<Admin.Newsletter> subs = ViewBag.subs;
-    if(subs == null){
-        subs = new List<Admin.Newsletter>();
-    }
-    
+    List<Admin.Newsletter> subs = ViewBag.subs ?? new List<Admin.Newsletter>();
+    Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
+    TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
+
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -24,7 +23,7 @@
             <tr>
                 <td>@sub.Name</td>
                 <td>@sub.Email</td>
-                <td>@Convert.ToDateTime(sub.DateAdded)</td>
+                <td>@String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(sub.DateAdded, tz))</td>
                 <td>
                     <a href="javascript:void(0)" title="Unsubscribe" class="remove" data-id="@sub.ID">Remove</a>
                 </td>

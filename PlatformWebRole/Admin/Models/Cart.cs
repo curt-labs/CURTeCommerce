@@ -13,7 +13,7 @@ namespace Admin
     partial class Cart {
 
         partial void OnCreated() {
-            this.date_created = DateTime.Now;
+            this.date_created = DateTime.UtcNow;
             this.ship_to = 0;
             this.bill_to = 0;
             this.voided = false;
@@ -79,7 +79,7 @@ namespace Admin
                 Customer cust = db.Customers.Where(x => x.ID == cust_id).First<Customer>();
                 Cart c = new Cart {
                     cust_id = cust_id,
-                    date_created = DateTime.Now,
+                    date_created = DateTime.UtcNow,
                     ship_to = cust.shippingID,
                     bill_to = cust.billingID,
                     shipping_price = 0
@@ -236,7 +236,7 @@ namespace Admin
             PaymentType ptype = db.PaymentTypes.Where(x => x.name.ToLower() == type.ToLower()).FirstOrDefault();
             Payment p = new Payment {
                 type = ptype.ID,
-                created = DateTime.Now,
+                created = DateTime.UtcNow,
                 confirmationKey = confirmKey,
                 status = status
             };

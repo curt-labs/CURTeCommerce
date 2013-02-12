@@ -122,7 +122,7 @@ namespace EcommercePlatform.Controllers {
                     fname = Request.Form["fname"],
                     lname = Request.Form["lname"],
                     phone = Request.Form["phone"],
-                    dateAdded = DateTime.Now,
+                    dateAdded = DateTime.UtcNow,
                     isSuspended = 0,
                     isValidated = 0,
                     validator = Guid.NewGuid()

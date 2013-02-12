@@ -1,28 +1,10 @@
 ﻿@{
-    List<string> errors = ViewBag.errors;
-    if (errors == null) {
-        errors = new List<string>();
-    }
+    List<string> errors = ViewBag.errors ?? new List<string>();
+    Admin.Customer customer = ViewBag.cust ?? new Admin.Customer();
+    Admin.Address billing = ViewBag.billing ?? new Admin.Address();
+    Admin.Address shipping = ViewBag.shipping ?? new Admin.Address();
+    List<Admin.Country> countries = ViewBag.countries ?? new List<Admin.Country>();
 
-    Admin.Customer customer = ViewBag.cust;
-    if (customer == null) {
-        customer = new Admin.Customer();
-    }
-
-    Admin.Address billing = ViewBag.billing;
-    if (billing == null) {
-        billing = new Admin.Address();
-    }
-
-    Admin.Address shipping = ViewBag.shipping;
-    if (shipping == null) {
-        shipping = new Admin.Address();
-    }
-
-    List<Admin.Country> countries = ViewBag.countries;
-    if (countries == null) {
-        countries = new List<Admin.Country>();
-    }
     string error = ViewBag.error;
     ViewBag.Title = "| Add Order";
     Layout = "~/Views/Shared/_Layout.cshtml";

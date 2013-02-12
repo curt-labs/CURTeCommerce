@@ -14,6 +14,7 @@ using System.Net;
 using System.Collections.Specialized;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Collections.ObjectModel;
 
 namespace Admin.Models {
     public class UDF {
@@ -213,6 +214,11 @@ namespace Admin.Models {
             string url = "";
             url = HttpContext.Current.Request.Url.AbsolutePath;
             return url;
+        }
+
+        public static List<TimeZoneInfo> GetTimeZones() {
+            List<TimeZoneInfo> timeZones = TimeZoneInfo.GetSystemTimeZones().ToList();
+            return timeZones;
         }
     }
 

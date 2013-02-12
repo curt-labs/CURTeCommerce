@@ -90,15 +90,15 @@ namespace Admin.Models {
                     post_title = p.post_title,
                     slug = p.slug,
                     post_text = p.post_text,
-                    createdDate = DateTime.Now,
-                    lastModified = DateTime.Now,
+                    createdDate = DateTime.UtcNow,
+                    lastModified = DateTime.UtcNow,
                     meta_title = p.meta_title,
                     meta_description = p.meta_description,
                     keywords = p.keywords,
                     active = true
                 };
                 if (publish)
-                    post.publishedDate = DateTime.Now;
+                    post.publishedDate = DateTime.UtcNow;
                 db.BlogPosts.InsertOnSubmit(post);
                 db.SubmitChanges();
 
@@ -121,13 +121,13 @@ namespace Admin.Models {
                 post.meta_description = p.meta_description;
                 post.keywords = p.keywords;
                 post.profileID = p.profileID;
-                post.lastModified = DateTime.Now;
+                post.lastModified = DateTime.UtcNow;
                 post.post_title = p.post_title;
                 post.slug = p.slug;
                 post.post_text = p.post_text;
 
                 if (publish) {
-                    if (post.publishedDate == null) { post.publishedDate = DateTime.Now; }
+                    if (post.publishedDate == null) { post.publishedDate = DateTime.UtcNow; }
                 } else {
                     post.publishedDate = null;
                 }
