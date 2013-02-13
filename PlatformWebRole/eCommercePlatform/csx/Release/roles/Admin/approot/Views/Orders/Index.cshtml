@@ -8,6 +8,9 @@
     int pageend = ((page - 1) * perpage) + perpage;
     int pages = ViewBag.pages ?? Convert.ToInt32(Math.Ceiling(Convert.ToDouble(count) / perpage));
     string evenodd = "even";
+    Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
+    TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
+
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -57,7 +60,7 @@
                     <td>@order.orderID</td>
                     <td>@order.customerName</td>
                     <td>@order.itemcount</td>
-                    <td>@String.Format("{0:M/d/yyyy h:mm tt}", order.orderDate.ToLocalTime())</td>
+                    <td>@String.Format("{0:M/d/yyyy h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.orderDate, tz))</td>
                     <td>@order.PaymentMethod</td>
                     <td>@order.status</td>
                     <td>@String.Format("{0:C}", order.total)</td>

@@ -1,8 +1,5 @@
 ﻿@{
-    List<Admin.Models.SimplePricing> points = ViewBag.pricePoints;
-    if (points == null) {
-        points = new List<Admin.Models.SimplePricing>();
-    }
+    List<Admin.Models.SimplePricing> points = ViewBag.pricePoints ?? new List<Admin.Models.SimplePricing>();
     
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";

@@ -1,13 +1,8 @@
 ﻿@{
-    List<Admin.ContactInquiry> inquiries = ViewBag.inquiries;
-    if(inquiries == null){
-        inquiries = new List<Admin.ContactInquiry>();
-    }
-
-    List<Admin.ContactType> types = ViewBag.types;
-    if (types == null) {
-        types = new List<Admin.ContactType>();
-    }
+    List<Admin.ContactInquiry> inquiries = ViewBag.inquiries ?? new List<Admin.ContactInquiry>();
+    List<Admin.ContactType> types = ViewBag.types ?? new List<Admin.ContactType>();
+    Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
+    TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
     
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -41,7 +36,7 @@
                     <tr>
                         <td>@inq.name</td>
                         <td>@inq.ContactType.label</td>
-                        <td>@Convert.ToDateTime(inq.dateAdded.ToLocalTime())</td>
+                        <td>@TimeZoneInfo.ConvertTimeFromUtc(inq.dateAdded, tz)</td>
                         <td><img src="/Admin/Content/img/@((inq.followedUp == 0) ? "red_cross.png" : "Checkmark.svg")" alt="@((inq.followedUp == 0)?"Needs follw-up":"Follwed Up")" /></td>
                         <td>
                             <a href="javascript:void(0)" title="View Message" data-id="@inq.ID" class="viewMessage">View Message</a>

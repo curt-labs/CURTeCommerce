@@ -1,23 +1,10 @@
 ﻿@{
-    Admin.Customer customer = ViewBag.customer;
-    if (customer == null) {
-        customer = new Admin.Customer();
-    }
-
-    Admin.Cart cart = ViewBag.cart;
-    if (cart == null) {
-        cart = new Admin.Cart();
-    }
-
-    List<Admin.Country> countries = ViewBag.countries;
-    if (countries == null) {
-        countries = new List<Admin.Country>();
-    }
-
-    List<Admin.Address> addresses = ViewBag.addresses;
-    if (addresses == null) {
-        addresses = new List<Admin.Address>();
-    }
+    Admin.Customer customer = ViewBag.customer ?? new Admin.Customer();
+    Admin.Cart cart = ViewBag.cart ?? new Admin.Cart();
+    List<Admin.Country> countries = ViewBag.countries ?? new List<Admin.Country>();
+    List<Admin.Address> addresses = ViewBag.addresses ?? new List<Admin.Address>();
+    Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
+    TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
 
     string error = ViewBag.error;
     

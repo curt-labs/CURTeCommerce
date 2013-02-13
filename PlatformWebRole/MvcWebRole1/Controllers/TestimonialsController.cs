@@ -10,6 +10,7 @@ namespace EcommercePlatform.Controllers {
     public class TestimonialsController : BaseController {
 
         public ActionResult Index(string message = "", int page = 1, int pageSize = 10) {
+            ViewBag.timezone = UDF.GetTimeZone();
 
             List<string> errors = (List<string>)TempData["errors"];
             ViewBag.first_name = ((string)TempData["first_name"] != null) ? (string)TempData["first_name"] : "";

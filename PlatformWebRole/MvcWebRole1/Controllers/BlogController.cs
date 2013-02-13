@@ -13,7 +13,8 @@ namespace EcommercePlatform.Controllers {
 
         public ActionResult Index(int page = 1, int pageSize = 5) {
 
-            List<PostWithCategories> posts = PostModel.GetAllPublished(page,pageSize);
+            ViewBag.timezone = UDF.GetTimeZone();
+            List<PostWithCategories> posts = PostModel.GetAllPublished(page, pageSize);
             ViewBag.posts = posts;
 
             int postcount = PostModel.CountAllPublished();
@@ -36,7 +37,8 @@ namespace EcommercePlatform.Controllers {
         public ActionResult ViewPost(string date = "", string title = "")
         {
 
-            PostWithCategories post = PostModel.Get(date,title);
+            ViewBag.timezone = UDF.GetTimeZone();
+            PostWithCategories post = PostModel.Get(date, title);
             ViewBag.post = post;
 
             List<Archive> months = Archive.GetMonths();
@@ -50,6 +52,7 @@ namespace EcommercePlatform.Controllers {
 
         public ActionResult ViewCategory(string name = "", int page = 1, int pageSize = 5) {
 
+            ViewBag.timezone = UDF.GetTimeZone();
             BlogCategory category = BlogCategoryModel.GetCategoryByName(name);
             ViewBag.category = category;
 
@@ -75,6 +78,7 @@ namespace EcommercePlatform.Controllers {
 
         public ActionResult ViewArchive(string month = "", string year = "", int page = 1, int pageSize = 5) {
 
+            ViewBag.timezone = UDF.GetTimeZone();
             List<PostWithCategories> posts = PostModel.GetAllPublishedByDate(month, year, page, pageSize);
             ViewBag.posts = posts;
 
@@ -104,6 +108,7 @@ namespace EcommercePlatform.Controllers {
             string lname = dname.Split('_')[1];
             Profile author = db.Profiles.Where(x => x.first == fname).Where(x => x.last == lname).FirstOrDefault<Profile>();
             ViewBag.author = author;
+            ViewBag.timezone = UDF.GetTimeZone();
 
             int count = db.BlogPosts.Where(x => x.profileID == author.id).Where(x => x.active == true).Count();
             if (count == 0) {

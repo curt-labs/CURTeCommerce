@@ -18,6 +18,7 @@ namespace EcommercePlatform.Controllers {
         [RequireHttps]
         public ActionResult Index(string message = "") {
             Customer customer = new Customer();
+            ViewBag.timezone = UDF.GetTimeZone();
 
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
@@ -315,6 +316,7 @@ namespace EcommercePlatform.Controllers {
         [RequireHttps]
         public ActionResult Complete(int id = 0) {
             Customer customer = new Customer();
+            ViewBag.timezone = UDF.GetTimeZone();
 
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();

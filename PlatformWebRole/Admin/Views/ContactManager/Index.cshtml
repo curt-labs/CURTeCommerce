@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Admin.Models;
+@{
     List<Admin.ContactInquiry> inquiries = ViewBag.inquiries ?? new List<Admin.ContactInquiry>();
     List<Admin.ContactType> types = ViewBag.types ?? new List<Admin.ContactType>();
     Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
@@ -36,7 +37,7 @@
                     <tr>
                         <td>@inq.name</td>
                         <td>@inq.ContactType.label</td>
-                        <td>@TimeZoneInfo.ConvertTimeFromUtc(inq.dateAdded, tz)</td>
+                        <td>@TimeZoneInfo.ConvertTimeFromUtc(inq.dateAdded, tz) @UDF.ShortTZ(tz, inq.dateAdded)</td>
                         <td><img src="/Admin/Content/img/@((inq.followedUp == 0) ? "red_cross.png" : "Checkmark.svg")" alt="@((inq.followedUp == 0)?"Needs follw-up":"Follwed Up")" /></td>
                         <td>
                             <a href="javascript:void(0)" title="View Message" data-id="@inq.ID" class="viewMessage">View Message</a>

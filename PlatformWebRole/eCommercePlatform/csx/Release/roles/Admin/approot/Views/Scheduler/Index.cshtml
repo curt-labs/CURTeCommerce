@@ -1,6 +1,8 @@
 ﻿@{
     List<string> errors = ViewBag.errors ?? new List<string>();
     List<Admin.ScheduledTask> tasks = ViewBag.tasks ?? new List<Admin.ScheduledTask>();
+    Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
+    TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
 
     ViewBag.Title = "| Task Scheduler";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -24,10 +26,10 @@
 @foreach (Admin.ScheduledTask task in tasks) {
     <div id="task_@(task.ID)" class="task">
         <span class="name">@task.name</span>
-        <span class="runtime">@((task.runtime != null) ? "Daily at " + String.Format("{0:h:mm tt}", task.runtime.Value.ToLocalTime()) : "")</span>
+        <span class="runtime">@((task.runtime != null) ? "Daily at " + String.Format("{0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(task.runtime.Value, tz)) : "")</span>
         <span class="interval">@((task.interval != null) ? "Every " + task.interval + " minutes" : "")</span>
         <span class="url">@task.url</span>
-        <span class="runtime">@((task.lastRan != null) ? String.Format("{0:MM-dd-yyyy h:mm tt}", task.lastRan.Value) : "never")</span>
+        <span class="runtime">@((task.lastRan != null) ? String.Format("{0:MM-dd-yyyy h:mm tt}",  TimeZoneInfo.ConvertTimeFromUtc(task.lastRan.Value, tz)) : "never")</span>
         <a href="javascript:void();" data-id="@task.ID" class="runtask">Run Task</a>
         <img src="/Content/img/ajax-loader-small.gif" alt="running..." class="running" style="display: none;" />
         <a class="delete" data-id="@task.ID" data-name="@task.name" href="/Admin/Scheduler/DeleteTask/@task.ID">&times;</a>

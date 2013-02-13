@@ -8,10 +8,9 @@
     int pageend = ((page - 1) * perpage) + perpage;
     int pages = ViewBag.pages ?? Convert.ToInt32(Math.Ceiling(Convert.ToDouble(count) / perpage));
     string evenodd = "even";
-    string error = ViewBag.error;
-    if(error == null){
-        error = "";
-    }
+    string error = ViewBag.error ?? "";
+    Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
+    TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
     
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -66,7 +65,7 @@
                     <td>@cust.email</td>
                     <td>@cust.phone</td>
                     <td>@cust.ordercount</td>
-                    <td>@Convert.ToDateTime(cust.created)</td>
+                    <td>@TimeZoneInfo.ConvertTimeFromUtc(cust.created, tz)</td>
                     <td>@cust.status</td>
                 </tr>
             }

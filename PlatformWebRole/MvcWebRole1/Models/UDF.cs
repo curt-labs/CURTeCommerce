@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Security;
 using System.Data.Linq.Mapping;
 using System.Security.Cryptography;
+using Newtonsoft.Json;
 
 namespace EcommercePlatform.Models {
     public class UDF {
@@ -172,6 +173,60 @@ namespace EcommercePlatform.Models {
                 list[n] = value;
             }
             return list.ToList();
+        }
+
+        public static IPAddress GetIp() {
+            string ipString;
+            if (string.IsNullOrEmpty(HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"])) {
+                ipString = HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"];
+            } else {
+                ipString = HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"]
+                   .Split(",".ToCharArray(),
+                   StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+            }
+
+            IPAddress result;
+            if (!IPAddress.TryParse(ipString, out result)) {
+                result = IPAddress.None;
+            }
+
+            return result;
+        }
+
+        public static TimeZoneInfo GetTimeZone() {
+            string timezone = "UTC";
+            HttpCookie zone_cookie = null;
+            zone_cookie = HttpContext.Current.Request.Cookies.Get("tzinfo");
+            if (zone_cookie != null && zone_cookie.Value != null && zone_cookie.Value.Length > 0) {
+                // zone cookie exists
+                timezone = zone_cookie.Value;
+            } else {
+                TimeZone.GetTimeZone();
+            }
+            TimeZoneInfo info = TimeZoneInfo.FindSystemTimeZoneById(timezone);
+            return info;
+        }
+
+        public static string ShortTZ(TimeZoneInfo tz, DateTime time) {
+            if (tz.Id.IndexOf(" ") > 0) {
+                string toabbr = "";
+                string abbr = "";
+                if (tz.SupportsDaylightSavingTime) {
+                    if (tz.IsDaylightSavingTime(time)) {
+                        toabbr = tz.DaylightName;
+                    } else {
+                        toabbr = tz.StandardName;
+                    }
+                } else {
+                    toabbr = tz.Id;
+                }
+                string[] words = toabbr.Split(' ');
+                foreach (var word in words) {
+                    abbr += word[0];
+                }
+                return abbr;
+            }
+            return tz.Id;
         }
     }
     public class DCList {

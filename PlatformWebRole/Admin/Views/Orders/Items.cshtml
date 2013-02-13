@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Admin.Models;
+@{
     Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
     TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
     Admin.Cart order = ViewBag.order ?? new Admin.Cart();
@@ -39,7 +40,7 @@
             </label>
             <label>
                 Date Created
-                <input type="text" value="@String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.Payment.created, tz))" readonly="readonly" />
+                <input type="text" value="@String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.Payment.created, tz)) @UDF.ShortTZ(tz, order.Payment.created)" readonly="readonly" />
             </label>
             <label>
                 Payment Method
@@ -146,7 +147,7 @@
         </label>
         <label>
             Payment Date
-            <input type="text" value="@String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.Payment.created, tz))" readonly />
+            <input type="text" value="@String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.Payment.created, tz)) @UDF.ShortTZ(tz, order.Payment.created)" readonly />
         </label>
         <label>
             Amount

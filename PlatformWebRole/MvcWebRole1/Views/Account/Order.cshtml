@@ -1,4 +1,5 @@
-﻿@{
+﻿@using EcommercePlatform.Models;
+@{
     EcommercePlatform.Cart order = ViewBag.order;
 
     EcommercePlatform.Payment payment = ViewBag.payment;
@@ -6,6 +7,7 @@
         payment = new EcommercePlatform.Payment();
     }
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
+    TimeZoneInfo tz = ViewBag.timezone ?? TimeZoneInfo.Utc;
 
     ViewBag.Title = "Order";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -32,7 +34,7 @@
     <div class="tab_container">
         <div class="tab_content" id="order">
             <p><strong>Order ID:</strong> @order.payment_id</p>
-            <p><strong>Paid by:</strong> @payment.PaymentTypes.name on @String.Format("{0:M/d/yyyy} at {0:h:mm tt}", payment.created.ToLocalTime())</p>
+            <p><strong>Paid by:</strong> @payment.PaymentTypes.name on @String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(payment.created, tz)) @UDF.ShortTZ(tz, payment.created)</p>
             <p><strong>Payment Status:</strong> @payment.status</p>
             <div class="address">
                 <span>Billing Address</span>
@@ -86,7 +88,7 @@
         </div>
         <div class="tab_content" id="payment">
             <p><strong>Type:</strong> @payment.PaymentTypes.name</p>
-            <p><strong>Payment Date:</strong> @String.Format("{0:M/d/yyyy} at {0:h:mm tt}", payment.created)</p>
+            <p><strong>Payment Date:</strong> @String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(payment.created, tz)) @UDF.ShortTZ(tz, payment.created)</p>
             <p><strong>Amount:</strong> @String.Format("{0:C}", order.getTotal())</p>
             <p><strong>Confirmation Code:</strong> @payment.confirmationKey</p>
             <p><strong>Status:</strong> @payment.status</p>

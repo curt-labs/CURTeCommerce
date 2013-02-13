@@ -220,6 +220,28 @@ namespace Admin.Models {
             List<TimeZoneInfo> timeZones = TimeZoneInfo.GetSystemTimeZones().ToList();
             return timeZones;
         }
+
+        public static string ShortTZ(TimeZoneInfo tz, DateTime time) {
+            if (tz.Id.IndexOf(" ") > 0) {
+                string toabbr = "";
+                string abbr = "";
+                if (tz.SupportsDaylightSavingTime) {
+                    if (tz.IsDaylightSavingTime(time)) {
+                        toabbr = tz.DaylightName;
+                    } else {
+                        toabbr = tz.StandardName;
+                    }
+                } else {
+                    toabbr = tz.Id;
+                }
+                string[] words = toabbr.Split(' ');
+                foreach (var word in words) {
+                    abbr += word[0];
+                }
+                return abbr;
+            }
+            return tz.Id;
+        }
     }
 
     public static class UDE {

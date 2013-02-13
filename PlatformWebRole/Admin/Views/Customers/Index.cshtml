@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Admin.Models;
+@{
     List<Admin.Models.AdminCustomer> customers = ViewBag.custs ?? new List<Admin.Models.AdminCustomer>();
     int page = ViewBag.page ?? 1;
     int perpage = ViewBag.perpage ?? 10;
@@ -65,7 +66,7 @@
                     <td>@cust.email</td>
                     <td>@cust.phone</td>
                     <td>@cust.ordercount</td>
-                    <td>@TimeZoneInfo.ConvertTimeFromUtc(cust.created, tz)</td>
+                    <td>@TimeZoneInfo.ConvertTimeFromUtc(cust.created, tz) @UDF.ShortTZ(tz, cust.created)</td>
                     <td>@cust.status</td>
                 </tr>
             }

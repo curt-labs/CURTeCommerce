@@ -1,9 +1,7 @@
 ﻿@{
-    List<Admin.Testimonial> testimonials = ViewBag.testimonials;
-    if (testimonials == null) {
-        testimonials = new List<Admin.Testimonial>();
-    }
-
+    List<Admin.Testimonial> testimonials = ViewBag.testimonials ?? new List<Admin.Testimonial>();
+    Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
+    TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -37,7 +35,7 @@
                 <td>@testimonial.first_name @testimonial.last_name</td>
                 <td>@testimonial.location</td>
                 <td>@testimonial.testimonial1</td>
-                <td>@String.Format("{0:M/d/yyyy h:mm tt}",testimonial.dateAdded)</td>
+                <td>@String.Format("{0:M/dd/yyyy} {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(testimonial.dateAdded, tz))</td>
                 <td style="text-align: center;">
                     <input type="checkbox" name="approved" data-id="@testimonial.testimonialID" class="isApproved" value="true" @((testimonial.approved) ? "checked='checked'" : "") />
                 </td>

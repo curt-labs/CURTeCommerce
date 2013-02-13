@@ -12,7 +12,7 @@
 <div class="content">
     <h2>Pay With PayPal</h2>
     @Html.Raw(page.content)
-    @Html.Partial("_CartNoQty")
+    @Html.Partial("_Cart")
     @if (ViewBag.message != null && ViewBag.message != "") {
         <p class="message">@ViewBag.message</p>
     }

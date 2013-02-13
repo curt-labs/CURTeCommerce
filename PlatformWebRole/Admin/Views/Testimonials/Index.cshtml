@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Admin.Models;
+@{
     List<Admin.Testimonial> testimonials = ViewBag.testimonials ?? new List<Admin.Testimonial>();
     Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
     TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
@@ -35,7 +36,7 @@
                 <td>@testimonial.first_name @testimonial.last_name</td>
                 <td>@testimonial.location</td>
                 <td>@testimonial.testimonial1</td>
-                <td>@String.Format("{0:M/dd/yyyy} {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(testimonial.dateAdded, tz))</td>
+                <td>@String.Format("{0:M/dd/yyyy} {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(testimonial.dateAdded, tz)) @UDF.ShortTZ(tz, testimonial.dateAdded)</td>
                 <td style="text-align: center;">
                     <input type="checkbox" name="approved" data-id="@testimonial.testimonialID" class="isApproved" value="true" @((testimonial.approved) ? "checked='checked'" : "") />
                 </td>

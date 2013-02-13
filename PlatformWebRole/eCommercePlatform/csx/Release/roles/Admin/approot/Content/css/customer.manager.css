@@ -42,3 +42,11 @@ a.modalClose{
     font-size: 12px;
     margin-left: 10px;
 }
+
+#addAddress {
+    display: none;
+}
+
+td.center {
+    text-align: center;
+}

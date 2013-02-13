@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Admin.Models;
+@{
     Admin.Models.PostWithCategories post = ViewBag.post ?? new Admin.Models.PostWithCategories();
     List<Admin.BlogCategory> postcats = post.categories ?? new List<Admin.BlogCategory>();
     Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
@@ -74,7 +75,7 @@
     </label>
     @if (post.publishedDate != null) {
         <label for="published">
-            <span class="subtext">(Published on @TimeZoneInfo.ConvertTimeFromUtc(post.publishedDate.Value, tz).ToString())</span>
+            <span class="subtext">(Published on @TimeZoneInfo.ConvertTimeFromUtc(post.publishedDate.Value, tz).ToString() @UDF.ShortTZ(tz, post.publishedDate.Value))</span>
             <br />Published? <input type="checkbox" name="publish" id="publish" value="true" checked="checked" style="display:inline;" />
         </label>
     }

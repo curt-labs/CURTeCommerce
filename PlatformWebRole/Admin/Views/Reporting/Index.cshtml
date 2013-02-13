@@ -1,7 +1,8 @@
 ﻿@{
+    Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
+    TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
     ViewBag.Title = "| Reporting Tools";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    TimeZone zone = TimeZone.CurrentTimeZone;
 }
 <link href="/Admin/Content/css/reporting.css" rel="stylesheet" type="text/css" />
 <span class="title">Reporting Tools</span>
@@ -11,11 +12,11 @@
     <form action="/Admin/Reporting/OrdersByDateRange" method="post">
         <label for="startdate">
             Start:
-            <input type="text" class="daterange" name="startdate" id="startdate" placeholder="Select a Start Date" value="@String.Format("{0:MM/dd/yyyy hh:mm tt}",zone.ToLocalTime(DateTime.Now.AddDays(-1)))" />
+            <input type="text" class="daterange" name="startdate" id="startdate" placeholder="Select a Start Date" value="@String.Format("{0:MM/dd/yyyy hh:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddDays(-1), tz))" />
         </label>
         <label for="enddate">
             End:
-            <input type="text" class="daterange" name="enddate" id="enddate" placeholder="Select an End Date" value="@String.Format("{0:MM/dd/yyyy hh:mm tt}",zone.ToLocalTime(DateTime.Now))" />
+            <input type="text" class="daterange" name="enddate" id="enddate" placeholder="Select an End Date" value="@String.Format("{0:MM/dd/yyyy hh:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tz))" />
         </label>
         <input type="submit" class="button" value="Generate" />
     </form>

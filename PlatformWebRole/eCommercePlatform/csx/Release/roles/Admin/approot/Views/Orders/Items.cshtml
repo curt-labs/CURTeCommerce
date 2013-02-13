@@ -1,13 +1,8 @@
 ﻿@{
-    Admin.Cart order = ViewBag.order;
-    if(order == null){
-        order = new Admin.Cart();
-    }
-
-    Admin.Customer cust = ViewBag.customer;
-    if (cust == null) {
-        cust = new Admin.Customer();
-    }
+    Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
+    TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
+    Admin.Cart order = ViewBag.order ?? new Admin.Cart();
+    Admin.Customer cust = ViewBag.customer ?? new Admin.Customer();
     string trackingcodes = "";
 
     ViewBag.Title = "Items";
@@ -44,7 +39,7 @@
             </label>
             <label>
                 Date Created
-                <input type="text" value="@Convert.ToDateTime(order.Payment.created.ToLocalTime())" readonly="readonly" />
+                <input type="text" value="@String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.Payment.created, tz))" readonly="readonly" />
             </label>
             <label>
                 Payment Method
@@ -151,7 +146,7 @@
         </label>
         <label>
             Payment Date
-            <input type="text" value="@String.Format("{0:M/d/yyyy} at {0:h:mm tt}", order.Payment.created)" readonly />
+            <input type="text" value="@String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.Payment.created, tz))" readonly />
         </label>
         <label>
             Amount

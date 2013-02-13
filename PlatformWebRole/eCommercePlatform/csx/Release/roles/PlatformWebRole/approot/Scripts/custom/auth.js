@@ -1,5 +1,19 @@
 ﻿$(function () {
 
+    $('#signup,#login').hide();
+
+    $('#newcustomer').on('click', function (e) {
+        e.preventDefault();
+        $('#landing').hide();
+        $('#signup').fadeIn();
+    });
+
+    $('#returningcustomer').on('click', function (e) {
+        e.preventDefault();
+        $('#landing').hide();
+        $('#login').fadeIn();
+    });
+
     $('#sfirst').parent().before('<label for="same"><input type="checkbox" id="same" value="1" />Same as billing address</label>');
 
     $(document).on('click', '#same', function () {

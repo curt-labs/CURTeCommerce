@@ -1,4 +1,5 @@
-﻿@{
+﻿@using EcommercePlatform.Models;
+@{
     EcommercePlatform.Customer cust = ViewBag.cust;
     if(cust == null){
         cust = new EcommercePlatform.Customer();
@@ -10,6 +11,7 @@
         error = "";
     }
     EcommercePlatform.Payment payment = new EcommercePlatform.Payment();
+    TimeZoneInfo tz = ViewBag.timezone ?? TimeZoneInfo.Utc;
     ViewBag.Title = "Orders";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -33,23 +35,26 @@
 </ul>
 <div class="tab_container">
     <div class="tab_content">
-        <article class="order-heading">
-            <span class="title">Order #</span>
-            <div class="info">
-                <span class="date">Date Created</span>
-                <span class="total">Order Total</span>
-            </div>
-        </article>
-        @foreach (EcommercePlatform.Cart order in cust.Orders) {
-            payment = order.getPayment();
-            <article class="order" data-id="@order.payment_id">
-                <span class="title">Order #@(order.payment_id)</span>
-                <div class="info">
-                    <span class="date">@payment.created.ToLocalTime()</span>
-                    <span class="total">@String.Format("{0:C}",order.getTotal())</span>
-                </div>
-            </article>
-        }
+        <table class="orders">
+            <thead>
+                <tr class="header">
+                    <th class="title">Order #</th>
+                    <th>Date Created</th>
+                    <th class="total">Order Total</th>
+                </tr>
+                <tr><td colspan="3">&nbsp;</td></tr>
+            </thead>
+            <tbody>
+            @foreach (EcommercePlatform.Cart order in cust.Orders) {
+                payment = order.getPayment();
+                <tr class="order" data-id="@order.payment_id">
+                    <td class="title">Order #@(order.payment_id)</td>
+                    <td class="date">@String.Format("{0:MMMM d, yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(payment.created, tz)) @UDF.ShortTZ(tz, payment.created)</td>
+                    <td class="total">@String.Format("{0:C}", order.getTotal())</td>
+                </tr>
+            }
+            </tbody>
+        </table>
         <div class="clearfix"></div>
     </div>
 </div>

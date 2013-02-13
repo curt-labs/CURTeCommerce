@@ -3,6 +3,8 @@
     Admin.BlogPost post = comment.post;
     string errors = Request.QueryString.Get("err");
     Layout = "~/Views/Shared/_Layout.cshtml";
+    Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
+    TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
 }
 
 <h2>View Comment</h2>
@@ -15,5 +17,5 @@
 @if (!String.IsNullOrEmpty(comment.email)) {
     <p><strong>Email:</strong> @comment.email</p>
 }
-<p><strong>Posted On:</strong> @(String.Format("{0:MMM d, yyyy} at {0:h:mm tt}",comment.createdDate))</p>
+<p><strong>Posted On:</strong> @(String.Format("{0:MMM d, yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(comment.createdDate, tz))))</p>
 <p><strong>Comment:</strong> @comment.comment_text</p>

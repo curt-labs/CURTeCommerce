@@ -5,7 +5,7 @@ $(function () {
         window.location.href = '/Account/Order/' + id;
     };
 
-    $(document).on('click', 'article.order', function () {
+    $(document).on('click', 'table.orders tr.order', function () {
         var id = $(this).data('id');
         if (id !== undefined && id > 0) {
             gotoOrder(id);

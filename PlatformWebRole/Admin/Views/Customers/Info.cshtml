@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Admin.Models;
+@{
     Admin.Customer cust = ViewBag.customer ?? new Admin.Customer();
     List<Admin.Address> addresses = ViewBag.addresses ?? new List<Admin.Address>();
     List<Admin.Cart> orders = cust.Carts.Where(x => x.payment_id > 0).OrderByDescending(x => x.Payment.created).ToList<Admin.Cart>();
@@ -193,7 +194,7 @@
                             <tr>
                                 <td>@order.payment_id</td>
                                 <td>@order.getCount()</td>
-                                <td>@String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.Payment.created, tz))</td>
+                                <td>@String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.Payment.created, tz)) @UDF.ShortTZ(tz, order.Payment.created)</td>
                                 <td>@String.Format("{0:C}", order.getTotal())</td>
                                 <td>@order.Payment.PaymentTypes.name</td>
                                 <td><a href="/Admin/Orders/Items/@order.payment_id" class="btn">View Items</a></td>

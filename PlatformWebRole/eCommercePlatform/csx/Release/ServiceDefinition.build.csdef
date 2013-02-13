@@ -5,21 +5,12 @@
       <LocalStorage name="DiagnosticStore" sizeInMB="4096" cleanOnRoleRecycle="false" />
     </LocalResources>
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" />
       <Setting name="StorageConnectionString" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Endpoint1" protocol="http" port="8080" localPort="8080" />
-      <InternalEndpoint name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Rdp" protocol="tcp">
-        <FixedPortRange min="3389" max="3389" />
-      </InternalEndpoint>
     </Endpoints>
-    <Certificates>
-      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" storeLocation="LocalMachine" storeName="My" />
-    </Certificates>
+    <Certificates />
   </WebRole>
   <WebRole name="PlatformWebRole" vmsize="ExtraSmall">
     <LocalResources>
@@ -29,10 +20,6 @@
       <Setting name="AccountKey" />
       <Setting name="AccountName" />
       <Setting name="BaseUri" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" />
       <Setting name="Mode" />
       <Setting name="ProviderName" />
       <Setting name="StorageConnectionString" />
@@ -42,13 +29,9 @@
     <Endpoints>
       <InputEndpoint name="Endpoint1" protocol="http" port="80" localPort="80" />
       <InputEndpoint name="Https" protocol="https" port="443" certificate="CurtSSL" localPort="443" />
-      <InternalEndpoint name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Rdp" protocol="tcp">
-        <FixedPortRange min="3389" max="3389" />
-      </InternalEndpoint>
     </Endpoints>
     <Certificates>
       <Certificate name="CurtSSL" storeLocation="LocalMachine" storeName="CA" />
-      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" storeLocation="LocalMachine" storeName="My" />
     </Certificates>
   </WebRole>
   <WorkerRole name="FTPServerRole" vmsize="ExtraSmall">
@@ -59,11 +42,6 @@
       <Setting name="AccountKey" />
       <Setting name="AccountName" />
       <Setting name="BaseUri" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" />
       <Setting name="Mode" />
       <Setting name="ProviderName" />
       <Setting name="UseAsyncMethods" />
@@ -71,14 +49,8 @@
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="FTP" protocol="tcp" port="21" localPort="21" />
-      <InputEndpoint name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.RdpInput" protocol="tcp" port="3389" localPort="*" ignoreRoleInstanceStatus="true" />
-      <InternalEndpoint name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Rdp" protocol="tcp">
-        <FixedPortRange min="3389" max="3389" />
-      </InternalEndpoint>
     </Endpoints>
-    <Certificates>
-      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" storeLocation="LocalMachine" storeName="My" />
-    </Certificates>
+    <Certificates />
   </WorkerRole>
   <WorkerRole name="TaskScheduler" vmsize="ExtraSmall">
     <LocalResources>
@@ -87,21 +59,12 @@
     <ConfigurationSettings>
       <Setting name="AccountKey" />
       <Setting name="AccountName" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" />
       <Setting name="ProviderName" />
       <Setting name="StorageConnectionString" />
     </ConfigurationSettings>
     <Endpoints>
       <InternalEndpoint name="Endpoint1" protocol="tcp" />
-      <InternalEndpoint name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Rdp" protocol="tcp">
-        <FixedPortRange min="3389" max="3389" />
-      </InternalEndpoint>
     </Endpoints>
-    <Certificates>
-      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" storeLocation="LocalMachine" storeName="My" />
-    </Certificates>
+    <Certificates />
   </WorkerRole>
 </ServiceDefinition>

@@ -178,6 +178,7 @@
     <Compile Include="Models\ContactManagement.cs" />
     <Compile Include="Models\ContentManagement.cs" />
     <Compile Include="Models\ContentPage.cs" />
+    <Compile Include="Models\TimeZone.cs" />
     <Compile Include="Models\InvoiceAddress.cs" />
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\State.cs" />

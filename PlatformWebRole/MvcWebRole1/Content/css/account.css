@@ -5,35 +5,41 @@
 }
 label[for=receiveOffers] input, label[for=receiveNewsletter] input{ float:right }
 
-article.order-heading{
+table.orders {
+    width: 100%;
+}
+
+table.orders th, table.orders td {
+    padding: 0 10px;
+}
+
+table.orders thead tr.header {
     background: #343434;
     height: 30px;
     width: 95%;
-    padding: 0px 10px;
+    padding: 0px;
     color: white;
     line-height:30px;
+}
+
+table.orders thead th {
+    font-weight: normal;
     margin-bottom: 15px;
 }
 
-article.order-heading span.title{
-    float:left;    
+table.orders thead tr th{
+    text-align: left;    
 }
 
-article.order-heading div.info{
-    float:right;
-    display:inline-block;
-    color: white;    
-    height: 50px;
+table.orders thead tr th.total {
+    text-align: right;
 }
 
-article.order-heading div.info span{
-    display:inline-block;
-    width: 150px;
-    text-align:center;
+table.orders tbody {
+    border-top: 2px solid #E2E2E2;
 }
 
-article.order{
-    width: 95%;
+table.orders tbody tr {
     min-height: 40px;
     line-height:40px;
     -webkit-transition: all 0.3s ease-in-out;
@@ -41,31 +47,19 @@ article.order{
     padding: 5px 10px;
 }
 
-article.order:hover{
+table.orders tbody tr:hover{
     background:#e8e8e8;
 }
-
-article.order:nth-child(2){
-    border-top: 2px solid #e2e2e2;
+table.orders tbody td {
+    text-align: left;
 }
-
-article.order span.title{
+table.orders tbody td.title{
     font-size: 14px;
     color:#FA241A;
-    float:left;
 }
 
-article.order div.info{
-    float:right;    
-}
-
-article.order div.info span{
-    display:inline-block;
-    width: 150px;    
-}
-
-article.order div.info span:last-child{
-    text-align:right;    
+table.orders tbody td.total {
+    text-align: right;
 }
 
 .address {

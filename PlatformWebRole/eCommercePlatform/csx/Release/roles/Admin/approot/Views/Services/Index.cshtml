@@ -1,14 +1,6 @@
 ﻿@{
-    List<Admin.Service> services = ViewBag.services;
-    if (services == null) {
-        services = new List<Admin.Service>();
-    }
-
-    List<Admin.Models.GroupedModule> modules = ViewBag.modules;
-    if (modules == null) {
-        modules = new List<Admin.Models.GroupedModule>();
-    }
-
+    List<Admin.Service> services = ViewBag.services ?? new List<Admin.Service>();
+    List<Admin.Models.GroupedModule> modules = ViewBag.modules ?? new List<Admin.Models.GroupedModule>();
     bool can_edit = false;
     try {
         if (modules.Where(x => x.path.ToUpper().Equals("/ADMIN/SERVICES")).FirstOrDefault<Admin.Models.GroupedModule>().subs.Where(x => x.name.ToUpper().Equals("EDIT")).Count() > 0) {

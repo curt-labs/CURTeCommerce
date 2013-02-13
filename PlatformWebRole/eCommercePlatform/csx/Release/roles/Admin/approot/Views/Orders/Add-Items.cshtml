@@ -1,14 +1,6 @@
 ﻿@{
-    Admin.Customer customer = ViewBag.customer;
-    if (customer == null) {
-        customer = new Admin.Customer();
-    }
-
-    Admin.Cart cart = ViewBag.cart;
-    if (cart == null) {
-        cart = new Admin.Cart();
-    }
-
+    Admin.Customer customer = ViewBag.customer ?? new Admin.Customer();
+    Admin.Cart cart = ViewBag.cart ?? new Admin.Cart();
     ViewBag.Title = "| Add Order";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }

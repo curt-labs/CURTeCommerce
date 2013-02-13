@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Admin.Models;
+@{
     List<Admin.Models.Orders> orders = ViewBag.orders ?? new List<Admin.Models.Orders>();
     int page = ViewBag.page ?? 1;
     int perpage = ViewBag.perpage ?? 10;
@@ -60,7 +61,7 @@
                     <td>@order.orderID</td>
                     <td>@order.customerName</td>
                     <td>@order.itemcount</td>
-                    <td>@String.Format("{0:M/d/yyyy h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.orderDate, tz))</td>
+                    <td>@String.Format("{0:M/d/yyyy h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.orderDate, tz)) @UDF.ShortTZ(tz, order.orderDate)</td>
                     <td>@order.PaymentMethod</td>
                     <td>@order.status</td>
                     <td>@String.Format("{0:C}", order.total)</td>

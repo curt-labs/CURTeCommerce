@@ -50,7 +50,7 @@ namespace Admin.Controllers {
                     message = resp.message,
                     email = resp.email,
                     type = (resp.ContactType != null && resp.ContactType.label != null) ? resp.ContactType.label : "N/A",
-                    dateAdded = String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(resp.dateAdded, tz)),
+                    dateAdded = String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(resp.dateAdded, tz)) + " " + UDF.ShortTZ(tz, resp.dateAdded),
                     followedUp = resp.followedUp
                 };
 

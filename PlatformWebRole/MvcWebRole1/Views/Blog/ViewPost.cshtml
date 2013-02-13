@@ -1,4 +1,5 @@
-﻿@{
+﻿@using EcommercePlatform.Models;
+@{
     EcommercePlatform.Models.PostWithCategories post = ViewBag.post;
     if (post.meta_title == "") {
         ViewBag.Title = post.post_title;
@@ -16,15 +17,16 @@
         if (i == 0) {
             catlist = "<a href=\"/Blog/Category/" + categories[i].name + "\">" + categories[i].name + "</a>";
         } else {
-            if(i == (categories.Count() - 1)) {
+            if (i == (categories.Count() - 1)) {
                 catlist += " and " + "<a href=\"/Blog/Category/" + categories[i].name + "\">" + categories[i].name + "</a>";
             } else {
                 catlist += ", " + "<a href=\"/Blog/Category/" + categories[i].name + "\">" + categories[i].name + "</a>";
             }
-        }   
+        }
     }
     string message = Request.QueryString.Get("message");
     string errors = Request.QueryString.Get("err");
+    TimeZoneInfo tz = ViewBag.timezone ?? TimeZoneInfo.Utc;
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
 <link href="@settings.Get("PathToCSS")/css/blog.css" rel="stylesheet" type="text/css" />
@@ -38,7 +40,7 @@
             <h2>@post.post_title</h2>
             <p class="byline">
                 By @post.author.first @post.author.last
-                <span>@String.Format("{0:MMMM d, yyyy} at {0:h:mm tt}", post.publishedDate.Value)</span>
+                <span>@String.Format("{0:MMMM d, yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(post.publishedDate.Value, tz)) @UDF.ShortTZ(tz, post.publishedDate.Value)</span>
             </p>
             @if (catlist.Length > 0) {
                 <p class="categories">Posted in: @Html.Raw(catlist)</p>
@@ -79,7 +81,7 @@
             <div class="comment">
                 <p class="header">
                     @comment.name
-                    <span>Posted On: @String.Format("{0:MMM d, yyyy} at {0:h:mm tt}", comment.createdDate)</span>
+                    <span>Posted On: @String.Format("{0:MMM d, yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(comment.createdDate, tz)) @UDF.ShortTZ(tz, comment.createdDate)</span>
                 </p>
                 <p>@comment.comment_text</p>
             </div>

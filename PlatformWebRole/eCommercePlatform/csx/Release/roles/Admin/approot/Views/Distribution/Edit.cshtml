@@ -5,26 +5,10 @@
         dc.ID = 0;
     }
 
-    List<Admin.Country> countries = ViewBag.countries;
-    if (countries == null) {
-        countries = new List<Admin.Country>();
-    }
-
-    List<string> errors = ViewBag.errors;
-    if (errors == null) {
-        errors = new List<string>();
-    }
-
-    bool failed = ViewBag.failed;
-    if (failed == null) {
-        failed = false;
-    }
-
-    List<Admin.Models.GroupedModule> modules = ViewBag.modules;
-    if (modules == null) {
-        modules = new List<Admin.Models.GroupedModule>();
-    }
-    
+    List<Admin.Country> countries = ViewBag.countries ?? new List<Admin.Country>();
+    List<string> errors = ViewBag.errors ?? new List<string>();
+    bool failed = ViewBag.failed ?? false;
+    List<Admin.Models.GroupedModule> modules = ViewBag.modules ?? new List<Admin.Models.GroupedModule>();
     bool can_delete = false;
     try {
         if (modules.Where(x => x.path.ToUpper().Equals("/ADMIN/DISTRIBUTION")).FirstOrDefault<Admin.Models.GroupedModule>().subs.Where(x => x.name.ToUpper().Equals("DELETE")).Count() > 0) {

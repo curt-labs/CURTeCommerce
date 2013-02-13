@@ -1,6 +1,9 @@
-﻿@{
+﻿@using Admin.Models;
+@{
     Admin.Models.PostWithCategories post = ViewBag.post;
     List<Admin.Comment> comments = ViewBag.comments;
+    Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
+    TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
 
     ViewBag.Title = "View Post Comments";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,7 +12,7 @@
 <h2>Comments for Blog Post: @post.post_title <a href="/Admin/Blog/" class="backButton">Back to Posts</a></h2>
 <hr />
 
-<p><strong>Posted On</strong> @String.Format("{0:MMM d, yyyy} at {0:h:mm tt}", post.publishedDate)</p>
+<p><strong>Posted On</strong> @String.Format("{0:MMM d, yyyy} at {0:h:mm tt}", post.publishedDate) @UDF.ShortTZ(tz, post.publishedDate.Value)</p>
 <p><strong>Author:</strong> @post.author.first @post.author.last</p>
 <p><strong>Post Content:</strong></p>
 @Html.Raw(post.post_text)
@@ -32,7 +35,7 @@
                 <td>@comment.commentID</td>
                 <td>@comment.name</td>
                 <td>@comment.email</td>
-                <td>@comment.createdDate.ToString()</td>
+                <td>@String.Format("{0:MMM d, yyyy} at {0:h:mm tt}", comment.createdDate) @UDF.ShortTZ(tz, comment.createdDate)</td>
                 <td>@((comment.approved == true) ? "Yes" : "No")</td>
                 <td>
                     <a href="/Admin/Blog/ViewComment/@comment.commentID" class="viewcomment" data-id="@comment.commentID" title="View">View</a> | 

@@ -1,4 +1,5 @@
-﻿@{
+﻿@using EcommercePlatform.Models;
+@{
     List<EcommercePlatform.Testimonial> testimonials = ViewBag.testimonials;
     if (testimonials == null) {
         testimonials = new List<EcommercePlatform.Testimonial>();   
@@ -8,6 +9,7 @@
     int page = ViewBag.page;
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    TimeZoneInfo tz = ViewBag.timezone ?? TimeZoneInfo.Utc;
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
 <link href="@settings.Get("PathToCSS")/css/testimonials.css" rel="stylesheet" type="text/css" />
@@ -17,12 +19,12 @@
 
     @foreach (EcommercePlatform.Testimonial testimonial in testimonials) {
         <article>
-            <span class="date">Submitted on @String.Format("{0:MM/dd/yyyy hh:mm tt}",testimonial.dateAdded)</span>
+            <span class="date">Submitted on @String.Format("{0:MM/dd/yyyy hh:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(testimonial.dateAdded, tz)) @UDF.ShortTZ(tz, testimonial.dateAdded)</span>
             <span class="name">By @((String.IsNullOrEmpty(testimonial.first_name.Trim()) && String.IsNullOrEmpty(testimonial.last_name.Trim())) ? "Anonymous" : testimonial.first_name + " " + testimonial.last_name)</span>
             <p>@testimonial.testimonial1</p>
         </article>
     }
-    @if(pagecount > 1) {
+    @if (pagecount > 1) {
         <footer id="pagination">
             @if (page > 1 && pagecount > 1) {
                 //Previous page link

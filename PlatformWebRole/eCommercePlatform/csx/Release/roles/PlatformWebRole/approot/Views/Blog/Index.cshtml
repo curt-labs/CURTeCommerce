@@ -6,6 +6,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     int pagecount = ViewBag.pagecount;
     int page = ViewBag.page;
+    TimeZoneInfo tz = ViewBag.timezone ?? TimeZoneInfo.Utc;
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
 <link href="@settings.Get("PathToCSS")/css/blog.css" rel="stylesheet" type="text/css" />
@@ -20,7 +21,7 @@
                 <a href="/Blog/Post/@String.Format("{0:M-dd-yyyy}", post.publishedDate)/@post.slug">@post.post_title</a>
                 <p class="byline">
                     By <a href="/Blog/Author/@(Server.UrlEncode(post.author.first))_@(Server.UrlEncode(post.author.last))">@post.author.first @post.author.last</a>
-                    <span>@String.Format("{0:MMMM d, yyyy} at {0:h:mm tt}", post.publishedDate)</span>
+                    <span>@String.Format("{0:MMMM d, yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(post.publishedDate.Value, tz)) @tz.DisplayName</span>
                 </p>
             </div>
             @if (post.post_text.Length > 400) {

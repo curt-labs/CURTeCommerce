@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Admin.Models;
+@{
     Admin.Models.CommentWithPost comment = ViewBag.comment;
     Admin.BlogPost post = comment.post;
     string errors = Request.QueryString.Get("err");
@@ -17,5 +18,5 @@
 @if (!String.IsNullOrEmpty(comment.email)) {
     <p><strong>Email:</strong> @comment.email</p>
 }
-<p><strong>Posted On:</strong> @(String.Format("{0:MMM d, yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(comment.createdDate, tz))))</p>
+<p><strong>Posted On:</strong> @(String.Format("{0:MMM d, yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(comment.createdDate, tz)))) @UDF.ShortTZ(tz, comment.createdDate)</p>
 <p><strong>Comment:</strong> @comment.comment_text</p>

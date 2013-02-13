@@ -1,11 +1,13 @@
 ﻿@{
-    Admin.Customer cust = ViewBag.customer;
-    if (cust == null) {
-        cust = new Admin.Customer();
-    }
-
+    Admin.Customer cust = ViewBag.customer ?? new Admin.Customer();
+    List<Admin.Address> addresses = ViewBag.addresses ?? new List<Admin.Address>();
     List<Admin.Cart> orders = cust.Carts.Where(x => x.payment_id > 0).OrderByDescending(x => x.Payment.created).ToList<Admin.Cart>();
     Admin.Cart cart = cust.Carts.Where(x => x.payment_id == 0).FirstOrDefault<Admin.Cart>();
+    List<Admin.Country> countries = ViewBag.countries ?? new List<Admin.Country>();
+    string message = ViewBag.message ?? "";
+    string error = ViewBag.error ?? "";
+    Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
+    TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
 
     ViewBag.Title = "View";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -13,15 +15,23 @@
 <link href="/Admin/Content/css/customer.manager.css" rel="stylesheet" type="text/css" />
 <span class="title">@(cust.fname + " " + cust.lname)</span>
 <a class="button suspension" data-id="@cust.ID" href="/Admin/Customers/Suspension/@cust.ID">@((cust.isSuspended == 0) ? "Suspend" : "Reinstate")</a>
+@if (message != "") {
+    <script>
+        showMessage("@message");
+    </script>
+}
+@if (error != "") {
+    <p class="error">@error</p>
+}
 <ul class="tabs">
     <li>
         <a href="#basic" title="Basic Information">Basic Info</a>
     </li>
     <li>
-        <a href="#billing" title="Billing Address">Billing</a>
+        <a href="#password" title="Password">Set Password</a>
     </li>
     <li>
-        <a href="#shipping" title="Shipping Address">Shipping</a>
+        <a href="#addresses" title="Billing Address">Addresses</a>
     </li>
     @if (orders != null && orders.Count > 0) {
         <li>
@@ -50,92 +60,123 @@
                 Last Name
                 <input type="text" name="lname" value="@cust.lname" />
             </label>
+            <label>
+                Phone
+                <input type="tel" name="phone" value="@cust.phone" />
+            </label>
             <input type="submit" class="button" value="Save" />
         </form>    
     </div>
-    <div class="tab_content" id="billing">
-        @if (cust.billingID != 0) {
-        <form class="admin_form">
+    <div class="tab_content" id="password">
+        <h2>Change Customer Password</h2>
+        <p>Password must be six characters or longer</p>
+        <form class="admin_form" action="/Admin/Customers/ChangePassword" method="post">
+            <input type="hidden" name="customerID" value="@cust.ID" />
             <label>
-                Billing Name
-                <input type="text" readonly="readonly" value="@cust.Address.first @cust.Address.last" />
+                Password (longer than 6 chars)
+                <input type="password" name="password" required title="Password field is required" pattern="(^.{6,}$)" placeholder="Enter a new password (must be at least 6 characters)" />
             </label>
             <label>
-                Address Type
-                <input type="text" readonly="readonly" value="@((cust.Address.residential) ? "Residential" : "Commercial")" />
+                Confirm Password
+                <input type="password" name="confirmpassword" required title="Confirmation Password field is required" pattern="(^.{6,}$)" placeholder="Confirm new Password" />
             </label>
             <label>
-                Street
-                <input type="text" readonly="readonly" value="@cust.Address.street1" />
+                <input type="checkbox" name="notify" value="true" checked="checked" />
+                Notify Customer by email?
             </label>
-            <label>
-                Street 2
-                <input type="text" readonly="readonly" value="@cust.Address.street2" />
-            </label>
-            <label>
-                City
-                <input type="text" readonly="readonly" value="@cust.Address.city" />
-            </label>
-            <label>
-                State
-                <input type="text" readonly="readonly" value="@(cust.Address.State1.abbr + " " + cust.Address.State1.state1)" />
-            </label>
-            <label>
-                Country
-                <input type="text" readonly="readonly" value="@(cust.Address.State1.Country.abbr + " - " + cust.Address.State1.Country.name)" />
-            </label>
-            <label>
-                Postal Code
-                <input type="text" readonly="readonly" value="@cust.Address.postal_code" />
-            </label>
-        </form>
-        } else {
-            <p>No Default Billing Address</p>
-        }
+            <input type="submit" class="button" value="Save" />
+        </form>    
     </div>
-    <div class="tab_content" id="shipping">
-        @if (cust.shippingID != 0) {
-        <form class="admin_form">
-            <label>
-                Shipping Name
-                <input type="text" readonly="readonly" value="@String.Format("{0:C}",cust.Address1.first,cust.Address1.last)" />
-            </label>
-            <label>
-                Address Type
-                <input type="text" readonly="readonly" value="@((cust.Address1.residential) ? "Residential" : "Commercial")" />
-            </label>
-            <label>
-                Street
-                <input type="text" readonly="readonly" value="@cust.Address1.street1" />
-            </label>
-            <label>
-                Street 2
-                <input type="text" readonly="readonly" value="@cust.Address1.street2" />
-            </label>
-            <label>
-                City
-                <input type="text" readonly="readonly" value="@cust.Address1.city" />
-            </label>
-            <label>
-                State
-                <input type="text" readonly="readonly" value="@(cust.Address1.State1.abbr + " - " + cust.Address1.State1.state1)" />
-            </label>
-            <label>
-                Country
-                <input type="text" readonly="readonly" value="@(cust.Address1.State1.Country.abbr + " - " + cust.Address1.State1.Country.name)" />
-            </label>
-            <label>
-                Postal Code
-                <input type="text" readonly="readonly" value="@cust.Address1.postal_code" />
-            </label>
-        </form>
+    <div class="tab_content" id="addresses">
+        <div id="addAddress">
+            <h2>Add an Address</h2>
+            <form class="admin_form" id="addressform" method="post" action="/Admin/Customers/SaveAddress">
+                <input type="hidden" name="id" value="@cust.ID" data-default="@cust.ID" />
+                <input type="hidden" id="addressID" name="addressID" value="0" data-default="0" />
+                <label for="first">
+                    First Name
+                    <input id="first" name="first" type="text" value="@cust.fname" data-default="@cust.fname" placeholder="Customer First Name" required title="Enter a First name" />
+                </label>
+                <label for="last">
+                    Last Name
+                    <input id="last" name="last" type="text" value="@cust.lname" data-default="@cust.lname" placeholder="Customer Last Name" required title="Enter a Last name" />
+                </label>
+                <label for="street1">
+                    Street
+                    <input id="street1" name="street1" type="text" placeholder="Street address" required title="Enter a Street address" />
+                </label>
+                <label for="street2">
+                    Street 2
+                    <input id="street2" name="street2" type="text" placeholder="(Optional) Street Address Line 2" />
+                </label>
+                <label for="city">
+                    City
+                    <input id="city" name="city" type="text" placeholder="City" required title="Enter a City name" />
+                </label>
+                <label for="state">
+                    State/Province
+                    <select name="state" id="state" required="required" title="Select a State/Province">
+                        <option value="0">- Select State/Province -</option>
+                        @foreach (Admin.Country country in countries) {
+                            <optgroup label="@country.name">
+                                @foreach (Admin.State state in country.getProvinces()) {
+                                    <option value="@state.stateID">@(String.Format("{0} - {1}", state.abbr, state.state1))</option>
+                                }
+                            </optgroup>
+                        }
+                    </select>
+                </label>
+                <label for="postalcode">
+                    Postal Code
+                    <input id="postalcode" name="postalcode" type="text" placeholder="Postal Code" required title="Enter a Postal code" />
+                </label>
+                <label for="residential">
+                    <input type="checkbox" name="residential" id="residential" value="true" checked="checked" data-default="checked" />
+                    Residential Address?
+                </label>
+                <input type="submit" id="btnAddAddress" class="button" value="Save" />
+                <input type="reset" id="btnResetAddress" class="button cancel" value="Cancel" />
+            </form>
+        </div>
+        @if (addresses.Count > 0) {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Street</th>
+                        <th>City</th>
+                        <th>State / Prov</th>
+                        <th>Postal Code</th>
+                        <th>Type</th>
+                        <th>Billing Default</th>
+                        <th>Shipping Default</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Admin.Address address in addresses) {
+                        <tr id="address_@(address.ID)">
+                            <td>@address.first @address.last</td>
+                            <td>@address.street1@((address.street2 != "") ? Html.Raw("<br>" + address.street2) : Html.Raw(""))</td>
+                            <td>@address.city</td>
+                            <td>@address.State1.abbr - @address.State1.Country.abbr</td>
+                            <td>@address.postal_code</td>
+                            <td>@((address.residential) ? "Residential" : "Commercial")</td>
+                            <td class="center">@((address.ID == cust.billingID) ? Html.Raw("&#10004;") : Html.Raw("<a href=\"/Admin/Customers/SetBillingDefault/" + address.ID + "\" class=\"btn setdefault\">Set</a>"))</td>
+                            <td class="center">@((address.ID == cust.shippingID) ? Html.Raw("&#10004;") : Html.Raw("<a href=\"/Admin/Customers/SetShippingDefault/" + address.ID + "\" class=\"btn setdefault\">Set</a>"))</td>
+                            <td><a href="#" data-id="@address.ID" class="edit">Edit</a> | <a href="#" data-id="@address.ID" class="delete">Delete</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         } else {
-            <p>No Default Shipping Address</p>
+            <p>This customer has no addresses</p>
         }
+        <a class="btn" href="#" id="addaddressbtn">Add Address</a>
     </div>
     @if (orders != null && orders.Count > 0) {
         <div class="tab_content" id="orders">
-            @if(orders.Count > 0) {
+            @if (orders.Count > 0) {
                 <table class="table">
                     <thead>
                         <tr>
@@ -152,8 +193,8 @@
                             <tr>
                                 <td>@order.payment_id</td>
                                 <td>@order.getCount()</td>
-                                <td>@String.Format("{0:M/d/yyyy} at {0:h:mm tt}",order.Payment.created.ToLocalTime())</td>
-                                <td>@String.Format("{0:C}",order.getTotal())</td>
+                                <td>@String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.Payment.created, tz))</td>
+                                <td>@String.Format("{0:C}", order.getTotal())</td>
                                 <td>@order.Payment.PaymentTypes.name</td>
                                 <td><a href="/Admin/Orders/Items/@order.payment_id" class="btn">View Items</a></td>
                             </tr>

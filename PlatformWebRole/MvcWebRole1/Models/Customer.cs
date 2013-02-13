@@ -308,6 +308,7 @@ namespace EcommercePlatform {
                 cartID = Convert.ToInt32(cart_cookie.Value);
             }
             if (cartID == 0) {
+                // cart doesn't exist yet / no cookie
                 cart = cart.Save();
                 cartID = cart.ID;
                 HttpCookie cook = new HttpCookie("hdcart", cartID.ToString());
@@ -316,10 +317,13 @@ namespace EcommercePlatform {
                 }
                 HttpContext.Current.Response.Cookies.Add(cook);
             } else {
+                // cookie exists
                 try {
+                    // attempt to get cart
                     cart = new Cart().Get(cartID);
                     custID = cart.cust_id;
                 } catch {
+                    // no cart
                     cart = cart.Save();
                     cartID = cart.ID;
                     HttpCookie cook = new HttpCookie("hdcart", cartID.ToString());
@@ -332,6 +336,7 @@ namespace EcommercePlatform {
 
             Customer customer = new Customer();
             if (custID > 0) {
+                // customer ID exists on cart. Get customer
                 try {
                     customer = customer.Get(custID);
                 } catch { }

@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Admin.Models;
+@{
     List<Admin.Models.PostWithCategories> posts = ViewBag.posts ?? new List<Admin.Models.PostWithCategories>();
     List<Admin.BlogCategory> categories = ViewBag.categories ?? new List<Admin.BlogCategory>();
     List<Admin.Models.CommentWithPost> comments = ViewBag.comments ?? new List<Admin.Models.CommentWithPost>();
@@ -41,8 +42,8 @@
                 @foreach (Admin.Models.PostWithCategories post in posts) {
                     <tr>
                         <td>@post.post_title</td>
-                        <td>@String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(post.createdDate, tz))</td>
-                        <td>@((post.publishedDate == null) ? "Not Published" : String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(post.publishedDate.Value, tz)))</td>
+                        <td>@String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(post.createdDate, tz)) @UDF.ShortTZ(tz, post.createdDate)</td>
+                        <td>@((post.publishedDate == null) ? "Not Published" : String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(post.publishedDate.Value, tz))) @UDF.ShortTZ(tz, post.publishedDate.Value)</td>
                         <td style="text-align: center;">@post.comments.Count()</td>
                         <td style="text-align: center;">@post.mod_comments.Count()</td>
                         <td>
@@ -100,7 +101,7 @@
                     <tr>
                         <td>@comment.name</td>
                         <td>@comment.email</td>
-                        <td>@String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(comment.createdDate, tz))</td>
+                        <td>@String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(comment.createdDate, tz)) @UDF.ShortTZ(tz, comment.createdDate)</td>
                         <td>@((comment.approved == true) ? "Yes" : "No")</td>
                         <td>
                             <a href="/Admin/Blog/ViewComment/@comment.commentID" title="View">View</a> | 

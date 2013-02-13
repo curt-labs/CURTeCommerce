@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Script.Serialization;
+using System.Web.SessionState;
 
 namespace EcommercePlatform.Models {
     public class SessionWorker {
@@ -43,8 +44,6 @@ namespace EcommercePlatform.Models {
             } catch (Exception) { }
         }
 
-
-
         internal static List<APIPart> GetRecentParts() {
             try {
                 List<int> recent = new List<int>();
@@ -68,6 +67,21 @@ namespace EcommercePlatform.Models {
             } catch (Exception) {
                 return new List<APIPart>();
             }
+        }
+
+        internal static bool CheckingTimeZone() {
+            bool checking = false;
+            HttpSessionState session = HttpContext.Current.Session;
+            if (session["timezonecheck"] == null) {
+                session["timezonecheck"] = checking;
+            } else if ((bool)session["timezonecheck"]) {
+                checking = true;
+            }
+            return checking;
+        }
+
+        internal static void SetCheckingTimeZone(bool checking) {
+            HttpContext.Current.Session["timezonecheck"] = checking;
         }
     }
 }

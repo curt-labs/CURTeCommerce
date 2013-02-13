@@ -25,6 +25,7 @@
     }
     string message = Request.QueryString.Get("message");
     string errors = Request.QueryString.Get("err");
+    TimeZoneInfo tz = ViewBag.timezone ?? TimeZoneInfo.Utc;
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
 <link href="@settings.Get("PathToCSS")/css/blog.css" rel="stylesheet" type="text/css" />
@@ -38,7 +39,7 @@
             <h2>@post.post_title</h2>
             <p class="byline">
                 By @post.author.first @post.author.last
-                <span>@String.Format("{0:MMMM d, yyyy} at {0:h:mm tt}", post.publishedDate.Value)</span>
+                <span>@String.Format("{0:MMMM d, yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(post.publishedDate.Value, tz)) @tz.DisplayName</span>
             </p>
             @if (catlist.Length > 0) {
                 <p class="categories">Posted in: @Html.Raw(catlist)</p>
@@ -79,7 +80,7 @@
             <div class="comment">
                 <p class="header">
                     @comment.name
-                    <span>Posted On: @String.Format("{0:MMM d, yyyy} at {0:h:mm tt}", comment.createdDate)</span>
+                    <span>Posted On: @String.Format("{0:MMM d, yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(comment.createdDate, tz)) @tz.DisplayName</span>
                 </p>
                 <p>@comment.comment_text</p>
             </div>
