@@ -98,37 +98,6 @@
             <div class="right">
                 <article class="scroller">
                     <span class="banner">Addresses</span>
-                    @if (cust.Cart.bill_to != 0) {
-                        foreach (EcommercePlatform.Address a in addresses) {
-                            if (!a.ID.Equals(cust.Cart.Billing.ID)) {
-                                <div class="address" data-id="@a.ID" id="address-@a.ID">
-                                    <span>@((a.residential) ? "Residential" : "Commercial")</span>
-                                    @a.first @a.last<br />
-                                    @a.street1<br />
-                                    @if (!String.IsNullOrEmpty(a.street2)) {
-                                        @a.street2<br />
-                                    }
-                                    @a.city, @a.State1.abbr @a.postal_code<br />
-                                    @a.State1.Country.name
-                                    <a href="/Cart/ChooseBilling/@a.ID" class="button">Choose</a>
-                                </div>
-                            }
-                        }
-                    } else {
-                        foreach (EcommercePlatform.Address a in addresses) {
-                            <div class="address" data-id="@a.ID" id="address-@a.ID">
-                                <span>@((a.residential) ? "Residential" : "Commercial")</span>
-                                @a.first @a.last<br />
-                                @a.street1<br />
-                                @if (!String.IsNullOrEmpty(a.street2)) {
-                                    @a.street2<br />
-                                }
-                                @a.city, @a.State1.abbr @a.postal_code<br />
-                                @a.State1.Country.name
-                                <a href="/Cart/ChooseBilling/@a.ID" class="button">Choose</a>
-                            </div>
-                        }
-                    }
                     <a href="javascript: void;" class="new-address button" id="new-billing-address">New Address</a>
                 </article>
             </div>
