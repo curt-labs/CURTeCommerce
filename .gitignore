@@ -1,6 +1,10 @@
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
 obj
 csx
+PlatformWebRole/Admin.Azure/bin
+debug
+release
+
 
 # mstest test results
 TestResults
@@ -8,3 +12,14 @@ TestResults
 # web.config files
 *.suo
 *.user
+EcommercePlatform.dll
+EcommercePlatform.pdb
+Admin.dll
+Admin.pdb
+AzureFtpServer.dll
+AzureFtpServer.pdb
+TaskScheduler.dll
+TaskScheduler.pdb
+FtpServerRole.dll
+FtpServerRole.pdb
+*.azurePubxml
