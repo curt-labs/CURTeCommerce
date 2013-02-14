@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "eCommercePlatform", "eCommercePlatform\eCommercePlatform.ccproj", "{45FDB16B-B611-4C79-AD0C-5E135ECE5327}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlatformWebRole", "MvcWebRole1\PlatformWebRole.csproj", "{836DBA86-BD2C-4F45-B3BD-4F8543FE2DD9}"
