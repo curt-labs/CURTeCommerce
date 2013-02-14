@@ -28,9 +28,11 @@
       <Certificate name="CurtSSL" storeLocation="LocalMachine" storeName="CA" />
     </Certificates>
     <Startup>
-      <Task commandLine="Startup.cmd" executionContext="elevated" taskType="simple"></Task>
+      <Task commandLine="Startup.cmd" executionContext="elevated" taskType="simple">
+      </Task>
     </Startup>
-    <Imports></Imports>
+    <Imports>
+    </Imports>
   </WebRole>
   <WorkerRole name="FTPServerRole" vmsize="ExtraSmall">
     <Endpoints>
@@ -44,12 +46,16 @@
       <Setting name="BaseUri" />
       <Setting name="UseHttps" />
       <Setting name="UseAsyncMethods" />
+      <Setting name="StorageConnectionString" />
     </ConfigurationSettings>
-    <Certificates></Certificates>
-    <Imports></Imports>
+    <Certificates>
+    </Certificates>
+    <Imports>
+    </Imports>
   </WorkerRole>
   <WorkerRole name="TaskScheduler" vmsize="ExtraSmall">
-    <Imports></Imports>
+    <Imports>
+    </Imports>
     <Endpoints>
       <InternalEndpoint name="Endpoint1" protocol="tcp" />
     </Endpoints>
@@ -71,7 +77,8 @@
     <Endpoints>
       <InputEndpoint name="Endpoint1" protocol="http" port="8080" />
     </Endpoints>
-    <Imports></Imports>
+    <Imports>
+    </Imports>
     <ConfigurationSettings>
       <Setting name="StorageConnectionString" />
     </ConfigurationSettings>

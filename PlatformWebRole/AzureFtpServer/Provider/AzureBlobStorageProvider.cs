@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.StorageClient;
 using AzureFtpServer.Provider;
+using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace AzureFtpServer.Provider {
 
@@ -13,8 +14,7 @@ namespace AzureFtpServer.Provider {
         public StorageOperationResult Result;
     }
 
-    public sealed class AzureBlobStorageProvider
-    {
+    public sealed class AzureBlobStorageProvider {
         // Events
 
         #region Delegates
@@ -26,20 +26,24 @@ namespace AzureFtpServer.Provider {
         private CloudStorageAccount _account;
         private CloudBlobClient _blobClient;
 
-        public AzureBlobStorageProvider(String containerName)
-        {
+        public AzureBlobStorageProvider(String containerName) {
             Initialise(containerName);
         }
 
         // Default constructor, required for reflection.
-        public AzureBlobStorageProvider()
-        {
+        public AzureBlobStorageProvider() {
             Initialise(null); // HTTPS disabled; Asynch Calls enabled by default.
         }
 
-        private Uri BaseUri
-        {
-            get { return new Uri(StorageProviderConfiguration.BaseUri + "/" + StorageProviderConfiguration.AccountName + @"/" + ContainerName); }
+        private Uri BaseUri {
+            get {
+                if (StorageProviderConfiguration.Mode == Modes.Development || StorageProviderConfiguration.Mode == Modes.Debug) {
+                    return new Uri(CloudStorageAccount.DevelopmentStorageAccount.BlobEndpoint.AbsoluteUri);
+                } else {
+                    return new Uri(string.Format("http://{0}.blob.core.windows.net", StorageProviderConfiguration.AccountName));
+                }
+
+            }
         }
 
         public bool UseHttps { get; private set; }
@@ -55,8 +59,7 @@ namespace AzureFtpServer.Provider {
         /// </summary>
         public event EventHandler<StorageProviderEventArgs> StorageProviderOperationCompleted;
 
-        public String FolderDelimiter
-        {
+        public String FolderDelimiter {
             get { return "/"; }
         }
 
@@ -65,31 +68,29 @@ namespace AzureFtpServer.Provider {
         // Delegates
 
         // Initialiser method
-        private void Initialise(String containerName)
-        {
-           
+        private void Initialise(String containerName) {
+
             if (String.IsNullOrEmpty(containerName))
                 throw new ArgumentException("You must provide the base Container Name", "containerName");
-            
+
             ContainerName = containerName;
 
-            if (StorageProviderConfiguration.Mode == Modes.Development || StorageProviderConfiguration.Mode == Modes.Debug)
-            {
+            if (StorageProviderConfiguration.Mode == Modes.Development || StorageProviderConfiguration.Mode == Modes.Debug) {
+                Uri base_uri = this.BaseUri;
                 _account = CloudStorageAccount.DevelopmentStorageAccount;
                 _blobClient = _account.CreateCloudBlobClient();
                 _blobClient.Timeout = new TimeSpan(0, 0, 0, 5);
-            }
-            else
-            {
-                _account = new CloudStorageAccount(
-                    new StorageCredentialsAccountAndKey(StorageProviderConfiguration.AccountName, StorageProviderConfiguration.AccountKey), UseHttps);
+            } else {
+                string connstr = RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString");
+                _account = CloudStorageAccount.Parse(connstr);
                 _blobClient = _account.CreateCloudBlobClient();
                 _blobClient.Timeout = new TimeSpan(0, 0, 0, 5);
             }
 
             _blobClient.GetContainerReference(ContainerName).CreateIfNotExist();
-            
+
         }
+
 
         #region "Storage operations"
 
@@ -97,8 +98,7 @@ namespace AzureFtpServer.Provider {
         /// Puts the specified object onto the cloud storage provider.
         /// </summary>
         /// <param name="o">The object to store.</param>
-        public void Put(AzureCloudFile o)
-        {
+        public void Put(AzureCloudFile o) {
             if (o.Data == null)
                 throw new ArgumentNullException("o", "AzureCloudFile cannot be null.");
 
@@ -124,8 +124,7 @@ namespace AzureFtpServer.Provider {
 
             // Set permissions on the container
             BlobContainerPermissions perms = container.GetPermissions();
-            if (perms.PublicAccess != BlobContainerPublicAccessType.Container)
-            {
+            if (perms.PublicAccess != BlobContainerPublicAccessType.Container) {
                 perms.PublicAccess = BlobContainerPublicAccessType.Container;
                 container.SetPermissions(perms);
             }
@@ -147,8 +146,7 @@ namespace AzureFtpServer.Provider {
         /// Delete the specified AzureCloudFile from the Azure container.
         /// </summary>
         /// <param name="o">The object to be deleted.</param>
-        public void Delete(AzureCloudFile o)
-        {
+        public void Delete(AzureCloudFile o) {
             string path = UriPathToString(o.Uri);
             if (path.StartsWith("/"))
                 path = path.Remove(0, 1);
@@ -168,8 +166,7 @@ namespace AzureFtpServer.Provider {
         /// <param name="downloadData">Boolean indicating whether to download the contents of the file to the Data property or not</param>
         /// <returns>AzureCloudFile</returns>
         /// <exception cref="FileNotFoundException">Throws a FileNotFoundException if the URI is not found on the provider.</exception>
-        public AzureCloudFile Get(string path, bool downloadData)
-        {
+        public AzureCloudFile Get(string path, bool downloadData) {
             var u = new Uri(path, UriKind.RelativeOrAbsolute);
             string blobPath = UriPathToString(u);
 
@@ -183,57 +180,43 @@ namespace AzureFtpServer.Provider {
 
             CloudBlob b = null;
 
-            try
-            {
+            try {
                 b = c.GetBlobReference(blobPath);
                 b.FetchAttributes();
-                o = new AzureCloudFile
-                        {
-                            Meta = b.Metadata,
-                            StorageOperationResult = StorageOperationResult.Completed,
-                            Uri = new Uri(blobPath, UriKind.RelativeOrAbsolute),
-                            LastModified = b.Properties.LastModifiedUtc,
-                            ContentType = b.Properties.ContentType,
-                            Size = b.Properties.Length
-                        };
+                o = new AzureCloudFile {
+                    Meta = b.Metadata,
+                    StorageOperationResult = StorageOperationResult.Completed,
+                    Uri = new Uri(blobPath, UriKind.RelativeOrAbsolute),
+                    LastModified = b.Properties.LastModifiedUtc,
+                    ContentType = b.Properties.ContentType,
+                    Size = b.Properties.Length
+                };
 
                 o.Meta.Add("ContentType", b.Properties.ContentType);
-            }
-            catch (StorageClientException ex)
-            {
-                if (ex.ErrorCode == StorageErrorCode.BlobNotFound)
-                {
+            } catch (StorageClientException ex) {
+                if (ex.ErrorCode == StorageErrorCode.BlobNotFound) {
                     throw new FileNotFoundException(
                         "The storage provider was unable to locate the object identified by the given URI.",
                         u.ToString());
                 }
 
-                if (ex.ErrorCode == StorageErrorCode.ResourceNotFound)
-                {
+                if (ex.ErrorCode == StorageErrorCode.ResourceNotFound) {
                     return null;
                 }
             }
 
             // Try to download the data for the blob, if requested
             // TODO: Implement asynchronous calls for this
-            try
-            {
-                if (downloadData && b != null)
-                {
+            try {
+                if (downloadData && b != null) {
                     byte[] data = b.DownloadByteArray();
                     o.Data = data;
                 }
-            }
-
-            catch (TimeoutException)
-            {
-                if (RetryOnTimeout)
-                {
+            } catch (TimeoutException) {
+                if (RetryOnTimeout) {
                     Get(blobPath, downloadData); // NOTE: Infinite retries, what fun! :)
                     // TODO: Implement retry attempt limitation
-                }
-                else
-                {
+                } else {
                     throw;
                 }
             }
@@ -246,37 +229,28 @@ namespace AzureFtpServer.Provider {
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns></returns>
-        public bool CheckBlobExists(string path)
-        {
+        public bool CheckBlobExists(string path) {
             string p = path;
 
             // Remove any leading slashes
-            if (p.StartsWith("/"))
-            {
+            if (p.StartsWith("/")) {
                 p = p.Remove(0, 1);
             }
 
-            if (p.StartsWith(ContainerName + @"/"))
-            {
+            if (p.StartsWith(ContainerName + @"/")) {
                 p = p.Replace(ContainerName + @"/", @"");
             }
 
             CloudBlobContainer c = GetContainerReference(ContainerName);
             CloudBlob b = c.GetBlobReference(p);
 
-            try
-            {
+            try {
                 b.FetchAttributes();
                 return true;
-            }
-            catch (StorageClientException e)
-            {
-                if (e.ErrorCode == StorageErrorCode.ResourceNotFound)
-                {
+            } catch (StorageClientException e) {
+                if (e.ErrorCode == StorageErrorCode.ResourceNotFound) {
                     return false;
-                }
-                else
-                {
+                } else {
                     throw;
                 }
             }
@@ -287,43 +261,37 @@ namespace AzureFtpServer.Provider {
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns></returns>
-        public CloudDirectoryCollection GetDirectoryListing(string path)
-        {
+        public CloudDirectoryCollection GetDirectoryListing(string path) {
             path = ParsePath(path);
             CloudBlobContainer container = _blobClient.GetContainerReference(ContainerName);
             var directories = new CloudDirectoryCollection();
 
-            if (path == "")
-            {
+            if (path == "") {
                 directories.AddRange(
                     container.ListBlobs().OfType<CloudBlobDirectory>().Select(
-                        dir => new CloudDirectory {Path = dir.Uri.ToString()}));
-            }
-            else
-            {
+                        dir => new CloudDirectory { Path = dir.Uri.ToString() }));
+            } else {
                 CloudBlobDirectory parent = container.GetDirectoryReference(path);
                 directories.AddRange(
                     parent.ListBlobs().OfType<CloudBlobDirectory>().Select(
-                        dir => new CloudDirectory {Path = dir.Uri.ToString()}));
+                        dir => new CloudDirectory { Path = dir.Uri.ToString() }));
             }
 
             return directories;
         }
 
-        public CloudFileCollection GetFileListing(string path)
-        {
+        public CloudFileCollection GetFileListing(string path) {
             String prefix = String.Concat(ContainerName, "/", ParsePath(path));
             var files = new CloudFileCollection();
             files.AddRange(
                 _blobClient.ListBlobsWithPrefix(prefix).OfType<CloudBlob>().Select(
                     blob =>
-                    new AzureCloudFile
-                        {
-                            Meta = blob.Metadata,
-                            Uri = blob.Uri,
-                            Size = blob.Properties.Length,
-                            ContentType = blob.Properties.ContentType
-                        }));
+                    new AzureCloudFile {
+                        Meta = blob.Metadata,
+                        Uri = blob.Uri,
+                        Size = blob.Properties.Length,
+                        ContentType = blob.Properties.ContentType
+                    }));
 
             return files;
         }
@@ -333,11 +301,9 @@ namespace AzureFtpServer.Provider {
         /// </summary>
         /// <param name="originalPath">The original path.</param>
         /// <param name="newObject">The new object.</param>
-        public void Overwrite(string originalPath, AzureCloudFile newObject)
-        {
+        public void Overwrite(string originalPath, AzureCloudFile newObject) {
             // Check if the original path exists on the provider.
-            if (!CheckBlobExists(originalPath))
-            {
+            if (!CheckBlobExists(originalPath)) {
                 throw new FileNotFoundException("The path supplied does not exist on the storage provider.",
                                                 originalPath);
             }
@@ -352,8 +318,7 @@ namespace AzureFtpServer.Provider {
         /// <param name="originalPath">The original path.</param>
         /// <param name="newPath">The new path.</param>
         /// <returns></returns>
-        public StorageOperationResult Rename(string originalPath, string newPath)
-        {
+        public StorageOperationResult Rename(string originalPath, string newPath) {
             var u = new Uri(newPath, UriKind.RelativeOrAbsolute);
             CloudBlobContainer c = GetContainerReference(ContainerName);
 
@@ -369,28 +334,23 @@ namespace AzureFtpServer.Provider {
             CloudBlob originalBlob = c.GetBlobReference(originalPath);
 
             // Check if the original path exists on the provider.
-            if (!CheckBlobExists(originalPath))
-            {
+            if (!CheckBlobExists(originalPath)) {
                 throw new FileNotFoundException("The path supplied does not exist on the storage provider.",
                                                 originalPath);
             }
 
             newBlob.CopyFromBlob(originalBlob);
 
-            try
-            {
+            try {
                 newBlob.FetchAttributes();
                 originalBlob.Delete();
                 return StorageOperationResult.Completed;
-            }
-            catch (StorageClientException e)
-            {
+            } catch (StorageClientException e) {
                 throw;
             }
         }
 
-        public void CreateDirectory(string path)
-        {
+        public void CreateDirectory(string path) {
             if (path.StartsWith("/"))
                 path = path.Remove(0, 1);
 
@@ -411,8 +371,7 @@ namespace AzureFtpServer.Provider {
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public bool IsValidPath(string path)
-        {
+        public bool IsValidPath(string path) {
             if (path != null)
                 if (path == "/")
                     return true;
@@ -425,16 +384,12 @@ namespace AzureFtpServer.Provider {
                 return true;
 
             CloudBlob b = c.GetBlobReference(path);
-            try
-            {
+            try {
                 b.FetchAttributes();
-            }
-            catch (StorageClientException ex)
-            {
+            } catch (StorageClientException ex) {
                 if (ex.ErrorCode == StorageErrorCode.ResourceNotFound)
                     return false;
-                else
-                {
+                else {
                     throw;
                 }
             }
@@ -451,8 +406,7 @@ namespace AzureFtpServer.Provider {
         /// </summary>
         /// <param name="path">The full URI to the stored object, including the filename.</param>
         /// <returns></returns>
-        private static string ExtractContainerName(String path)
-        {
+        private static string ExtractContainerName(String path) {
             return path.Split('/')[0].ToLower(); // Azure requires URI's in lowercase
         }
 
@@ -461,15 +415,13 @@ namespace AzureFtpServer.Provider {
         /// </summary>
         /// <param name="containerName">The container to retrieve.</param>
         /// <returns></returns>
-        private CloudBlobContainer GetContainerReference(string containerName)
-        {
+        private CloudBlobContainer GetContainerReference(string containerName) {
             // Put a reference to the container if one does not exist already
             CloudBlobContainer container = _blobClient.GetContainerReference(containerName);
             container.CreateIfNotExist();
 
             BlobContainerPermissions permissions = container.GetPermissions();
-            if (permissions.PublicAccess != BlobContainerPublicAccessType.Container)
-            {
+            if (permissions.PublicAccess != BlobContainerPublicAccessType.Container) {
                 permissions.PublicAccess = BlobContainerPublicAccessType.Container;
                 container.SetPermissions(permissions);
             }
@@ -482,23 +434,18 @@ namespace AzureFtpServer.Provider {
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns></returns>
-        private String ParsePath(String path)
-        {
+        private String ParsePath(String path) {
             if (!path.EndsWith("/"))
                 path += "/";
 
-            switch (path)
-            {
+            switch (path) {
                 case "/":
                     path = "";
                     break;
                 default:
-                    if (!path.EndsWith("/"))
-                    {
+                    if (!path.EndsWith("/")) {
                         path += "/";
-                    }
-                    else
-                    {
+                    } else {
                         path = path.Remove(0, 1);
                     }
 
@@ -515,14 +462,10 @@ namespace AzureFtpServer.Provider {
         /// </summary>
         /// <param name="u"></param>
         /// <returns></returns>
-        private string UriPathToString(Uri u)
-        {
-            if (u.IsAbsoluteUri)
-            {
+        private string UriPathToString(Uri u) {
+            if (u.IsAbsoluteUri) {
                 return u.PathAndQuery;
-            }
-            else
-            {
+            } else {
                 return u.ToString();
             }
         }
@@ -532,8 +475,7 @@ namespace AzureFtpServer.Provider {
         /// </summary>
         /// <param name="path">The path you want to strip</param>
         /// <returns></returns>
-        private string RemoveContainerName(string path)
-        {
+        private string RemoveContainerName(string path) {
             path = path.Replace(ContainerName + @"/", "");
             return path;
         }
@@ -546,12 +488,10 @@ namespace AzureFtpServer.Provider {
         /// Announce completion of PUT operation
         /// </summary>
         /// <param name="result"></param>
-        private void PutOperationCompleteCallback(IAsyncResult result)
-        {
-            var o = (Uri) result.AsyncState;
+        private void PutOperationCompleteCallback(IAsyncResult result) {
+            var o = (Uri)result.AsyncState;
             if (StorageProviderOperationCompleted == null) return;
-            var a = new StorageProviderEventArgs
-                        {Operation = StorageOperation.Put, Result = StorageOperationResult.Created};
+            var a = new StorageProviderEventArgs { Operation = StorageOperation.Put, Result = StorageOperationResult.Created };
 
             // Raise the event
             StorageProviderOperationCompleted(o, a);
@@ -561,13 +501,11 @@ namespace AzureFtpServer.Provider {
         /// Announce completion of a Delete operation.
         /// </summary>
         /// <param name="result"></param>
-        private void DeleteOperationCompleteCallback(IAsyncResult result)
-        {
-            var o = (Uri) result.AsyncState;
+        private void DeleteOperationCompleteCallback(IAsyncResult result) {
+            var o = (Uri)result.AsyncState;
 
             if (StorageProviderOperationCompleted == null) return;
-            var a = new StorageProviderEventArgs
-                        {Operation = StorageOperation.Delete, Result = StorageOperationResult.Deleted};
+            var a = new StorageProviderEventArgs { Operation = StorageOperation.Delete, Result = StorageOperationResult.Deleted };
             // Raise the event
             StorageProviderOperationCompleted(o, a);
         }

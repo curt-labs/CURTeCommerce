@@ -12,10 +12,14 @@
     <AssemblyName>eCommercePlatform</AssemblyName>
     <StartDevelopmentStorage>True</StartDevelopmentStorage>
     <Name>eCommercePlatform</Name>
-    <SccProjectName>SAK</SccProjectName>
-    <SccProvider>SAK</SccProvider>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccLocalPath>SAK</SccLocalPath>
+    <SccProjectName>
+    </SccProjectName>
+    <SccProvider>
+    </SccProvider>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccLocalPath>
+    </SccLocalPath>
     <UseIISExpressByDefault>False</UseIISExpressByDefault>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

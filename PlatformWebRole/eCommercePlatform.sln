@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "eCommercePlatform", "eCommercePlatform\eCommercePlatform.ccproj", "{45FDB16B-B611-4C79-AD0C-5E135ECE5327}"
+Project("{48B1769A-AADA-35A8-8DD7-B39A433C486A}") = "eCommercePlatform", "eCommercePlatform\eCommercePlatform.ccproj", "{45FDB16B-B611-4C79-AD0C-5E135ECE5327}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlatformWebRole", "MvcWebRole1\PlatformWebRole.csproj", "{836DBA86-BD2C-4F45-B3BD-4F8543FE2DD9}"
 EndProject
@@ -14,30 +14,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskScheduler", "TaskScheduler\TaskScheduler.csproj", "{37381F2C-6433-433D-BB80-E5B575A8934F}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://s-foundation:8080/tfs/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = eCommercePlatform\\eCommercePlatform.ccproj
-		SccProjectName1 = eCommercePlatform
-		SccLocalPath1 = eCommercePlatform
-		SccProjectUniqueName2 = MvcWebRole1\\PlatformWebRole.csproj
-		SccProjectName2 = MvcWebRole1
-		SccLocalPath2 = MvcWebRole1
-		SccProjectUniqueName3 = Admin\\Admin.csproj
-		SccProjectName3 = ../Admin/Admin
-		SccLocalPath3 = Admin
-		SccProjectUniqueName4 = AzureFtpServer\\AzureFtpServer.csproj
-		SccProjectName4 = AzureFtpServer
-		SccLocalPath4 = AzureFtpServer
-		SccProjectUniqueName5 = WorkerRole1\\FTPServerRole.csproj
-		SccProjectName5 = WorkerRole1
-		SccLocalPath5 = WorkerRole1
-		SccProjectUniqueName6 = TaskScheduler\\TaskScheduler.csproj
-		SccProjectName6 = TaskScheduler
-		SccLocalPath6 = TaskScheduler
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

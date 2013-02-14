@@ -6,14 +6,11 @@ using System.Data.Linq;
 using System;
 using System.Text;
 
-namespace AzureFtpServer.Azure
-{
-    public class AzureFileSystemFactory : IFileSystemClassFactory
-    {
+namespace AzureFtpServer.Azure {
+    public class AzureFileSystemFactory : IFileSystemClassFactory {
         #region Implementation of IFileSystemClassFactory
 
-        public IFileSystem Create(string sUser, string sPassword)
-        {
+        public IFileSystem Create(string sUser, string sPassword) {
             string containerName = "";
             // TODO: Put your authentication call here. Return NULL if authentication fails. Return an initialised AzureFileSystem() object if authentication is successful.
             // In the example below, to demonstrate, any username will work so long as the password == "test".
@@ -31,9 +28,9 @@ namespace AzureFtpServer.Azure
                 return null;
             };
 
-            #endregion  
+            #endregion
 
-            var system = new AzureFileSystem(sUser, sPassword, containerName, Modes.Development);
+            IFileSystem system = new AzureFTP.AzureFileSystem(sUser, sPassword, containerName);
             return system;
         }
 

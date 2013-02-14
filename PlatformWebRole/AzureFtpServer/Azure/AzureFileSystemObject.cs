@@ -4,21 +4,18 @@ using System.Linq;
 using AzureFtpServer.Ftp.FileSystem;
 using AzureFtpServer.Provider;
 
-namespace AzureFtpServer.Azure
-{
-    public class AzureFileSystem : IFileSystem
-    {
-       private readonly AzureBlobStorageProvider _provider;
+namespace AzureFtpServer.Azure {
+    public class AzureFileSystem : IFileSystem {
+        private readonly AzureBlobStorageProvider _provider;
         private String _containerName;
         private String _password;
         private String _userName;
 
         // Constructor
-        public AzureFileSystem(String userName, String password, String containerName, Modes mode)
-        {
+        public AzureFileSystem(String userName, String password, String containerName, Modes mode) {
             _userName = userName;
             _password = password;
-            
+
             // Set container name (if none specified, specify the development container default)
             _containerName = !String.IsNullOrEmpty(containerName) ? containerName : "DevelopmentContainer";
             _provider = new AzureBlobStorageProvider(containerName);
@@ -26,35 +23,33 @@ namespace AzureFtpServer.Azure
 
         #region Implementation of IFileSystem
 
-        public IFile OpenFile(string sPath, bool fWrite)
-        {
+        public IFile OpenFile(string sPath, bool fWrite) {
             sPath = PreparePath(sPath);
             var f = new AzureFile();
             try {
                 AzureCloudFile file = _provider.Get(sPath, true);
                 f.Load(file.Data);
-            } catch { };
-            return f;
+                return f;
+            } catch (Exception e) {
+                return f;
+            };
         }
 
-        public IFileInfo GetFileInfo(string sPath)
-        {
+        public IFileInfo GetFileInfo(string sPath) {
             sPath = PreparePath(sPath);
             AzureCloudFile file = _provider.Get(sPath, false);
-            var info = new AzureFileInfo((AzureCloudFile) file, _provider);
+            var info = new AzureFileInfo((AzureCloudFile)file, _provider);
             return info;
         }
 
-        public string[] GetFiles(string sPath)
-        {
+        public string[] GetFiles(string sPath) {
             sPath = PreparePath(sPath);
             CloudFileCollection files = _provider.GetFileListing(sPath);
             string[] result = files.Select(r => r.Uri.ToString()).ToArray().ToFtpPath();
             return result;
         }
 
-        public string[] GetFiles(string sPath, string sWildcard)
-        {
+        public string[] GetFiles(string sPath, string sWildcard) {
             sPath = PreparePath(sPath);
             CloudFileCollection files = _provider.GetFileListing(sPath);
             IEnumerable<string> result = (from f in files
@@ -64,15 +59,13 @@ namespace AzureFtpServer.Azure
             return r;
         }
 
-        public string[] GetDirectories(string sPath)
-        {
+        public string[] GetDirectories(string sPath) {
             sPath = PreparePath(sPath);
             CloudDirectoryCollection directories = _provider.GetDirectoryListing(sPath);
             return directories.Select(r => r.Path).ToArray().ToFtpPath();
         }
 
-        public string[] GetDirectories(string sPath, string sWildcard)
-        {
+        public string[] GetDirectories(string sPath, string sWildcard) {
             sPath = PreparePath(sPath);
             CloudDirectoryCollection directories = _provider.GetDirectoryListing(sPath);
             IEnumerable<CloudDirectory> result = (from dir in directories
@@ -83,37 +76,32 @@ namespace AzureFtpServer.Azure
             return directories.Select(r => r.Path).ToArray().ToFtpPath();
         }
 
-        public bool DirectoryExists(string sPath)
-        {
+        public bool DirectoryExists(string sPath) {
             sPath = PreparePath(sPath);
             return _provider.IsValidPath(sPath);
         }
 
-        public bool FileExists(string sPath)
-        {
+        public bool FileExists(string sPath) {
             sPath = PreparePath(sPath);
             return _provider.CheckBlobExists(sPath);
         }
 
-        public bool CreateDirectory(string sPath)
-        {
+        public bool CreateDirectory(string sPath) {
             sPath = PreparePath(sPath);
             _provider.CreateDirectory(sPath);
             return true;
         }
 
-        public bool Move(string sOldPath, string sNewPath)
-        {
+        public bool Move(string sOldPath, string sNewPath) {
             sOldPath = PreparePath(sOldPath);
             sNewPath = PreparePath(sNewPath);
 
             return _provider.Rename(sOldPath, sNewPath) == StorageOperationResult.Completed;
         }
 
-        public bool Delete(string sPath)
-        {
+        public bool Delete(string sPath) {
             sPath = PreparePath(sPath);
-            _provider.Delete(new AzureCloudFile {Uri = new Uri(sPath, UriKind.RelativeOrAbsolute)});
+            _provider.Delete(new AzureCloudFile { Uri = new Uri(sPath, UriKind.RelativeOrAbsolute) });
             return true;
         }
 
@@ -121,14 +109,12 @@ namespace AzureFtpServer.Azure
 
         #region IFileSystem Members
 
-        public bool Put(string sPath, IFile oFile)
-        {
-            var f = new AzureCloudFile
-                        {
-                            Uri = new Uri(sPath, UriKind.RelativeOrAbsolute),
-                            Data = oFile.File.ToArray(),
-                            Size = oFile.File.Length
-                        };
+        public bool Put(string sPath, IFile oFile) {
+            var f = new AzureCloudFile {
+                Uri = new Uri(sPath, UriKind.RelativeOrAbsolute),
+                Data = oFile.File.ToArray(),
+                Size = oFile.File.Length
+            };
 
             _provider.Put(f);
             return true;
@@ -141,8 +127,7 @@ namespace AzureFtpServer.Azure
         /// </summary>
         /// <param name="sPath">The path from the FTP provider</param>
         /// <returns></returns>
-        private static String PreparePath(String sPath)
-        {
+        private static String PreparePath(String sPath) {
             sPath = sPath.Replace(@"\", @"/");
             return sPath;
         }
