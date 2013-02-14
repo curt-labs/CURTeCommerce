@@ -33,6 +33,7 @@ namespace EcommercePlatform.Controllers {
         [RequireHttps]
         public ActionResult Checkout() {
             // start checkout process here
+            // one page checkout form followed by shipping type
             Customer customer = ViewBag.customer;
             customer.GetFromStorage();
             if (customer.Cart.payment_id == 0) {
