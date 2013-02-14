@@ -1,0 +1,30 @@
+﻿@{
+    List<Admin.Country> countries = ViewBag.countries ?? new List<Admin.Country>();
+    
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/taxes.manager.css" rel="stylesheet" type="text/css" />
+<span class="title">Regions / Taxes</span>
+<p>Tax Rates are in percentages (i.e. 5.25%)</p>
+
+@foreach (Admin.Country country in countries) {
+    <h2>@country.name</h2>
+    <table class="taxProvinces">
+        <thead>
+            <tr><th>State / Province</th><th>Tax Rate (%)</th><th>Hide from Shipping</th><th></th></tr>
+        </thead>
+        <tbody>
+        @foreach (Admin.State state in country.getProvinces()) {
+            <tr id="state-@state.stateID">
+                <td>@state.state1</td>
+                <td><input type="number" id="staterate-@state.stateID" data-id="@state.stateID" step=".1" value="@state.taxRate" /></td>
+                <td><input type="checkbox" id="statehidden-@state.stateID" data-id="@state.stateID" value="true" @((state.hide) ? "checked=checked" : "" ) /></td>
+                <td><button type="button" class="setStateRate" data-id="@state.stateID">Save</button></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+<script type="text/javascript" src="/Admin/Scripts/custom/taxes.manager.js"></script>

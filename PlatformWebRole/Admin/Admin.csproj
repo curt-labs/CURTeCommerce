@@ -126,7 +126,7 @@
     <Compile Include="Controllers\ContactManagerController.cs" />
     <Compile Include="Controllers\ContentManagerController.cs" />
     <Compile Include="Controllers\FTPController.cs" />
-    <Compile Include="Controllers\TaxesController.cs" />
+    <Compile Include="Controllers\RegionsController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\SchedulerController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -820,7 +820,7 @@
     <Content Include="Views\Scheduler\Index.cshtml" />
     <Content Include="Views\Invoice\Index.cshtml" />
     <Content Include="Views\Invoice\Details.cshtml" />
-    <Content Include="Views\Taxes\Index.cshtml" />
+    <Content Include="Views\Regions\Index.cshtml" />
     <Content Include="Views\Invoice\List.cshtml" />
     <Content Include="Views\Invoice\Print.cshtml" />
     <Content Include="Views\Invoice\UnPrinted.cshtml" />

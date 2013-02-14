@@ -152,10 +152,10 @@
         <elementListCompartment Id="33d957c9-233e-4ef0-b36d-1a29588f9a1c" absoluteBounds="3.7650000000000006, 9.585, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="b84cf04e-924c-430d-8586-df27e978a780" absoluteBounds="3.75, 3, 2, 1.7708968098958327">
+    <classShape Id="b84cf04e-924c-430d-8586-df27e978a780" absoluteBounds="3.75, 3, 2, 1.9631982421874996">
       <DataClassMoniker Name="/EcommercePlatformDataContext/State" />
       <nestedChildShapes>
-        <elementListCompartment Id="83c2b103-f9d0-4035-b5d8-1395a16b1241" absoluteBounds="3.7650000000000006, 3.46, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="83c2b103-f9d0-4035-b5d8-1395a16b1241" absoluteBounds="3.7650000000000006, 3.46, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
     <associationConnector edgePoints="[(18.75 : 2.82859537760417); (18.75 : 3.25)]" fixedFrom="NotFixed" fixedTo="NotFixed">
@@ -179,7 +179,7 @@
         <classShapeMoniker Id="7f5e73e4-d82e-44ed-bc46-c38c47141db8" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(4.75 : 2.57859537760417); (4.75 : 3)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(4.75 : 2.57859537760417); (4.75 : 3)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/EcommercePlatformDataContext/Country/Country_State" />
       <nodes>
         <classShapeMoniker Id="1564fd49-9aab-4adf-8d71-66961c9cedba" />
@@ -200,14 +200,14 @@
         <classShapeMoniker Id="fd12a081-446e-4f7c-9970-6734c04fed4b" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.75 : 3.52485270182292); (6.5 : 3.52485270182292)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(5.75 : 3.52485270182292); (6.5 : 3.52485270182292)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/EcommercePlatformDataContext/State/State_Address" />
       <nodes>
         <classShapeMoniker Id="b84cf04e-924c-430d-8586-df27e978a780" />
         <classShapeMoniker Id="f0714c8d-08cb-4817-8098-082555167196" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(6.5 : 4.875); (6.125 : 4.5); (6.125 : 5.14589680989583); (5.75 : 4.77089680989583)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(6.5 : 4.875); (6.125 : 4.5); (6.125 : 5.3381982421875); (5.75 : 4.9631982421875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/EcommercePlatformDataContext/Location/Location_State" />
       <nodes>
         <classShapeMoniker Id="efe38510-71f5-40df-8ba7-edccddd5c17f" />
@@ -228,14 +228,14 @@
         <classShapeMoniker Id="be9c445d-72b4-4eda-8f27-f0ef636806df" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(8.5 : 2.58735270182292); (8.79166666666667 : 2.58735270182292 : JumpStart); (8.95833333333333 : 2.58735270182292 : JumpEnd); (9.375 : 2.58735270182292)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(8.5 : 2.58735270182292); (9.375 : 2.58735270182292)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/EcommercePlatformDataContext/Address/Address_Customer" />
       <nodes>
         <classShapeMoniker Id="f0714c8d-08cb-4817-8098-082555167196" />
         <classShapeMoniker Id="e84d5b3f-cc7c-4eb5-a70f-3d68a84d2973" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(8.5 : 1.79367635091146); (8.79166666666667 : 1.79367635091146 : JumpStart); (8.95833333333333 : 1.79367635091146 : JumpEnd); (9.375 : 1.79367635091146)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(8.5 : 1.79367635091146); (8.79166666666667 : 1.79367635091146 : JumpStart); (8.95833333333333 : 1.79367635091146 : JumpEnd); (9.04166666666667 : 1.79367635091146 : JumpStart); (9.20833333333333 : 1.79367635091146 : JumpEnd); (9.375 : 1.79367635091146)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/EcommercePlatformDataContext/Address/Address_Customer1" />
       <nodes>
         <classShapeMoniker Id="f0714c8d-08cb-4817-8098-082555167196" />
@@ -297,7 +297,7 @@
         <elementListCompartment Id="5fb7d023-7302-4f6d-83ee-ab7e97792970" absoluteBounds="3.7649999999999997, 5.96, 1.9700000000000002, 2.5570068359375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(4.7187475 : 4.77089680989583); (4.7187475 : 5.5)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(4.7187475 : 4.9631982421875); (4.7187475 : 5.5)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/EcommercePlatformDataContext/State/State_DistributionCenter" />
       <nodes>
         <classShapeMoniker Id="b84cf04e-924c-430d-8586-df27e978a780" />
@@ -310,7 +310,7 @@
         <elementListCompartment Id="841b750d-5edb-41e5-946b-f856e83b2bce" absoluteBounds="9.89, 12.96, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(8.5 : 2.58735270182292); (8.79166666666667 : 2.58735270182292 : JumpStart); (8.95833333333333 : 2.58735270182292 : JumpEnd); (9.125 : 2.58735270182292); (9.125 : 0.875); (12.5104146666667 : 0.874999999999999 : JumpStart); (12.6770813333333 : 0.875 : JumpEnd); (13.125 : 0.875); (13.125 : 1.375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(8.5 : 2.58735270182292); (9.125 : 2.58735270182292); (9.125 : 0.875); (13.125 : 0.875); (13.125 : 1.375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/EcommercePlatformDataContext/Address/Address_Cart" />
       <nodes>
         <classShapeMoniker Id="f0714c8d-08cb-4817-8098-082555167196" />

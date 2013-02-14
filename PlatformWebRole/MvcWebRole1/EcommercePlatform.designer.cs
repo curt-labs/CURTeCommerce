@@ -5817,6 +5817,8 @@ namespace EcommercePlatform
 		
 		private decimal _taxRate;
 		
+		private bool _hide;
+		
 		private EntitySet<Address> _Addresses;
 		
 		private EntitySet<DistributionCenter> _DistributionCenters;
@@ -5837,6 +5839,8 @@ namespace EcommercePlatform
     partial void OncountryIDChanged();
     partial void OntaxRateChanging(decimal value);
     partial void OntaxRateChanged();
+    partial void OnhideChanging(bool value);
+    partial void OnhideChanged();
     #endregion
 		
 		public State()
@@ -5947,6 +5951,26 @@ namespace EcommercePlatform
 					this._taxRate = value;
 					this.SendPropertyChanged("taxRate");
 					this.OntaxRateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_hide", DbType="Bit NOT NULL")]
+		public bool hide
+		{
+			get
+			{
+				return this._hide;
+			}
+			set
+			{
+				if ((this._hide != value))
+				{
+					this.OnhideChanging(value);
+					this.SendPropertyChanging();
+					this._hide = value;
+					this.SendPropertyChanged("hide");
+					this.OnhideChanged();
 				}
 			}
 		}

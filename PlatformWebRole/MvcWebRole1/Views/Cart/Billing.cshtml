@@ -1,26 +1,9 @@
 ﻿@{
-    EcommercePlatform.ContentPage page = ViewBag.page;
-    if (page == null) {
-        page = new EcommercePlatform.ContentPage();
-    }
+    EcommercePlatform.ContentPage page = ViewBag.page ?? new EcommercePlatform.ContentPage();
     ViewBag.Title = "Choose Billing";
-    EcommercePlatform.Customer cust = ViewBag.customer;
-    if (cust == null) {
-        cust = new EcommercePlatform.Customer();
-    }
-
-    List<EcommercePlatform.Country> countries = ViewBag.countries;
-    if (countries == null) {
-        countries = new List<EcommercePlatform.Country>();
-    }
-
-    List<EcommercePlatform.Address> addresses = ViewBag.addresses;
-    if (addresses == null) {
-        addresses = new List<EcommercePlatform.Address>();
-    }
-
+    EcommercePlatform.Customer cust = ViewBag.customer ?? new EcommercePlatform.Customer();
+    List<EcommercePlatform.Country> countries = ViewBag.countries ?? new List<EcommercePlatform.Country>();
     Layout = "~/Views/Shared/_Layout.cshtml";
-    int quebec = 59;
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
 <link href="@settings.Get("PathToCSS")/css/cart.css" rel="stylesheet" type="text/css" />
@@ -88,7 +71,7 @@
                                 @foreach (EcommercePlatform.Country country in countries) {
                                     <optgroup label="@country.name">
                                         @foreach (EcommercePlatform.State state in country.getProvinces()) {
-                                            if (state.stateID != quebec) {
+                                            if (!state.hide) {
                                                 <option value="@state.stateID">@(String.Format("{0} - {1}", state.abbr, state.state1))</option>
                                             }
                                         }

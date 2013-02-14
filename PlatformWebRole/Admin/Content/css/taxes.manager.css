@@ -26,31 +26,31 @@ section a.button{
     line-height:45px;
 }
 
-ul.taxProvinces li {
-	list-style: none;
-	padding: 5px 15px;
+table.taxProvinces {
+    margin-left: 20px;
+    width: 70%;
 }
 
-ul.taxProvinces li:nth-child(odd) {
+table.taxProvinces th {
+    text-align: left;
+}
+
+table.taxProvinces th, table.taxProvinces td {
+	padding: 5px 15px;
+	vertical-align: middle;
+}
+
+table.taxProvinces tbody tr:nth-child(odd) {
     background-color: #eee;    
 }
 
-ul.taxProvinces li label {
-	display: inline-block;
-	margin-bottom: 0px;
-}
-ul.taxProvinces li label span {
-    display: inline-block;
-    width: 200px;
-}
-
-ul.taxProvinces li label input {
+table.taxProvinces tbody td input[type='number'] {
     display: inline-block;
     width: 70px;
     margin-bottom: 0px;
 }
 
-ul.taxProvinces li button.setStateRate {
+table.taxProvinces tbody button.setStateRate {
     display: inline-block;
     background: #BF3504;
     border: 2px solid #C63707;

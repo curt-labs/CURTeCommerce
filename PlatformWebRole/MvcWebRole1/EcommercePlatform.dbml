@@ -272,6 +272,7 @@
       <Column Name="abbr" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
       <Column Name="countryID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="taxRate" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="hide" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="State_Address" Member="Addresses" AccessModifier="Internal" ThisKey="stateID" OtherKey="state" Type="Address" />
       <Association Name="State_DistributionCenter" Member="DistributionCenters" AccessModifier="Internal" ThisKey="stateID" OtherKey="State" Type="DistributionCenter" />
       <Association Name="Country_State" Member="Country" ThisKey="countryID" OtherKey="ID" Type="Country" IsForeignKey="true" />

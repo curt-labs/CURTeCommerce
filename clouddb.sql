@@ -24,6 +24,7 @@ CREATE TABLE [dbo].[States](
 	[abbr] [varchar](3) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[countryID] [int] NOT NULL,
 	[taxRate] [decimal](18, 2) NOT NULL,
+	[hide] [bit] NOT NULL DEFAULT(0),
  CONSTRAINT [PK_States] PRIMARY KEY CLUSTERED 
 (
 	[stateID] ASC
@@ -677,7 +678,7 @@ CREATE TABLE [dbo].[Locations](
 	[address] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[city] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[stateID] [int] NOT NULL,
-	[zip] [int] NULL,
+	[zip] [varchar](20) NULL,
 	[isPrimary] [int] NOT NULL,
 	[latitude] [decimal](18, 8) NOT NULL,
 	[longitude] [decimal](18, 8) NOT NULL,
@@ -813,6 +814,7 @@ CREATE TABLE [dbo].[Profile](
 	[date_added] [datetime] NULL,
 	[image] [varchar](200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[bio] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[timezone] [varchar](100) NOT NULL DEFAULT ('UTC'),
  CONSTRAINT [PK_Profile] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC

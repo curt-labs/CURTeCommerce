@@ -54,16 +54,17 @@ namespace EcommercePlatform.Controllers {
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
 
-            if (!customer.LoggedIn()) {
+            /*if (!customer.LoggedIn()) {
                 return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout", checkout = 1 });
-            }
+            }*/
 
             if (customer.Cart.payment_id == 0) {
-                customer.BindAddresses();
+                if (customer.LoggedIn()) {
+                    customer.BindAddresses();
 
-                List<Address> addresses = customer.GetAddresses();
-                ViewBag.addresses = addresses;
-
+                    List<Address> addresses = customer.GetAddresses();
+                    ViewBag.addresses = addresses;
+                }
                 List<Country> countries = UDF.GetCountries();
                 ViewBag.countries = countries;
 
@@ -88,16 +89,18 @@ namespace EcommercePlatform.Controllers {
             ContentPage page = ContentManagement.GetPageByTitle("shipping");
             ViewBag.page = page;
 
-            if (!customer.LoggedIn()) {
+            /*if (!customer.LoggedIn()) {
                 return RedirectToAction("Index", "Authenticate");
-            }
+            }*/
 
             if (customer.Cart.payment_id == 0) {
-                customer.BindAddresses();
+                if (customer.LoggedIn()) {
+                    customer.BindAddresses();
 
-                List<Address> addresses = customer.GetAddresses();
-                List<Address> shippingaddresses = addresses.Where(x => !x.isPOBox()).ToList<Address>();
-                ViewBag.addresses = shippingaddresses;
+                    List<Address> addresses = customer.GetAddresses();
+                    List<Address> shippingaddresses = addresses.Where(x => !x.isPOBox()).ToList<Address>();
+                    ViewBag.addresses = shippingaddresses;
+                }
 
                 List<Country> countries = UDF.GetCountries();
                 ViewBag.countries = countries;

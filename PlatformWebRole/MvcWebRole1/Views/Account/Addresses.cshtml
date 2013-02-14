@@ -4,7 +4,6 @@
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
     List<EcommercePlatform.Address> addresses = ViewBag.addresses ?? new List<EcommercePlatform.Address>();
     List<EcommercePlatform.Country> countries = ViewBag.countries ?? new List<EcommercePlatform.Country>();
-    int quebec = 59;
 
     ViewBag.Title = "Addresses";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -98,7 +97,7 @@
                             @foreach (EcommercePlatform.Country country in countries) {
                                 <optgroup label="@country.name">
                                     @foreach (EcommercePlatform.State state in country.getProvinces()) {
-                                        if (state.stateID != quebec) {
+                                        if (!state.hide) {
                                             <option value="@state.stateID">@(String.Format("{0} - {1}", state.abbr, state.state1))</option>
                                         }
                                     }
