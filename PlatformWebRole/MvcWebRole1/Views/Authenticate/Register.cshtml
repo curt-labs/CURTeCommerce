@@ -1,0 +1,20 @@
+﻿@{
+    string error = ViewBag.error ?? "";
+    ViewBag.setup = true;
+    ViewBag.Title = "Login";
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="@settings.Get("PathToCSS")/css/auth.css" rel="stylesheet" type="text/css" />
+@if(error.Length > 0){
+    <p class="error">@Html.Raw(error)</p>
+}
+
+<h2>Sign Up for an Account</h2>
+<div class="left">
+    <p>To Sign up, please fill out the form below.  You will receive a confirmation e-mail after you have submitted the form.</p>
+    @Html.Partial("_RegistrationForm")
+</div>
+<div class="clearfix"></div>
+
+<script defer src="/Scripts/custom/auth.js" type="text/javascript"></script>

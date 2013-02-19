@@ -36,16 +36,157 @@ namespace EcommercePlatform.Controllers {
             // one page checkout form followed by shipping type
             Customer customer = ViewBag.customer;
             customer.GetFromStorage();
-            if (customer.Cart.payment_id == 0) {
-                return RedirectToAction("Billing", new { checkout = 1 });
-            } else {
+            if (customer.Cart.payment_id != 0) {
+                // cart gets expired
                 UDF.ExpireCart(customer.ID);
                 return RedirectToAction("Index");
+            }
+            bool same = true;
+
+            Address billing = new Address();
+            Address shipping = new Address();
+            
+            if (customer.LoggedIn()) {
+                customer.BindAddresses();
+                billing = (customer.billingID != 0) ? customer.Address : new Address();
+                shipping = (customer.shippingID != 0) ? customer.Address1 : new Address();
+            }
+            try {
+                customer = (Customer)TempData["customer"];
+                billing = (Address)TempData["billing"];
+                shipping = (Address)TempData["customer"];
+                same = (bool)TempData["same"];
+            } catch (Exception) { }
+
+            ViewBag.billing = billing;
+            ViewBag.shipping = shipping;
+            List<Country> countries = UDF.GetCountries();
+            ViewBag.countries = countries;
+            ViewBag.same = same;
+            ViewBag.error = TempData["error"];
+
+            return View();
+        }
+
+        [RequireHttps]
+        public ActionResult Proceed() {
+            Customer cust = ViewBag.customer;
+            cust.GetFromStorage();
+            Cart cart = cust.Cart;
+
+            Settings settings = ViewBag.settings;
+            Address billing = new Address();
+            Address shipping = new Address();
+            bool sameAsBilling = (Request.Form["same"] != null) ? true : false;
+            string email = Request.Form["email"] ?? "";
+            try {
+                #region Get Or Create Customer
+                // Build out our Customer object
+                cust = cust.GetCustomerByEmail(email);
+                if (cust == null || cust.ID == 0) {
+                    cust = new Customer {
+                        email = Request.Form["email"],
+                        fname = Request.Form["fname"],
+                        lname = Request.Form["lname"],
+                        phone = Request.Form["phone"],
+                        password = UDF.EncryptString(new PasswordGenerator().Generate()),
+                        dateAdded = DateTime.UtcNow,
+                        isSuspended = 0,
+                        isValidated = 0,
+                        receiveNewsletter = (Request.Form["receiveNewsletter"] != null) ? 1 : 0,
+                        receiveOffers = (Request.Form["receiveOffers"] != null) ? 1 : 0,
+                        validator = Guid.NewGuid()
+                    };
+                    cust.ValidateEmail(Request.Form["email"], Request.Form["email"]);
+                    string[] nullables = new string[] { "phone", "issuspended", "receivenewsletter", "receiveoffers", "isvalidated", "billingid", "shippingid", "Address", "Address1", "cart", "id", "orders" };
+                    UDF.Sanitize(cust, nullables);
+                    cust.Save();
+                }
+                cart.UpdateCart(cust.ID);
+                #endregion
+
+                #region Address Initialization
+                // Build out our Billing object
+                billing = new Address {
+                    first = Request.Form["bfirst"],
+                    last = Request.Form["blast"],
+                    street1 = Request.Form["bstreet1"],
+                    street2 = Request.Form["bstreet2"],
+                    city = Request.Form["bcity"],
+                    postal_code = Request.Form["bzip"],
+                    residential = (Request.Form["bresidential"] == null) ? false : true,
+                    cust_id = cust.ID,
+                    active = true
+                };
+
+                // Build out our Shipping object
+                shipping = new Address {
+                    first = Request.Form["sfirst"],
+                    last = Request.Form["slast"],
+                    street1 = Request.Form["sstreet1"],
+                    street2 = Request.Form["sstreet2"],
+                    city = Request.Form["scity"],
+                    postal_code = Request.Form["szip"],
+                    residential = (Request.Form["sresidential"] == null) ? false : true,
+                    cust_id = cust.ID,
+                    active = true
+                };
+                #endregion
+
+
+                #region Address state validation
+                // Validate billing state
+                try {
+                    billing.state = Convert.ToInt32(Request.Form["bstate"]);
+                } catch (Exception) {
+                    throw new Exception("You must select a billing state/province.");
+                }
+                // Validate shipping state
+                if (!sameAsBilling || !billing.Equals(shipping)) {
+                    try {
+                        shipping.state = Convert.ToInt32(Request.Form["sstate"]);
+                    } catch (Exception) {
+                        throw new Exception("You must select a shipping state/province.");
+                    }
+                }
+                #endregion
+
+                #region Get Or Create Address in Database
+                billing.cust_id = cust.ID;
+                shipping.cust_id = cust.ID;
+                billing.MatchOrSave();
+                if (sameAsBilling || billing.Equals(shipping)) {
+                    shipping = billing;
+                } else {
+                    shipping.MatchOrSave();
+                }
+                if (cust.billingID == 0 || cust.shippingID == 0) {
+                    cust.SaveAddresses(billing, shipping);
+                }
+                #endregion
+                cart.SetBilling(billing.ID);
+                cart.SetShipping(shipping.ID);
+                cart.BindAddresses();
+                if (cart.Shipping.isPOBox()) {
+                    throw new Exception("Your Shipping address cannot be a PO Box.");
+                }
+
+                return RedirectToAction("Shipping");
+            } catch (Exception e) {
+                if (e.Message.ToLower().Contains("a potentially dangerous")) {
+                    throw new HttpException(403, "Forbidden");
+                }
+                TempData["customer"] = cust;
+                TempData["billing"] = billing;
+                TempData["shipping"] = shipping;
+                TempData["same"] = sameAsBilling;
+                TempData["error"] = e.Message + ' ' + e.StackTrace;
+                return RedirectToAction("Checkout");
             }
         }
 
         [RequireHttps]
-        public ActionResult Billing(int checkout = 0) {
+        public ActionResult Billing() {
             // Create Customer
             Customer customer = ViewBag.customer;
 
@@ -91,25 +232,12 @@ namespace EcommercePlatform.Controllers {
             ContentPage page = ContentManagement.GetPageByTitle("shipping");
             ViewBag.page = page;
 
-            /*if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate");
-            }*/
-
             if (customer.Cart.payment_id == 0) {
-                if (customer.LoggedIn()) {
-                    customer.BindAddresses();
-
-                    List<Address> addresses = customer.GetAddresses();
-                    List<Address> shippingaddresses = addresses.Where(x => !x.isPOBox()).ToList<Address>();
-                    ViewBag.addresses = shippingaddresses;
+                if (!customer.LoggedIn()) {
+                    TempData["error"] = "Please fill out the required fields.";
+                    return RedirectToAction("Checkout");
                 }
-
-                List<Country> countries = UDF.GetCountries();
-                ViewBag.countries = countries;
-
-                if (customer.Cart.ship_to == 0 && customer.Cart.bill_to != 0 && !customer.Cart.Billing.isPOBox()) {
-                    RedirectToAction("ChooseShipping", new { id = customer.Cart.bill_to });
-                }
+                customer.BindAddresses();
 
                 ShippingResponse shippingresponse = new ShippingResponse();
                 if (customer.Cart.ship_to != 0 && !customer.Cart.Shipping.isPOBox()) {
@@ -243,7 +371,6 @@ namespace EcommercePlatform.Controllers {
             if (!customer.LoggedIn()) {
                 return RedirectToAction("Index", "Authenticate");
             }
-
 
             if (customer.Cart.payment_id == 0) {
                 if (customer.billingID == 0) {
@@ -460,10 +587,8 @@ namespace EcommercePlatform.Controllers {
 
                     if (customer.Cart.Validate()) {
                         return RedirectToAction("Index", "Payment");
-                    } else if (customer.Cart.bill_to == 0) {
-                        return RedirectToAction("Billing");
-                    } else if (customer.Cart.ship_to == 0) {
-                        return RedirectToAction("Shipping");
+                    } else if (customer.Cart.bill_to == 0 || customer.Cart.ship_to == 0) {
+                        return RedirectToAction("Checkout");
                     } else {
                         return RedirectToAction("Index");
                     }

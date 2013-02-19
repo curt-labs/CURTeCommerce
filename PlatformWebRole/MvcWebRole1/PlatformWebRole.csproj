@@ -533,7 +533,7 @@
     <Content Include="Views\Blog\ViewCategory.cshtml" />
     <Content Include="Views\Blog\ViewPost.cshtml" />
     <Content Include="Views\Blog\_BlogNavigation.cshtml" />
-    <Content Include="Views\Cart\Billing.cshtml" />
+    <Content Include="Views\Cart\Checkout.cshtml" />
     <Content Include="Views\Cart\Index.cshtml" />
     <Content Include="Views\Categories\Index.cshtml" />
     <Content Include="Views\Categories\Parts.cshtml" />
@@ -559,7 +559,7 @@
     <Content Include="Views\Testimonials\Add.cshtml" />
     <Content Include="Views\Testimonials\Index.cshtml" />
     <Content Include="Views\Shared\_Cart.cshtml" />
-    <Content Include="Views\Shared\_CustomerForm.cshtml" />
+    <Content Include="Views\Shared\_RegistrationForm.cshtml" />
     <Content Include="Views\Shared\_PartListing.cshtml" />
     <None Include="EcommercePlatform.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
@@ -570,6 +570,13 @@
     <Content Include="Views\Account\Addresses.cshtml" />
     <Content Include="Views\_404\Http404.cshtml" />
     <Content Include="Views\Account\Password.cshtml" />
+    <Content Include="Scripts\custom\auth.min.js.map">
+      <DependentUpon>auth.js</DependentUpon>
+    </Content>
+    <Content Include="Views\Authenticate\Register.cshtml" />
+    <Content Include="Scripts\custom\checkout.min.js.map">
+      <DependentUpon>checkout.js</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

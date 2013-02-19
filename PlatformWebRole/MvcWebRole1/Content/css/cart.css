@@ -1,4 +1,30 @@
-﻿table#cart {
+﻿#customer_form {
+    width: 435px;
+}
+label[for=same], label[for=bresidential], label[for=sresidential], label[for=remember], label[for=receiveOffers], label[for=receiveNewsletter]{
+    margin-top: 15px;
+    margin-bottom: 10px;
+    min-height: 25px;
+}
+
+label[for=remember]{
+   min-height:15px;
+}
+
+label[for=same] input, label[for=bresidential] input, label[for=sresidential] input, label[for=remember] input, label[for=receiveOffers] input, label[for=receiveNewsletter] input{
+    display:inline;
+    vertical-align: middle;
+    margin-right: 10px;
+    width: auto;
+}
+label[for=receiveOffers] span, label[for=receiveNewsletter] span{
+    display:block;
+    float:left;
+    width: 300px;   
+}
+label[for=receiveOffers] input, label[for=receiveNewsletter] input{ float:right }
+
+table#cart {
     width: 100%;
     margin-bottom: 20px;
 }

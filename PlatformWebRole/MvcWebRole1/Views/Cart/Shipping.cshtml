@@ -2,8 +2,6 @@
     EcommercePlatform.ContentPage page = ViewBag.page ?? new EcommercePlatform.ContentPage();
     ViewBag.Title = "Choose Shipping";
     EcommercePlatform.Customer cust = ViewBag.customer ?? new EcommercePlatform.Customer();
-    List<EcommercePlatform.Country> countries = ViewBag.countries ?? new List<EcommercePlatform.Country>();
-    List<EcommercePlatform.Address> addresses = ViewBag.addresses ?? new List<EcommercePlatform.Address>();
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
     List<string> freeshippingtypes = settings.Get("FreeShippingType").Split(',').ToList<string>();
 
@@ -21,10 +19,10 @@
 
     <ul class="tabs nojs">
         <li>
-            <a href="/Cart/Billing" title="Billing Information">Billing</a>
+            <a href="/Cart/Checkout" title="Customer Information">Customer Information</a>
         </li>
         <li>
-            <a href="/Cart/Shipping" title="Shipping Information" class="active">Shipping</a>
+            <a href="/Cart/Shipping" title="Shipping Information" class="active">Choose Shipping Type</a>
         </li>
     </ul>
     <div class="tab_container">
@@ -69,108 +67,15 @@
                                 } else if (shippingresponse.Status == "ERROR") {
                                     <p>There was a problem with FedEx: @shippingresponse.Status_Description</p>
                                 } else {
-                                        <p>There was a problem with FedEx. Please try again.</p>
+                                    <p>There was a problem with FedEx. Please try again.</p>
                                 }
                             </fieldset>
                         </form>
                     </div>
                 }
-                <form class="simple-form @((cust.Cart.ship_to != 0) ? "hideme" : "")" id="add-shipping-address" method="post" action="/Cart/AddShippingAddress">
-                    <fieldset>
-                        <legend>Add a Shipping Address</legend>
-                        <label for="sfirst">
-                            Shipping First Name
-                            <input type="text" name="sfirst" id="sfirst" class="placeholder" placeholder="Enter the shipping first name" required="required" title="First Name on shipping address is required" value="@cust.fname" />
-                        </label>
-
-                        <label for="slast">
-                            Shipping Last Name
-                            <input type="text" name="slast" id="slast" class="placeholder" placeholder="Enter the shipping last name" required="required" title="Last Name on shipping address is required" value="@cust.lname" />
-                        </label>
-
-                        <label for="sstreet1">
-                            Shipping Street 1
-                            <input type="text" name="sstreet1" id="sstreet1" class="placeholder" placeholder="Enter the shipping street" required="required" title="Shipping street is required" />
-                        </label>
-                        <label for="sstreet2">
-                            Shipping Street 2
-                            <input type="text" name="sstreet2" id="sstreet2" class="placeholder" placeholder="Enter additional info for shipping street" />
-                        </label>
-
-                        <label for="scity">
-                            Shipping City
-                            <input type="text" name="scity" id="scity" class="placeholder" placeholder="Enter the shipping city" required="required" title="Shipping city is required" />
-                        </label>
-
-                        <label for="sstate">
-                            Shipping State/Province
-                            <select name="sstate" id="sstate" required="required" title="Select a Shipping State/Province">
-                                <option value="0">- Select State/Province -</option>
-                                @foreach (EcommercePlatform.Country country in countries) {
-                                    <optgroup label="@country.name">
-                                        @foreach (EcommercePlatform.State state in country.getProvinces()) {
-                                            if (!state.hide) {
-                                                <option value="@state.stateID">@(String.Format("{0} - {1}", state.abbr, state.state1))</option>
-                                            }
-                                        }
-                                    </optgroup>
-                                }
-                            </select>
-                        </label>
-                        <label for="szip">
-                            Shipping Postal Code
-                            <input type="text" name="szip" id="szip" class="placeholder" placeholder="Enter the shipping postal code" required="required" title="Shipping Postal Code is required" />
-                        </label>
-                        <label for="sresidential">
-                            <input type="checkbox" name="sresidential" id="sresidential" value="true" checked="checked" />
-                            Residential Address?
-                        </label>
-                    </fieldset>
-                    <input type="submit" id="btnAddShippingAddress" class="button" value="Add Shipping Address" />
-                    @if (cust.Cart.ship_to != 0) {
-                        <input type="reset" id="btnResetShipping" class="button cancel" value="Cancel" />
-                    }
-                    <div class="clearfix"></div>
-                </form>
-            </div>
-            <div class="right">
-                <article class="scroller">
-                    <span class="banner">Addresses</span>
-                    @if (cust.Cart.ship_to != 0) {
-                        foreach (EcommercePlatform.Address a in addresses) {
-                            if (!a.ID.Equals(cust.Cart.Shipping.ID)) {
-                                <div class="address" data-id="@a.ID" id="address-@a.ID">
-                                    <span>@((a.residential) ? "Residential" : "Commercial")</span>
-                                    @a.first @a.last<br />
-                                    @a.street1<br />
-                                    @if (!String.IsNullOrEmpty(a.street2)) {
-                                        @a.street2<br />
-                                    }
-                                    @a.city, @a.State1.abbr @a.postal_code<br />
-                                    @a.State1.Country.name
-                                    <a href="/Cart/ChooseShipping/@a.ID" class="button">Choose</a>
-                                </div>
-                            }
-                        }
-                    } else {
-                        foreach (EcommercePlatform.Address a in addresses) {
-                            <div class="address" data-id="@a.ID" id="address-@a.ID">
-                                <span>@((a.residential) ? "Residential" : "Commercial")</span>
-                                @a.first @a.last<br />
-                                @a.street1<br />
-                                @if (!String.IsNullOrEmpty(a.street2)) {
-                                    @a.street2<br />
-                                }
-                                @a.city, @a.State1.abbr @a.postal_code<br />
-                                @a.State1.Country.name
-                                <a href="/Cart/ChooseShipping/@a.ID" class="button">Choose</a>
-                            </div>
-                        }
-                    }
-                    <a href="javascript: void;" class="new-address button" id="new-shipping-address">New Address</a>
-                </article>
             </div>
             <div class="clearfix"></div>
+        </div>
     </div>
 </div>
 <script defer src="/Scripts/custom/checkout.js"></script>

@@ -1,0 +1,156 @@
+﻿@{
+    List<EcommercePlatform.Country> countries = ViewBag.countries ?? new List<EcommercePlatform.Country>();
+    EcommercePlatform.Customer cust = ViewBag.cust ?? new EcommercePlatform.Customer();
+    EcommercePlatform.Address billing = ViewBag.billing ?? new EcommercePlatform.Address();
+    EcommercePlatform.Address shipping = ViewBag.shipping ?? new EcommercePlatform.Address();
+    bool same = ViewBag.same ?? true;
+}
+<form class="simple-form" id="registration_form" method="post" action="https://@Request.Url.Host/Authenticate/Signup">
+    <fieldset class="left">
+        <legend>Basic Information</legend>
+        <label for="fname">
+            First Name
+            <input type="text" name="fname" id="fname" class="placeholder" placeholder="Enter your first name" required="required" title="First name is required" value="@cust.fname" />
+        </label>
+        <label for="lname">
+            Last Name
+            <input type="text" name="lname" id="lname" class="placeholder" placeholder="Enter your last name" required="required" title="Last name is required" value="@cust.lname" />
+        </label>
+        <label for="phone">
+            Phone Number
+            <input type="tel" name="phone" id="phone" class="placeholder" placeholder="Enter your phone number" required="required" title="Phone Number is required" value="@cust.phone" />
+        </label>
+        <label for="signup_email">
+            E-Mail Address
+            <input type="email" name="email" id="signup_email" class="placeholder" placeholder="Enter your e-mail address" required="required" title="E-Mail Address is required" value="@cust.email" />
+        </label>
+        <label for="signup_password">
+            Password (must be at least 6 characters)
+            <input type="password" name="password" id="signup_password" autocomplete="off" placeholder="Enter your password" required="required" title="Password is required" pattern="\S{6,}" />
+        </label>
+        <label for="confirm_password">
+            Confirm Password
+            <input type="password" name="password2" id="confirm_password" autocomplete="off" placeholder="Confirm your password" required="required" title="You must confirm your password" pattern="\S{6,}" />
+        </label>
+    </fieldset>
+            
+    <fieldset class="billing left">
+        <legend>Billing Information</legend>
+
+        <label for="bfirst">
+            Billing First Name
+            <input type="text" name="bfirst" id="bfirst" class="placeholder" placeholder="Enter the billing first name" required="required" title="Last Name on billing address is required" value="@billing.first" />
+        </label>
+
+        <label for="blast">
+            Billing Last Name
+            <input type="text" name="blast" id="blast" class="placeholder" placeholder="Enter the billing last name" required="required" title="Last name on billing address is required" value="@billing.last" />
+        </label>
+
+        <label for="bstreet1">
+            Billing Street 1
+            <input type="text" name="bstreet1" id="bstreet1" class="placeholder" placeholder="Enter the billing street" required="required" title="Billing street is required" value="@billing.street1" />
+        </label>
+        <label for="bstreet2">
+            Billing Street 2
+            <input type="text" name="bstreet2" id="bstreet2" class="placeholder" placeholder="Enter additional info for billing street" value="@billing.street2" />
+        </label>
+
+        <label for="bcity">
+            Billing City
+            <input type="text" name="bcity" id="bcity" class="placeholder" placeholder="Enter the billing city" required="required" title="Billing city is required" value="@billing.city" />
+        </label>
+
+        <label for="bstate">
+            Billing State/Province
+            <select name="bstate" id="bstate" required="required" title="Select a Billing State/Province">
+                <option value="0">- Select State/Province -</option>
+                @foreach (EcommercePlatform.Country country in countries) {
+                    <optgroup label="@country.name">
+                        @foreach (EcommercePlatform.State state in country.getProvinces()) {
+                            if (!state.hide) {
+                                <option value="@state.stateID" @((state.stateID == billing.state) ? "selected=selected" : "")>@(String.Format("{0} - {1}", state.abbr, state.state1))</option>
+                            }
+                        }
+                    </optgroup>
+                }
+            </select>
+        </label>
+        <label for="bzip">
+            Billing Postal Code
+            <input type="text" name="bzip" id="bzip" class="placeholder" placeholder="Enter the billing postal code" required="required" title="Billing Postal Code is required" value="@billing.postal_code" />
+        </label>
+        <label for="bresidential">
+            <input type="checkbox" name="bresidential" id="bresidential" value="true" @((billing.ID == 0 || billing.residential) ? "checked=checked" : "") />
+            Residential Address?
+        </label>
+    </fieldset>
+
+    <fieldset class="shipping left">
+        <legend>Shipping Information</legend>
+        <label for="same"><input type="checkbox" id="same" name="same" value="true" @((same) ? "checked=checked" : "") />Same as billing address</label>
+        <div id="show_shipping" style="@((same) ? "display:none;" : "")">
+            <label for="sfirst">
+                Shipping First Name
+                <input type="text" name="sfirst" id="sfirst" class="placeholder" placeholder="Enter the shipping first name" required="required" title="First Name on shipping address is required" value="@shipping.first" />
+            </label>
+
+            <label for="slast">
+                Shipping Last Name
+                <input type="text" name="slast" id="slast" class="placeholder" placeholder="Enter the shipping last name" required="required" title="Last Name on shipping address is required" value="@shipping.last" />
+            </label>
+
+            <label for="sstreet1">
+                Shipping Street 1
+                <input type="text" name="sstreet1" id="sstreet1" class="placeholder" placeholder="Enter the shipping street" required="required" title="Shipping street is required" value="@shipping.street1" />
+            </label>
+            <label for="sstreet2">
+                Shipping Street 2
+                <input type="text" name="sstreet2" id="sstreet2" class="placeholder" placeholder="Enter additional info for shipping street" value="@shipping.street2" />
+            </label>
+
+            <label for="scity">
+                Shipping City
+                <input type="text" name="scity" id="scity" class="placeholder" placeholder="Enter the shipping city" required="required" title="Shipping city is required" value="@shipping.city" />
+            </label>
+
+            <label for="sstate">
+                Shipping State/Province
+                <select name="sstate" id="sstate" required="required" title="Select a Shipping State/Province">
+                    <option value="0">- Select State/Province -</option>
+                    @foreach (EcommercePlatform.Country country in countries) {
+                        <optgroup label="@country.name">
+                            @foreach (EcommercePlatform.State state in country.getProvinces()) {
+                                if (!state.hide) {
+                                    <option value="@state.stateID" @((state.stateID == shipping.state) ? "selected=selected" : "")>@(String.Format("{0} - {1}", state.abbr, state.state1))</option>
+                                }
+                            }
+                        </optgroup>
+                    }
+                </select>
+            </label>
+            <label for="szip">
+                Shipping Postal Code
+                <input type="text" name="szip" id="szip" class="placeholder" placeholder="Enter the shipping postal code" required="required" title="Shipping Postal Code is required" value="@shipping.postal_code" />
+            </label>
+            <label for="sresidential">
+                <input type="checkbox" name="sresidential" id="sresidential" value="true" @((shipping.ID == 0 || shipping.residential) ? "checked=checked" : "") />
+                Residential Address?
+            </label>
+        </div>
+    </fieldset>
+    
+    <fieldset class="left">
+        <legend>Offers/Newsletter</legend>
+        <label for="receiveOffers">
+            <span>Would you like to receive offers from @ViewBag.settings.Get("SiteName")?</span>
+            <input type="checkbox" name="receiveOffers" id="receiveOffers" value="1" @((cust.receiveOffers == 1)?"checked=checked":"") />
+        </label>
+        <label for="receiveNewsletter">
+            <span>Would you like to receive the newsletter from @ViewBag.settings.Get("SiteName")?</span>
+            <input type="checkbox" name="receiveNewsletter" id="receiveNewsletter" value="1" @((cust.receiveNewsletter == 1)?"checked=checked":"") />
+        </label>
+    </fieldset>
+    <div class="clearfix"></div>
+    <input type="submit" name="btnSubmit" id="btnSignup" value="Sign Up" />
+</form>

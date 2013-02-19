@@ -17,25 +17,30 @@ namespace EcommercePlatform.Controllers {
         /// <returns>View page</returns>
         [RequireHttps]
         public ActionResult Index() {
+            ViewBag.error = TempData["error"];
+            return View();
+        }
+
+        [RequireHttps]
+        public ActionResult Register() {
 
             List<Country> countries = UDF.GetCountries();
 
             Customer cust = new Customer();
-            /*Address billing = new Address();
-            Address shipping = new Address();*/
+            Address billing = new Address();
+            Address shipping = new Address();
+            bool same = true;
             try {
                 cust = (Customer)TempData["customer"];
-            } catch (Exception) { }
-            /*try {
                 billing = (Address)TempData["billing"];
+                shipping = (Address)TempData["customer"];
+                same = (bool)TempData["same"];
             } catch (Exception) { }
-            try {
-                shipping = (Address)TempData["shipping"];
-            } catch (Exception) { }*/
 
             ViewBag.cust = cust;
-            /*ViewBag.billing = billing;
-            ViewBag.shipping = shipping;*/
+            ViewBag.billing = billing;
+            ViewBag.shipping = shipping;
+            ViewBag.same = same;
             ViewBag.countries = countries;
             ViewBag.error = TempData["error"];
             return View();
@@ -84,7 +89,7 @@ namespace EcommercePlatform.Controllers {
                 return RedirectToAction("Index", "Cart");
             } catch (Exception e) {
                 TempData["error"] = e.Message;
-                return Redirect("/Authenticate/Index");
+                return RedirectToAction("Index");
             }
         }
 
@@ -101,16 +106,18 @@ namespace EcommercePlatform.Controllers {
                     Response.Cookies.Add(c);
                 }
             } catch (Exception) { }
-            return RedirectToAction("Index", "Authenticate");
+            return RedirectToAction("Index");
         }
 
         [RequireHttps]
         public ActionResult Signup() {
             Customer cust = new Customer();
             Settings settings = ViewBag.settings;
-            /*Address billing = new Address();
-            Address shipping = new Address();*/
+            Address billing = new Address();
+            Address shipping = new Address();
             bool loginAfterRegistration = false;
+            bool sameAsBilling = (Request.Form["same"] != null) ? true : false;
+
             if (settings.Get("CustomerLoginAfterRegistration") == "true") {
                 loginAfterRegistration = true;
             }
@@ -123,13 +130,15 @@ namespace EcommercePlatform.Controllers {
                     lname = Request.Form["lname"],
                     phone = Request.Form["phone"],
                     dateAdded = DateTime.UtcNow,
+                    receiveNewsletter = (Request.Form["receiveNewsletter"] != null) ? 1 : 0,
+                    receiveOffers = (Request.Form["receiveOffers"] != null) ? 1 : 0,
                     isSuspended = 0,
                     isValidated = 0,
                     validator = Guid.NewGuid()
                 };
 
                 // Build out our Billing object
-                /*billing = new Address {
+                billing = new Address {
                     first = Request.Form["bfirst"],
                     last = Request.Form["blast"],
                     street1 = Request.Form["bstreet1"],
@@ -150,74 +159,59 @@ namespace EcommercePlatform.Controllers {
                     postal_code = Request.Form["szip"],
                     residential = (Request.Form["sresidential"] == null) ? false : true,
                     active = true
-                };*/
+                };
                 #endregion
 
                 cust.ValidatePasswords(Request.Form["password"], Request.Form["password2"]);
-                cust.ValidateEmail(Request.Form["email"], Request.Form["email2"]);
-
-                #region Offers/Newsletter
-                int receiveOffers = 0;
-                int receiveNewsletter = 0;
-                if (Request.Form["receiveOffers"] != null) {
-                    try {
-                        receiveOffers = Convert.ToInt32(Request.Form["receiveOffers"]);
-                    } catch (Exception) { }
-                }
-                if (Request.Form["receiveNewsletter"] != null) {
-                    try {
-                        receiveNewsletter = Convert.ToInt32(Request.Form["receiveNewsletter"]);
-                    } catch (Exception) { }
-                }
-
-                cust.receiveNewsletter = receiveNewsletter;
-                cust.receiveOffers = receiveOffers;
-                #endregion
+                cust.ValidateEmail(Request.Form["email"], Request.Form["email"]);
 
                 #region Address state validation
                 // Validate billing state
-                /*try {
+                try {
                     billing.state = Convert.ToInt32(Request.Form["bstate"]);
                 } catch (Exception) {
                     throw new Exception("You must select a billing state/province.");
                 }
                 // Validate shipping state
-                try {
-                    shipping.state = Convert.ToInt32(Request.Form["sstate"]);
-                } catch (Exception) {
-                    throw new Exception("You must select a shipping state/province.");
-                }*/
+                if (!sameAsBilling || !billing.Equals(shipping)) {
+                    try {
+                        shipping.state = Convert.ToInt32(Request.Form["sstate"]);
+                    } catch (Exception) {
+                        throw new Exception("You must select a shipping state/province.");
+                    }
+                }
                 #endregion
 
                 string[] nullables = new string[] { "phone", "issuspended", "receivenewsletter", "receiveoffers", "isvalidated", "billingid", "shippingid", "Address", "Address1", "cart", "id", "orders" };
                 UDF.Sanitize(cust, nullables);
 
                 cust.Save();
-                /*billing.Save(cust.ID);
-                if(billing.Equals(shipping)) {
+                billing.Save(cust.ID);
+                if (sameAsBilling || billing.Equals(shipping)) {
                     shipping = billing;
                 } else {
                     shipping.Save(cust.ID);
                 }
                 cust.SaveAddresses(billing, shipping);
                 cust.Address = billing;
-                cust.Address1 = shipping;*/
+                cust.Address1 = shipping;
 
                 if (loginAfterRegistration) {
                     return RedirectToAction("login", new { email = cust.email, password = Request.Form["password"], remember = 0 });
                 } else {
                     TempData["error"] = "You're account has been successfully created. Please check your e-mail to confirm your account.";
-                    return Redirect("/Authenticate");
+                    return RedirectToAction("Index");
                 }
             } catch (Exception e) {
                 if (e.Message.ToLower().Contains("a potentially dangerous")) {
                     throw new HttpException(403, "Forbidden");
                 }
                 TempData["customer"] = cust;
-                /*TempData["billing"] = billing;
-                TempData["shipping"] = shipping;*/
+                TempData["billing"] = billing;
+                TempData["shipping"] = shipping;
+                TempData["same"] = sameAsBilling;
                 TempData["error"] = e.Message;
-                return Redirect(String.Format("/Authenticate/Index?#{0}", "signup"));
+                return RedirectToAction("Register");
             }
         }
 
@@ -231,7 +225,7 @@ namespace EcommercePlatform.Controllers {
             } catch (Exception) {
                 TempData["error"] = "We're sorry, but we failed to send your validation e-mail.";
             }
-            return Redirect("/Authenticate");
+            return RedirectToAction("Index");
         }
 
         public ActionResult Validate(int id, Guid validator) {
@@ -245,11 +239,11 @@ namespace EcommercePlatform.Controllers {
                     };
                     cust.ValidateCreation();
                     TempData["error"] = "You're account has been validated. You may now log in to your account.";
-                    return Redirect("/Authenticate/Index#login");
+                    return RedirectToAction("Index");
                 }
             } catch (Exception) {
                 TempData["error"] = "We failed to validate your account.";
-                return Redirect("/Authenticate/Index#signup");
+                return RedirectToAction("Register");
             }
 
         }
@@ -267,10 +261,10 @@ namespace EcommercePlatform.Controllers {
                 cust.ResetPassword();
 
                 TempData["error"] = String.Format("An e-mail has been sent to {0} with information on retrieving your account.", email);
-                return RedirectToAction("Index","Authenticate"); 
+                return RedirectToAction("Index"); 
             } catch (Exception) {
                 TempData["error"] = "We're sorry we were unable to reset the password on your account.";
-                return RedirectToAction("Forgot","Authenticate");
+                return RedirectToAction("Forgot");
             }
         }
     }

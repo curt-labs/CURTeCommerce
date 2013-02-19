@@ -35,7 +35,41 @@
 </ul>
 <div class="tab_container">
     <div class="tab_content">
-        @Html.Partial("_CustomerForm")
+        <form class="simple-form" method="post" action="https://@Request.Url.Host/Account/Save">
+            <fieldset class="left">
+                <legend>Basic Information</legend>
+                <label for="signup_email">
+                    E-Mail Address
+                    <input type="email" name="email" id="signup_email" class="placeholder" placeholder="Enter your e-mail address" required="required" title="E-Mail Address is required" value="@cust.email" />
+                </label>
+                <label for="fname">
+                    First Name
+                    <input type="text" name="fname" id="fname" class="placeholder" placeholder="Enter your first name" required="required" title="First name is required" value="@cust.fname" />
+                </label>
+                <label for="lname">
+                    Last Name
+                    <input type="text" name="lname" id="lname" class="placeholder" placeholder="Enter your last name" required="required" title="Last name is required" value="@cust.lname" />
+                </label>
+                <label for="phone">
+                    Phone Number
+                    <input type="tel" name="phone" id="phone" class="placeholder" placeholder="Enter your phone number" value="@cust.phone" />
+                </label>
+            </fieldset>
+            
+            <fieldset class="left">
+                <legend>Offers/Newsletter</legend>
+                <label for="receiveOffers">
+                    <span>Would you like to receive offers from @ViewBag.settings.Get("SiteName")?</span>
+                    <input type="checkbox" name="receiveOffers" id="receiveOffers" value="1" @((cust.receiveOffers == 1)?"checked=checked":"") />
+                </label>
+                <label for="receiveNewsletter">
+                    <span>Would you like to receive the newsletter from @ViewBag.settings.Get("SiteName")?</span>
+                    <input type="checkbox" name="receiveNewsletter" id="receiveNewsletter" value="1" @((cust.receiveNewsletter == 1)?"checked=checked":"") />
+                </label>
+            </fieldset>
+            <div class="clearfix"></div>
+            <input type="submit" name="btnSubmit" id="btnSignup" value="Save" />
+        </form>
     </div>
 </div>
 

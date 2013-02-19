@@ -47,6 +47,10 @@ label[for=receiveOffers] input, label[for=receiveNewsletter] input{ float:right 
     text-decoration:underline;
 }
 
+#newcustomer {
+    clear: both;
+}
+
 #landing {
     display: block;
 }

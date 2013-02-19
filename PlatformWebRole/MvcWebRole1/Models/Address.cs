@@ -53,20 +53,18 @@ namespace EcommercePlatform {
 
         internal void MatchOrSave() {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-            try {
-                Address address = (from a in db.Addresses
-                                   where a.first.ToLower().Trim().Equals(this.first.ToLower().Trim()) &&
-                                   a.last.ToLower().Trim().Equals(this.last.ToLower().Trim()) &&
-                                   a.street1.ToLower().Trim().Equals(this.street1.ToLower().Trim()) &&
-                                   a.street2.ToLower().Trim().Equals(this.street2.ToLower().Trim()) &&
-                                   a.city.ToLower().Trim().Equals(this.city.ToLower().Trim()) &&
-                                   a.state.Equals(this.state) &&
-                                   a.postal_code.ToLower().Trim().Equals(this.postal_code.ToLower().Trim())
-                                   select a).First();
+            Address address = (from a in db.Addresses
+                                where a.cust_id.Equals(this.cust_id) && a.first.ToLower().Trim().Equals(this.first.ToLower().Trim()) &&
+                                a.last.ToLower().Trim().Equals(this.last.ToLower().Trim()) &&
+                                a.street1.ToLower().Trim().Equals(this.street1.ToLower().Trim()) &&
+                                a.street2.ToLower().Trim().Equals(this.street2.ToLower().Trim()) &&
+                                a.city.ToLower().Trim().Equals(this.city.ToLower().Trim()) &&
+                                a.state.Equals(this.state) &&
+                                a.postal_code.ToLower().Trim().Equals(this.postal_code.ToLower().Trim())
+                                select a).FirstOrDefault();
+            if(address != null && address.ID > 0) {
                 this.ID = address.ID;
-            } catch {
-                this.residential = true;
-                this.cust_id = 0;
+            } else {
                 db.Addresses.InsertOnSubmit(this);
                 db.SubmitChanges();
             }
