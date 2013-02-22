@@ -72,29 +72,9 @@ namespace AzureFtpServer.FtpCommands
             var stringBuilder = new StringBuilder();
 
             for (int nIndex = 0; nIndex < asDirectories.Length; nIndex++) {
-                stringBuilder.Append("drwxr-xr-x 1 owner group");
-                stringBuilder.Append(" 0 ");
-
-                DateTime fileDate = DateTime.Now;
-                string sDay = fileDate.Day.ToString();
-
-                stringBuilder.Append(TextHelpers.Month(fileDate.Month));
-                stringBuilder.Append(" ");
-
-                if (sDay.Length == 1) {
-                    stringBuilder.Append(" ");
-                }
-
-                stringBuilder.Append(sDay);
-                stringBuilder.Append(" ");
-                stringBuilder.Append(string.Format("{0:hh}", fileDate));
-                stringBuilder.Append(":");
-                stringBuilder.Append(string.Format("{0:mm}", fileDate));
-                stringBuilder.Append(" ");
-
-                stringBuilder.Append(asDirectories[nIndex]);
-                stringBuilder.Append(" ");
-                stringBuilder.Append(Environment.NewLine);
+                string ftprow = "drwxr-xr-x 1 owner group " + "0".PadLeft(12) + " ";
+                ftprow += String.Format("{0:MMM dd HH:mm}", DateTime.Now) + " " + asDirectories[nIndex] + Environment.NewLine;
+                stringBuilder.Append(ftprow);
             }
             
             for (int nIndex = 0; nIndex < asFiles.Length; nIndex++)
@@ -106,38 +86,9 @@ namespace AzureFtpServer.FtpCommands
 
                 if (info != null)
                 {
-                    string sAttributes = info.GetAttributeString();
-                    stringBuilder.Append(sAttributes);
-                    stringBuilder.Append(" 1 owner group");
-
-                    DateTime fileDate = DateTime.Now;
-
-                    string sFileSize = info.GetSize().ToString().PadLeft(12);
-                    stringBuilder.Append(sFileSize);
-                    //stringBuilder.Append(TextHelpers.RightAlignString(sFileSize, 13, ' '));
-                    stringBuilder.Append(" ");
-                    fileDate = info.GetModifiedTime();
-
-                    string sDay = fileDate.Day.ToString();
-
-                    stringBuilder.Append(TextHelpers.Month(fileDate.Month));
-                    stringBuilder.Append(" ");
-
-                    if (sDay.Length == 1)
-                    {
-                        stringBuilder.Append(" ");
-                    }
-
-                    stringBuilder.Append(sDay);
-                    stringBuilder.Append(" ");
-                    stringBuilder.Append(string.Format("{0:hh}", fileDate));
-                    stringBuilder.Append(":");
-                    stringBuilder.Append(string.Format("{0:mm}", fileDate));
-                    stringBuilder.Append(" ");
-
-                    stringBuilder.Append(asFiles[nIndex]);
-                    stringBuilder.Append(" ");
-                    stringBuilder.Append(Environment.NewLine);
+                    string ftprow = info.GetAttributeString() + " 1 owner group " + info.GetSize().ToString().PadLeft(12) + " ";
+                    ftprow += String.Format("{0:MMM dd HH:mm}", info.GetModifiedTime()) + " " + asFiles[nIndex] + Environment.NewLine;
+                    stringBuilder.Append(ftprow);
                 }
             }
 
