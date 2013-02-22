@@ -86,7 +86,8 @@ namespace AzureFtpServer.FtpCommands
 
                 if (info != null)
                 {
-                    string ftprow = info.GetAttributeString() + " 1 owner group " + info.GetSize().ToString().PadLeft(12) + " ";
+                    string perms = info.GetAttributeString().Replace("d", "-");
+                    string ftprow = perms + " 1 owner group " + info.GetSize().ToString().PadLeft(12) + " ";
                     ftprow += String.Format("{0:MMM dd HH:mm}", info.GetModifiedTime()) + " " + asFiles[nIndex] + Environment.NewLine;
                     stringBuilder.Append(ftprow);
                 }

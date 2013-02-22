@@ -148,10 +148,16 @@ namespace AzureFtpServer.Provider {
         /// Delete the specified AzureCloudFile from the Azure container.
         /// </summary>
         /// <param name="o">The object to be deleted.</param>
-        public void Delete(AzureCloudFile o) {
-            ICloudBlob b = _blobClient.GetBlobReferenceFromServer(o.Uri);
+        public void Delete(string path) {
+            if (path.StartsWith("/"))
+                path = path.Remove(0, 1);
+            UriKind kind = UriKind.RelativeOrAbsolute;
+            CloudBlobContainer parentContainer = _blobClient.GetContainerReference(ContainerName);
+            Uri u = new Uri(parentContainer.Uri.ToString() + path, kind);
+
+            ICloudBlob b = _blobClient.GetBlobReferenceFromServer(u);
             if (b != null)
-                b.BeginDelete(new AsyncCallback(DeleteOperationCompleteCallback), o.Uri);
+                b.BeginDelete(new AsyncCallback(DeleteOperationCompleteCallback), u);
             else
                 throw new ArgumentException("The container reference could not be retrieved from storage provider.", "o");
         }
@@ -191,16 +197,7 @@ namespace AzureFtpServer.Provider {
 
                 o.Meta.Add("ContentType", b.Properties.ContentType);
             } catch (StorageException ex) {
-                StorageExtendedErrorInformation extendedInformation = ex.RequestInformation.ExtendedErrorInformation;
-                if (extendedInformation != null && extendedInformation.ErrorCode == "BlobNotFound") {
-                    throw new FileNotFoundException(
-                        "The storage provider was unable to locate the object identified by the given URI.",
-                        u.ToString());
-                }
-
-                if (extendedInformation != null && extendedInformation.ErrorCode == "ResourceNotFound") {
-                    return null;
-                }
+                return null;
             }
 
             // Try to download the data for the blob, if requested
@@ -306,36 +303,22 @@ namespace AzureFtpServer.Provider {
         /// <param name="newPath">The new path.</param>
         /// <returns></returns>
         public StorageOperationResult Rename(string originalPath, string newPath) {
-            var u = new Uri(newPath, UriKind.RelativeOrAbsolute);
-            //CloudBlobContainer c = GetContainerReference(ContainerName);
 
-            newPath = UriPathToString(u);
-            if (newPath.StartsWith("/"))
-                newPath = newPath.Remove(0, 1);
+            CloudBlobContainer parentContainer = _blobClient.GetContainerReference(ContainerName);
+            Uri originalUri = new Uri(parentContainer.Uri.ToString() + originalPath, UriKind.RelativeOrAbsolute);
+            Uri newUri = new Uri(parentContainer.Uri.ToString() + newPath, UriKind.RelativeOrAbsolute);
+            ICloudBlob originalBlob = _blobClient.GetBlobReferenceFromServer(originalUri);
 
-            originalPath = UriPathToString(new Uri(originalPath, UriKind.RelativeOrAbsolute));
-            if (originalPath.StartsWith("/"))
-                originalPath = originalPath.Remove(0, 1);
-
-            ICloudBlob originalBlob = _blobClient.GetBlobReferenceFromServer(new Uri(originalPath));
-
-            // Check if the original path exists on the provider.
-            if (!CheckBlobExists(originalPath)) {
-                throw new FileNotFoundException("The path supplied does not exist on the storage provider.",
-                                                originalPath);
-            }
-
-            CloudBlobContainer parentContainer = GetContainerReference(GetParentFromPath(newPath));
             AsyncCallback callback = MoveOperationCompleteCallback;
             List<Uri> blobrefs = new List<Uri>();
             blobrefs.Add(originalBlob.Uri);
 
             if (originalBlob.GetType() == typeof(CloudBlockBlob)) {
-                CloudBlockBlob newBlob = parentContainer.GetBlockBlobReference(GetDirectoryFromPath(newPath));
+                CloudBlockBlob newBlob = parentContainer.GetBlockBlobReference(newUri.ToString());
                 blobrefs.Add(newBlob.Uri);
                 newBlob.BeginStartCopyFromBlob((CloudBlockBlob)originalBlob, callback, blobrefs);
             } else if (originalBlob.GetType() == typeof(CloudPageBlob)) {
-                CloudPageBlob newBlob = parentContainer.GetPageBlobReference(GetDirectoryFromPath(newPath));
+                CloudPageBlob newBlob = parentContainer.GetPageBlobReference(newUri.ToString());
                 blobrefs.Add(newBlob.Uri);
                 newBlob.BeginStartCopyFromBlob((CloudPageBlob)originalBlob, callback, blobrefs);
             }
@@ -381,13 +364,8 @@ namespace AzureFtpServer.Provider {
             try {
                 ICloudBlob b = c.GetBlobReferenceFromServer(path);
                 b.FetchAttributes();
-            } catch (StorageException ex) {
-                StorageExtendedErrorInformation extendedInformation = ex.RequestInformation.ExtendedErrorInformation;
-                if (extendedInformation.ErrorCode == "ResourceNotFound") {
-                    return false;
-                } else {
-                    throw;
-                }
+            } catch {
+                return false;
             }
 
             return false;
@@ -550,15 +528,16 @@ namespace AzureFtpServer.Provider {
         /// <param name="result"></param>
         private void MoveOperationCompleteCallback(IAsyncResult result) {
             List<Uri> uris = (List<Uri>)result.AsyncState;
+            ICloudBlob originalBlob = _blobClient.GetBlobReferenceFromServer(uris[0]);
+            AsyncCallback callback = DeleteOperationCompleteCallback;
+            originalBlob.BeginDeleteIfExists(callback, uris[0]);
+
             if (StorageProviderOperationCompleted == null) return;
             var a = new StorageProviderEventArgs { Operation = StorageOperation.Put, Result = StorageOperationResult.Created };
 
             // Raise the event
             StorageProviderOperationCompleted(uris[1], a);
 
-            ICloudBlob originalBlob = _blobClient.GetBlobReferenceFromServer(uris[0]);
-            AsyncCallback callback = DeleteOperationCompleteCallback;
-            originalBlob.BeginDeleteIfExists(callback, uris[0]);
         }
         #endregion
     }

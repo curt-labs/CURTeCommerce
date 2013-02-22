@@ -105,8 +105,7 @@ namespace AzureFtpServer.Azure {
         }
 
         public bool Delete(string sPath) {
-            sPath = PreparePath(sPath);
-            _provider.Delete(new AzureCloudFile { Uri = new Uri(sPath, UriKind.RelativeOrAbsolute) });
+            _provider.Delete(sPath);
             return true;
         }
 

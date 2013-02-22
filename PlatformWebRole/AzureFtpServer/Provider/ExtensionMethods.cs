@@ -8,24 +8,22 @@ namespace AzureFtpServer.Provider
     {
         public static bool HasFiles(this CloudBlobContainer c, string prefix)
         {
-            IEnumerable<CloudBlockBlob> resultsa =
-                (from f in c.ListBlobs(prefix,true).OfType<CloudBlockBlob>()
-                 where f.Uri.ToString().Contains(prefix)
-                 select f);
-            IEnumerable<CloudPageBlob> resultsb =
-                (from f in c.ListBlobs(prefix, true).OfType<CloudPageBlob>()
-                 where f.Uri.ToString().Contains(prefix)
-                 select f);
-            return (resultsa.Count() + resultsb.Count()) > 0;
+            if (prefix.StartsWith("/"))
+                prefix = prefix.Remove(0, 1);
+
+            int resultsa = c.ListBlobs(prefix).OfType<CloudBlockBlob>().Count();
+            int resultsb = c.ListBlobs(prefix).OfType<CloudPageBlob>().Count();
+            int total = resultsa + resultsb;
+            return total > 0;
         }
 
         public static bool HasDirectories(this CloudBlobContainer c, string prefix)
         {
-            IEnumerable<CloudBlobDirectory> results =
-                (from d in c.ListBlobs(prefix,true).OfType<CloudBlobDirectory>()
-                 where d.Uri.ToString().Contains(prefix)
-                 select d);
-            return results.Count() > 0;
+            if (prefix.StartsWith("/"))
+                prefix = prefix.Remove(0, 1);
+
+            int results = c.ListBlobs(prefix).OfType<CloudBlobDirectory>().Count();
+            return results > 0;
         }
     }
 }
