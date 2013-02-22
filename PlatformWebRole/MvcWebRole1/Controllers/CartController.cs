@@ -52,10 +52,12 @@ namespace EcommercePlatform.Controllers {
                 shipping = (customer.shippingID != 0) ? customer.Address1 : new Address();
             }
             try {
-                customer = (Customer)TempData["customer"];
-                billing = (Address)TempData["billing"];
-                shipping = (Address)TempData["customer"];
-                same = (bool)TempData["same"];
+                if (TempData["customer"] != null && TempData["billing"] != null && TempData["shipping"] != null) {
+                    customer = (Customer)TempData["customer"];
+                    billing = (Address)TempData["billing"];
+                    shipping = (Address)TempData["shipping"];
+                    same = (bool)TempData["same"];
+                }
             } catch (Exception) { }
 
             ViewBag.billing = billing;

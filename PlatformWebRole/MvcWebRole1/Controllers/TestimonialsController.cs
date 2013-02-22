@@ -54,8 +54,7 @@ namespace EcommercePlatform.Controllers {
             };
             string message = "";
             try {
-                string remoteip = (Request.ServerVariables["HTTP_X_FORWARDED_FOR"] != null) ? Request.ServerVariables["HTTP_X_FORWARDED_FOR"] : Request.ServerVariables["REMOTE_ADDR"];
-                bool recaptchavalid = ReCaptcha.ValidateCaptcha(Request.Form["recaptcha_challenge_field"], Request.Form["recaptcha_response_field"], remoteip);
+                bool recaptchavalid = ReCaptcha.ValidateCaptcha(Request.Form["recaptcha_challenge_field"], Request.Form["recaptcha_response_field"]);
                 if (!recaptchavalid) message += "Captcha was incorrect. ";
                 if (testimonial.Trim() == "") message += "A Testimonial is required.";
 

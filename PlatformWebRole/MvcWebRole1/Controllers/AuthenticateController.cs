@@ -85,6 +85,11 @@ namespace EcommercePlatform.Controllers {
                     cook.Expires = DateTime.Now.AddDays(30);
                 }
                 Response.Cookies.Add(cook);
+                HttpCookie authed = new HttpCookie("authenticated", "1");
+                if (remember != 0) {
+                    cook.Expires = DateTime.Now.AddDays(30);
+                }
+                Response.Cookies.Add(authed);
 
                 return RedirectToAction("Index", "Cart");
             } catch (Exception e) {
@@ -102,6 +107,11 @@ namespace EcommercePlatform.Controllers {
 
                 if (Request.Cookies["hdcart"] != null) {
                     var c = new HttpCookie("hdcart");
+                    c.Expires = DateTime.Now.AddDays(-1);
+                    Response.Cookies.Add(c);
+                }
+                if (Request.Cookies["authenticated"] != null) {
+                    var c = new HttpCookie("authenticated");
                     c.Expires = DateTime.Now.AddDays(-1);
                     Response.Cookies.Add(c);
                 }

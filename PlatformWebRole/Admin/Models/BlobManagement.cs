@@ -4,9 +4,11 @@ using System.Linq;
 using System.Web;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.StorageClient;
 using System.IO;
 using System.Drawing;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
+using System.Text;
 
 namespace Admin.Models {
     public class BlobManagement {
@@ -36,8 +38,13 @@ namespace Admin.Models {
                 string fileName = "/required.req";
                 string filetext = "#REQUIRED: At least one file is required to be present in this folder.";
                 con = client.GetContainerReference(folders[0]);
-                CloudBlob f = con.GetBlobReference(conName + fileName);
-                f.UploadText(filetext);
+                CloudBlockBlob f = con.GetBlockBlobReference(conName + fileName);
+
+                byte[] blobBytes = Encoding.ASCII.GetBytes(filetext);
+                MemoryStream stream = new MemoryStream(blobBytes);
+
+                f.UploadFromStream(stream);
+                //f.UploadText(filetext);
                 CloudBlobDirectory d = con.GetDirectoryReference(conName);
                 
                 // Cast to our object
@@ -53,7 +60,7 @@ namespace Admin.Models {
                 con = client.GetContainerReference(conName);
 
                 // Create the container if it doesn't already exist
-                con.CreateIfNotExist();
+                con.CreateIfNotExists();
                 
                 // Cast to our object
                 container = new DiscountBlobContainer {
@@ -72,6 +79,27 @@ namespace Admin.Models {
             return container;
         }
 
+        internal static string GetParentFromPath(string path) {
+            if (path.Contains('/')) {
+                List<string> paths = path.Split('/').ToList();
+                string parent = paths.FirstOrDefault();
+                return parent;
+            } else {
+                return path;
+            }
+        }
+
+        internal static string GetDirectoryFromPath(string path) {
+            if (path.Contains('/')) {
+                List<string> paths = path.Split('/').ToList();
+                paths.RemoveAt(0);
+                string folder = string.Join("/", paths.ToArray());
+                return folder;
+            } else {
+                return "";
+            }
+        }
+
         internal static DiscountBlobContainer GetContainer(string name) {
             if (name == null || name.Length == 0) {
                 return new DiscountBlobContainer { 
@@ -87,7 +115,7 @@ namespace Admin.Models {
 
             // Retrieve a reference to a previously created container
             CloudBlobContainer con = client.GetContainerReference(name);
-            con.CreateIfNotExist();
+            con.CreateIfNotExists();
 
             DiscountBlobContainer container = new DiscountBlobContainer {
                 Container = con,
@@ -112,7 +140,8 @@ namespace Admin.Models {
             CloudBlobClient client = storageAccount.CreateCloudBlobClient();
 
             // Retrieve a reference to a previously created container
-            CloudBlobDirectory con = client.GetBlobDirectoryReference(name);
+            CloudBlobContainer parentContainer = client.GetContainerReference(GetParentFromPath(name));
+            CloudBlobDirectory con = parentContainer.GetDirectoryReference(GetDirectoryFromPath(name));
 
             DiscountBlobContainer container = new DiscountBlobContainer {
                 Container = con.Container,
@@ -138,7 +167,8 @@ namespace Admin.Models {
             CloudBlobClient client = storageAccount.CreateCloudBlobClient();
 
             // Retrieve a reference to a previously created container
-            CloudBlobDirectory con = client.GetBlobDirectoryReference(name);
+            CloudBlobContainer parentContainer = client.GetContainerReference(GetParentFromPath(name));
+            CloudBlobDirectory con = parentContainer.GetDirectoryReference(GetDirectoryFromPath(name));
 
             DiscountBlobContainer container = new DiscountBlobContainer {
                 Container = null,
@@ -169,28 +199,41 @@ namespace Admin.Models {
 
             // Create and retrieve reference to new container
             CloudBlobContainer newContainer = client.GetContainerReference(new_name);
-            newContainer.CreateIfNotExist();
+            newContainer.CreateIfNotExists();
             newContainer.SetPermissions(new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob });
 
             foreach (var blob in oldContainer.ListBlobs()) {
 
-                if (blob.GetType().ToString().ToUpper() == "CLOUDBLOBDIRECTORY") {
+                if (blob.GetType() == typeof(CloudBlobDirectory)) {
                     CloudBlobDirectory oldDir = (CloudBlobDirectory)blob;
 
                     // Get the name of the directory
                     string dirName = oldDir.Container.Name;
-                } else {
-
-                    CloudBlob oldBlob = (CloudBlob)blob;
+                } else if (blob.GetType() == typeof(CloudPageBlob)) {
+                    CloudPageBlob oldBlob = (CloudPageBlob)blob;
 
                     // Get the filename of the existing blob
                     string filename = Path.GetFileName(blob.Uri.ToString());
 
                     // Create blob reference for the new container using the existing blob's filename
-                    CloudBlob newBlob = newContainer.GetBlobReference(filename);
+                    CloudPageBlob newBlob = newContainer.GetPageBlobReference(filename);
 
                     // Copy old blob to new blob
-                    newBlob.CopyFromBlob(oldBlob);
+                    newBlob.StartCopyFromBlob(oldBlob);
+
+                    // Delete old Blob
+                    oldBlob.DeleteIfExists();
+                } else {
+                    CloudBlockBlob oldBlob = (CloudBlockBlob)blob;
+
+                    // Get the filename of the existing blob
+                    string filename = Path.GetFileName(blob.Uri.ToString());
+
+                    // Create blob reference for the new container using the existing blob's filename
+                    CloudBlockBlob newBlob = newContainer.GetBlockBlobReference(filename);
+
+                    // Copy old blob to new blob
+                    newBlob.StartCopyFromBlob(oldBlob);
 
                     // Delete old Blob
                     oldBlob.DeleteIfExists();
@@ -272,16 +315,28 @@ namespace Admin.Models {
                 // Create the blobl client
                 CloudBlobClient client = storageAccount.CreateCloudBlobClient();
 
-                CloudBlobDirectory container = client.GetBlobDirectoryReference(parent);
+                CloudBlobContainer parentContainer = client.GetContainerReference(GetParentFromPath(parent));
                 List<DiscountBlobContainer> subs = new List<DiscountBlobContainer>();
+                if (parent.Contains("/")) {
+                    CloudBlobDirectory container = parentContainer.GetDirectoryReference(GetDirectoryFromPath(parent));
+                    foreach (CloudBlobDirectory sub_dir in container.ListBlobs().OfType<CloudBlobDirectory>()) {
+                        DiscountBlobContainer sub = new DiscountBlobContainer {
+                            BlobCount = sub_dir.ListBlobs().Count(),
+                            Container = sub_dir.Container,
+                            uri = sub_dir.Uri
+                        };
+                        subs.Add(sub);
+                    }
+                } else {
+                    foreach (CloudBlobDirectory sub_dir in parentContainer.ListBlobs().OfType<CloudBlobDirectory>()) {
+                        DiscountBlobContainer sub = new DiscountBlobContainer {
+                            BlobCount = sub_dir.ListBlobs().Count(),
+                            Container = sub_dir.Container,
+                            uri = sub_dir.Uri
+                        };
+                        subs.Add(sub);
+                    }
 
-                foreach (CloudBlobDirectory sub_dir in container.ListBlobs().OfType<CloudBlobDirectory>()) {
-                    DiscountBlobContainer sub = new DiscountBlobContainer {
-                        BlobCount = sub_dir.ListBlobs().Count(),
-                        Container = sub_dir.Container,
-                        uri = sub_dir.Uri
-                    };
-                    subs.Add(sub);
                 }
 
                 return subs;
@@ -303,7 +358,7 @@ namespace Admin.Models {
             CloudBlobContainer container = client.GetContainerReference(containerName);
 
             List<IListBlobItem> blobs = new List<IListBlobItem>();
-            blobs = container.ListBlobs().ToList<IListBlobItem>();
+            blobs = container.ListBlobs().Where(x => x.GetType() != typeof(CloudBlobDirectory)).ToList<IListBlobItem>();
 
             return blobs;
         }
@@ -316,17 +371,22 @@ namespace Admin.Models {
 
             // Create the blobl client
             CloudBlobClient client = storageAccount.CreateCloudBlobClient();
+            List<string> paths = directoryName.Split('/').ToList();
+            string parent = paths.FirstOrDefault();
+            paths.RemoveAt(0);
+            string folder = string.Join("/", paths.ToArray());
 
+            CloudBlobContainer parentContainer = client.GetContainerReference(parent);
             // Retrieve a reference to a previously created container
-            CloudBlobDirectory container = client.GetBlobDirectoryReference(directoryName);
+            CloudBlobDirectory container = parentContainer.GetDirectoryReference(folder);
 
             List<IListBlobItem> blobs = new List<IListBlobItem>();
-            blobs = container.ListBlobs().ToList<IListBlobItem>();
+            blobs = container.ListBlobs().Where(x => x.GetType() != typeof(CloudBlobDirectory)).ToList<IListBlobItem>();
 
             return blobs;
         }
         
-        internal static CloudBlob CreateBlob(string container = "", string filename = "", Stream file = null) {
+        internal static CloudBlockBlob CreateBlob(string container = "", string filename = "", Stream file = null) {
             if (file == null) { throw new Exception("No file found."); }
 
             if (file.Length > 0) {
@@ -340,45 +400,31 @@ namespace Admin.Models {
                 // and using parallel settings appears to spread the copy across multiple threads
                 // if you have big bandwidth you can increase the thread number below
                 // because Azure accepts blobs broken into blocks in any order of arrival. Fucking awesome!
-                client.Timeout = new System.TimeSpan(1, 0, 0);
+                client.ServerTimeout = new System.TimeSpan(1, 0, 0);
                 client.ParallelOperationThreadCount = 2;
 
 
                 // Retrieve reference to the previously created container
-                CloudBlobDirectory blobContainer = null;
+                CloudBlockBlob blob = null;
                 if (container.Length == 0) {
-                    blobContainer = client.GetBlobDirectoryReference("Misc");
+                    container = "Misc";
+                }
+                if (container.Contains('/')) {
+                    CloudBlobContainer parentContainer = client.GetContainerReference(GetParentFromPath(container));
+                    CloudBlobDirectory blobContainer = parentContainer.GetDirectoryReference(GetDirectoryFromPath(container));
+                    blob = blobContainer.GetBlockBlobReference(filename.Replace(" ", ""));
                 } else {
-                    blobContainer = client.GetBlobDirectoryReference(container);
+                    CloudBlobContainer blobContainer = client.GetContainerReference(container);
+                    blob = blobContainer.GetBlockBlobReference(filename.Replace(" ", ""));
                 }
 
-                CloudBlob blob = null;
-                blob = blobContainer.GetBlobReference(filename.Replace(" ", ""));
 
                 // Get the content type of the file;
                 string content_type = "image/png";
                 Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(Path.GetExtension(filename).ToLower());
                 if(rk != null && rk.GetValue("Content Type") != null){ content_type = rk.GetValue("Content Type").ToString(); }
 
-                try {
-                    // Create an image object and resize the image to 72x72
-                    Image img = Image.FromStream(file);
-
-                    // Push the image into a MemoryStream and upload the stream to our blob, fuck this is too much work
-                    // why can't we just say here's the image, now put it in a blob! Damn you!!!!
-                    MemoryStream stream = new MemoryStream();
-                    img.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-
-                    byte[] imgBytes = stream.GetBuffer();
-                    stream.Seek(0, SeekOrigin.Begin);
-
-                    blob.UploadFromStream(stream);
-
-                    // Oh yeah, dispose the stream so we don't eat up memory
-                    stream.Dispose();
-                } catch (Exception) {
-                    blob.UploadFromStream(file);
-                }
+                blob.UploadFromStream(file);
 
                 /// Set the metadata into the blob
                 blob.Metadata["FileName"] = filename;
@@ -395,8 +441,8 @@ namespace Admin.Models {
             }
         }
 
-        internal static void DeleteBlob(string blobUri) {
-            if (blobUri == null || blobUri.Length == 0) {
+        internal static void DeleteBlob(string blobPath) {
+            if (blobPath == null || blobPath.Length == 0) {
                 throw new Exception("Invalid blob reference.");
             }
 
@@ -404,7 +450,8 @@ namespace Admin.Models {
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
             // Create the blobl client
             CloudBlobClient client = storageAccount.CreateCloudBlobClient();
-            CloudBlob blob = client.GetBlobReference(blobUri);
+            Uri blobUri = new Uri(blobPath);
+            ICloudBlob blob = client.GetBlobReferenceFromServer(blobUri);
             blob.DeleteIfExists();
         }
     }

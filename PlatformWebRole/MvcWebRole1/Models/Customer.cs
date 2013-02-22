@@ -432,10 +432,14 @@ namespace EcommercePlatform {
             db.SubmitChanges();
         }
 
-        internal bool LoggedIn() {
+        public bool LoggedIn() {
             this.GetFromStorage();
             if (this.ID > 0) {
-                return true;
+                HttpCookie auth_cook = null;
+                auth_cook = HttpContext.Current.Request.Cookies.Get("authenticated");
+                if (auth_cook != null && auth_cook.Value != null && auth_cook.Value.Length > 0 && auth_cook.Value == "1") {
+                    return true;
+                }
             }
             return false;
         }

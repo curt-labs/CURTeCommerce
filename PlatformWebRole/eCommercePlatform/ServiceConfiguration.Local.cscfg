@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ServiceConfiguration serviceName="eCommercePlatform" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="2" osVersion="*" schemaVersion="2012-10.1.8">
   <Role name="PlatformWebRole">
-    <Instances count="3" />
+    <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="StorageConnectionString" value="DefaultEndpointsProtocol=http;AccountName=curtplatform;AccountKey=0rAk0pTnb2/zOto3yugtlpfGhrTVVwkdFXas++1xWxuhylrh7ZAK1CheInjI/7nMy+fMuKklodm7wXLaMzsLBw==" />
       <Setting name="AccountKey" value="0rAk0pTnb2/zOto3yugtlpfGhrTVVwkdFXas++1xWxuhylrh7ZAK1CheInjI/7nMy+fMuKklodm7wXLaMzsLBw==" />

@@ -289,7 +289,6 @@ $(function () {
         $('#scroll_logo').css('display', 'none');
         $(window).scroll(function () {
             var top = $(this).scrollTop();
-            console.log(top);
             if (top > 80) {
                 $('#scroll_logo').fadeIn('fast');
                 $('header').find('.logo').fadeOut();

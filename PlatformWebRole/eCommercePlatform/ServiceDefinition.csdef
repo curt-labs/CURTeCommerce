@@ -75,12 +75,14 @@
       </Site>
     </Sites>
     <Endpoints>
-      <InputEndpoint name="Endpoint1" protocol="http" port="8080" />
+      <InputEndpoint name="Endpoint1" protocol="https" port="8080" />
     </Endpoints>
     <Imports>
     </Imports>
     <ConfigurationSettings>
       <Setting name="StorageConnectionString" />
     </ConfigurationSettings>
+    <Certificates>
+    </Certificates>
   </WebRole>
 </ServiceDefinition>

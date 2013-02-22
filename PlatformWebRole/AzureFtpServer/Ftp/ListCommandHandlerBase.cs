@@ -40,8 +40,7 @@ namespace AzureFtpServer.FtpCommands
                 asDirectories = ConnectionObject.FileSystemObject.GetDirectories(sPath, sMessage);
             }
 
-            var asAll = ArrayHelpers.Add(asDirectories, asFiles) as string[];
-            string sFileList = BuildReply(sMessage, asAll);
+            string sFileList = BuildReply(sMessage, asDirectories, asFiles);
 
             var socketReply = new FtpReplySocket(ConnectionObject);
 
@@ -56,28 +55,54 @@ namespace AzureFtpServer.FtpCommands
             return GetMessage(226, "LIST successful.");
         }
 
-        protected abstract string BuildReply(string sMessage, string[] asFiles);
+        protected abstract string BuildReply(string sMessage, string[] asDirectories, string[] asFiles);
 
-        protected string BuildShortReply(string[] asFiles)
+        protected string BuildShortReply(string[] asDirectories, string[] asFiles)
         {
+            /*string sFileList = string.Join("\r\n", asDirectories);*/
             string sFileList = string.Join("\r\n", asFiles);
             sFileList += "\r\n";
             return sFileList;
         }
 
-        protected string BuildLongReply(string[] asFiles)
+        protected string BuildLongReply(string[] asDirectories, string[] asFiles)
         {
             string sDirectory = GetPath("");
 
             var stringBuilder = new StringBuilder();
 
+            for (int nIndex = 0; nIndex < asDirectories.Length; nIndex++) {
+                stringBuilder.Append("drwxr-xr-x 1 owner group");
+                stringBuilder.Append(" 0 ");
+
+                DateTime fileDate = DateTime.Now;
+                string sDay = fileDate.Day.ToString();
+
+                stringBuilder.Append(TextHelpers.Month(fileDate.Month));
+                stringBuilder.Append(" ");
+
+                if (sDay.Length == 1) {
+                    stringBuilder.Append(" ");
+                }
+
+                stringBuilder.Append(sDay);
+                stringBuilder.Append(" ");
+                stringBuilder.Append(string.Format("{0:hh}", fileDate));
+                stringBuilder.Append(":");
+                stringBuilder.Append(string.Format("{0:mm}", fileDate));
+                stringBuilder.Append(" ");
+
+                stringBuilder.Append(asDirectories[nIndex]);
+                stringBuilder.Append(" ");
+                stringBuilder.Append(Environment.NewLine);
+            }
+            
             for (int nIndex = 0; nIndex < asFiles.Length; nIndex++)
             {
                 string sFile = asFiles[nIndex];
                 sFile = Path.Combine(sDirectory, sFile);
 
                 IFileInfo info = ConnectionObject.FileSystemObject.GetFileInfo(sFile);
-
 
                 if (info != null)
                 {
@@ -87,18 +112,11 @@ namespace AzureFtpServer.FtpCommands
 
                     DateTime fileDate = DateTime.Now;
 
-                    if (info.IsDirectory())
-                    {
-                        stringBuilder.Append("            1 ");
-                    }
-                    else
-                    {
-                        string sFileSize = info.GetSize().ToString();
-                        stringBuilder.Append(TextHelpers.RightAlignString(sFileSize, 13, ' '));
-                        stringBuilder.Append(" ");
-                        fileDate = info.GetModifiedTime();
-                    }
-
+                    string sFileSize = info.GetSize().ToString().PadLeft(12);
+                    stringBuilder.Append(sFileSize);
+                    //stringBuilder.Append(TextHelpers.RightAlignString(sFileSize, 13, ' '));
+                    stringBuilder.Append(" ");
+                    fileDate = info.GetModifiedTime();
 
                     string sDay = fileDate.Day.ToString();
 
@@ -118,7 +136,8 @@ namespace AzureFtpServer.FtpCommands
                     stringBuilder.Append(" ");
 
                     stringBuilder.Append(asFiles[nIndex]);
-                    stringBuilder.Append("\r\n");
+                    stringBuilder.Append(" ");
+                    stringBuilder.Append(Environment.NewLine);
                 }
             }
 

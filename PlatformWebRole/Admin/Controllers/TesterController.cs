@@ -5,8 +5,9 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.ServiceRuntime;
-using Microsoft.WindowsAzure.StorageClient;
 using System.Text;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Admin.Controllers
 {
@@ -35,10 +36,7 @@ namespace Admin.Controllers
                 CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
                 CloudBlobContainer con = blobClient.GetContainerReference("profile-pictures");
 
-                BlobRequestOptions opts = new BlobRequestOptions();
-                opts.UseFlatBlobListing = true;
-
-                foreach (CloudBlob blob in con.ListBlobs(opts)) {
+                foreach (ICloudBlob blob in con.ListBlobs()) {
                     Response.Write(blob.Name);
                 }
 

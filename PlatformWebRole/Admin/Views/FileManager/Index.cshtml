@@ -1,5 +1,6 @@
 ﻿@using Admin.Models;
-@using Microsoft.WindowsAzure.StorageClient;
+@using Microsoft.WindowsAzure.Storage.Blob;
+
 @{
     List<IListBlobItem> files = ViewBag.files ?? new List<IListBlobItem>();
 
@@ -71,7 +72,7 @@
             <li class="ligallery" id="folder_@(UDF.getBlobFileName(g.uri))">
                 <a class="gallery" href="/Admin/FileManager?name=@UDF.getFolderPath(g.uri)">
                     <span class="folder contextmenu"></span>
-                    <span class="galleryname"><strong>@UDF.getBlobFileName(g.uri)</strong> @((g.SubContainers != null) ? g.SubContainers.Count() : 0) subfolders; @((g.SubContainers != null) ? g.BlobCount - g.SubContainers.Count() : g.BlobCount) files</span>
+                    <span class="galleryname"><strong>@UDF.getBlobFileName(g.uri)</strong> @((g.SubContainers != null) ? g.SubContainers.Count() : 0) subfolders; @g.BlobCount files</span>
                 </a>
                 @if(can_edit && g.BlobCount == 0 && ((profile.username.Equals(g.Container.Name) || !usernames.Contains(g.Container.Name)))) {
                     <ul class="menu">
@@ -82,7 +83,7 @@
         }
     }
     @if (files.Count() > 0) {
-        foreach (Microsoft.WindowsAzure.StorageClient.IListBlobItem file in files) {
+        foreach (Microsoft.WindowsAzure.Storage.Blob.IListBlobItem file in files) {
             <li class="lifile">
                 <span class="filebox">
                     @if (image_types.Contains(Path.GetExtension(file.Uri.ToString().ToLower()))) {

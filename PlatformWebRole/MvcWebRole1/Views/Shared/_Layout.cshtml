@@ -1,30 +1,12 @@
 ﻿@{
-    List<EcommercePlatform.Models.APICategory> parent_cats = ViewBag.parent_cats;
-    if (parent_cats == null) {
-        parent_cats = new List<EcommercePlatform.Models.APICategory>();
-    }
-
-    List<double> years = ViewBag.years;
-    if (years == null) {
-        years = new List<double>();
-    }
-
+    List<EcommercePlatform.Models.APICategory> parent_cats = ViewBag.parent_cats ?? new List<EcommercePlatform.Models.APICategory>();
+    List<double> years = ViewBag.years ?? new List<double>();
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
-    
-    string titletag = ViewBag.Title;
-    if(String.IsNullOrEmpty(titletag)) {
-        titletag = settings.Get("SiteTitle");
-    }
+    EcommercePlatform.Customer customer = ViewBag.customer ?? new EcommercePlatform.Customer();
 
-    string metadescription = ViewBag.metadescription;
-    if (String.IsNullOrEmpty(metadescription)) {
-        metadescription = settings.Get("SiteDescription");
-    }
+    string titletag = (String.IsNullOrEmpty(ViewBag.Title)) ? settings.Get("SiteTitle") : ViewBag.Title;
+    string metadescription = (String.IsNullOrEmpty(ViewBag.metadescription)) ? settings.Get("SiteDescription") : ViewBag.metadescription;
 
-    EcommercePlatform.Customer customer = ViewBag.customer;
-    if (customer == null) {
-        customer = new EcommercePlatform.Customer();
-    }
 }
 <!doctype html>
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
@@ -117,7 +99,7 @@
                         <input type="submit" id="btnSearch" value="" />
                     </form>
                     <a href="/" title="Home" class="sub_link">Home</a>
-                    @if (customer != null && customer.ID > 0) {
+                    @if (customer != null && customer.LoggedIn()) {
                         <a href="/Account" title="Access Your Account" class="sub_link">My Account</a>
                     } else {
                         <a href="/Authenticate" title="Login to Your Account" class="sub_link">Login</a>
@@ -125,7 +107,7 @@
                     @if (customer.Cart != null && customer.Cart.CartItems != null) {
                         <a href="/Cart" id="cartlink" title="View Cart" class="sub_link">View Cart ( <span id="cartCount">@customer.Cart.getCount()</span> )</a>
                     }
-                    @if (customer != null && customer.ID > 0) {
+                    @if (customer != null && customer.LoggedIn()) {
                         <a href="/Authenticate/Logout" title="Log Out of your Account" class="sub_link">Log Out</a>
                     }
                     <span class="phone">Call Us: @settings.Get("PhoneNumber")</span>

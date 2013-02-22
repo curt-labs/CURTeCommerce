@@ -31,6 +31,10 @@ namespace AzureFtpServer.Ftp.FileSystem
 
         #region IFile Members
 
+        public string GetRootContainer() {
+            return "";
+        }
+
         public int Read(byte[] abData, int nDataSize)
         {
             if (m_theFile == null)

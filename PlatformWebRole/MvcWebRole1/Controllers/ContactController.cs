@@ -38,7 +38,6 @@ namespace EcommercePlatform.Controllers {
 
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Send(string name = null, string phone = null, string email = null, int contact_type = 0, string message = null) {
-            string remoteip = (Request.ServerVariables["HTTP_X_FORWARDED_FOR"] != null) ? Request.ServerVariables["HTTP_X_FORWARDED_FOR"] : Request.ServerVariables["REMOTE_ADDR"];
 
             ContactInquiry inq = new ContactInquiry();
             try {
@@ -51,7 +50,7 @@ namespace EcommercePlatform.Controllers {
                     dateAdded = DateTime.UtcNow,
                     followedUp = 0
                 };
-                bool recaptchavalid = ReCaptcha.ValidateCaptcha(Request.Form["recaptcha_challenge_field"], Request.Form["recaptcha_response_field"], remoteip);
+                bool recaptchavalid = ReCaptcha.ValidateCaptcha(Request.Form["recaptcha_challenge_field"], Request.Form["recaptcha_response_field"]);
                 if (!recaptchavalid) throw new Exception("Captcha Incorrect!");
 
                 UDF.Sanitize(inq, new string[] { "phone", "followedUp" });
@@ -67,8 +66,6 @@ namespace EcommercePlatform.Controllers {
 
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult SendAJAX(string name = null, string phone = null, string email = null, string to = null, string message = null, string recaptcha_challenge_field = null, string recaptcha_response_field = null) {
-            string remoteip = (Request.ServerVariables["HTTP_X_FORWARDED_FOR"] != null) ? Request.ServerVariables["HTTP_X_FORWARDED_FOR"] : Request.ServerVariables["REMOTE_ADDR"];
-
             ContactInquiry inq = new ContactInquiry();
             try {
                 inq = new ContactInquiry {
@@ -80,7 +77,7 @@ namespace EcommercePlatform.Controllers {
                     dateAdded = DateTime.UtcNow,
                     followedUp = 0
                 };
-                bool recaptchavalid = ReCaptcha.ValidateCaptcha(recaptcha_challenge_field, recaptcha_response_field, remoteip);
+                bool recaptchavalid = ReCaptcha.ValidateCaptcha(recaptcha_challenge_field, recaptcha_response_field);
                 if (!recaptchavalid) throw new Exception("Captcha Incorrect!");
 
                 UDF.Sanitize(inq, new string[] { "phone", "contact_type", "followedUp" });

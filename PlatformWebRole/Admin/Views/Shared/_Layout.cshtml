@@ -1,19 +1,7 @@
 ﻿@{
-    Admin.Profile profile = ViewBag.profile;
-    if(profile == null){
-        profile = new Admin.Profile();   
-    }
-
-    List<Admin.Models.GroupedModule> modules = ViewBag.modules;
-    if(modules == null){
-        modules = new List<Admin.Models.GroupedModule>();   
-    }
-
-    string active_path = ViewBag.active_path;
-    if(active_path == null){
-        active_path = "";
-    }
-    
+    Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
+    List<Admin.Models.GroupedModule> modules = ViewBag.modules ?? new List<Admin.Models.GroupedModule>();
+    string active_path = ViewBag.active_path ?? "";
 }
 
 <!doctype html>

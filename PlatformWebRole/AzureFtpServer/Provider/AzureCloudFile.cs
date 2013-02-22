@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 
 namespace AzureFtpServer.Provider
@@ -12,7 +13,7 @@ namespace AzureFtpServer.Provider
         public byte[] Data { get; set; }
         public Uri Uri { get; set; }
         public StorageOperationResult StorageOperationResult { get; set; }
-        public NameValueCollection Meta { get; set; }
+        public IDictionary<string,string> Meta { get; set; }
         public long Size { get; set; }
         public String ContentType { get; set; }
 

@@ -67,7 +67,7 @@ namespace AzureFtpServer.Azure
 
         public bool IsDirectory()
         {
-            bool result = _file == null || !_provider.CheckBlobExists(_file.Uri.ToString());
+            bool result = _file == null || _file.Uri == null || !_provider.CheckBlobExists(_file.Uri.ToString());
             return result;
         }
 

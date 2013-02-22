@@ -24,12 +24,17 @@ namespace EcommercePlatform.Controllers {
             ViewBag.subject = subject;
             ViewBag.rating = rating;
             ViewBag.review = review;
+            ViewBag.err = err;
 
             return View();
         }
 
+        [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Submit(int id = 0, string name = "", string email = "", string subject = "", int rating = 5, string review = "") {
             try {
+                if (!(ReCaptcha.ValidateCaptcha(Request.Form["recaptcha_challenge_field"], Request.Form["recaptcha_response_field"]))) {
+                    throw new Exception("Recaptcha Validation Failed.");
+                }
                 CURTAPI.SubmitReview(id, rating, subject, review, name, email);
                 return Redirect("/Part/" + id);
             } catch (Exception e) {

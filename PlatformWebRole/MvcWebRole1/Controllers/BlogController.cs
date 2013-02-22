@@ -129,8 +129,7 @@ namespace EcommercePlatform.Controllers {
             BlogPost post = PostModel.GetById(id);
             string postdate = String.Format("{0:M-d-yyyy}", post.publishedDate);
             try {
-                string remoteip = (Request.ServerVariables["HTTP_X_FORWARDED_FOR"] != null) ? Request.ServerVariables["HTTP_X_FORWARDED_FOR"] : Request.ServerVariables["REMOTE_ADDR"];
-                if (!(Models.ReCaptcha.ValidateCaptcha(Request.Form["recaptcha_challenge_field"], Request.Form["recaptcha_response_field"], remoteip))) {
+                if (!(Models.ReCaptcha.ValidateCaptcha(Request.Form["recaptcha_challenge_field"], Request.Form["recaptcha_response_field"]))) {
                     throw new Exception("Recaptcha Validation Failed.");
                 }
                 if (id == 0) { throw new Exception("You must be on a blog post to add a comment"); }

@@ -17,6 +17,10 @@ namespace EcommercePlatform.Controllers {
             // Retrieve from Session/Cookie
             cust.GetFromStorage();
 
+            if (!cust.LoggedIn()) {
+                return RedirectToAction("Index","Authenticate");
+            }
+
             // Get the Customer record
             cust.Get();
 
@@ -32,6 +36,9 @@ namespace EcommercePlatform.Controllers {
         public ActionResult Orders() {
             Customer cust = new Customer();
             cust.GetFromStorage();
+            if (!cust.LoggedIn()) {
+                return RedirectToAction("Index", "Authenticate");
+            }
             cust.BindOrders();
 
             ViewBag.cust = cust;
@@ -43,6 +50,9 @@ namespace EcommercePlatform.Controllers {
             ViewBag.message = message;
             Customer cust = new Customer();
             cust.GetFromStorage();
+            if (!cust.LoggedIn()) {
+                return RedirectToAction("Index", "Authenticate");
+            }
             ViewBag.cust = cust;
             return View();
         }
@@ -51,6 +61,9 @@ namespace EcommercePlatform.Controllers {
         public ActionResult ResetPassword() {
             Customer cust = new Customer();
             cust.GetFromStorage();
+            if (!cust.LoggedIn()) {
+                return RedirectToAction("Index", "Authenticate");
+            }
             string message = "";
             try {
                 string current = Request.Form["current"];
@@ -76,6 +89,9 @@ namespace EcommercePlatform.Controllers {
         [RequireHttps]
         public ActionResult Addresses() {
             Customer cust = ViewBag.customer;
+            if (!cust.LoggedIn()) {
+                return RedirectToAction("Index", "Authenticate");
+            }
             List<Address> addresses = cust.GetAddresses();
             List<Country> countries = UDF.GetCountries();
             ViewBag.countries = countries;
@@ -88,6 +104,9 @@ namespace EcommercePlatform.Controllers {
         [RequireHttps]
         public ActionResult Order(int id = 0) {
             Customer cust = new Customer();
+            if (!cust.LoggedIn()) {
+                return RedirectToAction("Index", "Authenticate");
+            }
             cust.ID = ViewBag.customer.ID;
             Cart order = cust.GetOrderByPayment(id);
             if (order == null || order.ID == 0) {
@@ -106,6 +125,9 @@ namespace EcommercePlatform.Controllers {
             try {
                 cust.GetFromStorage();
 
+                if (!cust.LoggedIn()) {
+                    return RedirectToAction("Index", "Authenticate");
+                }
                 #region Basic Information
                 string email = cust.email;
                 if (Request.Form["email"] != null && Request.Form["email"].Length > 0) {
@@ -202,6 +224,9 @@ namespace EcommercePlatform.Controllers {
         public ActionResult DeleteAddress(int id = 0) {
             Customer cust = new Customer();
             cust.GetFromStorage();
+            if (!cust.LoggedIn()) {
+                return RedirectToAction("Index", "Authenticate");
+            }
             Address a = new Address().Get(id);
             cust.ClearAddress(a.ID);
             if (a.cust_id == cust.ID) {
@@ -214,6 +239,9 @@ namespace EcommercePlatform.Controllers {
         public ActionResult SetBillingDefault(int id = 0) {
             Customer cust = new Customer();
             cust.GetFromStorage();
+            if (!cust.LoggedIn()) {
+                return RedirectToAction("Index", "Authenticate");
+            }
             Address a = new Address().Get(id);
             if (a.cust_id == cust.ID) {
                 cust.SetBillingDefaultAddress(id);
@@ -226,6 +254,9 @@ namespace EcommercePlatform.Controllers {
         public ActionResult SetShippingDefault(int id = 0) {
             Customer cust = new Customer();
             cust.GetFromStorage();
+            if (!cust.LoggedIn()) {
+                return RedirectToAction("Index", "Authenticate");
+            }
             Address a = new Address().Get(id);
             if (a.cust_id == cust.ID) {
                 cust.SetShippingDefaultAddress(id);

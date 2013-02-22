@@ -5,8 +5,9 @@ using System.Web;
 using System.IO;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.ServiceRuntime;
-using Microsoft.WindowsAzure.StorageClient;
 using System.Configuration;
+using System.Text;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Admin.Models {
     public class EDI {
@@ -17,7 +18,7 @@ namespace Admin.Models {
                     Cart order = new Cart().Get(id);
                     string ponumber = settings.Get("EDIPOPreface") + order.payment_id.ToString();
                     if (order.CartItems.Count > 0) {
-                        CloudBlob blob = null;
+                        CloudBlockBlob blob = null;
                         string edicontent = "";
                         int linecount = 1;
                         // linecount is just for the PO section and doesn't include the head or tail
@@ -71,8 +72,10 @@ namespace Admin.Models {
                         DiscountBlobContainer blobcontainer = BlobManagement.GetContainer("edi");
                         BlobContainerPermissions perms = new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob };
                         blobcontainer.Container.SetPermissions(perms);
-                        blob = blobcontainer.Container.GetBlobReference(string.Format("out\\PO{0}_{1}.txt", String.Format("{0:yyyyMMdd}", DateTime.Now), String.Format("{0:HHmmss}", DateTime.Now)));
-                        blob.UploadText(edicontent);
+                        blob = blobcontainer.Container.GetBlockBlobReference(string.Format("out\\PO{0}_{1}.txt", String.Format("{0:yyyyMMdd}", DateTime.Now), String.Format("{0:HHmmss}", DateTime.Now)));
+                        byte[] edibytes = Encoding.ASCII.GetBytes(edicontent);
+                        MemoryStream edistream = new MemoryStream(edibytes);
+                        blob.UploadFromStream(edistream);
                     }
                 } catch { };
             }

@@ -39,7 +39,7 @@ namespace Admin {
 
         protected void Application_BeginRequest(Object sender, EventArgs e) {
             if (HttpContext.Current.Request.IsSecureConnection == false) {
-                Response.Redirect("https://" + Request.ServerVariables["HTTP_HOST"] + HttpContext.Current.Request.RawUrl);
+                //Response.Redirect("https://" + Request.ServerVariables["HTTP_HOST"] + HttpContext.Current.Request.RawUrl);
             }
         }
 

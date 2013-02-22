@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AzureFtpServer.Ftp.FileSystem;
 using AzureFtpServer.Provider;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace AzureFtpServer.Azure {
     public class AzureFileSystem : IFileSystem {
@@ -35,6 +36,10 @@ namespace AzureFtpServer.Azure {
             };
         }
 
+        public string GetRootContainer() {
+            return _containerName;
+        }
+
         public IFileInfo GetFileInfo(string sPath) {
             sPath = PreparePath(sPath);
             AzureCloudFile file = _provider.Get(sPath, false);
@@ -45,7 +50,7 @@ namespace AzureFtpServer.Azure {
         public string[] GetFiles(string sPath) {
             sPath = PreparePath(sPath);
             CloudFileCollection files = _provider.GetFileListing(sPath);
-            string[] result = files.Select(r => r.Uri.ToString()).ToArray().ToFtpPath();
+            string[] result = files.Where(x => x.GetType() != typeof(CloudBlobDirectory)).Select(r => r.Uri.ToString()).ToArray().ToFtpPath();
             return result;
         }
 
@@ -53,7 +58,7 @@ namespace AzureFtpServer.Azure {
             sPath = PreparePath(sPath);
             CloudFileCollection files = _provider.GetFileListing(sPath);
             IEnumerable<string> result = (from f in files
-                                          where f.Uri.ToString().Contains(sWildcard)
+                                          where f.Uri.ToString().Contains(sWildcard) && f.GetType() != typeof(CloudBlobDirectory)
                                           select f.Uri.ToString());
             string[] r = result.ToArray().ToFtpPath();
             return r;

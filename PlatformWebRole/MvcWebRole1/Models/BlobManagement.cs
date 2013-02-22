@@ -4,9 +4,10 @@ using System.Linq;
 using System.Web;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.StorageClient;
 using System.IO;
 using System.Drawing;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace EcommercePlatform.Models {
     public class BlobManagement {
@@ -25,16 +26,17 @@ namespace EcommercePlatform.Models {
             
             CloudBlobContainer con = null;
             if (parent.Length > 0) {
-                conName = parent + "/" + name;
-                CloudBlobDirectory subCon = client.GetBlobDirectoryReference(conName);
-                subCon.Container.CreateIfNotExist();
+                //conName = parent + "/" + name;
+                CloudBlobContainer parentContainer = client.GetContainerReference(parent);
+                CloudBlobDirectory subCon = parentContainer.GetDirectoryReference(name);
+                subCon.Container.CreateIfNotExists();
                 con = subCon.Container;
             }else{
                 // Retrieve a reference to a container
                 con = client.GetContainerReference(conName);
 
                 // Create the container if it doesn't already exist
-                con.CreateIfNotExist();
+                con.CreateIfNotExists();
             }
 
             if (make_public) { // Make access to this container public
@@ -66,7 +68,7 @@ namespace EcommercePlatform.Models {
 
             // Retrieve a reference to a previously created container
             CloudBlobContainer con = client.GetContainerReference(name);
-            con.CreateIfNotExist();
+            con.CreateIfNotExists();
             con.SetPermissions(new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Container });
 
             DiscountBlobContainer container = new DiscountBlobContainer {
@@ -77,15 +79,16 @@ namespace EcommercePlatform.Models {
             return container;
         }
 
-        internal static CloudBlobDirectory GetDirectory(string name) {
-
+        internal static CloudBlobDirectory GetDirectory(string parent, string name) {
+            
             // Retrieve storage account from connection string
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
 
             // Create the blobl client
             CloudBlobClient client = storageAccount.CreateCloudBlobClient();
 
-            CloudBlobDirectory subCon = client.GetBlobDirectoryReference(name);
+            CloudBlobContainer parentCont = client.GetContainerReference(parent);
+            CloudBlobDirectory subCon = parentCont.GetDirectoryReference(name);
 
             return subCon;
         }
@@ -109,28 +112,42 @@ namespace EcommercePlatform.Models {
 
             // Create and retrieve reference to new container
             CloudBlobContainer newContainer = client.GetContainerReference(new_name);
-            newContainer.CreateIfNotExist();
+            newContainer.CreateIfNotExists();
             newContainer.SetPermissions(new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob });
 
             foreach (var blob in oldContainer.ListBlobs()) {
 
-                if (blob.GetType().ToString().ToUpper() == "CLOUDBLOBDIRECTORY") {
+                if (blob.GetType() == typeof(CloudBlobDirectory)) {
                     CloudBlobDirectory oldDir = (CloudBlobDirectory)blob;
 
                     // Get the name of the directory
                     string dirName = oldDir.Container.Name;
-                } else {
-
-                    CloudBlob oldBlob = (CloudBlob)blob;
+                } else if (blob.GetType() == typeof(CloudPageBlob)) {
+                    CloudPageBlob oldBlob = (CloudPageBlob)blob;
 
                     // Get the filename of the existing blob
                     string filename = Path.GetFileName(blob.Uri.ToString());
 
                     // Create blob reference for the new container using the existing blob's filename
-                    CloudBlob newBlob = newContainer.GetBlobReference(filename);
+                    CloudPageBlob newBlob = newContainer.GetPageBlobReference(filename);
 
                     // Copy old blob to new blob
-                    newBlob.CopyFromBlob(oldBlob);
+                    newBlob.StartCopyFromBlob(oldBlob);
+                    // Delete old Blob
+                    oldBlob.DeleteIfExists();
+
+                } else {
+
+                    CloudBlockBlob oldBlob = (CloudBlockBlob)blob;
+
+                    // Get the filename of the existing blob
+                    string filename = Path.GetFileName(blob.Uri.ToString());
+
+                    // Create blob reference for the new container using the existing blob's filename
+                    CloudBlockBlob newBlob = newContainer.GetBlockBlobReference(filename);
+
+                    // Copy old blob to new blob
+                    newBlob.StartCopyFromBlob(oldBlob);
 
                     // Delete old Blob
                     oldBlob.DeleteIfExists();
@@ -199,7 +216,7 @@ namespace EcommercePlatform.Models {
                 // Create the blobl client
                 CloudBlobClient client = storageAccount.CreateCloudBlobClient();
 
-                CloudBlobDirectory container = client.GetBlobDirectoryReference(parent);
+                CloudBlobContainer container = client.GetContainerReference(parent);
                 List<DiscountBlobContainer> subs = new List<DiscountBlobContainer>();
 
                 foreach (CloudBlobDirectory sub_dir in container.ListBlobs().OfType<CloudBlobDirectory>()) {
@@ -234,32 +251,63 @@ namespace EcommercePlatform.Models {
             return blobs;
         }
 
-        internal static void MoveBlob(CloudBlob blob, string topath = "", string currentpath = "") {
+        internal static void MoveBlob(IListBlobItem blob, string topath = "", string currentpath = "") {
             // Retrieve stroage account from connection string
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
 
             // Create the blob client
             CloudBlobClient client = storageAccount.CreateCloudBlobClient();
 
-            CloudBlobContainer blobContainer = null;
             CloudBlobDirectory toFolder = null;
-
-            CloudBlob newblob = null;
-
-            if (topath.Contains('/')) {
-                toFolder = client.GetBlobDirectoryReference(topath);
-                string filepath = blob.Name.Substring(blob.Name.IndexOf("/") + 1);
-                newblob = toFolder.GetBlobReference(filepath);
+            CloudBlobContainer parentContainer = null;
+            string filepath = "";
+            if (blob.GetType() == typeof(CloudPageBlob)) {
+                CloudPageBlob bblob = (CloudPageBlob)blob;
+                filepath = bblob.Name.Substring(bblob.Name.IndexOf("/") + 1);
             } else {
-                blobContainer = client.GetContainerReference(topath);
-                string filepath = blob.Name.Substring(blob.Name.IndexOf("/") + 1);
-                newblob = blobContainer.GetBlobReference(filepath);
+                CloudBlockBlob bblob = (CloudBlockBlob)blob;
+                filepath = bblob.Name.Substring(bblob.Name.IndexOf("/") + 1);
             }
-            newblob.UploadByteArray(blob.DownloadByteArray());
-            blob.DeleteIfExists();
+            if (topath.Contains('/')) {
+                List<string> paths = topath.Split('/').ToList();
+                string parent = paths.FirstOrDefault();
+                paths.RemoveAt(0);
+                string folder = string.Join("/", paths.ToArray());
+
+                parentContainer = client.GetContainerReference(parent);
+                toFolder = parentContainer.GetDirectoryReference(folder);
+                if(blob.GetType() == typeof(CloudPageBlob)) {
+                    CloudPageBlob pblob = (CloudPageBlob)blob;
+                    CloudPageBlob newblob = toFolder.GetPageBlobReference(filepath);
+                    newblob.StartCopyFromBlob(pblob);
+                    pblob.DeleteIfExists();
+
+                } else {
+                    CloudBlockBlob bblob = (CloudBlockBlob)blob;
+                    CloudBlockBlob newblob = toFolder.GetBlockBlobReference(filepath);
+                    newblob.StartCopyFromBlob(bblob);
+                    bblob.DeleteIfExists();
+                }
+            } else {
+                parentContainer = client.GetContainerReference(topath);
+                if (blob.GetType() == typeof(CloudPageBlob)) {
+                    CloudPageBlob pblob = (CloudPageBlob)blob;
+                    filepath = pblob.Name.Substring(pblob.Name.IndexOf("/") + 1);
+                    CloudPageBlob newblob = parentContainer.GetPageBlobReference(filepath);
+                    newblob.StartCopyFromBlob(pblob);
+                    pblob.DeleteIfExists();
+
+                } else {
+                    CloudBlockBlob bblob = (CloudBlockBlob)blob;
+                    filepath = bblob.Name.Substring(bblob.Name.IndexOf("/") + 1);
+                    CloudBlockBlob newblob = parentContainer.GetBlockBlobReference(filepath);
+                    newblob.StartCopyFromBlob(bblob);
+                    bblob.DeleteIfExists();
+                }
+            }
         }
 
-        internal static CloudBlob CreateBlob(string container = "", string filename = "", Stream file = null) {
+        internal static CloudBlockBlob CreateBlob(string container = "", string filename = "", Stream file = null) {
             if (file == null) { throw new Exception("No file found."); }
 
             if (file.Length > 0) {
@@ -273,7 +321,7 @@ namespace EcommercePlatform.Models {
                 // and using parallel settings appears to spread the copy across multiple threads
                 // if you have big bandwidth you can increase the thread number below
                 // because Azure accepts blobs broken into blocks in any order of arrival. Fucking awesome!
-                client.Timeout = new System.TimeSpan(1, 0, 0);
+                client.ServerTimeout = new System.TimeSpan(1, 0, 0);
                 client.ParallelOperationThreadCount = 2;
 
 
@@ -284,36 +332,18 @@ namespace EcommercePlatform.Models {
                 } else {
                     blobContainer = client.GetContainerReference(container);
                 }
-                blobContainer.CreateIfNotExist(); // Create the container if it doesn't exist
+                blobContainer.CreateIfNotExists(); // Create the container if it doesn't exist
                 blobContainer.SetPermissions(new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob });
 
-                CloudBlob blob = null;
-                blob = blobContainer.GetBlobReference(filename.Replace(" ", ""));
+                CloudBlockBlob blob = null;
+                blob = blobContainer.GetBlockBlobReference(filename.Replace(" ", ""));
 
                 // Get the content type of the file;
                 string content_type = "image/png";
                 Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(Path.GetExtension(filename).ToLower());
                 if(rk != null && rk.GetValue("Content Type") != null){ content_type = rk.GetValue("Content Type").ToString(); }
 
-                try {
-                    // Create an image object and resize the image to 72x72
-                    Image img = Image.FromStream(file);
-
-                    // Push the image into a MemoryStream and upload the stream to our blob, fuck this is too much work
-                    // why can't we just say here's the image, now put it in a blob! Damn you!!!!
-                    MemoryStream stream = new MemoryStream();
-                    img.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-
-                    byte[] imgBytes = stream.GetBuffer();
-                    stream.Seek(0, SeekOrigin.Begin);
-
-                    blob.UploadFromStream(stream);
-
-                    // Oh yeah, dispose the stream so we don't eat up memory
-                    stream.Dispose();
-                } catch (Exception) {
-                    blob.UploadFromStream(file);
-                }
+                blob.UploadFromStream(file);
 
                 /// Set the metadata into the blob
                 blob.Metadata["FileName"] = filename;
@@ -349,9 +379,15 @@ namespace EcommercePlatform.Models {
             List<IListBlobItem> blobs = new List<IListBlobItem>();
             blobs = container.ListBlobs().ToList<IListBlobItem>();
 
-            foreach (CloudBlob blob in blobs) {
+            foreach (IListBlobItem blob in blobs) {
                 if (blob.Uri.ToString().ToLower() == blobUri.ToLower()) {
-                    blob.DeleteIfExists();
+                    if (blob.GetType() == typeof(CloudBlockBlob)) {
+                        CloudBlockBlob item = (CloudBlockBlob)blob;
+                        item.DeleteIfExists();
+                    } else if (blob.GetType() == typeof(CloudPageBlob)) {
+                        CloudPageBlob item = (CloudPageBlob)blob;
+                        item.DeleteIfExists();
+                    }
                 }
             }
         }

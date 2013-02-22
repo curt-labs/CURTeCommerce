@@ -20,6 +20,7 @@ insert into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('FTP','/A
 insert into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('Task Scheduler','/Admin/Scheduler',0,'Task Scheduler',1,'/Admin/Content/img/module_icons/SiteMap.png');
 insert into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('Invoices','/Admin/Invoice',0,'View Invoices',1,'/Admin/Content/img/module_icons/Inbox.png');
 Insert Into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('Regions / Taxes','/Admin/Regions',0,'Region / Tax Management',1,'/Admin/Content/img/module_icons/Bank.png');
+Insert Into Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('Themes','/Admin/Themes',0,'Theme Management',1,'/Admin/Content/img/module_icons/ColorPalette.png');
 GO
 
 insert into Modules (name,path,parentID,alt_text,inMenu) VALUES ('Order Details','/Admin/Orders/Items',2,'Order Details',0);

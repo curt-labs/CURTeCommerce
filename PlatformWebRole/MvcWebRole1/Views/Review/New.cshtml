@@ -3,19 +3,12 @@
     bool hide_layout = ViewBag.hide_layout;
     int partID = ViewBag.partID;
 
-    EcommercePlatform.Models.APIPart part = ViewBag.part;
-    if(part == null){
-        part = new EcommercePlatform.Models.APIPart();   
-    }
-    
+    EcommercePlatform.Models.APIPart part = ViewBag.part ?? new EcommercePlatform.Models.APIPart();
     if(!hide_layout){
         Layout = "~/Views/Shared/_Layout.cshtml";
     }
     
-    string _err = ViewBag.err;
-    if (_err == null) {
-        _err = ""; 
-    }
+    string _err = ViewBag.err ?? "";
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
 <link href="@settings.Get("PathToCSS")/css/new_review.css" rel="stylesheet" type="text/css" />
@@ -36,7 +29,7 @@
         <p class="error">@_err</p>
     }
     
-    <form method="get" action="/Review/Submit/@partID">
+    <form method="post" action="/Review/Submit/@partID">
         <label for="rname">
             Name
             <input type="text" name="name" id="rname" value="@ViewBag.name" class="placeholder" placeholder="Enter your name" />
@@ -65,6 +58,8 @@
         </label>
 
         <textarea rows="15" cols="50" name="review" class="placeholder" placeholder="Write new review...">@ViewBag.review</textarea>
+        @Html.Raw(EcommercePlatform.Models.ReCaptcha.GenerateCaptcha())
+
         <input type="submit" name="btnReview" id="btnReview" value="Submit" />
         
     </form>

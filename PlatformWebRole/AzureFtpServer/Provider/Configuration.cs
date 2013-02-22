@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using Microsoft.WindowsAzure.ServiceRuntime;
-using Microsoft.WindowsAzure.StorageClient;
 
 namespace AzureFtpServer.Provider
 {

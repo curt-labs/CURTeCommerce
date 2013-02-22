@@ -1,31 +1,11 @@
 ﻿@{
     ViewBag.Title = "Index";
 
-    List<EcommercePlatform.Models.APIPart> recentParts = ViewBag.recentParts;
-    if(recentParts == null){
-        recentParts = new List<EcommercePlatform.Models.APIPart>();
-    }
-
-    List<EcommercePlatform.Models.APICategory> parent_cats = ViewBag.parent_cats;
-    if(parent_cats == null){
-        parent_cats = new List<EcommercePlatform.Models.APICategory>();
-    }
-
-    EcommercePlatform.ContentPage page = ViewBag.page;
-    if(page == null){
-        page = new EcommercePlatform.ContentPage();   
-    }
-
-    List<EcommercePlatform.Banner> banners = ViewBag.banners;
-    if (banners == null) {
-        banners = new List<EcommercePlatform.Banner>();
-    }
-
-    EcommercePlatform.Customer customer = ViewBag.customer;
-    if (customer == null) {
-        customer = new EcommercePlatform.Customer();
-    }
-
+    List<EcommercePlatform.Models.APIPart> recentParts = ViewBag.recentParts ?? new List<EcommercePlatform.Models.APIPart>();
+    List<EcommercePlatform.Models.APICategory> parent_cats = ViewBag.parent_cats ?? new List<EcommercePlatform.Models.APICategory>();
+    EcommercePlatform.ContentPage page = ViewBag.page ?? new EcommercePlatform.ContentPage();
+    List<EcommercePlatform.Banner> banners = ViewBag.banners ?? new List<EcommercePlatform.Banner>();
+    EcommercePlatform.Customer customer = ViewBag.customer ?? new EcommercePlatform.Customer();
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
     string titletag = page.metaTitle ?? ViewBag.settings.Get("SiteTitle");
 
@@ -121,7 +101,7 @@
                         <input type="submit" id="btnSearch" value="" />
                     </form>
                     <a href="/" title="Home" class="sub_link">Home</a>
-                    @if (customer != null && customer.ID > 0) {
+                    @if (customer != null && customer.LoggedIn()) {
                         <a href="/Account" title="Access Your Account" class="sub_link">My Account</a>
                     } else {
                         <a href="/Authenticate" title="Login to Your Account" class="sub_link">Login</a>
@@ -129,7 +109,7 @@
                     @if (customer.Cart != null && customer.Cart.CartItems != null) {
                         <a href="/Cart" id="cartlink" title="View Cart" class="sub_link">View Cart ( <span id="cartCount">@customer.Cart.getCount()</span> )</a>
                     }
-                    @if (customer != null && customer.ID > 0) {
+                    @if (customer != null && customer.LoggedIn()) {
                         <a href="/Authenticate/Logout" title="Log Out of your Account" class="sub_link">Log Out</a>
                     }
                     <span class="phone">Call Us: @settings.Get("PhoneNumber")</span>
@@ -368,9 +348,10 @@
                     <a href="http://www.sema.org/" title="SEMA Specialty Equipment Market Association" target="_blank">
                         <img src="/Content/img/footer/sema.png" alt="SEMA Show" class="sema" />
                     </a>
-
+                    
                 </div>
                 <a href="http://www.curtmfg.com/" class="curtlogo" target="_blank"><img src="/Content/img/curt.jpg" alt="CURT Manufacturing - The FIRST Name in Towing Products" /></a>
+                <script type="text/javascript" id="badge_script" async src="http://authorized.curtmfg.com/badge.js?id=ca2a0d65-356b-4da7-8b42-a7de4e1f2731&size=small"></script>
             </div>
         </div>
         <div class="clearfix"></div>

@@ -9,9 +9,9 @@ namespace AzureFtpServer.FtpCommands
         {
         }
 
-        protected override string BuildReply(string sMessage, string[] asFiles)
+        protected override string BuildReply(string sMessage, string[] asDirectories, string[] asFiles)
         {
-            return BuildLongReply(asFiles);
+            return BuildLongReply(asDirectories, asFiles);
         }
     }
 }

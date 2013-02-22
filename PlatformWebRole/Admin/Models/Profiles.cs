@@ -10,9 +10,10 @@ using System.Drawing;
 using System.Net;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.ServiceRuntime;
-using Microsoft.WindowsAzure.StorageClient;
 using System.Diagnostics;
 using System.Net.Configuration;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage;
 
 
 namespace Admin.Models {
@@ -207,12 +208,8 @@ namespace Admin.Models {
                     // Retrieve reference to a previously created container
                     CloudBlobContainer container = client.GetContainerReference("profile-pictures");
 
-                    // Create FlatListing options
-                    BlobRequestOptions opts = new BlobRequestOptions();
-                    opts.UseFlatBlobListing = true;
-
                     // Retrieve reference to a blob name
-                    foreach(CloudBlob blob in container.ListBlobs(opts)){
+                    foreach(ICloudBlob blob in container.ListBlobs()){
                         if(blob.Uri.ToString() == prof.image){
                             blob.DeleteIfExists();
                             prof.image = "";
@@ -257,12 +254,12 @@ namespace Admin.Models {
                 // and using parallel settings appears to spread the copy across multiple threads
                 // if you have big bandwidth you can increase the thread number below
                 // because Azure accepts blobs broken into blocks in any order of arrival. Fucking awesome!
-                _BlobClient.Timeout = new System.TimeSpan(1, 0, 0);
+                _BlobClient.ServerTimeout = new System.TimeSpan(1, 0, 0);
                 _BlobClient.ParallelOperationThreadCount = 2;
 
                 // Get and create the container
                 _BlobContainer = _BlobClient.GetContainerReference("profile-pictures");
-                _BlobContainer.CreateIfNotExist();
+                _BlobContainer.CreateIfNotExists();
 
                 // Set the permissions on the container to be public
                 _BlobContainer.SetPermissions(new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob });
@@ -272,7 +269,7 @@ namespace Admin.Models {
                 string filename = username;
 
                 // Create the Blob and upload the file
-                CloudBlob blob = _BlobContainer.GetBlobReference(filename + extension);
+                CloudBlockBlob blob = _BlobContainer.GetBlockBlobReference(filename + extension);
 
                 // Create an image object and resize the image to 72x72
                 Image img = Image.FromStream(file.InputStream);

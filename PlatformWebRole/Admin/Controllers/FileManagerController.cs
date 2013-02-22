@@ -5,11 +5,11 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.ServiceRuntime;
-using Microsoft.WindowsAzure.StorageClient;
 using Admin.Models;
 using Newtonsoft.Json;
 using System.IO;
 using System.Web.Script.Serialization;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Admin.Controllers {
     public class FileManagerController : BaseController {
@@ -141,7 +141,7 @@ namespace Admin.Controllers {
             try {
                 string filename = HttpContext.Request.Headers["X-File-Name"];
                 Stream input = Request.InputStream;
-                CloudBlob blob = BlobManagement.CreateBlob(container, filename, input);
+                CloudBlockBlob blob = BlobManagement.CreateBlob(container, filename, input);
 
                 return blob.Uri.ToString();
             } catch (Exception e) {
@@ -203,7 +203,7 @@ namespace Admin.Controllers {
             try {
                 string filename = upload.FileName;
                 Stream input = upload.InputStream;
-                CloudBlob blob = BlobManagement.CreateBlob("miscellaneous", filename, input);
+                CloudBlockBlob blob = BlobManagement.CreateBlob("miscellaneous", filename, input);
                 url = blob.Uri.ToString();
                 message = "File Uploaded";
             } catch (Exception e) {

@@ -5,8 +5,9 @@ using System.Web;
 using System.IO;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.ServiceRuntime;
-using Microsoft.WindowsAzure.StorageClient;
 using System.Configuration;
+using Microsoft.WindowsAzure.Storage.Blob;
+using System.Text;
 
 namespace EcommercePlatform.Models {
     public class EDI {
@@ -20,7 +21,7 @@ namespace EcommercePlatform.Models {
                         cust.Get();
                         order.BindAddresses();
                         string ponumber = settings.Get("EDIPOPreface") + order.payment_id.ToString();
-                        CloudBlob blob = null;
+                        CloudBlockBlob blob = null;
                         string edicontent = "";
                         int linecount = 1;
                         // linecount is just for the PO section and doesn't include the head or tail
@@ -74,20 +75,41 @@ namespace EcommercePlatform.Models {
                         DiscountBlobContainer blobcontainer = BlobManagement.GetContainer("edi");
                         BlobContainerPermissions perms = new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob };
                         blobcontainer.Container.SetPermissions(perms);
-                        blob = blobcontainer.Container.GetBlobReference(string.Format("out\\PO{0}_{1}.txt", String.Format("{0:yyyyMMdd}", DateTime.Now), String.Format("{0:HHmmss}", DateTime.Now)));
-                        blob.UploadText(edicontent);
+                        blob = blobcontainer.Container.GetBlockBlobReference(string.Format("out\\PO{0}_{1}.txt", String.Format("{0:yyyyMMdd}", DateTime.Now), String.Format("{0:HHmmss}", DateTime.Now)));
+                        byte[] edibytes = Encoding.ASCII.GetBytes(edicontent);
+                        MemoryStream edistream = new MemoryStream(edibytes);
+                        blob.UploadFromStream(edistream);
                     }
                 } catch { };
             }
         }
 
         internal void Read() {
-            CloudBlobDirectory InFolder = BlobManagement.GetDirectory("edi/in");
-            CloudBlobDirectory ArchiveFolder = BlobManagement.GetDirectory("edi/archive");
-            foreach (CloudBlob blob in InFolder.ListBlobs()) {
-                if(blob.GetType().ToString().ToUpper() != "CLOUDBLOBDIRECTORY" && !blob.Name.Contains(".req")) {
-                    string editext = blob.DownloadText().Replace("\r\n", "");
-                    if (blob.Name.ToLower().Contains("inv")) {
+            
+            CloudBlobDirectory InFolder = BlobManagement.GetDirectory("edi","in");
+            CloudBlobDirectory ArchiveFolder = BlobManagement.GetDirectory("edi","archive");
+            foreach (var blob in InFolder.ListBlobs()) {
+                string blobname = "";
+                if (blob.GetType() != typeof(CloudBlobDirectory)) {
+                    string editext = "";
+                    Stream blobstream = null;
+                    if (blob.GetType() == typeof(CloudBlockBlob)) {
+                        CloudBlockBlob bblob = (CloudBlockBlob)blob;
+                        if (!bblob.Name.Contains(".req")) {
+                            blobname = bblob.Name;
+                            bblob.DownloadToStream(blobstream);
+                        }
+                    } else {
+                        CloudPageBlob pblob = (CloudPageBlob)blob;
+                        if (!pblob.Name.Contains(".req")) {
+                            blobname = pblob.Name;
+                            pblob.DownloadToStream(blobstream);
+                        }
+                    }
+                    StreamReader reader = new StreamReader(blobstream);
+                    editext = reader.ReadToEnd();
+                    editext = editext.Replace("\r\n", "");
+                    if (blobname.ToLower().Contains("inv")) {
                         // invoice file
                         try {
                             ReadInvoice(editext);
@@ -96,7 +118,7 @@ namespace EcommercePlatform.Models {
                             //string[] tos = new string [] {"jjaniuk@curtmfg.com"};
                             //UDF.SendEmail(tos, "Error in Invoice Read", false, e.Message + " " + e.StackTrace, false);
                         }
-                    } else if (blob.Name.ToLower().Contains("asn")) {
+                    } else if (blobname.ToLower().Contains("asn")) {
                         // ship notification
                         try {
                             ReadShippingNotification(editext);
