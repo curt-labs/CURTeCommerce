@@ -31,7 +31,7 @@
     <span class="error">Failed to save your profile.</span>
 }
 
-<form method="post" enctype="multipart/form-data" action="/Admin/Profile/Edit/@prof.id?ulist=@ulist" class="admin_form">
+<form method="post" enctype="multipart/form-data" action="/Admin/Profile/Edit/@prof.id?ulist=@ulist.ToString()" class="admin_form">
 
     @if (errors != null) {
         <ul class="error_box">

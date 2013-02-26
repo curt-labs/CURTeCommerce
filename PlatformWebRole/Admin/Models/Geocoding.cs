@@ -11,18 +11,20 @@ namespace Admin.Models {
 
     public class Geocoding {
 
-        public static GeocodingResponse GetGeoLocation(string address, string city, int stateID, string zip, string countryCode = "US", string StateProvidence = "") {
+        public static GeocodingResponse GetGeoLocation(string city, int stateID, string zip, string countryCode = "US", string StateProvidence = "") {
             try {
                 EcommercePlatformDataContext db = new EcommercePlatformDataContext();
                 string abbr = "";
                 if (stateID != 0) {
-                    abbr = db.States.Where(x => x.stateID.Equals(stateID)).Select(x => x.abbr).FirstOrDefault<string>();
+                    State state = db.States.Where(x => x.stateID.Equals(stateID)).FirstOrDefault();
+                    abbr = state.abbr;
+                    countryCode = state.Country.abbr;
                 } else {
                     abbr = StateProvidence;
                 }
 
                 string url = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-                url += HttpUtility.UrlEncode(address.Trim() + " " + city + ", " + abbr + " " + zip + " " + countryCode);
+                url += HttpUtility.UrlEncode(city + ", " + abbr + " " + zip + " " + countryCode);
                 url += "&sensor=false";
 
                 WebClient wc = new WebClient();

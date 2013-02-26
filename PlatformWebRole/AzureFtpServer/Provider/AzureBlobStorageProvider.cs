@@ -196,7 +196,7 @@ namespace AzureFtpServer.Provider {
                 };
 
                 o.Meta.Add("ContentType", b.Properties.ContentType);
-            } catch (StorageException ex) {
+            } catch {
                 return null;
             }
 
@@ -235,7 +235,7 @@ namespace AzureFtpServer.Provider {
                 ICloudBlob b = _blobClient.GetBlobReferenceFromServer(uri);
                 b.FetchAttributes();
                 return true;
-            } catch (StorageException e) {
+            } catch {
                 return false;
             }
         }

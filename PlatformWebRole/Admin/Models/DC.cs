@@ -51,7 +51,7 @@ namespace Admin.Models {
                 dc.Street2 = Street2;
 
                 // Geocode the DC
-                GeocodingResponse geo = Geocoding.GetGeoLocation(dc.Street1 + " " + dc.Street2, dc.City, 0, dc.PostalCode, dc.State1.Country.abbr, dc.State1.abbr);
+                GeocodingResponse geo = Geocoding.GetGeoLocation(dc.City, 0, dc.PostalCode, dc.State1.Country.abbr, dc.State1.abbr);
                 LatitudeLongitude latLon = new LatitudeLongitude();
                 if (geo.results.Count > 0) {
                     latLon = geo.results[0].geometry.location;

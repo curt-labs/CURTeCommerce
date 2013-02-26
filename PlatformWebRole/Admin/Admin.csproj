@@ -203,6 +203,7 @@
     <Compile Include="Models\ContentManagement.cs" />
     <Compile Include="Models\ContentPage.cs" />
     <Compile Include="Models\AdminCustomer.cs" />
+    <Compile Include="Models\Theme.cs" />
     <Compile Include="Models\InvoiceCount.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\State.cs" />
@@ -235,6 +236,7 @@
   <ItemGroup>
     <Content Include="bin\AuthorizeNet.dll" />
     <Content Include="bin\AuthorizeNet.Helpers.dll" />
+    <Content Include="Content\css\themes.css" />
     <Content Include="Content\css\invoice.manager.print.css" />
     <Content Include="Content\css\taxes.manager.css" />
     <Content Include="Content\css\invoice.manager.css" />
@@ -743,6 +745,7 @@
     <Content Include="Scripts\custom\blog.manager.js" />
     <Content Include="Scripts\custom\contact.manager.js" />
     <Content Include="Scripts\custom\content.manager.js" />
+    <Content Include="Scripts\custom\themes.js" />
     <Content Include="Scripts\custom\taxes.manager.js" />
     <Content Include="Scripts\custom\invoice.manager.js" />
     <Content Include="Scripts\custom\scheduler.js" />
@@ -865,6 +868,7 @@
     <Content Include="Views\Invoice\UnPrinted.cshtml" />
     <Content Include="Views\FTP\Index.cshtml" />
     <Content Include="Views\Themes\Index.cshtml" />
+    <Content Include="Views\Themes\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

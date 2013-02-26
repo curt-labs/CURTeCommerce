@@ -260,7 +260,7 @@ namespace EcommercePlatform.Models {
                 sb.Append("&style=" + style);
                 sb.Append("&cust_id=" + settings.Get("CURTAccount"));
                 return JsonConvert.DeserializeObject<List<APIPart>>(wc.DownloadString(sb.ToString()));
-            } catch (Exception e) {
+            } catch {
                 return new List<APIPart>();
             }
         }

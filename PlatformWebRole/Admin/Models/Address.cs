@@ -99,7 +99,7 @@ namespace Admin {
         }
 
         internal Address GeoLocate() {
-            GeocodingResponse geo = Geocoding.GetGeoLocation(this.street1 + " " + this.street2, this.city, 0, this.postal_code, this.State1.Country.abbr, this.State1.abbr);
+            GeocodingResponse geo = Geocoding.GetGeoLocation(this.city, 0, this.postal_code, this.State1.Country.abbr, this.State1.abbr);
             LatitudeLongitude latLon = new LatitudeLongitude();
             if (geo.results.Count > 0) {
                 latLon = geo.results[0].geometry.location;

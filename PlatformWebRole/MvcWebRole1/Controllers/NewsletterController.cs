@@ -31,7 +31,7 @@ namespace EcommercePlatform.Controllers {
                 message = "You have been successfully added to the mailing list for the Newsletter.";
 
                 ViewBag.page = ContentManagement.GetPageByTitle("newsletter");
-            } catch (Exception e) { }
+            } catch { }
             ViewBag.message = message;
             ViewBag.success = success;
 

@@ -65,7 +65,7 @@
                                         }
                                         <input type="submit" class="button" id="btnChooseShippingType" value="Proceed to Payment" />
                                 } else if (shippingresponse.Status == "ERROR") {
-                                    <p>There was a problem with FedEx: @shippingresponse.Status_Description</p>
+                                    <p>FedEx was unable to find shipping options for your address. FedEx may not be available in your location.</p>
                                 } else {
                                     <p>There was a problem with FedEx. Please try again.</p>
                                 }

@@ -32,8 +32,7 @@ namespace Admin.Models
 
                 return comments;
             }
-            catch (Exception e)
-            {
+            catch {
                 return new List<CommentWithPost>();
             }
         }
@@ -46,8 +45,7 @@ namespace Admin.Models
                 List<Comment> comments = db.Comments.Where(x => x.blogPostID == id).Where(x => x.active == true).OrderBy(x => x.createdDate).ToList<Comment>();
                 return comments;
             }
-            catch (Exception e)
-            {
+            catch {
                 return new List<Comment>();
             }
         }
@@ -76,8 +74,7 @@ namespace Admin.Models
 
                 return comment;
             }
-            catch (Exception e)
-            {
+            catch {
                 return new CommentWithPost();
             }
         }
@@ -101,39 +98,25 @@ namespace Admin.Models
                            }).First<CommentNoPost>();
 
                 return comment;
-            } catch (Exception e) {
+            } catch {
                 return new CommentNoPost();
             }
         }
 
         public static void Approve(int id = 0)
         {
-            try
-            {
-                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-                Comment c = db.Comments.Where(x => x.commentID == id).FirstOrDefault<Comment>();
-                c.approved = true;
-                db.SubmitChanges();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Comment c = db.Comments.Where(x => x.commentID == id).FirstOrDefault<Comment>();
+            c.approved = true;
+            db.SubmitChanges();
         }
 
         public static void Delete(int id = 0)
         {
-            try
-            {
-                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-                Comment c = db.Comments.Where(x => x.commentID == id).FirstOrDefault<Comment>();
-                c.active = false;
-                db.SubmitChanges();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Comment c = db.Comments.Where(x => x.commentID == id).FirstOrDefault<Comment>();
+            c.active = false;
+            db.SubmitChanges();
         }
     }
 

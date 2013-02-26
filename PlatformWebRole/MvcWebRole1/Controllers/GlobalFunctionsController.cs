@@ -29,7 +29,7 @@ namespace EcommercePlatform.Controllers {
                 JsonSerializerSettings settings = new JsonSerializerSettings();
                 settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 return JsonConvert.SerializeObject(countries, Formatting.None, settings);
-            } catch (Exception e) {
+            } catch {
                 return "[]";
             }
         }

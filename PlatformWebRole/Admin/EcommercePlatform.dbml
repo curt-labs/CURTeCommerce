@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ecom_platform" Class="EcommercePlatformDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="EcommercePlatform" Class="EcommercePlatformDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="WebSettings" ConnectionString="Data Source=srjbmn26rz.database.windows.net;Initial Catalog=EcommercePlatform;Persist Security Info=True;User ID=discounthitch" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="ecom_platformConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Address" Member="Addresses">
     <Type Name="Address">
@@ -464,6 +464,48 @@
       <Column Name="country" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
       <Association Name="Invoice_InvoiceAddress" Member="Invoice" AccessModifier="Internal" ThisKey="ID" OtherKey="billTo" Type="Invoice" IsForeignKey="true" />
       <Association Name="Invoice_InvoiceAddress1" Member="Invoice1" AccessModifier="Internal" ThisKey="ID" OtherKey="shipTo" Type="Invoice" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Theme" Member="Themes">
+    <Type Name="Theme">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="dateAdded" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="screenshot" Type="System.String" DbType="VarChar(255) NULL" CanBeNull="true" />
+      <Association Name="Theme_ThemeFile" Member="ThemeFiles" ThisKey="ID" OtherKey="themeID" Type="ThemeFile" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ThemeFileType" Member="ThemeFileTypes">
+    <Type Name="ThemeFileType">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="extension" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="mimetype" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="ThemeFileType_ThemeFile" Member="ThemeFiles" ThisKey="ID" OtherKey="ThemeFileTypeID" Type="ThemeFile" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ThemeArea" Member="ThemeAreas">
+    <Type Name="ThemeArea">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="controller" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Association Name="ThemeArea_ThemeFile" Member="ThemeFiles" ThisKey="ID" OtherKey="themeAreaID" Type="ThemeFile" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ThemeFile" Member="ThemeFiles">
+    <Type Name="ThemeFile">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="themeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ThemeFileTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="themeAreaID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="filePath" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="renderOrder" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="dateAdded" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="lastModified" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Theme_ThemeFile" Member="Theme" ThisKey="themeID" OtherKey="ID" Type="Theme" IsForeignKey="true" />
+      <Association Name="ThemeFileType_ThemeFile" Member="ThemeFileType" ThisKey="ThemeFileTypeID" OtherKey="ID" Type="ThemeFileType" IsForeignKey="true" />
+      <Association Name="ThemeArea_ThemeFile" Member="ThemeArea" ThisKey="themeAreaID" OtherKey="ID" Type="ThemeArea" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

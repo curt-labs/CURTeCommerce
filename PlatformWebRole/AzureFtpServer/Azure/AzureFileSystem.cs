@@ -22,7 +22,7 @@ namespace AzureFTP {
             _containerName = !String.IsNullOrEmpty(containerName) ? containerName : "DevelopmentContainer";
             try {
                 _provider = new AzureFtpServer.Provider.AzureBlobStorageProvider(containerName);
-            } catch (Exception e) {
+            } catch {
                 _provider = null;
             }
         }
@@ -39,7 +39,7 @@ namespace AzureFTP {
                 AzureCloudFile file = _provider.Get(sPath, true);
                 f.Load(file.Data);
                 return f;
-            } catch (Exception e) {
+            } catch {
                 return f;
             };
         }

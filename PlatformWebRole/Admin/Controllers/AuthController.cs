@@ -58,7 +58,7 @@ namespace Admin.Controllers {
                 Response.Cookies.Add(acct);
 
                 return Redirect("/admin");
-            } catch (Exception e) {
+            } catch {
                 return RedirectToAction("Index", "Auth", new { failed = true });
             }
         }

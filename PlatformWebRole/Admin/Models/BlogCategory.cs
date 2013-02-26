@@ -15,7 +15,7 @@ namespace Admin.Models
                 categories = db.BlogCategories.Where(x => x.active == true).ToList<BlogCategory>();
 
                 return categories;
-            } catch (Exception e) {
+            } catch {
                 return new List<BlogCategory>();
             }
         }
@@ -27,7 +27,7 @@ namespace Admin.Models
                 category = db.BlogCategories.Where(x => x.blogCategoryID == id).Where(x => x.active == true).FirstOrDefault<BlogCategory>();
 
                 return category;
-            } catch (Exception e) {
+            } catch {
                 return new BlogCategory();
             }
         }

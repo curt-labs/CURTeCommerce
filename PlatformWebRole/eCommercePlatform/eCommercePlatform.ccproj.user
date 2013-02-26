@@ -5,8 +5,7 @@
     <DeploymentPromptBeforeUpgrading>False</DeploymentPromptBeforeUpgrading>
     <RemoteDesktopMoreOptions>True</RemoteDesktopMoreOptions>
     <DeploymentPromptBeforeDeleting>False</DeploymentPromptBeforeDeleting>
-    <WebRoleHttpsSkipLaunchInBrowser>
-    </WebRoleHttpsSkipLaunchInBrowser>
+    <WebRoleHttpsSkipLaunchInBrowser>Admin</WebRoleHttpsSkipLaunchInBrowser>
     <WebRoleSkipLaunchInBrowser>
     </WebRoleSkipLaunchInBrowser>
   </PropertyGroup>

@@ -25,7 +25,7 @@ namespace EcommercePlatform.Models {
             try {
                 WebResponse resp = req.GetResponse();
                 return true;
-            } catch (Exception e) {
+            } catch {
                 return false;
             }
         }

@@ -31,7 +31,7 @@ namespace AzureFtpServer.Azure {
                 AzureCloudFile file = _provider.Get(sPath, true);
                 f.Load(file.Data);
                 return f;
-            } catch (Exception e) {
+            } catch {
                 return f;
             };
         }

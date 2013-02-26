@@ -22,9 +22,6 @@ namespace EcommercePlatform.Controllers {
 
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
-            if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate");
-            }
 
             if (!customer.Cart.Validate()) {
                 return RedirectToAction("Index", "Cart");
@@ -64,9 +61,6 @@ namespace EcommercePlatform.Controllers {
             Settings settings = ViewBag.settings;
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
-            if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate");
-            }
             if (!customer.Cart.Validate()) {
                 return RedirectToAction("Index", "Cart");
             }
@@ -146,9 +140,6 @@ namespace EcommercePlatform.Controllers {
 
             Customer customer = ViewBag.customer;
             customer.GetFromStorage();
-            if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate");
-            }
 
             if (!customer.Cart.Validate()) {
                 return RedirectToAction("Index", "Cart");
@@ -226,9 +217,6 @@ namespace EcommercePlatform.Controllers {
         public ActionResult PayPal() {
             Customer customer = ViewBag.customer;
             customer.GetFromStorage();
-            if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate");
-            }
             if (!customer.Cart.Validate()) {
                 return RedirectToAction("Index", "Cart");
             }
@@ -255,9 +243,6 @@ namespace EcommercePlatform.Controllers {
             Customer customer = ViewBag.customer;
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
-            if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate");
-            }
 
             // Create Cart object from customer
             customer.BindAddresses();
@@ -283,9 +268,6 @@ namespace EcommercePlatform.Controllers {
         public ActionResult CompletePayPalCheckout(string token = "", string payerID = "") {
             Customer customer = ViewBag.customer;
             customer.GetFromStorage();
-            if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate");
-            }
             decimal total = customer.Cart.getTotal();
             Paypal p = new Paypal();
             string confirmationKey = p.ECDoExpressCheckout(token, payerID, total.ToString(), customer.Cart);
@@ -321,10 +303,6 @@ namespace EcommercePlatform.Controllers {
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
             Cart order = new Cart().Get(id);
-
-            if (!customer.LoggedIn() || order.cust_id != customer.ID) {
-                return RedirectToAction("Index", "Authenticate");
-            }
 
             order.BindAddresses();
             Payment payment = order.getPayment();

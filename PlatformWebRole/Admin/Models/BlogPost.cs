@@ -32,7 +32,7 @@ namespace Admin.Models {
                         }).ToList<PostWithCategories>();
 
                 return posts;
-           } catch (Exception e) {
+           } catch {
                 return new List<PostWithCategories>();
             }
         }
@@ -45,7 +45,7 @@ namespace Admin.Models {
                 posts = db.BlogPosts.Where(x => x.active == true).Where(x => x.publishedDate != null).OrderBy(x => x.publishedDate).ToList<BlogPost>();
 
                 return posts;
-            } catch (Exception e) {
+            } catch {
                 return new List<BlogPost>();
             }
         }
@@ -76,7 +76,7 @@ namespace Admin.Models {
                          }).First<PostWithCategories>();
 
                 return post;
-            } catch (Exception e) {
+            } catch {
                 return new PostWithCategories();
             }
         }
@@ -155,16 +155,12 @@ namespace Admin.Models {
             return post.blogPostID;
         }
         public static void Delete(int id = 0) {
-            try {
-                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-                List<BlogPost_BlogCategory> postcats = db.BlogPost_BlogCategories.Where(x => x.blogPostID.Equals(id)).ToList<BlogPost_BlogCategory>();
-                db.BlogPost_BlogCategories.DeleteAllOnSubmit(postcats);
-                BlogPost p = db.BlogPosts.Where(x => x.blogPostID == id).FirstOrDefault<BlogPost>();
-                p.active = false;
-                db.SubmitChanges();
-            } catch (Exception e) {
-                throw e;
-            }
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            List<BlogPost_BlogCategory> postcats = db.BlogPost_BlogCategories.Where(x => x.blogPostID.Equals(id)).ToList<BlogPost_BlogCategory>();
+            db.BlogPost_BlogCategories.DeleteAllOnSubmit(postcats);
+            BlogPost p = db.BlogPosts.Where(x => x.blogPostID == id).FirstOrDefault<BlogPost>();
+            p.active = false;
+            db.SubmitChanges();
         }
 
         private static Profile GetAuthor(int id = 0) {

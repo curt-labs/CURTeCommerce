@@ -11,7 +11,7 @@ namespace EcommercePlatform.Models {
             try {
                 EcommercePlatformDataContext db = new EcommercePlatformDataContext();
                 return db.Testimonials.Where(x => x.active == true).Where(x => x.approved == true).OrderByDescending(x => x.dateAdded).Skip((page - 1) * pageSize).Take(pageSize).ToList<Testimonial>();
-            } catch (Exception e) {
+            } catch {
                 return new List<Testimonial>();
             }
         }
@@ -20,7 +20,7 @@ namespace EcommercePlatform.Models {
             try {
                 EcommercePlatformDataContext db = new EcommercePlatformDataContext();
                 return db.Testimonials.Where(x => x.active == true).Where(x => x.approved == true).Count();
-            } catch (Exception e) {
+            } catch {
                 return 0;
             }
         }
@@ -42,7 +42,7 @@ namespace EcommercePlatform.Models {
                 db.SubmitChanges();
                 return t;
 
-            } catch (Exception e) {
+            } catch {
                 return t;
             }
         }

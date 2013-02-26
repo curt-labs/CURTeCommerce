@@ -22,7 +22,7 @@ namespace Admin
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="ecom_platform")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="EcommercePlatform")]
 	public partial class EcommercePlatformDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -141,6 +141,18 @@ namespace Admin
     partial void InsertInvoiceAddress(InvoiceAddress instance);
     partial void UpdateInvoiceAddress(InvoiceAddress instance);
     partial void DeleteInvoiceAddress(InvoiceAddress instance);
+    partial void InsertTheme(Theme instance);
+    partial void UpdateTheme(Theme instance);
+    partial void DeleteTheme(Theme instance);
+    partial void InsertThemeFileType(ThemeFileType instance);
+    partial void UpdateThemeFileType(ThemeFileType instance);
+    partial void DeleteThemeFileType(ThemeFileType instance);
+    partial void InsertThemeArea(ThemeArea instance);
+    partial void UpdateThemeArea(ThemeArea instance);
+    partial void DeleteThemeArea(ThemeArea instance);
+    partial void InsertThemeFile(ThemeFile instance);
+    partial void UpdateThemeFile(ThemeFile instance);
+    partial void DeleteThemeFile(ThemeFile instance);
     #endregion
 		
 		public EcommercePlatformDataContext() : 
@@ -466,6 +478,38 @@ namespace Admin
 			get
 			{
 				return this.GetTable<InvoiceAddress>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Theme> Themes
+		{
+			get
+			{
+				return this.GetTable<Theme>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ThemeFileType> ThemeFileTypes
+		{
+			get
+			{
+				return this.GetTable<ThemeFileType>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ThemeArea> ThemeAreas
+		{
+			get
+			{
+				return this.GetTable<ThemeArea>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ThemeFile> ThemeFiles
+		{
+			get
+			{
+				return this.GetTable<ThemeFile>();
 			}
 		}
 	}
@@ -10112,6 +10156,845 @@ namespace Admin
 						this._ID = default(int);
 					}
 					this.SendPropertyChanged("Invoice1");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Theme")]
+	public partial class Theme : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _name;
+		
+		private bool _active;
+		
+		private System.DateTime _dateAdded;
+		
+		private string _screenshot;
+		
+		private EntitySet<ThemeFile> _ThemeFiles;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnnameChanging(string value);
+    partial void OnnameChanged();
+    partial void OnactiveChanging(bool value);
+    partial void OnactiveChanged();
+    partial void OndateAddedChanging(System.DateTime value);
+    partial void OndateAddedChanged();
+    partial void OnscreenshotChanging(string value);
+    partial void OnscreenshotChanged();
+    #endregion
+		
+		public Theme()
+		{
+			this._ThemeFiles = new EntitySet<ThemeFile>(new Action<ThemeFile>(this.attach_ThemeFiles), new Action<ThemeFile>(this.detach_ThemeFiles));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_name", DbType="VarChar(255)")]
+		public string name
+		{
+			get
+			{
+				return this._name;
+			}
+			set
+			{
+				if ((this._name != value))
+				{
+					this.OnnameChanging(value);
+					this.SendPropertyChanging();
+					this._name = value;
+					this.SendPropertyChanged("name");
+					this.OnnameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_active", DbType="Bit NOT NULL")]
+		public bool active
+		{
+			get
+			{
+				return this._active;
+			}
+			set
+			{
+				if ((this._active != value))
+				{
+					this.OnactiveChanging(value);
+					this.SendPropertyChanging();
+					this._active = value;
+					this.SendPropertyChanged("active");
+					this.OnactiveChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_dateAdded", DbType="DateTime NOT NULL")]
+		public System.DateTime dateAdded
+		{
+			get
+			{
+				return this._dateAdded;
+			}
+			set
+			{
+				if ((this._dateAdded != value))
+				{
+					this.OndateAddedChanging(value);
+					this.SendPropertyChanging();
+					this._dateAdded = value;
+					this.SendPropertyChanged("dateAdded");
+					this.OndateAddedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_screenshot", DbType="VarChar(255) NULL")]
+		public string screenshot
+		{
+			get
+			{
+				return this._screenshot;
+			}
+			set
+			{
+				if ((this._screenshot != value))
+				{
+					this.OnscreenshotChanging(value);
+					this.SendPropertyChanging();
+					this._screenshot = value;
+					this.SendPropertyChanged("screenshot");
+					this.OnscreenshotChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Theme_ThemeFile", Storage="_ThemeFiles", ThisKey="ID", OtherKey="themeID")]
+		public EntitySet<ThemeFile> ThemeFiles
+		{
+			get
+			{
+				return this._ThemeFiles;
+			}
+			set
+			{
+				this._ThemeFiles.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_ThemeFiles(ThemeFile entity)
+		{
+			this.SendPropertyChanging();
+			entity.Theme = this;
+		}
+		
+		private void detach_ThemeFiles(ThemeFile entity)
+		{
+			this.SendPropertyChanging();
+			entity.Theme = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ThemeFileType")]
+	public partial class ThemeFileType : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _name;
+		
+		private string _extension;
+		
+		private string _mimetype;
+		
+		private EntitySet<ThemeFile> _ThemeFiles;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnnameChanging(string value);
+    partial void OnnameChanged();
+    partial void OnextensionChanging(string value);
+    partial void OnextensionChanged();
+    partial void OnmimetypeChanging(string value);
+    partial void OnmimetypeChanged();
+    #endregion
+		
+		public ThemeFileType()
+		{
+			this._ThemeFiles = new EntitySet<ThemeFile>(new Action<ThemeFile>(this.attach_ThemeFiles), new Action<ThemeFile>(this.detach_ThemeFiles));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_name", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
+		public string name
+		{
+			get
+			{
+				return this._name;
+			}
+			set
+			{
+				if ((this._name != value))
+				{
+					this.OnnameChanging(value);
+					this.SendPropertyChanging();
+					this._name = value;
+					this.SendPropertyChanged("name");
+					this.OnnameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_extension", DbType="VarChar(10) NOT NULL", CanBeNull=false)]
+		public string extension
+		{
+			get
+			{
+				return this._extension;
+			}
+			set
+			{
+				if ((this._extension != value))
+				{
+					this.OnextensionChanging(value);
+					this.SendPropertyChanging();
+					this._extension = value;
+					this.SendPropertyChanged("extension");
+					this.OnextensionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_mimetype", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string mimetype
+		{
+			get
+			{
+				return this._mimetype;
+			}
+			set
+			{
+				if ((this._mimetype != value))
+				{
+					this.OnmimetypeChanging(value);
+					this.SendPropertyChanging();
+					this._mimetype = value;
+					this.SendPropertyChanged("mimetype");
+					this.OnmimetypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ThemeFileType_ThemeFile", Storage="_ThemeFiles", ThisKey="ID", OtherKey="ThemeFileTypeID")]
+		public EntitySet<ThemeFile> ThemeFiles
+		{
+			get
+			{
+				return this._ThemeFiles;
+			}
+			set
+			{
+				this._ThemeFiles.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_ThemeFiles(ThemeFile entity)
+		{
+			this.SendPropertyChanging();
+			entity.ThemeFileType = this;
+		}
+		
+		private void detach_ThemeFiles(ThemeFile entity)
+		{
+			this.SendPropertyChanging();
+			entity.ThemeFileType = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ThemeArea")]
+	public partial class ThemeArea : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _name;
+		
+		private string _controller;
+		
+		private EntitySet<ThemeFile> _ThemeFiles;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnnameChanging(string value);
+    partial void OnnameChanged();
+    partial void OncontrollerChanging(string value);
+    partial void OncontrollerChanged();
+    #endregion
+		
+		public ThemeArea()
+		{
+			this._ThemeFiles = new EntitySet<ThemeFile>(new Action<ThemeFile>(this.attach_ThemeFiles), new Action<ThemeFile>(this.detach_ThemeFiles));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_name", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
+		public string name
+		{
+			get
+			{
+				return this._name;
+			}
+			set
+			{
+				if ((this._name != value))
+				{
+					this.OnnameChanging(value);
+					this.SendPropertyChanging();
+					this._name = value;
+					this.SendPropertyChanged("name");
+					this.OnnameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_controller", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
+		public string controller
+		{
+			get
+			{
+				return this._controller;
+			}
+			set
+			{
+				if ((this._controller != value))
+				{
+					this.OncontrollerChanging(value);
+					this.SendPropertyChanging();
+					this._controller = value;
+					this.SendPropertyChanged("controller");
+					this.OncontrollerChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ThemeArea_ThemeFile", Storage="_ThemeFiles", ThisKey="ID", OtherKey="themeAreaID")]
+		public EntitySet<ThemeFile> ThemeFiles
+		{
+			get
+			{
+				return this._ThemeFiles;
+			}
+			set
+			{
+				this._ThemeFiles.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_ThemeFiles(ThemeFile entity)
+		{
+			this.SendPropertyChanging();
+			entity.ThemeArea = this;
+		}
+		
+		private void detach_ThemeFiles(ThemeFile entity)
+		{
+			this.SendPropertyChanging();
+			entity.ThemeArea = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ThemeFile")]
+	public partial class ThemeFile : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private int _themeID;
+		
+		private int _ThemeFileTypeID;
+		
+		private int _themeAreaID;
+		
+		private string _filePath;
+		
+		private int _renderOrder;
+		
+		private System.DateTime _dateAdded;
+		
+		private System.DateTime _lastModified;
+		
+		private EntityRef<Theme> _Theme;
+		
+		private EntityRef<ThemeFileType> _ThemeFileType;
+		
+		private EntityRef<ThemeArea> _ThemeArea;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnthemeIDChanging(int value);
+    partial void OnthemeIDChanged();
+    partial void OnThemeFileTypeIDChanging(int value);
+    partial void OnThemeFileTypeIDChanged();
+    partial void OnthemeAreaIDChanging(int value);
+    partial void OnthemeAreaIDChanged();
+    partial void OnfilePathChanging(string value);
+    partial void OnfilePathChanged();
+    partial void OnrenderOrderChanging(int value);
+    partial void OnrenderOrderChanged();
+    partial void OndateAddedChanging(System.DateTime value);
+    partial void OndateAddedChanged();
+    partial void OnlastModifiedChanging(System.DateTime value);
+    partial void OnlastModifiedChanged();
+    #endregion
+		
+		public ThemeFile()
+		{
+			this._Theme = default(EntityRef<Theme>);
+			this._ThemeFileType = default(EntityRef<ThemeFileType>);
+			this._ThemeArea = default(EntityRef<ThemeArea>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_themeID", DbType="Int NOT NULL")]
+		public int themeID
+		{
+			get
+			{
+				return this._themeID;
+			}
+			set
+			{
+				if ((this._themeID != value))
+				{
+					if (this._Theme.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnthemeIDChanging(value);
+					this.SendPropertyChanging();
+					this._themeID = value;
+					this.SendPropertyChanged("themeID");
+					this.OnthemeIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ThemeFileTypeID", DbType="Int NOT NULL")]
+		public int ThemeFileTypeID
+		{
+			get
+			{
+				return this._ThemeFileTypeID;
+			}
+			set
+			{
+				if ((this._ThemeFileTypeID != value))
+				{
+					if (this._ThemeFileType.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnThemeFileTypeIDChanging(value);
+					this.SendPropertyChanging();
+					this._ThemeFileTypeID = value;
+					this.SendPropertyChanged("ThemeFileTypeID");
+					this.OnThemeFileTypeIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_themeAreaID", DbType="Int NOT NULL")]
+		public int themeAreaID
+		{
+			get
+			{
+				return this._themeAreaID;
+			}
+			set
+			{
+				if ((this._themeAreaID != value))
+				{
+					if (this._ThemeArea.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnthemeAreaIDChanging(value);
+					this.SendPropertyChanging();
+					this._themeAreaID = value;
+					this.SendPropertyChanged("themeAreaID");
+					this.OnthemeAreaIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_filePath", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
+		public string filePath
+		{
+			get
+			{
+				return this._filePath;
+			}
+			set
+			{
+				if ((this._filePath != value))
+				{
+					this.OnfilePathChanging(value);
+					this.SendPropertyChanging();
+					this._filePath = value;
+					this.SendPropertyChanged("filePath");
+					this.OnfilePathChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_renderOrder", DbType="Int NOT NULL")]
+		public int renderOrder
+		{
+			get
+			{
+				return this._renderOrder;
+			}
+			set
+			{
+				if ((this._renderOrder != value))
+				{
+					this.OnrenderOrderChanging(value);
+					this.SendPropertyChanging();
+					this._renderOrder = value;
+					this.SendPropertyChanged("renderOrder");
+					this.OnrenderOrderChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_dateAdded", DbType="DateTime NOT NULL")]
+		public System.DateTime dateAdded
+		{
+			get
+			{
+				return this._dateAdded;
+			}
+			set
+			{
+				if ((this._dateAdded != value))
+				{
+					this.OndateAddedChanging(value);
+					this.SendPropertyChanging();
+					this._dateAdded = value;
+					this.SendPropertyChanged("dateAdded");
+					this.OndateAddedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lastModified", DbType="DateTime NOT NULL")]
+		public System.DateTime lastModified
+		{
+			get
+			{
+				return this._lastModified;
+			}
+			set
+			{
+				if ((this._lastModified != value))
+				{
+					this.OnlastModifiedChanging(value);
+					this.SendPropertyChanging();
+					this._lastModified = value;
+					this.SendPropertyChanged("lastModified");
+					this.OnlastModifiedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Theme_ThemeFile", Storage="_Theme", ThisKey="themeID", OtherKey="ID", IsForeignKey=true)]
+		public Theme Theme
+		{
+			get
+			{
+				return this._Theme.Entity;
+			}
+			set
+			{
+				Theme previousValue = this._Theme.Entity;
+				if (((previousValue != value) 
+							|| (this._Theme.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Theme.Entity = null;
+						previousValue.ThemeFiles.Remove(this);
+					}
+					this._Theme.Entity = value;
+					if ((value != null))
+					{
+						value.ThemeFiles.Add(this);
+						this._themeID = value.ID;
+					}
+					else
+					{
+						this._themeID = default(int);
+					}
+					this.SendPropertyChanged("Theme");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ThemeFileType_ThemeFile", Storage="_ThemeFileType", ThisKey="ThemeFileTypeID", OtherKey="ID", IsForeignKey=true)]
+		public ThemeFileType ThemeFileType
+		{
+			get
+			{
+				return this._ThemeFileType.Entity;
+			}
+			set
+			{
+				ThemeFileType previousValue = this._ThemeFileType.Entity;
+				if (((previousValue != value) 
+							|| (this._ThemeFileType.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._ThemeFileType.Entity = null;
+						previousValue.ThemeFiles.Remove(this);
+					}
+					this._ThemeFileType.Entity = value;
+					if ((value != null))
+					{
+						value.ThemeFiles.Add(this);
+						this._ThemeFileTypeID = value.ID;
+					}
+					else
+					{
+						this._ThemeFileTypeID = default(int);
+					}
+					this.SendPropertyChanged("ThemeFileType");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ThemeArea_ThemeFile", Storage="_ThemeArea", ThisKey="themeAreaID", OtherKey="ID", IsForeignKey=true)]
+		public ThemeArea ThemeArea
+		{
+			get
+			{
+				return this._ThemeArea.Entity;
+			}
+			set
+			{
+				ThemeArea previousValue = this._ThemeArea.Entity;
+				if (((previousValue != value) 
+							|| (this._ThemeArea.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._ThemeArea.Entity = null;
+						previousValue.ThemeFiles.Remove(this);
+					}
+					this._ThemeArea.Entity = value;
+					if ((value != null))
+					{
+						value.ThemeFiles.Add(this);
+						this._themeAreaID = value.ID;
+					}
+					else
+					{
+						this._themeAreaID = default(int);
+					}
+					this.SendPropertyChanged("ThemeArea");
 				}
 			}
 		}

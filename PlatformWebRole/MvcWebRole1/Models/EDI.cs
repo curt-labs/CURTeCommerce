@@ -114,7 +114,7 @@ namespace EcommercePlatform.Models {
                         try {
                             ReadInvoice(editext);
                             BlobManagement.MoveBlob(blob, "edi/archive", "edi/in");
-                        } catch (Exception e) {
+                        } catch {
                             //string[] tos = new string [] {"jjaniuk@curtmfg.com"};
                             //UDF.SendEmail(tos, "Error in Invoice Read", false, e.Message + " " + e.StackTrace, false);
                         }

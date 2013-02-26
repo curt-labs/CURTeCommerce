@@ -45,7 +45,15 @@ namespace Admin {
                             }).OrderBy(x => x.distance).First<DCList>();
 
                 distcenter = db.DistributionCenters.Where(x => x.ID == d.ID).First<DistributionCenter>();
-            } catch {};
+            } catch {
+                DCList d = (from dc in db.DistributionCenters
+                            where dc.State1.countryID == address.State1.countryID
+                            select new DCList {
+                                ID = dc.ID,
+                                distance = 0
+                            }).OrderBy(x => x.distance).First<DCList>();
+                distcenter = db.DistributionCenters.Where(x => x.ID == d.ID).First<DistributionCenter>();
+            };
             return distcenter;
         }
 

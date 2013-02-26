@@ -8,7 +8,6 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Specialized;
 using System.Web.Script.Serialization;
-using Newtonsoft.Json;
 
 namespace Admin.Controllers {
     public class ContentManagerController : BaseController {
@@ -87,8 +86,8 @@ namespace Admin.Controllers {
 
         [NoValidation]
         public string GetPages(int id = 0) {
-                return JsonConvert.SerializeObject(ContentManagement.GetAll());
             try {
+                return JsonConvert.SerializeObject(ContentManagement.GetAll());
             } catch (Exception) {
                 return JsonConvert.SerializeObject(new List<ContentPage>());
             }

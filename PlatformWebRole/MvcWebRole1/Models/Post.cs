@@ -19,8 +19,7 @@ namespace EcommercePlatform.Models
 
                 return posts;
             }
-            catch (Exception e)
-            {
+            catch {
                 return new List<BlogPost>();
             }
         }
@@ -55,8 +54,7 @@ namespace EcommercePlatform.Models
 
                 return posts;
             }
-            catch (Exception e)
-            {
+            catch {
                 return new List<PostWithCategories>();
             }
         }
@@ -87,7 +85,7 @@ namespace EcommercePlatform.Models
                          }).ToList();
 
                 return posts;
-            } catch (Exception e) {
+            } catch {
                 return new List<PostWithCategories>();
             }
         }
@@ -120,7 +118,7 @@ namespace EcommercePlatform.Models
                          }).Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
                 return posts;
-            } catch (Exception e) {
+            } catch {
                 return new List<PostWithCategories>();
             }
         }
@@ -153,7 +151,7 @@ namespace EcommercePlatform.Models
                          }).Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
                 return posts;
-            } catch (Exception e) {
+            } catch {
                 return new List<PostWithCategories>();
             }
         }
@@ -167,7 +165,7 @@ namespace EcommercePlatform.Models
                          select p.blogPostID
                          ).Count();
                 return count;
-            } catch (Exception e) {
+            } catch {
                 return 0;
             }
         }
@@ -183,7 +181,7 @@ namespace EcommercePlatform.Models
                          select p.blogPostID
                          ).Count();
                 return count;
-            } catch (Exception e) {
+            } catch {
                 return 0;
             }
         }
@@ -225,7 +223,7 @@ namespace EcommercePlatform.Models
                          select p.blogPostID
                          ).Count();
                 return count;
-            } catch (Exception e) {
+            } catch {
                 return 0;
             }
         }
@@ -257,7 +255,7 @@ namespace EcommercePlatform.Models
                          }).First<PostWithCategories>();
 
                 return post;
-            } catch (Exception e) {
+            } catch {
                 return new PostWithCategories();
             }
         }

@@ -6,29 +6,24 @@ using System.Text;
 using System.Net;
 using System.Web.Script.Serialization;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace EcommercePlatform.Models {
 
     public class Geocoding {
 
-        public static GeocodingResponse GetGeoLocation(string address, string city, int stateID, string zip, string countryCode = "US", string StateProvidence = "") {
+        public static GeocodingResponse GetGeoLocation(string city, string zip, string countryCode = "US", string StateProvidence = "") {
             try {
                 EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-                string abbr = "";
-                if (stateID != 0) {
-                    abbr = db.States.Where(x => x.stateID.Equals(stateID)).Select(x => x.abbr).FirstOrDefault<string>();
-                } else {
-                    abbr = StateProvidence;
-                }
-
                 string url = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-                url += HttpUtility.UrlEncode(address.Trim() + " " + city + ", " + abbr + " " + zip + " " + countryCode);
+                url += HttpUtility.UrlEncode(city + ", " + StateProvidence + " " + zip + " " + countryCode);
                 url += "&sensor=false";
 
                 WebClient wc = new WebClient();
                 wc.Proxy = null;
+                GeocodingResponse geo = new GeocodingResponse();
                 string resp = wc.DownloadString(url);
-                GeocodingResponse geo = new JavaScriptSerializer().Deserialize<GeocodingResponse>(resp);
+                geo = JsonConvert.DeserializeObject<GeocodingResponse>(resp);
 
                 return geo;
             } catch (Exception) {

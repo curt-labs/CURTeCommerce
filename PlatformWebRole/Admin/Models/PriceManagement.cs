@@ -22,7 +22,7 @@ namespace Admin.Models {
                     priceList = JsonConvert.DeserializeObject<List<SimplePricing>>(resp);
                 }
                 return priceList;
-            } catch (Exception e) {
+            } catch {
                 return new List<SimplePricing>();
             }
         }

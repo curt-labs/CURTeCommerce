@@ -20,7 +20,7 @@ namespace EcommercePlatform.Models {
             try {
                 WebResponse resp = req.GetResponse();
                 return true;
-            } catch (Exception e) {
+            } catch {
                 return false;
             }
         }
@@ -73,7 +73,7 @@ namespace EcommercePlatform.Models {
                 return this._partID;
             }
             set {
-                if (value != null && value != this._partID) {
+                if (value != this._partID) {
                     this._partID = value;
                 }
             }
@@ -83,7 +83,7 @@ namespace EcommercePlatform.Models {
                 return this._custPartID;
             }
             set {
-                if (value != null && value != this._custPartID) {
+                if (value != this._custPartID) {
                     this._custPartID = value;
                 }
             }
@@ -93,7 +93,7 @@ namespace EcommercePlatform.Models {
                 return this._status;
             }
             set {
-                if (value != null && value != this._status) {
+                if (value != this._status) {
                     this._status = value;
                 }
             }
@@ -234,7 +234,7 @@ namespace EcommercePlatform.Models {
                 return this._relatedCount;
             }
             set {
-                if (value != null && value != this._relatedCount) {
+                if (value != this._relatedCount) {
                     this._relatedCount = value;
                 }
             }
@@ -245,7 +245,7 @@ namespace EcommercePlatform.Models {
                 return this._installTime;
             }
             set {
-                if (value != null && value != this._installTime) {
+                if (value != this._installTime) {
                     this._installTime = value;
                 }
             }

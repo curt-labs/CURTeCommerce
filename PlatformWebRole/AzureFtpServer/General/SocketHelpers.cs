@@ -128,7 +128,7 @@ namespace AzureFtpServer.General
 
         public static IPAddress GetLocalAddress()
         {
-            IPHostEntry hostEntry = Dns.Resolve(Dns.GetHostName());
+            IPHostEntry hostEntry = Dns.GetHostEntry(Dns.GetHostName());
 
             if (hostEntry == null || hostEntry.AddressList.Length == 0)
             {

@@ -52,7 +52,7 @@ namespace Admin.Models {
             loc.isPrimary = isPrimary;
             loc.fax = fax;
 
-            GeocodingResponse geo = Geocoding.GetGeoLocation(loc.address, loc.city, stateID, zip.ToString());
+            GeocodingResponse geo = Geocoding.GetGeoLocation(loc.city, stateID, zip.ToString());
             LatitudeLongitude lat_lon = new LatitudeLongitude();
             if (geo.results.Count > 0) {
                 lat_lon = geo.results[0].geometry.location;

@@ -200,7 +200,7 @@ namespace EcommercePlatform {
 
         internal void ValidateCreation() {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-            if (this.ID == null || this.ID == 0 || this.validator == null) {
+            if (this.ID == 0 || this.validator == null) {
                 throw new Exception("Invalid reference.");
             }
             Customer cust = db.Customers.Where(x => x.ID.Equals(this.ID) && x.validator.Equals(this.validator)).FirstOrDefault<Customer>();

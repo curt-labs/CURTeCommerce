@@ -61,7 +61,7 @@ namespace Admin.Controllers {
 
                 // Now we need to make sure the current profile has access to the module that they are loading
 
-                /*if (cleaned_path.ToUpper() != "/ADMIN" && !static_pages.Contains(cleaned_path.ToUpper()) && HttpContext.Request.HttpMethod.ToUpper() != "POST" && validate) {
+                if (cleaned_path.ToUpper() != "/ADMIN" && !static_pages.Contains(cleaned_path.ToUpper()) && HttpContext.Request.HttpMethod.ToUpper() != "POST" && validate) {
                     GroupedModule active_mod = (from m in mods
                                                 where m.path.ToUpper().Equals(cleaned_path.ToUpper()) && m.hasAccess.Equals(1)
                                                 select m).FirstOrDefault<GroupedModule>();
@@ -80,7 +80,7 @@ namespace Admin.Controllers {
                             Response.Redirect("/Admin");
                         }
                     }
-                }*/
+                }
 
                 
                 ViewBag.profile = p;

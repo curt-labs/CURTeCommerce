@@ -50,6 +50,8 @@ namespace EcommercePlatform.Controllers {
                 customer.BindAddresses();
                 billing = (customer.billingID != 0) ? customer.Address : new Address();
                 shipping = (customer.shippingID != 0) ? customer.Address1 : new Address();
+                if (customer.billingID != customer.shippingID)
+                    same = false;
             }
             try {
                 if (TempData["customer"] != null && TempData["billing"] != null && TempData["shipping"] != null) {
@@ -199,17 +201,11 @@ namespace EcommercePlatform.Controllers {
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
 
-            /*if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate", new { referrer = "https://" + Request.Url.Host + "/Cart/Checkout", checkout = 1 });
-            }*/
-
             if (customer.Cart.payment_id == 0) {
-                if (customer.LoggedIn()) {
-                    customer.BindAddresses();
+                customer.BindAddresses();
 
-                    List<Address> addresses = customer.GetAddresses();
-                    ViewBag.addresses = addresses;
-                }
+                List<Address> addresses = customer.GetAddresses();
+                ViewBag.addresses = addresses;
                 List<Country> countries = UDF.GetCountries();
                 ViewBag.countries = countries;
 
@@ -235,10 +231,6 @@ namespace EcommercePlatform.Controllers {
             ViewBag.page = page;
 
             if (customer.Cart.payment_id == 0) {
-                if (!customer.LoggedIn()) {
-                    TempData["error"] = "Please fill out the required fields.";
-                    return RedirectToAction("Checkout");
-                }
                 customer.BindAddresses();
 
                 ShippingResponse shippingresponse = new ShippingResponse();
@@ -370,9 +362,6 @@ namespace EcommercePlatform.Controllers {
 
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
-            if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate");
-            }
 
             if (customer.Cart.payment_id == 0) {
                 if (customer.billingID == 0) {
@@ -393,9 +382,6 @@ namespace EcommercePlatform.Controllers {
                 // Create Customer
                 Customer customer = new Customer();
                 customer.GetFromStorage();
-                if (!customer.LoggedIn()) {
-                    return RedirectToAction("Index", "Authenticate");
-                }
 
                 if (customer.Cart.payment_id == 0) {
                     Address billing = new Address();
@@ -445,10 +431,6 @@ namespace EcommercePlatform.Controllers {
 
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
-            if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate");
-            }
-
             if (customer.Cart.payment_id == 0) {
                 if (customer.shippingID == 0) {
                     customer.SetShippingDefaultAddress(id);
@@ -469,10 +451,6 @@ namespace EcommercePlatform.Controllers {
                 // Create Customer
                 Customer customer = new Customer();
                 customer.GetFromStorage();
-                if (!customer.LoggedIn()) {
-                    return RedirectToAction("Index", "Authenticate");
-                }
-
 
                 Address shipping = new Address();
                 // Build out our Billing object
@@ -516,10 +494,6 @@ namespace EcommercePlatform.Controllers {
 
                 // Retrieve Customer from Sessions/Cookie
                 customer.GetFromStorage();
-                if (!customer.LoggedIn()) {
-                    return RedirectToAction("Index", "Authenticate");
-                }
-
                 decimal shipping_price = Convert.ToDecimal(rate.NetCharge.Key);
                 string shipping_type = details.ServiceType;
                 customer.Cart.setShippingType(shipping_type, shipping_price);
@@ -532,9 +506,6 @@ namespace EcommercePlatform.Controllers {
             Customer customer = new Customer();
             Settings settings = ViewBag.settings;
             customer.GetFromStorage();
-            if (!customer.LoggedIn()) {
-                Response.Redirect("/Authenticate");
-            }
 
             FedExAuthentication auth = new FedExAuthentication {
                 AccountNumber = Convert.ToInt32(settings.Get("FedExAccount")),
@@ -550,7 +521,7 @@ namespace EcommercePlatform.Controllers {
             try {
                 destination = customer.Cart.Shipping.getShipping();
             } catch (Exception) {
-                Response.Redirect("/Authenticate");
+                Response.Redirect("/Cart/Checkout");
             }
             DistributionCenter d = new DistributionCenter().GetNearest(customer.Cart.Shipping.GeoLocate());
             ShippingAddress origin = d.getAddress().getShipping();
@@ -571,9 +542,6 @@ namespace EcommercePlatform.Controllers {
 
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
-            if (!customer.LoggedIn()) {
-                return RedirectToAction("Index", "Authenticate");
-            }
             if (customer.Cart.payment_id == 0) {
 
                 decimal shipping_price = 0;
