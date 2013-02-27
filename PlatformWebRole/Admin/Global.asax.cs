@@ -23,6 +23,12 @@ namespace Admin {
             routes.IgnoreRoute("{file}.xml");
 
             routes.MapRoute(
+                "ThemeArea",
+                "Themes/Area/{themeID}/{areaID}",
+                new { controller = "Themes", action = "Area", themeID = "", areaID = "" }
+            );
+
+            routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
                 new { controller = "Index", action = "Index", id = UrlParameter.Optional } // Parameter defaults

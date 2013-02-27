@@ -1,0 +1,19 @@
+﻿@{
+    Admin.Theme theme = ViewBag.theme ?? new Admin.Theme();
+    List<Admin.ThemeArea> areas = ViewBag.areas ?? new List<Admin.ThemeArea>();
+    List<Admin.ThemeFileType> types = ViewBag.types ?? new List<Admin.ThemeFileType>();
+    ViewBag.Title = "| Manage Theme Files";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="/Admin/Content/css/themes.css" rel="stylesheet" type="text/css" />
+<span class="title">Files For Theme: @theme.name</span>
+<span class="clearfix"></span>
+@foreach(Admin.ThemeArea area in areas) {
+    <div class="themearea" id="area-@area.ID">
+        <a href="/Admin/Themes/Area/@theme.ID/@area.ID" class="areaname">@area.name</a>
+        @foreach(Admin.ThemeFileType type in types) {
+            @theme.ThemeFiles.Where(x => x.themeAreaID.Equals(area.ID) && x.ThemeFileTypeID.Equals(type.ID)).Count() <text> </text> @type.name <text>files</text> <br />
+        }
+    </div>
+}
+<script src="/Admin/Scripts/custom/themes.js"></script>

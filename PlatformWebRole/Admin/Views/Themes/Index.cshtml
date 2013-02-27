@@ -5,14 +5,15 @@
 }
 <link href="/Admin/Content/css/themes.css" rel="stylesheet" type="text/css" />
 <span class="title">Manage Themes</span>
-
+<a href="/Admin/Themes/Add" title="Add a Theme" class="addTheme">Add Theme</a>
+<span class="clearfix"></span>
 @if (themes.Count() > 0) {
     foreach(Admin.Theme theme in themes) {
-        <div class="theme@((theme.active) ? "active" : "")" id="theme-@theme.ID">
+        <div class="theme@((theme.active) ? " active" : "")" id="theme-@theme.ID">
             <a href="/Admin/Themes/Files/@theme.ID" class="themename" title="Manage Theme Files">@theme.name</a>
             <span class="themeimg">
-                <a href="/Admin/Themes/Activate/@theme.ID" title="@((theme.active) ? "Active Theme" : "Not Active Theme, click to Activate")" class="activate">@((theme.active) ? Html.Raw("<span class=active></span>") : Html.Raw("<span class=inactive></span>"))</a>
-                <a href="/Admin/Themes/Delete/@theme.ID" class="deletetheme" title="Delete Theme">&times;</a>
+                <a href="/Admin/Themes/Activate/@theme.ID" data-id="@theme.ID" title="@((theme.active) ? "Active Theme" : "Not Active Theme, click to Activate")" class="activate@((theme.active) ? " active" : "")">@((theme.active) ? Html.Raw("<span class=active></span>") : Html.Raw("<span class=inactive></span>"))</a>
+                <a href="/Admin/Themes/Delete/@theme.ID" data-id="@theme.ID" class="deletetheme" title="Delete Theme">&times;</a>
                 <a href="/Admin/Themes/Edit/@theme.ID" title="Edit Theme Basic Information" class="edittheme"><span class="pencil"></span></a>
                 <a href="/Admin/Themes/Files/@theme.ID" class="themefiles" title="Manage Theme Files">
                     <img src="@((!string.IsNullOrWhiteSpace(theme.screenshot)) ? theme.screenshot : "/Admin/Content/img/noimage.jpg" )" alt="@theme.name" />
@@ -23,3 +24,4 @@
 } else {
     <p>No Themes. <a href="/Admin/Themes/Add">Add a Theme</a></p>
 }
+<script src="/Admin/Scripts/custom/themes.js"></script>

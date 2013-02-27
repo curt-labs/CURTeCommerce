@@ -6,7 +6,6 @@
     <RemoteDesktopMoreOptions>True</RemoteDesktopMoreOptions>
     <DeploymentPromptBeforeDeleting>False</DeploymentPromptBeforeDeleting>
     <WebRoleHttpsSkipLaunchInBrowser>Admin</WebRoleHttpsSkipLaunchInBrowser>
-    <WebRoleSkipLaunchInBrowser>
-    </WebRoleSkipLaunchInBrowser>
+    <WebRoleSkipLaunchInBrowser>Admin</WebRoleSkipLaunchInBrowser>
   </PropertyGroup>
 </Project>

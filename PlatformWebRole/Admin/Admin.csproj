@@ -203,6 +203,9 @@
     <Compile Include="Models\ContentManagement.cs" />
     <Compile Include="Models\ContentPage.cs" />
     <Compile Include="Models\AdminCustomer.cs" />
+    <Compile Include="Models\ThemeFileType.cs" />
+    <Compile Include="Models\ThemeFile.cs" />
+    <Compile Include="Models\ThemeArea.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Models\InvoiceCount.cs" />
     <Compile Include="Models\Order.cs" />
@@ -869,6 +872,7 @@
     <Content Include="Views\FTP\Index.cshtml" />
     <Content Include="Views\Themes\Index.cshtml" />
     <Content Include="Views\Themes\Edit.cshtml" />
+    <Content Include="Views\Themes\Files.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

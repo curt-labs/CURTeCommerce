@@ -42,6 +42,32 @@ namespace Admin {
             db.SubmitChanges();
             this.ID = theme.ID;
         }
+
+        public bool Delete(int id) {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Theme theme = db.Themes.Where(x => x.ID.Equals(id)).FirstOrDefault();
+            if (theme != null && theme.ID > 0) {
+                db.Themes.DeleteOnSubmit(theme);
+                db.SubmitChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public bool Activate(int id) {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Theme theme = db.Themes.Where(x => x.ID.Equals(id)).FirstOrDefault();
+            if (theme != null && theme.ID > 0) {
+                List<Theme> themes = db.Themes.Where(x => x.active == true).ToList();
+                foreach (Theme t in themes) {
+                    t.active = false;
+                }
+                theme.active = true;
+                db.SubmitChanges();
+                return true;
+            }
+            return false;
+        }
     }
 
 

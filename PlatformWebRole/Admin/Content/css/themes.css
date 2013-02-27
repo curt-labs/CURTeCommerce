@@ -2,10 +2,10 @@
     margin-bottom: 40px;
     color: #bf3504;
     font-size: 16px;
-    display: block;
+    display: inline-block;
 }
 
-section a.addService{
+section a.addTheme{
     display:inline-block;
     width: 200px;
     height: 45px;
@@ -225,3 +225,15 @@ section form.admin_form label input[type="radio"] {
     opacity: 1;
 }
 
+.themearea {
+    float: left;
+    width: 200px;
+    margin: 5px;
+    padding: 5px;
+}
+
+.themearea .areaname {
+    display: block;
+    font-weight: bold;
+    font-size: 14px;
+}

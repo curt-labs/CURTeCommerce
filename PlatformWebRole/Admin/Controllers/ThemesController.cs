@@ -50,7 +50,56 @@ namespace Admin.Controllers {
                 else
                     return RedirectToAction("Add", new { error = e.Message });
             }
-            return RedirectToAction("Edit", new { id = theme.ID });
+            return RedirectToAction("Index");
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public string Delete(int id = 0) {
+            bool success = new Theme().Delete(id);
+            if(success) {
+                return "{\"success\":true}";
+            } else {
+                return "{\"success\":false}";
+            }
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public string Activate(int id = 0) {
+            bool success = new Theme().Activate(id);
+            if (success) {
+                return "{\"success\":true}";
+            } else {
+                return "{\"success\":false}";
+            }
+        }
+
+        public ActionResult Files(int id = 0) {
+            Theme theme = new Theme().Get(id);
+            ViewBag.theme = theme;
+
+            List<ThemeArea> areas = new ThemeArea().GetAll();
+            ViewBag.areas = areas;
+
+            List<ThemeFileType> types = new ThemeFileType().GetAll();
+            ViewBag.types = types;
+
+            return View();
+        }
+
+        public ActionResult Area(int themeID, int areaID) {
+            Theme theme = new Theme().Get(themeID);
+            ViewBag.theme = theme;
+
+            List<ThemeFile> files = theme.ThemeFiles.Where(x => x.themeAreaID.Equals(areaID)).ToList();
+            ViewBag.files = files;
+
+            ThemeArea area = files.Select(x => x.ThemeArea).FirstOrDefault();
+            ViewBag.area = area;
+
+            List<ThemeFileType> types = new ThemeFileType().GetAll();
+            ViewBag.types = types;
+
+            return View();
         }
     }
 }
