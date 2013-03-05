@@ -1,4 +1,20 @@
-﻿section span.title{
+﻿a.modalClose{
+    color: #bd0000;
+    font-size: 25px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    text-decoration: none;
+}
+
+#addfile {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    text-decoration: none;
+}
+
+section span.title{
     margin-bottom: 40px;
     color: #bf3504;
     font-size: 16px;

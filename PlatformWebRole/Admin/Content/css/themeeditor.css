@@ -1,0 +1,53 @@
+﻿section span.title{
+    margin-bottom: 40px;
+    color: #bf3504;
+    font-size: 16px;
+    display: inline-block;
+}
+
+.editor {
+    margin: 10px 0 0;
+    display: block;
+    line-height: 1;
+    height: 100%;
+    position: relative;
+}
+
+.editor .gutter {
+    float: left;
+    position: relative;
+    height: 100%;
+    min-width: 20px;
+    text-align: right;
+    background-color: #ebebeb;
+    counter-reset:section;
+    padding: 8.5px 4px 8.5px 4px;
+    line-height: 18px;
+    font-size: 12px;
+    border-top: 1px solid transparent;
+}
+
+.editor .gutter span.line {
+    display: block;
+}
+.editor .gutter span.line::before {
+    counter-increment:section;
+    content: counter(section);
+}
+
+.editor pre {
+    float: left;
+    height: 100%;
+    position: relative;
+    width: 94%;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+button.save {
+    float: right;
+}
+
+a.cancel {
+    color: #333;
+}

@@ -116,6 +116,12 @@ namespace Admin.Models {
             // Retrieve a reference to a previously created container
             CloudBlobContainer con = client.GetContainerReference(name);
             con.CreateIfNotExists();
+            BlobContainerPermissions perms = con.GetPermissions();
+            if (perms.PublicAccess != BlobContainerPublicAccessType.Container) {
+                perms.PublicAccess = BlobContainerPublicAccessType.Container;
+                con.SetPermissions(perms);
+            }
+
 
             DiscountBlobContainer container = new DiscountBlobContainer {
                 Container = con,
@@ -454,6 +460,52 @@ namespace Admin.Models {
             ICloudBlob blob = client.GetBlobReferenceFromServer(blobUri);
             blob.DeleteIfExists();
         }
+
+        internal static CloudBlockBlob GetOrCreateBlob(string path) {
+            //UDF.SendEmail(new string[] { "jjaniuk@curtmfg.com" }, "Save log", false, path, true);
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+            // Create the blobl client
+            CloudBlobClient client = storageAccount.CreateCloudBlobClient();
+            // path format = /Container/folder/file.ext
+            // there could be many folders
+            path = path.Remove(0, 1);
+            List<string> paths = path.Split('/').ToList();
+            string containername = paths[0];
+            paths.RemoveAt(0);
+            string filepath = String.Join("/", paths.ToArray());
+            //UDF.SendEmail(new string[] { "jjaniuk@curtmfg.com" }, "Save log", false, path, true);
+            DiscountBlobContainer container = GetContainer(containername);
+            CloudBlockBlob blob = container.Container.GetBlockBlobReference(filepath);
+            return blob;
+        }
+
+        /// <summary>
+        /// Renames the specified object by copying the original to a new path and deleting the original.
+        /// </summary>
+        /// <param name="originalPath">The original path.</param>
+        /// <param name="newPath">The new path.</param>
+        /// <returns></returns>
+        public static CloudBlockBlob RenameFile(Uri originalPath, Uri newPath) {
+
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+            // Create the blobl client
+            CloudBlobClient client = storageAccount.CreateCloudBlobClient();
+            CloudBlockBlob oldblob = GetOrCreateBlob(originalPath.LocalPath);
+            MemoryStream datastream = new MemoryStream();
+            oldblob.DownloadToStream(datastream);
+            byte[] databytes = datastream.ToArray();
+
+            CloudBlockBlob newblob = GetOrCreateBlob(newPath.LocalPath);
+            // upload new data to blob
+            MemoryStream newstream = new MemoryStream(databytes);
+            newblob.UploadFromStream(newstream);
+
+            // delete old blob
+            oldblob.Delete();
+
+            return newblob;
+        }
+
     }
 
     public class DiscountBlobContainer {
@@ -468,4 +520,5 @@ namespace Admin.Models {
     public class BlobFile {
         public Uri uri { get; set; }
     }
+
 }

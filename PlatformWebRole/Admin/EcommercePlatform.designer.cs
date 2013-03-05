@@ -10484,7 +10484,7 @@ namespace Admin
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ThemeFileType_ThemeFile", Storage="_ThemeFiles", ThisKey="ID", OtherKey="ThemeFileTypeID")]
-		public EntitySet<ThemeFile> ThemeFiles
+		internal EntitySet<ThemeFile> ThemeFiles
 		{
 			get
 			{
@@ -10622,7 +10622,7 @@ namespace Admin
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ThemeArea_ThemeFile", Storage="_ThemeFiles", ThisKey="ID", OtherKey="themeAreaID")]
-		public EntitySet<ThemeFile> ThemeFiles
+		internal EntitySet<ThemeFile> ThemeFiles
 		{
 			get
 			{
@@ -10898,7 +10898,7 @@ namespace Admin
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Theme_ThemeFile", Storage="_Theme", ThisKey="themeID", OtherKey="ID", IsForeignKey=true)]
-		public Theme Theme
+		internal Theme Theme
 		{
 			get
 			{

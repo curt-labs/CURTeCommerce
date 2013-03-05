@@ -482,7 +482,7 @@
       <Column Name="name" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
       <Column Name="extension" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
       <Column Name="mimetype" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Association Name="ThemeFileType_ThemeFile" Member="ThemeFiles" ThisKey="ID" OtherKey="ThemeFileTypeID" Type="ThemeFile" />
+      <Association Name="ThemeFileType_ThemeFile" Member="ThemeFiles" AccessModifier="Internal" ThisKey="ID" OtherKey="ThemeFileTypeID" Type="ThemeFile" />
     </Type>
   </Table>
   <Table Name="dbo.ThemeArea" Member="ThemeAreas">
@@ -490,7 +490,7 @@
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="name" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
       <Column Name="controller" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
-      <Association Name="ThemeArea_ThemeFile" Member="ThemeFiles" ThisKey="ID" OtherKey="themeAreaID" Type="ThemeFile" />
+      <Association Name="ThemeArea_ThemeFile" Member="ThemeFiles" AccessModifier="Internal" ThisKey="ID" OtherKey="themeAreaID" Type="ThemeFile" />
     </Type>
   </Table>
   <Table Name="dbo.ThemeFile" Member="ThemeFiles">
@@ -503,7 +503,7 @@
       <Column Name="renderOrder" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="dateAdded" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="lastModified" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Association Name="Theme_ThemeFile" Member="Theme" ThisKey="themeID" OtherKey="ID" Type="Theme" IsForeignKey="true" />
+      <Association Name="Theme_ThemeFile" Member="Theme" AccessModifier="Internal" ThisKey="themeID" OtherKey="ID" Type="Theme" IsForeignKey="true" />
       <Association Name="ThemeFileType_ThemeFile" Member="ThemeFileType" ThisKey="ThemeFileTypeID" OtherKey="ID" Type="ThemeFileType" IsForeignKey="true" />
       <Association Name="ThemeArea_ThemeFile" Member="ThemeArea" ThisKey="themeAreaID" OtherKey="ID" Type="ThemeArea" IsForeignKey="true" />
     </Type>

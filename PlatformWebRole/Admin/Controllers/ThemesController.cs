@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Admin.Models;
+using Newtonsoft.Json;
 
 namespace Admin.Controllers {
     public class ThemesController : BaseController {
@@ -86,20 +87,59 @@ namespace Admin.Controllers {
             return View();
         }
 
-        public ActionResult Area(int themeID, int areaID) {
+        [NoValidation]
+        public string AreaFiles(int themeID, int areaID, int typeID) {
+            ThemeDetails deets = new ThemeDetails {
+                theme = new Theme().Get(themeID),
+                type = new ThemeFileType().Get(typeID),
+                area = new ThemeArea().Get(areaID)
+            };
+
+            deets.files = deets.theme.ThemeFiles.Where(x => x.themeAreaID.Equals(areaID) && x.ThemeFileTypeID.Equals(typeID)).OrderBy(x => x.renderOrder).ToList();
+            return JsonConvert.SerializeObject(deets);
+        }
+
+        public ActionResult AddFile(int themeID, int areaID, int typeID) {
             Theme theme = new Theme().Get(themeID);
             ViewBag.theme = theme;
 
-            List<ThemeFile> files = theme.ThemeFiles.Where(x => x.themeAreaID.Equals(areaID)).ToList();
-            ViewBag.files = files;
-
-            ThemeArea area = files.Select(x => x.ThemeArea).FirstOrDefault();
+            ThemeArea area = new ThemeArea().Get(areaID);
             ViewBag.area = area;
 
-            List<ThemeFileType> types = new ThemeFileType().GetAll();
-            ViewBag.types = types;
+            ThemeFileType type = new ThemeFileType().Get(typeID);
+            ViewBag.type = type;
 
             return View();
         }
+
+        public ActionResult EditFile(int id) {
+            ThemeFile file = new ThemeFile().Get(id);
+            ViewBag.file = file;
+
+            Theme theme = file.Theme;
+            ViewBag.theme = theme;
+
+            ThemeArea area = file.ThemeArea;
+            ViewBag.area = area;
+
+            ThemeFileType type = file.ThemeFileType;
+            ViewBag.type = type;
+
+            return View("AddFile");
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public string SaveFile(int themeID, int areaID, int typeID, string content, string name, int fileID = 0) {
+            ThemeFile file = new ThemeFile().Save(fileID, themeID, areaID, typeID, content, name);
+            return JsonConvert.SerializeObject(file);
+        }
+
+
+    }
+    public class ThemeDetails {
+        public Theme theme { get; set; }
+        public ThemeArea area { get; set; }
+        public ThemeFileType type { get; set; }
+        public List<ThemeFile> files { get; set; }
     }
 }

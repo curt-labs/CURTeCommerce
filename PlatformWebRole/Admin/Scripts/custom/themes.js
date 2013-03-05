@@ -1,4 +1,5 @@
-﻿$(function () {
+﻿var fileWindow;
+$(function () {
     $(document).on('click', '.deletetheme', function (e) {
         e.preventDefault();
         var id = $(this).data('id');
@@ -37,4 +38,58 @@
             }, 'json');
         }
     });
+
+    $(document).on('click', '.themearea a', function (e) {
+        e.preventDefault();
+        var areaID = $(this).data('areaid');
+        var typeID = $(this).data('typeid');
+        var themeID = $('#themeID').val();
+        $.getJSON('/Admin/Themes/AreaFiles', { themeID: themeID, areaID: areaID, typeID: typeID }, fileWindow);
+    });
+
+    $(document).on('click', '#addfile', function (e) {
+        e.preventDefault();
+        var areaID = $(this).data('areaid');
+        var typeID = $(this).data('typeid');
+        var themeID = $(this).data('themeid');
+        window.location = '/Admin/Themes/AddFile?themeID=' + themeID + '&typeID=' + typeID + '&areaID=' + areaID;
+    });
 });
+
+fileWindow = function (data) {
+    console.log(data);
+    var html = '<div id="thememanager"><a href="javascript:$.modal.close()" title="Close" class="modalClose">&times;</a>'
+    html += '<h3>' + data.area.name + ': ' + data.type.name + ' Files</h3>';
+    html += '<p>Files are shown in their render order. Drag and Drop to re-order them.</p>';
+    html += '<ul id="thememanagerfiles">';
+    if (data.files.length > 0) {
+        $(data.files).each(function (i, obj) {
+            var filepath = obj.filePath.split('/');
+            html += '<li id="file_' + obj.ID + '" data-themeid="' + obj.themeID + '" data-areaid="' + obj.ThemeAreaID + '" data-typeid="' + obj.ThemeFileTypeID + '">';
+            html += '<a href="/Admin/Themes/EditFile/' + obj.ID + '" title="Edit File">' + filepath[filepath.length - 1] + '</a>';
+            html += '</li>';
+        });
+    } else {
+        html += '<li>No files</li>';
+    }
+    html += '</ul>';
+    html += '<button class="btn btn-inverse" id="addfile" data-themeid="' + data.theme.ID + '" data-areaid="' + data.area.ID + '" data-typeid="' + data.type.ID + '" type="button"><i class="icon-plus icon-white"></i> Add File</button></div>';
+    $.modal(html, {
+        containerCss: {
+            backgroundColor: '#ffffff',
+            borderColor: '#ffffff',
+            height: '350px',
+            width: '550px',
+            padding: '10px'
+        }, overlayCss: {
+            backgroundColor: 'black'
+        }, onClose: function (dialog) {
+            $('div.simplemodal-container').fadeOut(400, function () {
+                $('div.simplemodal-overlay').hide();
+                $('div.simplemodal-container').hide();
+            });
+            $('input.modalchoosing').removeClass('modalchoosing');
+            $.modal.close();
+        }
+    });
+};

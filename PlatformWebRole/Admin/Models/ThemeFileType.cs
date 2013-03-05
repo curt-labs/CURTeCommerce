@@ -18,6 +18,13 @@ namespace Admin {
             return filetypes;
         }
 
+        public ThemeFileType Get(int id = 0) {
+            ThemeFileType type = new ThemeFileType();
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            type = db.ThemeFileTypes.Where(x => x.ID.Equals(id)).FirstOrDefault();
+            return type;
+        }
+
     }
 
 

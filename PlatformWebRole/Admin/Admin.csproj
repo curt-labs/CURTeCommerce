@@ -239,6 +239,9 @@
   <ItemGroup>
     <Content Include="bin\AuthorizeNet.dll" />
     <Content Include="bin\AuthorizeNet.Helpers.dll" />
+    <Content Include="Content\css\syntaxhighliter\shCore.css" />
+    <Content Include="Content\css\syntaxhighliter\shThemeDefault.css" />
+    <Content Include="Content\css\themeeditor.css" />
     <Content Include="Content\css\themes.css" />
     <Content Include="Content\css\invoice.manager.print.css" />
     <Content Include="Content\css\taxes.manager.css" />
@@ -748,6 +751,7 @@
     <Content Include="Scripts\custom\blog.manager.js" />
     <Content Include="Scripts\custom\contact.manager.js" />
     <Content Include="Scripts\custom\content.manager.js" />
+    <Content Include="Scripts\custom\themeeditor.js" />
     <Content Include="Scripts\custom\themes.js" />
     <Content Include="Scripts\custom\taxes.manager.js" />
     <Content Include="Scripts\custom\invoice.manager.js" />
@@ -778,6 +782,9 @@
     <Content Include="Scripts\mustache.js" />
     <Content Include="Scripts\plugins.js" />
     <Content Include="Scripts\shadowbox.js" />
+    <Content Include="Scripts\syntaxhighliter\shBrushCss.js" />
+    <Content Include="Scripts\syntaxhighliter\shBrushJScript.js" />
+    <Content Include="Scripts\syntaxhighliter\shCore.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -873,6 +880,7 @@
     <Content Include="Views\Themes\Index.cshtml" />
     <Content Include="Views\Themes\Edit.cshtml" />
     <Content Include="Views\Themes\Files.cshtml" />
+    <Content Include="Views\Themes\AddFile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
