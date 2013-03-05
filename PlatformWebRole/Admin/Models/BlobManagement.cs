@@ -506,6 +506,16 @@ namespace Admin.Models {
             return newblob;
         }
 
+        public static void DeleteFile(Uri filePath) {
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+            // Create the blobl client
+            CloudBlobClient client = storageAccount.CreateCloudBlobClient();
+            CloudBlockBlob blob = GetOrCreateBlob(filePath.LocalPath);
+            if (blob.Exists()) {
+                blob.Delete();
+            }
+        }
+
     }
 
     public class DiscountBlobContainer {

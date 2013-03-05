@@ -134,6 +134,22 @@ namespace Admin.Controllers {
             return JsonConvert.SerializeObject(file);
         }
 
+        [AcceptVerbs(HttpVerbs.Post)]
+        public string DeleteFile(int id = 0) {
+            bool success = new ThemeFile().Delete(id);
+            if (success) {
+                return "{\"success\":true}";
+            } else {
+                return "{\"success\":false}";
+            }
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public string updateFileSort() {
+            List<string> filesort = Request.QueryString["file[]"].Split(',').ToList<string>();
+            new ThemeFile().updateSort(filesort);
+            return "";
+        }
 
     }
     public class ThemeDetails {

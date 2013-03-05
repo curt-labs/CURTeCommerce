@@ -253,3 +253,38 @@ section form.admin_form label input[type="radio"] {
     font-weight: bold;
     font-size: 14px;
 }
+
+#thememanagerfiles {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#thememanagerfiles li {
+    display: block;
+    padding-left: 10px;
+}
+
+#thememanagerfiles li span.handle {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: move;
+    padding: 5px;
+}
+
+#thememanagerfiles li span.deletethemefile {
+    display: none;
+    float: right;
+}
+
+#thememanagerfiles li:hover span.deletethemefile {
+    display: block;
+}
+
+#thememanagerfiles li span.deletethemefile a {
+    color: #9a0000;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 16px;
+}

@@ -1,4 +1,4 @@
-﻿var fileWindow;
+﻿var fileWindow, deleteFile, initSortable, destroySortable, updateSort;
 $(function () {
     $(document).on('click', '.deletetheme', function (e) {
         e.preventDefault();
@@ -54,10 +54,11 @@ $(function () {
         var themeID = $(this).data('themeid');
         window.location = '/Admin/Themes/AddFile?themeID=' + themeID + '&typeID=' + typeID + '&areaID=' + areaID;
     });
+
+    $(document).on('click', '.deletethemefile a', deleteFile);
 });
 
 fileWindow = function (data) {
-    console.log(data);
     var html = '<div id="thememanager"><a href="javascript:$.modal.close()" title="Close" class="modalClose">&times;</a>'
     html += '<h3>' + data.area.name + ': ' + data.type.name + ' Files</h3>';
     html += '<p>Files are shown in their render order. Drag and Drop to re-order them.</p>';
@@ -66,7 +67,8 @@ fileWindow = function (data) {
         $(data.files).each(function (i, obj) {
             var filepath = obj.filePath.split('/');
             html += '<li id="file_' + obj.ID + '" data-themeid="' + obj.themeID + '" data-areaid="' + obj.ThemeAreaID + '" data-typeid="' + obj.ThemeFileTypeID + '">';
-            html += '<a href="/Admin/Themes/EditFile/' + obj.ID + '" title="Edit File">' + filepath[filepath.length - 1] + '</a>';
+            html += '<span class="handle">&bull;</span> <a href="/Admin/Themes/EditFile/' + obj.ID + '" title="Edit File">' + filepath[filepath.length - 1] + '</a>';
+            html += '<span class="deletethemefile"><a href="/Admin/Themes/DeleteFile/' + obj.ID + '">&times;</a></span>';
             html += '</li>';
         });
     } else {
@@ -89,7 +91,42 @@ fileWindow = function (data) {
                 $('div.simplemodal-container').hide();
             });
             $('input.modalchoosing').removeClass('modalchoosing');
+            destroySortable();
             $.modal.close();
         }
     });
+    initSortable();
 };
+
+deleteFile = function (e) {
+    e.preventDefault();
+    var aobj = $(this);
+    var href = $(this).attr('href');
+    if (confirm('Are you sure you want to delete this file?')) {
+        $.post(href, function (data) {
+            if (data.success) {
+                var target = $(aobj).parent().parent();
+                $(target).fadeOut('fast', function () { $(target).remove(); });
+                showMessage("File Deleted.");
+                initSortable();
+            } else {
+                showMessage("There was a problem deleting the file.")
+            }
+        }, 'json')
+    }
+}
+
+updateSort = function() {
+    var x = $('#thememanagerfiles').sortable("serialize");
+    console.log(x);
+    $.post('/Admin/Themes/updateFileSort?' + x);
+}
+
+initSortable = function () {
+    $('#thememanagerfiles').sortable("destroy");
+    $('#thememanagerfiles').sortable({ axis: "y", handle: 'span.handle', update: function (event, ui) { updateSort(event, ui) } }).disableSelection();
+}
+
+destroySortable = function () {
+    $('#thememanagerfiles').sortable("destroy");
+}

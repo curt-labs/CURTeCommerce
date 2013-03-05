@@ -19,6 +19,7 @@ $(function () {
     $('.editor pre').on('keyup', fillGutter);
     fillGutter();
     $('.save').on('click', function (e) {
+        $('.ajax-loader').show();
         e.preventDefault();
         var fileID = $(this).data('fileid');
         var themeID = $(this).data('themeid');
@@ -32,9 +33,14 @@ $(function () {
             return;
         }
         $.post('/Admin/Themes/SaveFile', { fileID: fileID, themeID: themeID, areaID: areaID, typeID: typeID, content: content, name: name }, function (data) {
+            $('.ajax-loader').hide();
             filecontent = content;
             if (fileID == "" || fileID == 0) {
-                window.location = "/Admin/Themes/EditFile/" + data.ID;
+                if (data.ID > 0) {
+                    window.location = "/Admin/Themes/EditFile/" + data.ID;
+                } else {
+                    showMessage('There was a problem saving this file. It may be a duplicate file name. Please try again.');
+                }
             } else {
                 showMessage('File saved successfully');
             }

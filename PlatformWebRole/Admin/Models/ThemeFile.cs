@@ -74,6 +74,9 @@ namespace Admin {
             } else {
                 // new file
                 localpath = "/themes/" + themeID + "/" + areaID + "/" + name;
+                if (db.ThemeFiles.Any(x => x.themeID.Equals(themeID) && x.ThemeFileTypeID.Equals(typeID) && x.themeAreaID.Equals(areaID) && x.filePath.ToLower().Contains(localpath.ToLower()))) {
+                    return file;
+                }
             }
 
             // get blob from blob store
@@ -111,6 +114,30 @@ namespace Admin {
             }
             db.SubmitChanges();
             return file;
+        }
+
+        public bool Delete(int id) {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            ThemeFile file = db.ThemeFiles.Where(x => x.ID.Equals(id)).FirstOrDefault();
+            if (file != null && file.ID > 0) {
+                Uri filepath = new Uri(file.filePath);
+                BlobManagement.DeleteFile(filepath);
+                db.ThemeFiles.DeleteOnSubmit(file);
+                db.SubmitChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public void updateSort(List<string> files) {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            for (int i = 0; i < files.Count; i++) {
+                ThemeFile f = db.ThemeFiles.Where(x => x.ID.Equals(Convert.ToInt32(files[i]))).FirstOrDefault();
+                if (f.ID > 0) {
+                    f.renderOrder = i + 1;
+                    db.SubmitChanges();
+                }
+            }
         }
 
     }
