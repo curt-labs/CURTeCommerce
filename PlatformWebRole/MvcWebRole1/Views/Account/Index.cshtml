@@ -1,4 +1,5 @@
 ﻿@{
+    ViewBag.defaultcss = new List<string> { "/Content/css/account.css" };
     EcommercePlatform.Customer cust = ViewBag.cust;
     if (cust == null){
         Response.Redirect("/Authenticate");
@@ -7,16 +8,11 @@
     ViewBag.shipping = cust.Address1;
     ViewBag.setup = false;
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
-
-    string error = ViewBag.error;
-    if(error == null){
-        error = "";   
-    }
+    string error = ViewBag.error ?? "";
     
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<link href="@settings.Get("PathToCSS")/css/account.css" rel="stylesheet" type="text/css" />
 <h1>My Account</h1>
 <p class="error">@error</p>
 <ul class="tabs nojs">

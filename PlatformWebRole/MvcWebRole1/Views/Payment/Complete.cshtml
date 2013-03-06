@@ -1,8 +1,6 @@
 ﻿@{
-    EcommercePlatform.ContentPage page = ViewBag.page;
-    if (page == null) {
-        page = new EcommercePlatform.ContentPage();
-    }
+    ViewBag.defaultcss = new List<string> { "/Content/css/cart.css" };
+    EcommercePlatform.ContentPage page = ViewBag.page ?? new EcommercePlatform.ContentPage();
     
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
     string adwordsid = settings.Get("GoogleAdwordsConversionID");
@@ -16,7 +14,6 @@
     ViewBag.Title = "Payment Complete";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<link href="@settings.Get("PathToCSS")/css/cart.css" rel="stylesheet" type="text/css" />
 <div class="content">
     <h2>Order Placed Successfully!</h2>
     @Html.Raw(page.content)

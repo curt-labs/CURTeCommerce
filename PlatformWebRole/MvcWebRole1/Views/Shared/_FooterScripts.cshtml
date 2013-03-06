@@ -1,0 +1,43 @@
+﻿@{
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
+}
+<!-- JavaScript at the bottom for fast page loading -->
+<!-- scripts concatenated and minified via build script -->
+<!-- Facebook Like functionality -->
+<div id="fb-root"></div>
+<script>    (function (d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=154903937934243";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+    
+<!-- Tweet Functionality -->
+<script defer src="//platform.twitter.com/widgets.js"></script>
+
+<script defer src="/Scripts/tools/jquery.simplemodal.min.js" ></script>
+<script defer src="/Scripts/tools/jquery.bbq.min.js"></script>
+<script defer src="/Scripts/tools/jquery.cycle.js"></script>
+<script defer src="/Scripts/tools/jquery.dataTables.min.js"></script>
+<script defer src="/Scripts/tools/shadowbox.js"></script>
+
+<!-- end scripts -->
+@if (settings.Get("GoogleAnalyticsCode") != "") {
+    <!-- Asynchronous Google Analytics snippet. Change UA-XXXXX-X to be your site's ID.
+        mathiasbynens.be/notes/async-analytics-snippet -->
+    <script type="text/javascript">
+        (function () {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>
+}
+<!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+    chromium.org/developers/how-tos/chrome-frame-getting-started -->
+<!--[if lt IE 7 ]>
+<script defer src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+<script defer>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+<![endif]-->

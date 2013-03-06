@@ -47,6 +47,9 @@ namespace Admin {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             Theme theme = db.Themes.Where(x => x.ID.Equals(id)).FirstOrDefault();
             if (theme != null && theme.ID > 0) {
+                foreach(ThemeFile file in theme.ThemeFiles) {
+                    new ThemeFile().Delete(file.ID);
+                }
                 db.ThemeFiles.DeleteAllOnSubmit(theme.ThemeFiles);
                 db.Themes.DeleteOnSubmit(theme);
                 db.SubmitChanges();
@@ -65,6 +68,13 @@ namespace Admin {
                 }
                 theme.active = true;
                 db.SubmitChanges();
+
+                // adjust cookies so theme shows up immediately
+                HttpCookie activeTheme = new HttpCookie("activetheme");
+                activeTheme = new HttpCookie("activetheme");
+                activeTheme.Value = theme.ID.ToString();
+                activeTheme.Expires = DateTime.Now.AddHours(1);
+                HttpContext.Current.Response.Cookies.Add(activeTheme);
                 return true;
             }
             return false;

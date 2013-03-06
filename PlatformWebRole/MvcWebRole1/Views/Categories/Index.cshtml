@@ -1,15 +1,12 @@
 ﻿@{
-    EcommercePlatform.Models.APICategory cat = ViewBag.category;
-    if(cat == null){
-        cat = new EcommercePlatform.Models.APICategory();
-    }
+    ViewBag.defaultcss = new List<string> { "/Content/css/category.css" };
+    EcommercePlatform.Models.APICategory cat = ViewBag.category ?? new EcommercePlatform.Models.APICategory();
     cat.catTitle = cat.catTitle.Trim();
     
     ViewBag.Title = cat.catTitle;
     Layout = "~/Views/Shared/_Layout.cshtml";
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="@settings.Get("PathToCSS")/css/category.css" rel="stylesheet" type="text/css" />
 <span class="title">@cat.catTitle</span>
 
 <img src="@cat.image" alt="@cat.catTitle" onerror="$(this).remove()" class="cat_image" />

@@ -10381,6 +10381,8 @@ namespace Admin
 		
 		private string _mimetype;
 		
+		private string _structure;
+		
 		private EntitySet<ThemeFile> _ThemeFiles;
 		
     #region Extensibility Method Definitions
@@ -10395,6 +10397,8 @@ namespace Admin
     partial void OnextensionChanged();
     partial void OnmimetypeChanging(string value);
     partial void OnmimetypeChanged();
+    partial void OnstructureChanging(string value);
+    partial void OnstructureChanged();
     #endregion
 		
 		public ThemeFileType()
@@ -10479,6 +10483,26 @@ namespace Admin
 					this._mimetype = value;
 					this.SendPropertyChanged("mimetype");
 					this.OnmimetypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_structure", DbType="VarChar(255) NULL")]
+		public string structure
+		{
+			get
+			{
+				return this._structure;
+			}
+			set
+			{
+				if ((this._structure != value))
+				{
+					this.OnstructureChanging(value);
+					this.SendPropertyChanging();
+					this._structure = value;
+					this.SendPropertyChanged("structure");
+					this.OnstructureChanged();
 				}
 			}
 		}
@@ -10689,6 +10713,8 @@ namespace Admin
 		
 		private System.DateTime _lastModified;
 		
+		private bool _externalFile;
+		
 		private EntityRef<Theme> _Theme;
 		
 		private EntityRef<ThemeFileType> _ThemeFileType;
@@ -10715,6 +10741,8 @@ namespace Admin
     partial void OndateAddedChanged();
     partial void OnlastModifiedChanging(System.DateTime value);
     partial void OnlastModifiedChanged();
+    partial void OnexternalFileChanging(bool value);
+    partial void OnexternalFileChanged();
     #endregion
 		
 		public ThemeFile()
@@ -10893,6 +10921,26 @@ namespace Admin
 					this._lastModified = value;
 					this.SendPropertyChanged("lastModified");
 					this.OnlastModifiedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_externalFile", DbType="Bit NOT NULL")]
+		public bool externalFile
+		{
+			get
+			{
+				return this._externalFile;
+			}
+			set
+			{
+				if ((this._externalFile != value))
+				{
+					this.OnexternalFileChanging(value);
+					this.SendPropertyChanging();
+					this._externalFile = value;
+					this.SendPropertyChanged("externalFile");
+					this.OnexternalFileChanged();
 				}
 			}
 		}

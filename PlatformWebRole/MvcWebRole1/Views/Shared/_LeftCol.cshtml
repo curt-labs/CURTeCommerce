@@ -1,0 +1,33 @@
+﻿@{
+    List<EcommercePlatform.Models.APICategory> parent_cats = ViewBag.parent_cats ?? new List<EcommercePlatform.Models.APICategory>();
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
+}
+<section id="left_col">
+    @if (parent_cats.Count > 0) {
+        <article class="module">
+            <span class="module_title">Browse Categories</span>
+            <ul>
+                @foreach (EcommercePlatform.Models.APICategory cat in parent_cats) {
+                    <li>
+                        <a href="/Category/@cat.catID/@HttpUtility.HtmlEncode(cat.catTitle.Trim())" title="@cat.catTitle.Trim()">@cat.catTitle.Trim()</a>
+                    </li>
+                }
+            </ul>
+        </article>
+    }
+    <article class="module" id="newsletter">
+        <span class="module_title">Newsletter</span>
+        <p class="desc">Receive The Latest NEWS, UPDATES, AND INFORMATION</p>
+        <p class="action">SIGN UP NOW!</p>
+        <form method="post" action="/Newsletter/Signup">
+            <input type="text" name="name" id="news_name" class="placeholder" placeholder="Enter Full Name" />
+            <input type="email" name="email" id="news_email" class="placeholder" placeholder="Enter Email Address" />
+            <input type="submit" name="btnSubmit" value="Sign Up" />
+            <div style="clear:both"></div>
+        </form>
+        <a href="/Page/Newsletter" class="newsletterlink">View the latest Newsletter &gt;</a>
+    </article>
+    @if (!String.IsNullOrEmpty(settings.Get("HomeBannerLeft"))) {
+        <img src="@settings.Get("HomeBannerLeft")" alt="@settings.Get("HomeBannerLeftAltText")" class="free-shipping" />
+    }
+</section>

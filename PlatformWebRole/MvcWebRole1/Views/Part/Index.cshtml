@@ -1,41 +1,26 @@
 ﻿@{
-    if(ViewBag.ajax != true){
+    ViewBag.defaultcss = new List<string> { "/Content/DataTables/media/css/demo_table.min.css", "/Content/shadowbox/shadowbox.css", "/Content/css/part.css" };
+    ViewBag.defaultjs = new List<string> { "/Scripts/custom/part.js" };
+    if (ViewBag.ajax != true) {
         Layout = "~/Views/Shared/_Layout.cshtml";
     }
 
-    EcommercePlatform.Models.APIPart part = ViewBag.part;
-    if(part == null){
-        part = new EcommercePlatform.Models.APIPart();
-    }
+    EcommercePlatform.Models.APIPart part = ViewBag.part ?? new EcommercePlatform.Models.APIPart();
     ViewBag.Title = part.shortDesc;
 
-    List<EcommercePlatform.Models.APIPart> related = ViewBag.related_parts;
-    if(related == null){
-        related = new List<EcommercePlatform.Models.APIPart>();
-    }
-
-    List<EcommercePlatform.Models.FullVehicle> vehicles = ViewBag.vehicles;
-    if(vehicles == null){
-        vehicles = new List<EcommercePlatform.Models.FullVehicle>();
-    }
-
+    List<EcommercePlatform.Models.APIPart> related = ViewBag.related_parts ?? new List<EcommercePlatform.Models.APIPart>();
+    List<EcommercePlatform.Models.FullVehicle> vehicles = ViewBag.vehicles ?? new List<EcommercePlatform.Models.FullVehicle>();
     EcommercePlatform.Models.APIVideo installVideo = part.videos.Where(x => x.type.Contains("Installation")).FirstOrDefault<EcommercePlatform.Models.APIVideo>();
     
-    string year = (ViewBag.year != null)?ViewBag.year:"";
-    string make = (ViewBag.make != null) ? ViewBag.make : "";
-    string model = (ViewBag.model != null) ? ViewBag.model : "";
-    string style = (ViewBag.style != null) ? ViewBag.style : "";
+    string year = ViewBag.year ?? "";
+    string make = ViewBag.make ?? "";
+    string model = ViewBag.model ?? "";
+    string style = ViewBag.style ?? "";
 
-    List<EcommercePlatform.Models.APIPart> connectors = ViewBag.connectors;
-    if (connectors == null) {
-        connectors = new List<EcommercePlatform.Models.APIPart>();
-    }
+    List<EcommercePlatform.Models.APIPart> connectors = ViewBag.connectors ?? new List<EcommercePlatform.Models.APIPart>();
     bool first_image = true;
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="/Content/DataTables/media/css/demo_table.css" rel="stylesheet" type="text/css" />
-<link href="@settings.Get("PathToCSS")/css/part.css" rel="stylesheet" type="text/css" />
-<link href="/Content/shadowbox/shadowbox.css" rel="stylesheet" type="text/css" />
 
 @if (year.Length > 0 && make.Length > 0 && model.Length > 0 && style.Length > 0) {
     <!-- Display stored vehicle -->
@@ -315,11 +300,4 @@
         <div class="clearfix"></div>
     </div>
 }
-<script src="/Scripts/tools/jquery.bbq.min.js" type="text/javascript"></script>
-<script src="/Scripts/tools/jquery.dataTables.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="/Scripts/tools/shadowbox.js"></script>
-@if (HttpContext.Current.IsDebuggingEnabled) {
-    <script src="/Scripts/custom/part.js" type="text/javascript"></script>
-} else {
-    <script src="/Scripts/custom/part.min.js" type="text/javascript"></script>
-}
+<script src="/Scripts/custom/part.js" type="text/javascript"></script>

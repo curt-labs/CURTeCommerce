@@ -1,5 +1,6 @@
 ﻿@using EcommercePlatform.Models;
 @{
+    ViewBag.defaultcss = new List<string> { "/Content/css/blog.css" };
     EcommercePlatform.Models.PostWithCategories post = ViewBag.post;
     if (post.meta_title == "") {
         ViewBag.Title = post.post_title;
@@ -29,12 +30,10 @@
     TimeZoneInfo tz = ViewBag.timezone ?? TimeZoneInfo.Utc;
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="@settings.Get("PathToCSS")/css/blog.css" rel="stylesheet" type="text/css" />
-
 @Html.Partial("_BlogNavigation")
 
 <div class="content">
-    <article class="post" id="post_@post.postID">
+    <article class="post" id="post_@post.blogPostID">
         <span class="header">
             @if (errors != null && errors.Trim() != "") {<p class="error">@errors</p>}
             <h2>@post.post_title</h2>

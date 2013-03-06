@@ -25,7 +25,7 @@ File Name: <input type="text" id="filename" value="@((file != null && file.ID > 
 <a href="/Admin/Themes/Files/@theme.ID" class="cancel btn btn-red"><i class="icon-arrow-left"></i> Back</a><button class="save btn btn-success" data-fileid="@file.ID" data-themeid="@theme.ID" data-areaid="@area.ID" data-typeid="@type.ID" type="button">Save</button><img class="ajax-loader" src="/Content/img/ajax-loader.gif" alt="saving..." />
 <div class="editor">
 <div class="gutter"></div>
-<pre id="preeditor" class="" contenteditable="true">@data
+<pre id="preeditor" class="" contenteditable="true" spellcheck="false">@data
 </pre>
 </div>
 <span class="clearfix"></span>

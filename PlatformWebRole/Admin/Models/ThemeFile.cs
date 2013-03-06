@@ -32,13 +32,14 @@ namespace Admin {
             ThemeFile file = new ThemeFile();
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             file = db.ThemeFiles.Where(x => x.ID.Equals(id)).FirstOrDefault();
-            Uri filepath = new Uri(file.filePath);
-
-            CloudBlockBlob blob = BlobManagement.GetOrCreateBlob(filepath.LocalPath);
-            MemoryStream datastream = new MemoryStream();
-            blob.DownloadToStream(datastream);
-            byte[] databytes = datastream.ToArray();
-            file.content = Encoding.Default.GetString(databytes);
+            if (!file.externalFile) {
+                Uri filepath = new Uri(file.filePath);
+                CloudBlockBlob blob = BlobManagement.GetOrCreateBlob(filepath.LocalPath);
+                MemoryStream datastream = new MemoryStream();
+                blob.DownloadToStream(datastream);
+                byte[] databytes = datastream.ToArray();
+                file.content = Encoding.Default.GetString(databytes);
+            }
             return file;
         }
 
@@ -50,7 +51,7 @@ namespace Admin {
             return name;
         }
 
-        public ThemeFile Save(int fileID, int themeID, int areaID, int typeID, string data, string name = "") {
+        public ThemeFile Save(int fileID, int themeID, int areaID, int typeID, string data, string name = "", bool externalFile = false) {
             ThemeFile file = new ThemeFile();
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             data = data.Replace("\n\r", Environment.NewLine).Trim();
@@ -59,14 +60,16 @@ namespace Admin {
                 return file;
             }
             ThemeFileType type = new ThemeFileType().Get(typeID);
-            if(name.Trim().ToLower().IndexOf(type.extension.ToLower()) == -1) {
-                name = name.Trim() + type.extension;
+            if (!externalFile) {
+                if (name.Trim().ToLower().IndexOf(type.extension.ToLower()) == -1) {
+                    name = name.Trim() + type.extension;
+                }
             }
             if (fileID > 0) {
                 // prior file
                 file = db.ThemeFiles.Where(x => x.ID.Equals(fileID)).FirstOrDefault();
                 if (file.ID > 0) {
-                    // ex: http://curtplatform.blob.core.windows.net/assets/curt-theme.jpg
+                    // ex: https://curtplatform.blob.core.windows.net/assets/curt-theme.jpg
                     Uri filepath = new Uri(file.filePath);
                     localpath = filepath.LocalPath;
                     file.lastModified = DateTime.UtcNow;
@@ -78,38 +81,45 @@ namespace Admin {
                     return file;
                 }
             }
+            string fullpath = name;
+            Uri fullUri = new Uri(name,UriKind.RelativeOrAbsolute);
+            if (!externalFile) {
+                // get blob from blob store
+                CloudBlockBlob blob = BlobManagement.GetOrCreateBlob(localpath);
 
-            // get blob from blob store
-            CloudBlockBlob blob = BlobManagement.GetOrCreateBlob(localpath);
-
-            // upload new data to blob
-            byte[] databytes = Encoding.ASCII.GetBytes(data);
-            MemoryStream datastream = new MemoryStream(databytes);
-            blob.UploadFromStream(datastream);
-
+                // upload new data to blob
+                byte[] databytes = Encoding.ASCII.GetBytes(HttpUtility.HtmlDecode(data));
+                MemoryStream datastream = new MemoryStream(databytes);
+                blob.UploadFromStream(datastream);
+                blob.Properties.ContentType = type.mimetype;
+                blob.SetProperties();
+                fullpath = blob.Uri.ToString();
+                fullUri = blob.Uri;
+            }
             if (fileID == 0) {
                 // create new file
                 file = new ThemeFile {
                     dateAdded = DateTime.UtcNow,
                     lastModified = DateTime.UtcNow,
-                    filePath = blob.Uri.OriginalString,
+                    filePath = fullpath,
                     themeID = themeID,
                     themeAreaID = areaID,
                     ThemeFileTypeID = typeID,
-                    renderOrder = (db.ThemeFiles.Where(x => x.themeID.Equals(themeID) && x.themeAreaID.Equals(areaID) && x.ThemeFileTypeID.Equals(typeID)).OrderByDescending(x => x.renderOrder).Select(x => x.renderOrder).FirstOrDefault() + 1)
+                    renderOrder = (db.ThemeFiles.Where(x => x.themeID.Equals(themeID) && x.themeAreaID.Equals(areaID) && x.ThemeFileTypeID.Equals(typeID)).OrderByDescending(x => x.renderOrder).Select(x => x.renderOrder).FirstOrDefault() + 1),
+                    externalFile = externalFile
                 };
                 db.ThemeFiles.InsertOnSubmit(file);
             } else {
                 // check file name if needs changing
                 string filename = file.filePath.Split('/').ToList().Last();
                 if (filename.Trim().ToLower() != name.Trim().ToLower()) {
-                    List<string> frags = blob.Uri.OriginalString.Split('/').ToList();
+                    List<string> frags = fullpath.Split('/').ToList();
                     frags.RemoveAt(frags.Count - 1);
                     frags.Add(name.Trim());
                     Uri newFile = new Uri(String.Join("/", frags.ToArray()));
                     // filename needs to change
-                    CloudBlockBlob newblob = BlobManagement.RenameFile(blob.Uri, newFile);
-                    file.filePath = newblob.Uri.OriginalString;
+                    CloudBlockBlob newblob = BlobManagement.RenameFile(fullUri, newFile);
+                    file.filePath = newblob.Uri.ToString();
                 }
             }
             db.SubmitChanges();
@@ -120,8 +130,10 @@ namespace Admin {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             ThemeFile file = db.ThemeFiles.Where(x => x.ID.Equals(id)).FirstOrDefault();
             if (file != null && file.ID > 0) {
-                Uri filepath = new Uri(file.filePath);
-                BlobManagement.DeleteFile(filepath);
+                if (!file.externalFile) {
+                    Uri filepath = new Uri(file.filePath);
+                    BlobManagement.DeleteFile(filepath);
+                }
                 db.ThemeFiles.DeleteOnSubmit(file);
                 db.SubmitChanges();
                 return true;
@@ -131,18 +143,23 @@ namespace Admin {
 
         public void Duplicate(int themeID) {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-            Uri original = new Uri(this.filePath);
-            string newpath = original.Scheme + "://" + original.Host + "/themes/" + themeID + "/" + this.themeAreaID + "/" + original.Segments.ToList().Last();
-            Uri newfile = new Uri(newpath);
-            CloudBlockBlob blob = BlobManagement.DuplicateFile(original, newfile);
+            string path = this.filePath;
+            if (!this.externalFile) {
+                Uri original = new Uri(this.filePath);
+                string newpath = original.Scheme + "://" + original.Host + "/themes/" + themeID + "/" + this.themeAreaID + "/" + original.Segments.ToList().Last();
+                Uri newfile = new Uri(newpath);
+                CloudBlockBlob blob = BlobManagement.DuplicateFile(original, newfile);
+                path = blob.Uri.ToString();
+            }
             ThemeFile file = new ThemeFile {
-                filePath = blob.Uri.OriginalString,
+                filePath = path,
                 dateAdded = DateTime.UtcNow,
                 lastModified = DateTime.UtcNow,
                 renderOrder = this.renderOrder,
                 themeAreaID = this.themeAreaID,
                 ThemeFileTypeID = this.ThemeFileTypeID,
-                themeID = themeID
+                themeID = themeID,
+                externalFile = this.externalFile
             };
             db.ThemeFiles.InsertOnSubmit(file);
             db.SubmitChanges();

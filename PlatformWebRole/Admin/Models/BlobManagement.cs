@@ -499,6 +499,8 @@ namespace Admin.Models {
             // upload new data to blob
             MemoryStream newstream = new MemoryStream(databytes);
             newblob.UploadFromStream(newstream);
+            newblob.Properties.ContentType = oldblob.Properties.ContentType;
+            newblob.SetProperties();
 
             // delete old blob
             oldblob.Delete();
@@ -526,6 +528,8 @@ namespace Admin.Models {
             // upload new data to blob
             MemoryStream newstream = new MemoryStream(databytes);
             newblob.UploadFromStream(newstream);
+            newblob.Properties.ContentType = oldblob.Properties.ContentType;
+            newblob.SetProperties();
 
             return newblob;
         }

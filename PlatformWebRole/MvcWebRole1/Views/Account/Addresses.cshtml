@@ -1,4 +1,6 @@
 ﻿@{
+    ViewBag.defaultcss = new List<string> { "/Content/css/account.css" };
+    ViewBag.defaultjs = new List<string> { "/Scripts/custom/account.js" };
     EcommercePlatform.Customer cust = ViewBag.cust ?? new EcommercePlatform.Customer();
     string error = ViewBag.error ?? "";
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
@@ -8,8 +10,6 @@
     ViewBag.Title = "Addresses";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<link href="@settings.Get("PathToCSS")/css/account.css" rel="stylesheet" type="text/css" />
 <h1>My Account - Addresses</h1>
 <p class="error">@error</p>
 <ul class="tabs nojs">
@@ -147,4 +147,3 @@
         <div class="clearfix"></div>
     </div>
 </div>
-<script src="/Scripts/custom/account.js" type="text/javascript"></script>

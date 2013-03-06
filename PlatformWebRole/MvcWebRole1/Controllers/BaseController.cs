@@ -18,6 +18,17 @@ namespace EcommercePlatform.Controllers {
             List<double> years = CURTAPI.GetYears();
             ViewBag.years = years;
 
+            // Get the theme ID
+            int themeID = new Theme().getTheme();
+            ViewBag.themeID = themeID;
+
+            if (themeID > 0) {
+                // if there is an active theme, get the files
+                string cname = this.ControllerContext.Controller.ToString();
+                Dictionary<int, List<ThemeFile>> themefiles = new Theme().getFiles(UDF.GetControllerName(cname));
+                ViewBag.themefiles = themefiles;
+            }
+
             // Get the parent categories
             List<APICategory> parent_cats = CURTAPI.GetParentCategories();
             ViewBag.parent_cats = parent_cats;

@@ -1,5 +1,13 @@
 ﻿@{
-    Dictionary<string,List<EcommercePlatform.Models.APIPart>> parts = ViewBag.parts;
+    List<string> css = ViewBag.defaultcss ?? new List<string>();
+    css.Add("/Content/css/part_listing.css");
+    css.Add("/Content/shadowbox/shadowbox.css");
+    ViewBag.defaultcss = css;
+    List<string> js = ViewBag.defaultjs ?? new List<string>();
+    js.Add("/Scripts/custom/part_listing.js");
+    ViewBag.defaultjs = js;
+
+    Dictionary<string, List<EcommercePlatform.Models.APIPart>> parts = ViewBag.parts;
     if(parts == null){
         parts = new Dictionary<string,List<EcommercePlatform.Models.APIPart>>();
     }
@@ -9,9 +17,6 @@
     decimal part_group_height = part_count * 330;
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="@settings.Get("PathToCSS")/css/part_listing.css" rel="stylesheet" type="text/css" />
-<link href="/Content/shadowbox/shadowbox.css" rel="stylesheet" type="text/css" />
-
 <div class="part_tab_container">
     <ul>
         @foreach (KeyValuePair<string, List<EcommercePlatform.Models.APIPart>> part_group in parts.Where(x => !x.Key.ToUpper().Equals("SEARCH")).OrderBy(x => x.Key)) {
@@ -91,9 +96,3 @@
         height: @(part_group_height)px;
     }
 </style>
-@if (HttpContext.Current.IsDebuggingEnabled) {
-    <script src="/Scripts/custom/part_listing.js" type="text/javascript"></script>
-} else {
-    <script src="/Scripts/custom/part_listing.min.js" type="text/javascript"></script>
-}
-<script type="text/javascript" src="/Scripts/tools/shadowbox.js"></script>

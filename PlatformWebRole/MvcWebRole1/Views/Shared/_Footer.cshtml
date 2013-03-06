@@ -1,0 +1,78 @@
+﻿@{
+    EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
+}
+<footer>
+    <div id="footer_container">
+        <div class="footerlogo">
+            @if (!String.IsNullOrEmpty(settings.Get("HeaderLogoScroll"))) {
+                <img src="@settings.Get("HeaderLogoScroll")" alt="@settings.Get("SiteName")" />
+            }
+            <span class="copy">&copy; @DateTime.Now.Year @settings.Get("SiteName"). All Rights Reserved.</span>
+            <div class="social_links">
+                @if (!String.IsNullOrEmpty(settings.Get("FacebookPageURL"))) {
+                    <a href="@settings.Get("FacebookPageURL")" title="@settings.Get("SiteName") on Facebook">
+                        <img src="/Content/img/footer/facebook_dark.png" alt="@settings.Get("SiteName") on Facebook" class="dark fb" />
+                        <img src="/Content/img/footer/facebook_active.png" alt="@settings.Get("SiteName") on Facebook" class="active fb" />
+                    </a>
+                }
+                @if (!String.IsNullOrEmpty(settings.Get("TwitterPageURL"))) {
+                    <a href="@settings.Get("TwitterPageURL")" title="@settings.Get("SiteName") on Twitter">
+                        <img src="/Content/img/footer/twitter_dark.png" alt="@settings.Get("SiteName") on Twitter" class="dark tweet" />
+                        <img src="/Content/img/footer/twitter_active.png" alt="@settings.Get("SiteName") on Twitter" class="active tweet" />
+                    </a>
+                }
+                @if (!String.IsNullOrEmpty(settings.Get("YouTubePageURL"))) {
+                    <a href="@settings.Get("YouTubePageURL")" title="@settings.Get("SiteName") on YouTube">
+                        <img src="/Content/img/footer/youtube_dark.png" alt="@settings.Get("SiteName") on YouTube" class="dark yt" />
+                        <img src="/Content/img/footer/youtube_active.png" alt="@settings.Get("SiteName") on YouTube" class="active yt" />
+                    </a>
+                }
+                ​<a href="/Share/Index?type=site" title="Share via E-Mail" class="email-share" target="_blank">
+                    <img src="/Content/img/footer/mail.png" alt="Share via E-Mail">
+                </a>
+            </div>
+        </div>
+        <div class="link_box">
+            <a href="/About Us">About Us</a>
+            <a href="/Blog">Blog</a>
+            <a href="/Testimonials">Testimonials</a>
+            <a href="/Locations" title="Locations">Locations</a>
+            <a href="/page/Orders - Changes, Cancellations, and Transit Times">Orders - Changes, Cancellations, and Transit Times</a>
+            <a href="/Contact" title="Contact Us">Contact Us</a>
+        </div>
+
+        <div class="link_box">
+            <a href="/FAQ">FAQ</a>
+            <a href="/page/Returns">Returns</a>
+            <a href="/page/Warranty">Warranties</a>
+            <a href="/page/PrivacyPolicy">Privacy Policy</a>
+            <a href="#">Sitemap</a>
+        </div>
+
+        <div class="company">
+            @if (!String.IsNullOrEmpty(settings.Get("PhoneNumber"))) {
+                <span>CALL US WITH QUESTIONS: @settings.Get("PhoneNumber")</span>
+            }
+            <div class="footer_graphics">
+                <img src="/Content/img/footer/amex.png" alt="American Express" />
+                <img src="/Content/img/footer/mastercard.png" alt="Mastercard" />
+                <img src="/Content/img/footer/visa.png" alt="Visa" />
+                <img src="/Content/img/footer/discover.png" alt="Discover Card" />
+                <img src="/Content/img/footer/google_checkout.png" alt="Google Checkout" />
+                <img src="/Content/img/footer/paypal.png" alt="PayPal" />
+                <br />
+                <a href="http://www.authorize.net/" title="Authorize.Net Verified Merchant" target="_blank">
+                    <img src="/Content/img/footer/authorize.gif" alt="Authorize.Net Verified Merchant" class="authorize" />
+                </a>
+                <a href="http://www.sema.org/" title="SEMA Specialty Equipment Market Association" target="_blank">
+                    <img src="/Content/img/footer/sema.png" alt="SEMA Show" class="sema" />
+                </a>
+            </div>
+            <a href="http://www.curtmfg.com/" class="curtlogo" target="_blank"><img src="/Content/img/curt.jpg" alt="CURT Manufacturing - The FIRST Name in Towing Products" /></a>
+            @if (!String.IsNullOrWhiteSpace(settings.Get("authorizedBadgeID"))) {
+                <script type="text/javascript" id="badge_script" async src="http://authorized.curtmfg.com/badge.js?id=@settings.Get("authorizedBadgeID")&size=small"></script>
+            }
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</footer>

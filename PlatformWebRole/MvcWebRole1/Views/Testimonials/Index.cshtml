@@ -1,10 +1,7 @@
 ﻿@using EcommercePlatform.Models;
 @{
-    List<EcommercePlatform.Testimonial> testimonials = ViewBag.testimonials;
-    if (testimonials == null) {
-        testimonials = new List<EcommercePlatform.Testimonial>();   
-    }
-
+    ViewBag.defaultcss = new List<string> { "/Content/css/testimonials.css" };
+    List<EcommercePlatform.Testimonial> testimonials = ViewBag.testimonials ?? new List<EcommercePlatform.Testimonial>();
     int pagecount = ViewBag.pagecount;
     int page = ViewBag.page;
     ViewBag.Title = "Index";
@@ -12,7 +9,6 @@
     TimeZoneInfo tz = ViewBag.timezone ?? TimeZoneInfo.Utc;
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="@settings.Get("PathToCSS")/css/testimonials.css" rel="stylesheet" type="text/css" />
 <div class="content">
     <h2>Testimonials</h2>
     <a href="/Testimonials/Add" id="addTestimonial">Write Your Testimonial</a>
@@ -37,5 +33,4 @@
             }
         </footer>
     }
-
 </div>

@@ -482,6 +482,7 @@
       <Column Name="name" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
       <Column Name="extension" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
       <Column Name="mimetype" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="structure" Type="System.String" DbType="VarChar(255) NULL" CanBeNull="true" />
       <Association Name="ThemeFileType_ThemeFile" Member="ThemeFiles" AccessModifier="Internal" ThisKey="ID" OtherKey="ThemeFileTypeID" Type="ThemeFile" />
     </Type>
   </Table>
@@ -503,6 +504,7 @@
       <Column Name="renderOrder" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="dateAdded" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="lastModified" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="externalFile" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="Theme_ThemeFile" Member="Theme" AccessModifier="Internal" ThisKey="themeID" OtherKey="ID" Type="Theme" IsForeignKey="true" />
       <Association Name="ThemeFileType_ThemeFile" Member="ThemeFileType" ThisKey="ThemeFileTypeID" OtherKey="ID" Type="ThemeFileType" IsForeignKey="true" />
       <Association Name="ThemeArea_ThemeFile" Member="ThemeArea" ThisKey="themeAreaID" OtherKey="ID" Type="ThemeArea" IsForeignKey="true" />

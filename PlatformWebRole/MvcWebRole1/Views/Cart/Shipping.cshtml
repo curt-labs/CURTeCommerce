@@ -1,4 +1,6 @@
 ﻿@{
+    ViewBag.defaultcss = new List<string> { "/Content/css/cart.css" };
+    ViewBag.defaultjs = new List<string> { "/Scripts/custom/checkout.js" };
     EcommercePlatform.ContentPage page = ViewBag.page ?? new EcommercePlatform.ContentPage();
     ViewBag.Title = "Choose Shipping";
     EcommercePlatform.Customer cust = ViewBag.customer ?? new EcommercePlatform.Customer();
@@ -9,7 +11,6 @@
     string shipping_type = "";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<link href="@settings.Get("PathToCSS")/css/cart.css" rel="stylesheet" type="text/css" />
 <div class="content">
     <h2>Checkout - Enter Shipping</h2>
     @Html.Raw(page.content)
@@ -78,4 +79,3 @@
         </div>
     </div>
 </div>
-<script defer src="/Scripts/custom/checkout.js"></script>

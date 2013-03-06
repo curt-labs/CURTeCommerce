@@ -14,6 +14,13 @@
     text-decoration: none;
 }
 
+#addexternalfile {
+    position: absolute;
+    bottom: 5px;
+    right: 98px;
+    text-decoration: none;
+}
+
 section span.title{
     margin-bottom: 40px;
     color: #bf3504;
@@ -262,7 +269,8 @@ section form.admin_form label input[type="radio"] {
     position: relative;
     z-index: 1;
     display: block;
-    margin: 0 0 5px 5px;
+    margin: 0 0 5px 3px;
+    border-radius: 2px;
 }
 
 .theme .themeimg .duplicatetheme .copy::before {
@@ -272,11 +280,12 @@ section form.admin_form label input[type="radio"] {
     border: 1px solid #929292;
     position: absolute;
     top: 2px;
-    left: -4px;
+    left: -5px;
     z-index: 1;
     display: block;
     content: "";
     -webkit-filter: drop-shadow(2px 1px 4px rgba(0,0,0,0.4));
+    border-radius: 2px;
 }
 
 

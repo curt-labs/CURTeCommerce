@@ -1,29 +1,9 @@
 ﻿@{
-    List<EcommercePlatform.ContactType> types = ViewBag.types;
-    if(types == null){
-        types = new List<EcommercePlatform.ContactType>();   
-    }
-
-    EcommercePlatform.ContentPage page = ViewBag.page;
-    if(page == null){
-        page = new EcommercePlatform.ContentPage();   
-    }
-
-    EcommercePlatform.ContactInquiry inq = ViewBag.inquiry;
-    if(inq == null){
-        inq = new EcommercePlatform.ContactInquiry();
-    }
-
-    string message = ViewBag.message;
-    if (message == null) {
-        message = "";
-    }
-    
-    bool hide_layout = ViewBag.hide_layout;
-    if(hide_layout == null){
-        hide_layout = false;
-    }
-    
+    List<EcommercePlatform.ContactType> types = ViewBag.types ?? new List<EcommercePlatform.ContactType>();
+    EcommercePlatform.ContentPage page = ViewBag.page ?? new EcommercePlatform.ContentPage();
+    EcommercePlatform.ContactInquiry inq = ViewBag.inquiry ?? new EcommercePlatform.ContactInquiry();
+    string message = ViewBag.message ?? "";
+    bool hide_layout = ViewBag.hide_layout ?? false;
     ViewBag.Title = "Index";
     if(!hide_layout){
         Layout = "~/Views/Shared/_Layout.cshtml";

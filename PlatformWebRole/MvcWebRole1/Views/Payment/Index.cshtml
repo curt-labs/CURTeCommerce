@@ -1,14 +1,11 @@
 ﻿@{
+    ViewBag.defaultcss = new List<string> { "/Content/css/cart.css" };
     EcommercePlatform.Cart cart = ViewBag.cart;
-    EcommercePlatform.ContentPage page = ViewBag.page;
-    if (page == null) {
-        page = new EcommercePlatform.ContentPage();
-    }
+    EcommercePlatform.ContentPage page = ViewBag.page ?? new EcommercePlatform.ContentPage();
     ViewBag.Title = "Enter Payment";
     Layout = "~/Views/Shared/_Layout.cshtml";
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="@settings.Get("PathToCSS")/css/cart.css" rel="stylesheet" type="text/css" />
 <div class="content">
     <h2>Enter Payment</h2>
     @Html.Raw(page.content)

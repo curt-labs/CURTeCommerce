@@ -1,4 +1,7 @@
 ﻿@{
+    List<string> css = ViewBag.defaultcss ?? new List<string>();
+    css.Add("/Content/css/cart.css");
+    ViewBag.defaultcss = css;
     EcommercePlatform.Cart cart = ViewBag.cart;
     bool showTotal = (ViewBag.showTotal != null) ? ViewBag.showTotal : false;
     bool showQty = (ViewBag.showQty != null) ? ViewBag.showQty : true;
@@ -6,7 +9,6 @@
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
 @if (cart.CartItems.Count > 0) {
-    <link href="@settings.Get("PathToCSS")/css/cart.css" rel="stylesheet" type="text/css" />
     <table id="cart">
         <thead>
             <tr>

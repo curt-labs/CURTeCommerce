@@ -1,10 +1,10 @@
 ﻿@{
+    ViewBag.defaultcss = new List<string> { "/Content/css/blog.css" };
     EcommercePlatform.Profile author = ViewBag.author;
     ViewBag.Title = "Blog Author - " + author.first + " " + author.last;
     Layout = "~/Views/Shared/_Layout.cshtml";
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="@settings.Get("PathToCSS")/css/blog.css" rel="stylesheet" type="text/css" />
 
 @Html.Partial("_BlogNavigation")
 

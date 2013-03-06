@@ -10,6 +10,8 @@ using System.Security;
 using System.Data.Linq.Mapping;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
+using System.Web.Routing;
+using System.Web.Mvc;
 
 namespace EcommercePlatform.Models {
     public class UDF {
@@ -28,6 +30,11 @@ namespace EcommercePlatform.Models {
             } catch {
                 return false;
             }
+        }
+
+        public static string GetControllerName(string cname) {
+            string controllername = cname.Split('.').ToList().Last().Replace("Controller", "");
+            return controllername;
         }
 
         public static Cart ExpireCart(int cust_id) {

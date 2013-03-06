@@ -3,7 +3,7 @@
   <Role name="PlatformWebRole">
     <Instances count="3" />
     <ConfigurationSettings>
-      <Setting name="StorageConnectionString" value="DefaultEndpointsProtocol=http;AccountName=curtplatform;AccountKey=0rAk0pTnb2/zOto3yugtlpfGhrTVVwkdFXas++1xWxuhylrh7ZAK1CheInjI/7nMy+fMuKklodm7wXLaMzsLBw==" />
+      <Setting name="StorageConnectionString" value="DefaultEndpointsProtocol=https;AccountName=curtplatform;AccountKey=0rAk0pTnb2/zOto3yugtlpfGhrTVVwkdFXas++1xWxuhylrh7ZAK1CheInjI/7nMy+fMuKklodm7wXLaMzsLBw==" />
       <Setting name="AccountKey" value="0rAk0pTnb2/zOto3yugtlpfGhrTVVwkdFXas++1xWxuhylrh7ZAK1CheInjI/7nMy+fMuKklodm7wXLaMzsLBw==" />
       <Setting name="AccountName" value="curtplatform" />
       <Setting name="ProviderName" value="AzureBlobStorageProvider" />
@@ -31,7 +31,7 @@
       <Setting name="UseAsyncMethods" value="true" />
       <Setting name="ProviderName" value="AzureBlobStorageProvider" />
       <Setting name="BaseUri" value="" />
-      <Setting name="StorageConnectionString" value="DefaultEndpointsProtocol=http;AccountName=curtplatform;AccountKey=0rAk0pTnb2/zOto3yugtlpfGhrTVVwkdFXas++1xWxuhylrh7ZAK1CheInjI/7nMy+fMuKklodm7wXLaMzsLBw==" />
+      <Setting name="StorageConnectionString" value="DefaultEndpointsProtocol=https;AccountName=curtplatform;AccountKey=0rAk0pTnb2/zOto3yugtlpfGhrTVVwkdFXas++1xWxuhylrh7ZAK1CheInjI/7nMy+fMuKklodm7wXLaMzsLBw==" />
     </ConfigurationSettings>
     <Certificates>
     </Certificates>
@@ -42,7 +42,7 @@
       <Setting name="ProviderName" value="AzureBlobStorageProvider" />
       <Setting name="AccountKey" value="0rAk0pTnb2/zOto3yugtlpfGhrTVVwkdFXas++1xWxuhylrh7ZAK1CheInjI/7nMy+fMuKklodm7wXLaMzsLBw==" />
       <Setting name="AccountName" value="curtplatform" />
-      <Setting name="StorageConnectionString" value="DefaultEndpointsProtocol=http;AccountName=curtplatform;AccountKey=0rAk0pTnb2/zOto3yugtlpfGhrTVVwkdFXas++1xWxuhylrh7ZAK1CheInjI/7nMy+fMuKklodm7wXLaMzsLBw==" />
+      <Setting name="StorageConnectionString" value="DefaultEndpointsProtocol=https;AccountName=curtplatform;AccountKey=0rAk0pTnb2/zOto3yugtlpfGhrTVVwkdFXas++1xWxuhylrh7ZAK1CheInjI/7nMy+fMuKklodm7wXLaMzsLBw==" />
     </ConfigurationSettings>
     <Certificates>
     </Certificates>
@@ -50,7 +50,7 @@
   <Role name="Admin">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="StorageConnectionString" value="DefaultEndpointsProtocol=http;AccountName=curtplatform;AccountKey=0rAk0pTnb2/zOto3yugtlpfGhrTVVwkdFXas++1xWxuhylrh7ZAK1CheInjI/7nMy+fMuKklodm7wXLaMzsLBw==" />
+      <Setting name="StorageConnectionString" value="DefaultEndpointsProtocol=https;AccountName=curtplatform;AccountKey=0rAk0pTnb2/zOto3yugtlpfGhrTVVwkdFXas++1xWxuhylrh7ZAK1CheInjI/7nMy+fMuKklodm7wXLaMzsLBw==" />
     </ConfigurationSettings>
     <Certificates>
     </Certificates>

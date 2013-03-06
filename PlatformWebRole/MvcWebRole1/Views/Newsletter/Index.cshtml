@@ -1,14 +1,7 @@
 ﻿@{
-    EcommercePlatform.ContentPage page = ViewBag.page;
-    if(page == null){
-        page = new EcommercePlatform.ContentPage();
-    }
+    EcommercePlatform.ContentPage page = ViewBag.page ?? new EcommercePlatform.ContentPage();
+    string message = ViewBag.message ?? "";
 
-    string message = ViewBag.message;
-    if (message == null) {
-        message = "";
-    }
-    
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }

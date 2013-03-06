@@ -1,4 +1,4 @@
-﻿var fileWindow, deleteFile, initSortable, destroySortable, updateSort;
+﻿var fileWindow, deleteFile, initSortable, destroySortable, updateSort, fileList;
 $(function () {
     $(document).on('click', '.deletetheme', function (e) {
         e.preventDefault();
@@ -55,6 +55,23 @@ $(function () {
         window.location = '/Admin/Themes/AddFile?themeID=' + themeID + '&typeID=' + typeID + '&areaID=' + areaID;
     });
 
+    $(document).on('click', '#addexternalfile', function (e) {
+        e.preventDefault();
+        var areaID = $(this).data('areaid');
+        var typeID = $(this).data('typeid');
+        var themeID = $(this).data('themeid');
+        var filename = prompt("Enter the file full path", "");
+        if (filename != null) {
+            $.post('/Admin/Themes/SaveFile', { themeID: themeID, areaID: areaID, typeID: typeID, content: "", name: filename, fileID: 0, externalFile: true }, function (data) {
+                $.getJSON('/Admin/Themes/AreaFiles', { themeID: themeID, areaID: areaID, typeID: typeID }, function (response) {
+                    $('#thememanagerfiles').empty();
+                    html = fileList(response);
+                    $('#thememanagerfiles').append(html);
+                });
+            });
+        }
+    });
+
     $(document).on('click', '.deletethemefile a', deleteFile);
 
     $(document).on('click', '.duplicatetheme', function (e) {
@@ -83,19 +100,10 @@ fileWindow = function (data) {
     html += '<h3>' + data.area.name + ': ' + data.type.name + ' Files</h3>';
     html += '<p>Files are shown in their render order. Drag and Drop to re-order them.</p>';
     html += '<ul id="thememanagerfiles">';
-    if (data.files.length > 0) {
-        $(data.files).each(function (i, obj) {
-            var filepath = obj.filePath.split('/');
-            html += '<li id="file_' + obj.ID + '" data-themeid="' + obj.themeID + '" data-areaid="' + obj.ThemeAreaID + '" data-typeid="' + obj.ThemeFileTypeID + '">';
-            html += '<span class="handle">&bull;</span> <a href="/Admin/Themes/EditFile/' + obj.ID + '" title="Edit File">' + filepath[filepath.length - 1] + '</a>';
-            html += '<span class="deletethemefile"><a href="/Admin/Themes/DeleteFile/' + obj.ID + '">&times;</a></span>';
-            html += '</li>';
-        });
-    } else {
-        html += '<li>No files</li>';
-    }
+    html += fileList(data);
     html += '</ul>';
-    html += '<button class="btn btn-inverse" id="addfile" data-themeid="' + data.theme.ID + '" data-areaid="' + data.area.ID + '" data-typeid="' + data.type.ID + '" type="button"><i class="icon-plus icon-white"></i> Add File</button></div>';
+    html += '<button class="btn btn-inverse" id="addfile" data-themeid="' + data.theme.ID + '" data-areaid="' + data.area.ID + '" data-typeid="' + data.type.ID + '" type="button"><i class="icon-plus icon-white"></i> Add File</button>';
+    html += '<button class="btn btn-inverse" id="addexternalfile" data-themeid="' + data.theme.ID + '" data-areaid="' + data.area.ID + '" data-typeid="' + data.type.ID + '" type="button"><i class="icon-plus icon-white"></i> Add External File</button></div>';
     $.modal(html, {
         containerCss: {
             backgroundColor: '#ffffff',
@@ -149,4 +157,19 @@ initSortable = function () {
 
 destroySortable = function () {
     $('#thememanagerfiles').sortable("destroy");
+}
+
+fileList = function (data) {
+    var html = "";
+    if (data.files.length > 0) {
+        $(data.files).each(function (i, obj) {
+            html += '<li id="file_' + obj.ID + '" data-themeid="' + obj.themeID + '" data-areaid="' + obj.ThemeAreaID + '" data-typeid="' + obj.ThemeFileTypeID + '">';
+            html += '<span class="handle">&bull;</span> ' + ((obj.externalFile) ? '<span class="filename">' + obj.filePath + '</span>' : '<a href="/Admin/Themes/EditFile/' + obj.ID + '" title="Edit File">' + obj.filePath + '</a>');
+            html += '<span class="deletethemefile"><a href="/Admin/Themes/DeleteFile/' + obj.ID + '">&times;</a></span>';
+            html += '</li>';
+        });
+    } else {
+        html += '<li>No files</li>';
+    }
+    return html;
 }

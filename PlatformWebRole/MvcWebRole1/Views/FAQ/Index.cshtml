@@ -1,19 +1,12 @@
 ﻿@{
-    List<EcommercePlatform.FaqTopic> topics = ViewBag.topics;
-    if(topics == null){
-        topics = new List<EcommercePlatform.FaqTopic>();   
-    }
-
-    EcommercePlatform.ContentPage page = ViewBag.page;
-    if(page == null){
-        page = new EcommercePlatform.ContentPage();   
-    }
+    ViewBag.defaultcss = new List<string> { "/Content/css/faq.css" };
+    List<EcommercePlatform.FaqTopic> topics = ViewBag.topics ?? new List<EcommercePlatform.FaqTopic>();
+    EcommercePlatform.ContentPage page = ViewBag.page ?? new EcommercePlatform.ContentPage();
     
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="@settings.Get("PathToCSS")/css/faq.css" rel="stylesheet" type="text/css" />
 <div class="faq-topics">
     <span>Topics</span>
     <ul>

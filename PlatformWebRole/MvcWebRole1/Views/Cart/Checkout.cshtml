@@ -1,4 +1,6 @@
 ﻿@{
+    ViewBag.defaultcss = new List<string> { "/Content/css/cart.css" };
+    ViewBag.defaultjs = new List<string> { "/Scripts/custom/checkout.js" };
     EcommercePlatform.ContentPage page = ViewBag.page ?? new EcommercePlatform.ContentPage();
     ViewBag.Title = "Enter Customer Information";
     List<EcommercePlatform.Country> countries = ViewBag.countries ?? new List<EcommercePlatform.Country>();
@@ -9,7 +11,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="@settings.Get("PathToCSS")/css/cart.css" rel="stylesheet" type="text/css" />
 <div class="content">
     <h2>Checkout - Enter Customer Information</h2>
     @Html.Raw(page.content)
@@ -172,4 +173,3 @@
         </div>
     </div>
 </div>
-<script defer src="/Scripts/custom/checkout.js"></script>

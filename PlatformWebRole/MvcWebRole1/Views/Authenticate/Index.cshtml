@@ -1,10 +1,11 @@
 ﻿@{
+    ViewBag.defaultcss = new List<string> { "/Content/css/auth.css" };
+    ViewBag.defaultjs = new List<string> { "/Scripts/custom/auth.js" };
     string error = ViewBag.error ?? "";
     ViewBag.Title = "Login";
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<link href="@settings.Get("PathToCSS")/css/auth.css" rel="stylesheet" type="text/css" />
 @if(error.Length > 0){
     <p class="error">@Html.Raw(error)</p>
 }
@@ -34,5 +35,3 @@
     </form>
 </div>
 <div class="clearfix"></div>
-
-<script defer src="/Scripts/custom/auth.js" type="text/javascript"></script>

@@ -135,8 +135,8 @@ namespace Admin.Controllers {
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public string SaveFile(int themeID, int areaID, int typeID, string content, string name, int fileID = 0) {
-            ThemeFile file = new ThemeFile().Save(fileID, themeID, areaID, typeID, content, name);
+        public string SaveFile(int themeID, int areaID, int typeID, string content, string name, int fileID = 0, bool externalFile = false) {
+            ThemeFile file = new ThemeFile().Save(fileID, themeID, areaID, typeID, content, name, externalFile);
             return JsonConvert.SerializeObject(file);
         }
 

@@ -1,4 +1,6 @@
 ﻿@{
+    ViewBag.defaultcss = new List<string> { "/Content/css/new_review.css" };
+    ViewBag.defaultjs = new List<string> { "/Scripts/custom/new_review.js" };
     ViewBag.Title = "New";
     bool hide_layout = ViewBag.hide_layout;
     int partID = ViewBag.partID;
@@ -11,8 +13,6 @@
     string _err = ViewBag.err ?? "";
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="@settings.Get("PathToCSS")/css/new_review.css" rel="stylesheet" type="text/css" />
-
 <section class="new_review">
     <h3>Add a new review</h3>
 
@@ -64,8 +64,3 @@
         
     </form>
 </section>
-@if (HttpContext.Current.IsDebuggingEnabled) {
-    <script src="/Scripts/custom/new_review.js" type="text/javascript"></script>
-} else {
-    <script src="/Scripts/custom/new_review.min.js" type="text/javascript"></script>
-}

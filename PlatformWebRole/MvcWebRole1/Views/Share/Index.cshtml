@@ -1,8 +1,6 @@
 ﻿@{
-    bool layout = ViewBag.layout;
-    if(layout == null){
-        layout = true;
-    }
+    ViewBag.defaultcss = new List<string> { "/Content/css/share-email.css" };
+    bool layout = ViewBag.layout ?? true;
     string type = ViewBag.type;
     EcommercePlatform.Models.APIPart part = ViewBag.part;
     if(type == null || part == null){
@@ -19,8 +17,6 @@
     }
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="@settings.Get("PathToCSS")/css/share-email.css" rel="stylesheet" type="text/css" />
-
 @if (ViewBag.error != null && ViewBag.error.Length > 0) {
     <p class="error">@ViewBag.error</p>
 }

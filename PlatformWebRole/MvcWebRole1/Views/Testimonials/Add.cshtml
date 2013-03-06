@@ -1,13 +1,8 @@
 ﻿@{
-    EcommercePlatform.ContentPage page = ViewBag.page;
-    if(page == null){
-        page = new EcommercePlatform.ContentPage();   
-    }
-
-    EcommercePlatform.Testimonial testimonial = ViewBag.testimonial;
-    if(testimonial == null) {
-        testimonial = new EcommercePlatform.Testimonial();   
-    }
+    ViewBag.defaultcss = new List<string> { "/Content/css/testimonials.css" };
+    ViewBag.defaultjs = new List<string> { "/Scripts/custom/testimonials.js" };
+    EcommercePlatform.ContentPage page = ViewBag.page ?? new EcommercePlatform.ContentPage();
+    EcommercePlatform.Testimonial testimonial = ViewBag.testimonial ?? new EcommercePlatform.Testimonial();
 
     string message = ViewBag.message;
         
@@ -15,8 +10,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<link href="@settings.Get("PathToCSS")/css/testimonials.css" rel="stylesheet" type="text/css" />
-
 <span class="heading">Submit Your Testimonial</span>
 
 <form method="post" action="/Testimonials/Add" class="left simple-form" style="width:60%">
@@ -53,5 +46,3 @@
 <div class="right" style="width:38%">
     @Html.Raw(page.content)
 </div>
-
-<script src="/Scripts/custom/testimonials.js"></script>
