@@ -15,6 +15,7 @@
                 <a href="/Admin/Themes/Activate/@theme.ID" data-id="@theme.ID" title="@((theme.active) ? "Active Theme" : "Not Active Theme, click to Activate")" class="activate@((theme.active) ? " active" : "")">@((theme.active) ? Html.Raw("<span class=active></span>") : Html.Raw("<span class=inactive></span>"))</a>
                 <a href="/Admin/Themes/Delete/@theme.ID" data-id="@theme.ID" class="deletetheme" title="Delete Theme">&times;</a>
                 <a href="/Admin/Themes/Edit/@theme.ID" title="Edit Theme Basic Information" class="edittheme"><span class="pencil"></span></a>
+                <a href="/Admin/Themes/Duplicate/@theme.ID" title="Duplicate Theme" class="duplicatetheme"><span class="copy"></span></a>
                 <a href="/Admin/Themes/Files/@theme.ID" class="themefiles" title="Manage Theme Files">
                     <img src="@((!string.IsNullOrWhiteSpace(theme.screenshot)) ? theme.screenshot : "/Admin/Content/img/noimage.jpg" )" alt="@theme.name" />
                 </a>

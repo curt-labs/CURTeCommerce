@@ -506,6 +506,30 @@ namespace Admin.Models {
             return newblob;
         }
 
+        /// <summary>
+        /// Renames the specified object by copying the original to a new path and deleting the original.
+        /// </summary>
+        /// <param name="originalPath">The original path.</param>
+        /// <param name="newPath">The new path.</param>
+        /// <returns></returns>
+        public static CloudBlockBlob DuplicateFile(Uri originalPath, Uri newPath) {
+
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+            // Create the blobl client
+            CloudBlobClient client = storageAccount.CreateCloudBlobClient();
+            CloudBlockBlob oldblob = GetOrCreateBlob(originalPath.LocalPath);
+            MemoryStream datastream = new MemoryStream();
+            oldblob.DownloadToStream(datastream);
+            byte[] databytes = datastream.ToArray();
+
+            CloudBlockBlob newblob = GetOrCreateBlob(newPath.LocalPath);
+            // upload new data to blob
+            MemoryStream newstream = new MemoryStream(databytes);
+            newblob.UploadFromStream(newstream);
+
+            return newblob;
+        }
+
         public static void DeleteFile(Uri filePath) {
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
             // Create the blobl client

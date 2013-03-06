@@ -237,7 +237,50 @@ section form.admin_form label input[type="radio"] {
     box-shadow: inset -3px 0 2px #DED502;
 }
 
-.theme .themeimg:hover .deletetheme, .theme .themeimg:hover .activate, .theme .themeimg:hover .edittheme {
+.theme .themeimg .duplicatetheme {
+    display: block;
+    position: absolute;
+    z-index: 5;
+    right: 0px;
+    bottom: 0px;
+    background-color: #fff;
+    padding: 3px 6px;
+    line-height: 1;
+    box-shadow: -2px -2px 3px rgba(0,0,0,.25);
+    opacity: 0;
+    -webkit-transition-duration: .2s;
+    -moz-transition-duration: .2s;
+    -o-transition-duration: .2s;
+    transition-duration: .2s;
+}
+
+.theme .themeimg .duplicatetheme .copy {
+    background-color: #fff;
+    height: 12px;
+    width: 9px;
+    border: 1px solid #929292;
+    position: relative;
+    z-index: 1;
+    display: block;
+    margin: 0 0 5px 5px;
+}
+
+.theme .themeimg .duplicatetheme .copy::before {
+    background-color: #fff;
+    height: 12px;
+    width: 9px;
+    border: 1px solid #929292;
+    position: absolute;
+    top: 2px;
+    left: -4px;
+    z-index: 1;
+    display: block;
+    content: "";
+    -webkit-filter: drop-shadow(2px 1px 4px rgba(0,0,0,0.4));
+}
+
+
+.theme .themeimg:hover .deletetheme, .theme .themeimg:hover .activate, .theme .themeimg:hover .edittheme, .theme .themeimg:hover .duplicatetheme {
     opacity: 1;
 }
 

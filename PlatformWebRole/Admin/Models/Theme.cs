@@ -47,6 +47,7 @@ namespace Admin {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             Theme theme = db.Themes.Where(x => x.ID.Equals(id)).FirstOrDefault();
             if (theme != null && theme.ID > 0) {
+                db.ThemeFiles.DeleteAllOnSubmit(theme.ThemeFiles);
                 db.Themes.DeleteOnSubmit(theme);
                 db.SubmitChanges();
                 return true;
@@ -67,6 +68,26 @@ namespace Admin {
                 return true;
             }
             return false;
+        }
+
+        public Theme Duplicate(int id) {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Theme theme = db.Themes.Where(x => x.ID.Equals(id)).FirstOrDefault();
+            Theme newtheme = new Theme();
+            if (theme != null && theme.ID > 0) {
+                newtheme = new Theme {
+                    screenshot = theme.screenshot,
+                    name = "Copy of " + theme.name,
+                    active = false,
+                    dateAdded = DateTime.UtcNow
+                };
+                db.Themes.InsertOnSubmit(newtheme);
+                db.SubmitChanges();
+                foreach (ThemeFile file in theme.ThemeFiles) {
+                    file.Duplicate(newtheme.ID);
+                }
+            }
+            return newtheme;
         }
     }
 

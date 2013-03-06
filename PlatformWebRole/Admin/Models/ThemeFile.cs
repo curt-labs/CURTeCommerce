@@ -129,6 +129,25 @@ namespace Admin {
             return false;
         }
 
+        public void Duplicate(int themeID) {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Uri original = new Uri(this.filePath);
+            string newpath = original.Scheme + "://" + original.Host + "/themes/" + themeID + "/" + this.themeAreaID + "/" + original.Segments.ToList().Last();
+            Uri newfile = new Uri(newpath);
+            CloudBlockBlob blob = BlobManagement.DuplicateFile(original, newfile);
+            ThemeFile file = new ThemeFile {
+                filePath = blob.Uri.OriginalString,
+                dateAdded = DateTime.UtcNow,
+                lastModified = DateTime.UtcNow,
+                renderOrder = this.renderOrder,
+                themeAreaID = this.themeAreaID,
+                ThemeFileTypeID = this.ThemeFileTypeID,
+                themeID = themeID
+            };
+            db.ThemeFiles.InsertOnSubmit(file);
+            db.SubmitChanges();
+        }
+
         public void updateSort(List<string> files) {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             for (int i = 0; i < files.Count; i++) {

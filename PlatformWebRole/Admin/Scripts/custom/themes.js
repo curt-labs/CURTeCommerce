@@ -56,6 +56,26 @@ $(function () {
     });
 
     $(document).on('click', '.deletethemefile a', deleteFile);
+
+    $(document).on('click', '.duplicatetheme', function (e) {
+        e.preventDefault();
+        var href = $(this).attr('href');
+        if (confirm('Duplicate this theme?')) {
+            $.post(href, function (data) {
+                var themediv = '<div class="theme" id="theme-' + data.ID + '">';
+                themediv += '<a href="/Admin/Themes/Files/' + data.ID + '" class="themename" title="Manage Theme Files">' + data.name + '</a>';
+                themediv += '<span class="themeimg">';
+                themediv += '<a href="/Admin/Themes/Activate/' + data.ID + '" data-id="' + data.ID + '" title="Not Active Theme, click to Activate" class="activate"><span class=inactive></span></a>';
+                themediv += '<a href="/Admin/Themes/Delete/' + data.ID + '" data-id="' + data.ID + '" class="deletetheme" title="Delete Theme">&times;</a>';
+                themediv += '<a href="/Admin/Themes/Edit/' + data.ID + '" title="Edit Theme Basic Information" class="edittheme"><span class="pencil"></span></a>';
+                themediv += '<a href="/Admin/Themes/Duplicate/' + data.ID + '" title="Duplicate Theme" class="duplicatetheme"><span class="copy"></span></a>';
+                themediv += '<a href="/Admin/Themes/Files/' + data.ID + '" class="themefiles" title="Manage Theme Files">';
+                themediv += '<img src="' + ((data.screenshot != null && data.screenshot != '') ? data.screenshot : '/Admin/Content/img/noimage.jpg' ) + '" alt="' + data.name + '" />';
+                themediv += '</a></span></div>';
+                $('.theme:last').after(themediv);
+            }, 'json');
+        }
+    });
 });
 
 fileWindow = function (data) {

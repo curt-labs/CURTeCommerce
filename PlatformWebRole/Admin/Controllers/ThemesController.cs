@@ -74,6 +74,12 @@ namespace Admin.Controllers {
             }
         }
 
+        [AcceptVerbs(HttpVerbs.Post)]
+        public string Duplicate(int id = 0) {
+            Theme theme = new Theme().Duplicate(id);
+            return JsonConvert.SerializeObject(theme);
+        }
+
         public ActionResult Files(int id = 0) {
             Theme theme = new Theme().Get(id);
             ViewBag.theme = theme;
