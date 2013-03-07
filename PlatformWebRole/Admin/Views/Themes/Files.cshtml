@@ -2,16 +2,19 @@
     Admin.Theme theme = ViewBag.theme ?? new Admin.Theme();
     List<Admin.ThemeArea> areas = ViewBag.areas ?? new List<Admin.ThemeArea>();
     List<Admin.ThemeFileType> types = ViewBag.types ?? new List<Admin.ThemeFileType>();
+    int activeTheme = ViewBag.activeTheme ?? 0;
     ViewBag.Title = "| Manage Theme Files";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link href="/Admin/Content/css/themes.css" rel="stylesheet" type="text/css" />
 <span class="title">Theme File Management</span>
 <span class="clearfix"></span>
-<div class="theme">
+<div class="theme@((!theme.active && theme.ID == activeTheme) ? " preview" : "")">
     <input type="hidden" id="themeID" value="@theme.ID" />
     <a href="/Admin/Themes/Files/@theme.ID" class="themename" title="Manage Theme Files">@theme.name</a>
     <img src="@((!string.IsNullOrWhiteSpace(theme.screenshot)) ? theme.screenshot : "/Admin/Content/img/noimage.jpg" )" alt="@theme.name" />
+    <button id="preview" data-themeid="@theme.ID" class="btn">Preview Theme</button>
+    <button id="endpreview" data-themeid="@theme.ID" class="btn btn-inverse">Stop Preview</button>
 </div>
 <span class="clearfix"></span>
 @foreach(Admin.ThemeArea area in areas) {

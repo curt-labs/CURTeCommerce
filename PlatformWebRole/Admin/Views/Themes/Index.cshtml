@@ -1,6 +1,7 @@
 ﻿@{
     List<Admin.Theme> themes = ViewBag.themes ?? new List<Admin.Theme>();
     ViewBag.Title = "| Manage Themes";
+    int activeTheme = ViewBag.activeTheme ?? 0;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link href="/Admin/Content/css/themes.css" rel="stylesheet" type="text/css" />
@@ -9,7 +10,7 @@
 <span class="clearfix"></span>
 @if (themes.Count() > 0) {
     foreach(Admin.Theme theme in themes) {
-        <div class="theme@((theme.active) ? " active" : "")" id="theme-@theme.ID">
+        <div class="theme@((theme.active) ? " active" : (theme.ID == activeTheme) ? " preview" : "" )" id="theme-@theme.ID">
             <a href="/Admin/Themes/Files/@theme.ID" class="themename" title="Manage Theme Files">@theme.name</a>
             <span class="themeimg">
                 <a href="/Admin/Themes/Activate/@theme.ID" data-id="@theme.ID" title="@((theme.active) ? "Active Theme" : "Not Active Theme, click to Activate")" class="activate@((theme.active) ? " active" : "")">@((theme.active) ? Html.Raw("<span class=active></span>") : Html.Raw("<span class=inactive></span>"))</a>

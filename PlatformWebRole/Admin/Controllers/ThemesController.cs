@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -13,6 +14,9 @@ namespace Admin.Controllers {
             
             List<Theme> themes = new Theme().GetAll();
             ViewBag.themes = themes;
+
+            int activeTheme = new Theme().getActiveCookie();
+            ViewBag.activeTheme = activeTheme;
 
             return View();
         }
@@ -75,6 +79,26 @@ namespace Admin.Controllers {
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
+        public string Preview(int id = 0) {
+            bool success = new Theme().Preview(id);
+            if (success) {
+                return "{\"success\":true}";
+            } else {
+                return "{\"success\":false}";
+            }
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public string EndPreview(int id = 0) {
+            bool success = new Theme().EndPreview(id);
+            if (success) {
+                return "{\"success\":true}";
+            } else {
+                return "{\"success\":false}";
+            }
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
         public string Duplicate(int id = 0) {
             Theme theme = new Theme().Duplicate(id);
             return JsonConvert.SerializeObject(theme);
@@ -83,6 +107,9 @@ namespace Admin.Controllers {
         public ActionResult Files(int id = 0) {
             Theme theme = new Theme().Get(id);
             ViewBag.theme = theme;
+
+            int activeTheme = new Theme().getActiveCookie();
+            ViewBag.activeTheme = activeTheme;
 
             List<ThemeArea> areas = new ThemeArea().GetAll();
             ViewBag.areas = areas;
@@ -96,12 +123,12 @@ namespace Admin.Controllers {
         [NoValidation]
         public string AreaFiles(int themeID, int areaID, int typeID) {
             ThemeDetails deets = new ThemeDetails {
-                theme = new Theme().Get(themeID),
+                themeID = themeID,
                 type = new ThemeFileType().Get(typeID),
-                area = new ThemeArea().Get(areaID)
+                area = new ThemeArea().Get(areaID),
+                files = new ThemeFile().GetAllFiles(themeID, areaID, typeID)
             };
 
-            deets.files = deets.theme.ThemeFiles.Where(x => x.themeAreaID.Equals(areaID) && x.ThemeFileTypeID.Equals(typeID)).OrderBy(x => x.renderOrder).ToList();
             return JsonConvert.SerializeObject(deets);
         }
 
@@ -157,9 +184,20 @@ namespace Admin.Controllers {
             return "";
         }
 
+        [AcceptVerbs(HttpVerbs.Post)]
+        public string Upload(int themeID, int areaID, int typeID) {
+            ThemeFile file = new ThemeFile();
+            try {
+                string filename = HttpContext.Request.Headers["X-File-Name"];
+                string filetype = HttpContext.Request.Headers["X-File-Type"];
+                Stream input = Request.InputStream;
+                file = new ThemeFile().Upload(input, filename, filetype, themeID, areaID, typeID);
+            } catch {}
+            return JsonConvert.SerializeObject(file);
+        }
     }
     public class ThemeDetails {
-        public Theme theme { get; set; }
+        public int themeID { get; set; }
         public ThemeArea area { get; set; }
         public ThemeFileType type { get; set; }
         public List<ThemeFile> files { get; set; }

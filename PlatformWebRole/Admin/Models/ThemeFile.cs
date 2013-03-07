@@ -28,6 +28,13 @@ namespace Admin {
             return files;
         }
 
+        public List<ThemeFile> GetAllFiles(int themeID, int areaID, int typeID) {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            List<ThemeFile> files = new List<ThemeFile>();
+            files = db.ThemeFiles.Where(x => x.themeID.Equals(themeID) && x.themeAreaID.Equals(areaID) && x.ThemeFileTypeID.Equals(typeID)).OrderBy(x => x.renderOrder).ToList();
+            return files;
+        }
+
         public ThemeFile Get(int id) {
             ThemeFile file = new ThemeFile();
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
@@ -123,6 +130,48 @@ namespace Admin {
                 }
             }
             db.SubmitChanges();
+            return file;
+        }
+
+        public ThemeFile Upload(Stream data, string filename, string filetype, int themeID, int areaID, int typeID) {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            ThemeFile file = new ThemeFile();
+
+            // check if mime type matches
+            ThemeFileType type = new ThemeFileType().Get(typeID);
+            if (type.mimetype != filetype.Trim()) {
+                return file;
+            }
+
+            // check if file exists already
+            string localpath = "/themes/" + themeID + "/" + areaID + "/" + filename;
+            if (db.ThemeFiles.Any(x => x.themeID.Equals(themeID) && x.ThemeFileTypeID.Equals(typeID) && x.themeAreaID.Equals(areaID) && x.filePath.ToLower().Contains(localpath.ToLower()))) {
+                return file;
+            }
+
+            // get blob from blob store
+            CloudBlockBlob blob = BlobManagement.GetOrCreateBlob(localpath);
+
+            // upload new data to blob
+            blob.UploadFromStream(data);
+            blob.Properties.ContentType = type.mimetype;
+            blob.SetProperties();
+            string fullpath = blob.Uri.ToString();
+
+            // create new file
+            file = new ThemeFile {
+                dateAdded = DateTime.UtcNow,
+                lastModified = DateTime.UtcNow,
+                filePath = fullpath,
+                themeID = themeID,
+                themeAreaID = areaID,
+                ThemeFileTypeID = typeID,
+                renderOrder = (db.ThemeFiles.Where(x => x.themeID.Equals(themeID) && x.themeAreaID.Equals(areaID) && x.ThemeFileTypeID.Equals(typeID)).OrderByDescending(x => x.renderOrder).Select(x => x.renderOrder).FirstOrDefault() + 1),
+                externalFile = false
+            };
+            db.ThemeFiles.InsertOnSubmit(file);
+            db.SubmitChanges();
+
             return file;
         }
 

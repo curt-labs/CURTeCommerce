@@ -80,6 +80,28 @@ namespace Admin {
             return false;
         }
 
+        public bool Preview(int id) {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Theme theme = db.Themes.Where(x => x.ID.Equals(id)).FirstOrDefault();
+            if (theme != null && theme.ID > 0) {
+                // adjust cookies so theme shows up immediately
+                HttpCookie activeTheme = new HttpCookie("activetheme");
+                activeTheme = new HttpCookie("activetheme");
+                activeTheme.Value = theme.ID.ToString();
+                activeTheme.Expires = DateTime.Now.AddMinutes(5);
+                HttpContext.Current.Response.Cookies.Add(activeTheme);
+                return true;
+            }
+            return false;
+        }
+
+        public bool EndPreview(int id) {
+            HttpCookie activeTheme = new HttpCookie("activetheme");
+            activeTheme.Expires = DateTime.Now.AddDays(-1);
+            HttpContext.Current.Response.Cookies.Add(activeTheme);
+            return true;
+        }
+
         public Theme Duplicate(int id) {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             Theme theme = db.Themes.Where(x => x.ID.Equals(id)).FirstOrDefault();
@@ -99,7 +121,20 @@ namespace Admin {
             }
             return newtheme;
         }
+
+        public int getActiveCookie() {
+            HttpCookie activeTheme = new HttpCookie("activetheme");
+            activeTheme = HttpContext.Current.Request.Cookies.Get("activetheme");
+            int themeid = 0;
+
+            if (activeTheme != null && activeTheme.Value != null) {
+                int inttest;
+                if (int.TryParse(activeTheme.Value, out inttest)) {
+                    themeid = Convert.ToInt32(activeTheme.Value);
+                }
+            }
+            return themeid;
+        }
+
     }
-
-
 }

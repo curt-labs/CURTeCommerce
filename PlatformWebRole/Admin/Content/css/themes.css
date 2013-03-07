@@ -22,7 +22,6 @@
 }
 
 section span.title{
-    margin-bottom: 40px;
     color: #bf3504;
     font-size: 16px;
     display: inline-block;
@@ -59,11 +58,32 @@ section form.admin_form label input[type="radio"] {
     border-radius: 7px;
     border: 2px solid transparent;
     overflow: hidden;
+    position: relative;
+}
+
+.theme #preview, .theme #endpreview {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, .5);
+}
+
+.theme.preview #preview, .theme #endpreview {
+    display: none;
+}
+
+.theme #preview, .theme.preview #endpreview {
+    display: block;
 }
 
 .theme.active {
     border: 2px solid #CECECE;
 }
+
+.theme.preview {
+    border: 2px solid #debf00;
+}
+
 
 .theme .themename {
     display: block;
@@ -339,4 +359,31 @@ section form.admin_form label input[type="radio"] {
     font-weight: bold;
     text-decoration: none;
     font-size: 16px;
+}
+
+#dropzone {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    text-align: center;
+    border: 2px dashed #888;
+    height: 18px;
+    width: 140px;
+    padding: 11px 7px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#dropzone span {
+    display: block;
+    text-align: center;
+    font-size: 18px;
+    color: #888;
+    line-height: 18px;
+}
+
+#dropzone progress {
+    display: none;
+    width: 90%;
+    margin: 3px auto;
 }

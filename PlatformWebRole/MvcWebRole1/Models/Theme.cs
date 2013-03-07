@@ -36,12 +36,13 @@ namespace EcommercePlatform {
             Dictionary<int, List<ThemeFile>> files = new Dictionary<int, List<ThemeFile>>();
             List<ThemeFile> basefiles = new List<ThemeFile>();
             int themeID = getTheme();
-            if (HttpContext.Current.Session["basefiles"] != null && themeID == getSessionTheme()) {
-                basefiles = (List<ThemeFile>)HttpContext.Current.Session["basefiles"];
+            string keyname = themeID + "basefiles";
+            if (HttpContext.Current.Session[keyname] != null && themeID == getSessionTheme()) {
+                basefiles = (List<ThemeFile>)HttpContext.Current.Session[keyname];
             } else {
                 EcommercePlatformDataContext db = new EcommercePlatformDataContext();
                 basefiles = db.Themes.Where(x => x.ID.Equals(themeID)).SelectMany(x => x.ThemeFiles.Where(y => y.ThemeArea.controller.ToLower().Equals("base"))).OrderBy(x => x.ThemeFileTypeID).ThenBy(x => x.renderOrder).ToList();
-                HttpContext.Current.Session["basefiles"] = basefiles;
+                HttpContext.Current.Session[keyname] = basefiles;
             }
             foreach(ThemeFile file in basefiles) {
                 if(!files.Keys.Contains(file.ThemeFileTypeID)) {
@@ -58,8 +59,8 @@ namespace EcommercePlatform {
         public Dictionary<int, List<ThemeFile>> getFiles(string controller) {
             Dictionary<int, List<ThemeFile>> files = getBaseFiles();
             List<ThemeFile> themefiles = new List<ThemeFile>();
-            string keyname = controller + "files";
             int themeID = getTheme();
+            string keyname = themeID + controller + "files";
             if (HttpContext.Current.Session[keyname] != null && themeID == getSessionTheme()) {
                 themefiles = (List<ThemeFile>)HttpContext.Current.Session[keyname];
             } else {
