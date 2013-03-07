@@ -9,7 +9,6 @@ using AzureFtpServer.Ftp;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.ServiceRuntime;
-using Microsoft.WindowsAzure.StorageClient;
 
 namespace FTPServerRole {
     public class WorkerRole : RoleEntryPoint {

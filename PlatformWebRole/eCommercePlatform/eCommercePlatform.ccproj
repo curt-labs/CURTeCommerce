@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <PublishProfile Include="Profiles\curt-platformProduction.azurePubxml" />
+    <PublishProfile Include="Profiles\EcommercePlatformStaging.azurePubxml" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>
