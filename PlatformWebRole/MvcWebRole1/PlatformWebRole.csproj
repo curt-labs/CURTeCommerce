@@ -190,6 +190,7 @@
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
+    <Compile Include="Models\OrderEDI.cs" />
     <Compile Include="Models\ThemeFile.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Controllers\LegacyController.cs" />

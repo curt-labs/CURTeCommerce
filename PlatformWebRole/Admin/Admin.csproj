@@ -206,6 +206,7 @@
     <Compile Include="Models\ContentManagement.cs" />
     <Compile Include="Models\ContentPage.cs" />
     <Compile Include="Models\AdminCustomer.cs" />
+    <Compile Include="Models\OrderEDI.cs" />
     <Compile Include="Models\ThemeFileType.cs" />
     <Compile Include="Models\ThemeFile.cs" />
     <Compile Include="Models\ThemeArea.cs" />

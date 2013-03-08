@@ -12,10 +12,10 @@ using System.Text;
 namespace EcommercePlatform.Models {
     public class EDI {
         internal void CreatePurchaseOrder(int id = 0) {
-            if (!(HttpContext.Current.Request.Url.Host.Contains("127.0.0") || HttpContext.Current.Request.Url.Host.Contains("localhost"))) {
                 try {
                     Settings settings = new Settings();
                     Cart order = new Cart().Get(id);
+                    Payment payment = order.getPayment();
                     if (order.CartItems.Count > 0) {
                         Customer cust = new Customer { ID = order.cust_id };
                         cust.Get();
@@ -26,12 +26,12 @@ namespace EcommercePlatform.Models {
                         int linecount = 1;
                         // linecount is just for the PO section and doesn't include the head or tail
                         // next two lines are head
-                        edicontent += "ISA*00*          *00*          *12*" + settings.Get("EDIPhone") + "     *01*809988975      *" + String.Format("{0:yyMMdd}*{0:hhmm}", DateTime.Now) + "*U*00401*" + order.payment_id.ToString("000000000") + "*0*P*>~" + Environment.NewLine;
-                        edicontent += "GS*PO*" + settings.Get("EDIPhone") + "*809988975*" + String.Format("{0:yyyyMMdd}*{0:hhmm}", DateTime.Now) + "*" + order.payment_id.ToString("000000000") + "*X*004010~" + Environment.NewLine;
+                        edicontent += "ISA*00*          *00*          *12*" + settings.Get("EDIPhone") + "     *01*809988975      *" + String.Format("{0:yyMMdd}*{0:hhmm}", payment.created) + "*U*00401*" + order.payment_id.ToString("000000000") + "*0*P*>~" + Environment.NewLine;
+                        edicontent += "GS*PO*" + settings.Get("EDIPhone") + "*809988975*" + String.Format("{0:yyyyMMdd}*{0:hhmm}", payment.created) + "*" + order.payment_id.ToString("000000000") + "*X*004010~" + Environment.NewLine;
                         // begin PO section
                         edicontent += "ST*850*000000001~" + Environment.NewLine;
                         linecount++;
-                        edicontent += "BEG*00*DS*" + ponumber + "**" + String.Format("{0:yyyyMMdd}", order.getPayment().created) + "~" + Environment.NewLine;
+                        edicontent += "BEG*00*DS*" + ponumber + "**" + String.Format("{0:yyyyMMdd}", payment.created) + "~" + Environment.NewLine;
                         linecount++;
                         edicontent += "CUR*BT*USD~" + Environment.NewLine;
                         linecount++;
@@ -39,7 +39,7 @@ namespace EcommercePlatform.Models {
                         linecount++;
                         edicontent += "REF*IA*" + settings.Get("CURTAccount") + "~" + Environment.NewLine;
                         linecount++;
-                        edicontent += "DTM*002*" + String.Format("{0:yyyyMMdd}", order.getPayment().created) + "~" + Environment.NewLine;
+                        edicontent += "DTM*002*" + String.Format("{0:yyyyMMdd}", payment.created) + "~" + Environment.NewLine;
                         linecount++;
                         edicontent += "N1*ST*" + order.Shipping.first + " " + order.Shipping.last + "~" + Environment.NewLine;
                         linecount++;
@@ -75,12 +75,32 @@ namespace EcommercePlatform.Models {
                         DiscountBlobContainer blobcontainer = BlobManagement.GetContainer("edi");
                         BlobContainerPermissions perms = new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob };
                         blobcontainer.Container.SetPermissions(perms);
-                        blob = blobcontainer.Container.GetBlockBlobReference(string.Format("out\\PO{0}_{1}.txt", String.Format("{0:yyyyMMdd}", DateTime.Now), String.Format("{0:HHmmss}", DateTime.Now)));
+                        string filename = "PO" + String.Format("{0:yyyyMMdd}_{0:HHmmss}", payment.created) + ".txt";
+                        blob = blobcontainer.Container.GetBlockBlobReference("out\\" + filename);
                         byte[] edibytes = Encoding.ASCII.GetBytes(edicontent);
                         MemoryStream edistream = new MemoryStream(edibytes);
                         blob.UploadFromStream(edistream);
+                        OrderEDI orderedi = new OrderEDI {
+                            orderID = order.ID,
+                            editext = edicontent,
+                            filename = filename
+                        };
+                        orderedi.Save();
                     }
                 } catch { };
+        }
+
+        internal void Write() {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+
+            // get all orders with no edi history
+            List<int> orders = (from c in db.Carts
+                                join e in db.OrderEDIs on c.ID equals e.orderID into edijoin
+                                from ej in edijoin.DefaultIfEmpty()
+                                where c.payment_id > 0 && ej.orderID == null
+                                select c.ID).ToList();
+            foreach (int order in orders) {
+                CreatePurchaseOrder(order);
             }
         }
 
@@ -92,7 +112,7 @@ namespace EcommercePlatform.Models {
                 string blobname = "";
                 if (blob.GetType() != typeof(CloudBlobDirectory)) {
                     string editext = "";
-                    Stream blobstream = null;
+                    MemoryStream blobstream = new MemoryStream();
                     if (blob.GetType() == typeof(CloudBlockBlob)) {
                         CloudBlockBlob bblob = (CloudBlockBlob)blob;
                         if (!bblob.Name.Contains(".req")) {
@@ -106,8 +126,9 @@ namespace EcommercePlatform.Models {
                             pblob.DownloadToStream(blobstream);
                         }
                     }
-                    StreamReader reader = new StreamReader(blobstream);
-                    editext = reader.ReadToEnd();
+                    byte[] blobbytes = blobstream.ToArray();
+                    editext = Encoding.Default.GetString(blobbytes);
+
                     editext = editext.Replace("\r\n", "");
                     if (blobname.ToLower().Contains("inv")) {
                         // invoice file
@@ -122,6 +143,12 @@ namespace EcommercePlatform.Models {
                         // ship notification
                         try {
                             ReadShippingNotification(editext);
+                            BlobManagement.MoveBlob(blob, "edi/archive", "edi/in");
+                        } catch { }
+                    } else if (blobname.ToLower().Contains("ack")) {
+                        // functional acknowledgement
+                        try {
+                            ReadAcknowledgement(editext);
                             BlobManagement.MoveBlob(blob, "edi/archive", "edi/in");
                         } catch { }
                     }
@@ -362,6 +389,36 @@ namespace EcommercePlatform.Models {
                         } catch { }
                         break;
                 }
+            }
+        }
+
+        internal void ReadAcknowledgement(string editext) {
+            string purchaseOrderID = "";
+            Cart order = new Cart();
+            Settings settings = new Settings();
+            string EDIPOPreface = settings.Get("EDIPOPreface");
+
+            List<string> edilines = editext.Split('~').ToList<string>();
+            foreach (string line in edilines) {
+                List<string> lineelements = line.Split('*').ToList<string>();
+                switch (lineelements[0]) {
+                    case "AK1":
+                        // Original Shipment Number from Shipper
+                        purchaseOrderID = lineelements[2];
+                        if (EDIPOPreface != "") {
+                            purchaseOrderID = purchaseOrderID.Replace(EDIPOPreface, "");
+                        }
+                        break;
+                }
+            }
+            if (!String.IsNullOrWhiteSpace(purchaseOrderID)) {
+                try {
+                    order = new Cart().GetByPaymentID(Convert.ToInt32(purchaseOrderID));
+                    OrderEDI edi = new OrderEDI().GetByOrderID(order.ID);
+                    if (edi != null && edi.ID > 0) {
+                        edi.SetAcknowledged();
+                    }
+                } catch { }
             }
         }
     }

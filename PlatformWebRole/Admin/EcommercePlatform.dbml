@@ -84,6 +84,7 @@
       <Column Name="voided" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" UpdateCheck="Always" />
       <Association Name="Cart_CartItem" Member="CartItems" ThisKey="ID" OtherKey="order_id" Type="CartItem" />
       <Association Name="Cart_Shipment" Member="Shipments" ThisKey="ID" OtherKey="order_id" Type="Shipment" />
+      <Association Name="Cart_OrderEDI" Member="OrderEDI" ThisKey="ID" OtherKey="orderID" Type="OrderEDI" Cardinality="One" />
       <Association Name="Customer_Cart" Member="Customer" ThisKey="cust_id" OtherKey="ID" Type="Customer" IsForeignKey="true" />
       <Association Name="Payment_Cart" Member="Payment" ThisKey="payment_id" OtherKey="ID" Type="Payment" IsForeignKey="true" />
       <Association Name="Address_Cart" Member="Billing" ThisKey="bill_to" OtherKey="ID" Type="Address" IsForeignKey="true" />
@@ -508,6 +509,17 @@
       <Association Name="Theme_ThemeFile" Member="Theme" AccessModifier="Internal" ThisKey="themeID" OtherKey="ID" Type="Theme" IsForeignKey="true" />
       <Association Name="ThemeFileType_ThemeFile" Member="ThemeFileType" ThisKey="ThemeFileTypeID" OtherKey="ID" Type="ThemeFileType" IsForeignKey="true" />
       <Association Name="ThemeArea_ThemeFile" Member="ThemeArea" ThisKey="themeAreaID" OtherKey="ID" Type="ThemeArea" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OrderEDI" Member="OrderEDIs">
+    <Type Name="OrderEDI">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="orderID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="dateGenerated" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="editext" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="filename" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="dateAcknowledged" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Cart_OrderEDI" Member="Cart" AccessModifier="Internal" ThisKey="orderID" OtherKey="ID" Type="Cart" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

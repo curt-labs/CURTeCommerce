@@ -153,6 +153,9 @@ namespace Admin
     partial void InsertThemeFile(ThemeFile instance);
     partial void UpdateThemeFile(ThemeFile instance);
     partial void DeleteThemeFile(ThemeFile instance);
+    partial void InsertOrderEDI(OrderEDI instance);
+    partial void UpdateOrderEDI(OrderEDI instance);
+    partial void DeleteOrderEDI(OrderEDI instance);
     #endregion
 		
 		public EcommercePlatformDataContext() : 
@@ -510,6 +513,14 @@ namespace Admin
 			get
 			{
 				return this.GetTable<ThemeFile>();
+			}
+		}
+		
+		public System.Data.Linq.Table<OrderEDI> OrderEDIs
+		{
+			get
+			{
+				return this.GetTable<OrderEDI>();
 			}
 		}
 	}
@@ -1977,6 +1988,8 @@ namespace Admin
 		
 		private EntitySet<Shipment> _Shipments;
 		
+		private EntityRef<OrderEDI> _OrderEDI;
+		
 		private EntityRef<Customer> _Customer;
 		
 		private EntityRef<Payment> _Payment;
@@ -2019,6 +2032,7 @@ namespace Admin
 		{
 			this._CartItems = new EntitySet<CartItem>(new Action<CartItem>(this.attach_CartItems), new Action<CartItem>(this.detach_CartItems));
 			this._Shipments = new EntitySet<Shipment>(new Action<Shipment>(this.attach_Shipments), new Action<Shipment>(this.detach_Shipments));
+			this._OrderEDI = default(EntityRef<OrderEDI>);
 			this._Customer = default(EntityRef<Customer>);
 			this._Payment = default(EntityRef<Payment>);
 			this._Billing = default(EntityRef<Address>);
@@ -2305,6 +2319,35 @@ namespace Admin
 			set
 			{
 				this._Shipments.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Cart_OrderEDI", Storage="_OrderEDI", ThisKey="ID", OtherKey="orderID", IsUnique=true, IsForeignKey=false)]
+		public OrderEDI OrderEDI
+		{
+			get
+			{
+				return this._OrderEDI.Entity;
+			}
+			set
+			{
+				OrderEDI previousValue = this._OrderEDI.Entity;
+				if (((previousValue != value) 
+							|| (this._OrderEDI.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._OrderEDI.Entity = null;
+						previousValue.Cart = null;
+					}
+					this._OrderEDI.Entity = value;
+					if ((value != null))
+					{
+						value.Cart = this;
+					}
+					this.SendPropertyChanged("OrderEDI");
+				}
 			}
 		}
 		
@@ -11043,6 +11086,229 @@ namespace Admin
 						this._themeAreaID = default(int);
 					}
 					this.SendPropertyChanged("ThemeArea");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.OrderEDI")]
+	public partial class OrderEDI : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private int _orderID;
+		
+		private System.DateTime _dateGenerated;
+		
+		private string _editext;
+		
+		private string _filename;
+		
+		private System.Nullable<System.DateTime> _dateAcknowledged;
+		
+		private EntityRef<Cart> _Cart;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnorderIDChanging(int value);
+    partial void OnorderIDChanged();
+    partial void OndateGeneratedChanging(System.DateTime value);
+    partial void OndateGeneratedChanged();
+    partial void OneditextChanging(string value);
+    partial void OneditextChanged();
+    partial void OnfilenameChanging(string value);
+    partial void OnfilenameChanged();
+    partial void OndateAcknowledgedChanging(System.Nullable<System.DateTime> value);
+    partial void OndateAcknowledgedChanged();
+    #endregion
+		
+		public OrderEDI()
+		{
+			this._Cart = default(EntityRef<Cart>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_orderID", DbType="Int NOT NULL")]
+		public int orderID
+		{
+			get
+			{
+				return this._orderID;
+			}
+			set
+			{
+				if ((this._orderID != value))
+				{
+					if (this._Cart.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnorderIDChanging(value);
+					this.SendPropertyChanging();
+					this._orderID = value;
+					this.SendPropertyChanged("orderID");
+					this.OnorderIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_dateGenerated", DbType="DateTime NOT NULL")]
+		public System.DateTime dateGenerated
+		{
+			get
+			{
+				return this._dateGenerated;
+			}
+			set
+			{
+				if ((this._dateGenerated != value))
+				{
+					this.OndateGeneratedChanging(value);
+					this.SendPropertyChanging();
+					this._dateGenerated = value;
+					this.SendPropertyChanged("dateGenerated");
+					this.OndateGeneratedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_editext", DbType="Text", UpdateCheck=UpdateCheck.Never)]
+		public string editext
+		{
+			get
+			{
+				return this._editext;
+			}
+			set
+			{
+				if ((this._editext != value))
+				{
+					this.OneditextChanging(value);
+					this.SendPropertyChanging();
+					this._editext = value;
+					this.SendPropertyChanged("editext");
+					this.OneditextChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_filename", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
+		public string filename
+		{
+			get
+			{
+				return this._filename;
+			}
+			set
+			{
+				if ((this._filename != value))
+				{
+					this.OnfilenameChanging(value);
+					this.SendPropertyChanging();
+					this._filename = value;
+					this.SendPropertyChanged("filename");
+					this.OnfilenameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_dateAcknowledged", DbType="DateTime")]
+		public System.Nullable<System.DateTime> dateAcknowledged
+		{
+			get
+			{
+				return this._dateAcknowledged;
+			}
+			set
+			{
+				if ((this._dateAcknowledged != value))
+				{
+					this.OndateAcknowledgedChanging(value);
+					this.SendPropertyChanging();
+					this._dateAcknowledged = value;
+					this.SendPropertyChanged("dateAcknowledged");
+					this.OndateAcknowledgedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Cart_OrderEDI", Storage="_Cart", ThisKey="orderID", OtherKey="ID", IsForeignKey=true)]
+		internal Cart Cart
+		{
+			get
+			{
+				return this._Cart.Entity;
+			}
+			set
+			{
+				Cart previousValue = this._Cart.Entity;
+				if (((previousValue != value) 
+							|| (this._Cart.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Cart.Entity = null;
+						previousValue.OrderEDI = null;
+					}
+					this._Cart.Entity = value;
+					if ((value != null))
+					{
+						value.OrderEDI = this;
+						this._orderID = value.ID;
+					}
+					else
+					{
+						this._orderID = default(int);
+					}
+					this.SendPropertyChanged("Cart");
 				}
 			}
 		}

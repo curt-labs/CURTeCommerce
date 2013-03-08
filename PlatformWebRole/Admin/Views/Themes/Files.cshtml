@@ -11,7 +11,7 @@
 <span class="clearfix"></span>
 <div class="theme@((!theme.active && theme.ID == activeTheme) ? " preview" : "")">
     <input type="hidden" id="themeID" value="@theme.ID" />
-    <a href="/Admin/Themes/Files/@theme.ID" class="themename" title="Manage Theme Files">@theme.name</a>
+    <a href="/Admin/Themes/Edit/@theme.ID" class="themename" title="Edit Basic Theme Information">@theme.name</a>
     <img src="@((!string.IsNullOrWhiteSpace(theme.screenshot)) ? theme.screenshot : "/Admin/Content/img/noimage.jpg" )" alt="@theme.name" />
     <button id="preview" data-themeid="@theme.ID" class="btn">Preview Theme</button>
     <button id="endpreview" data-themeid="@theme.ID" class="btn btn-inverse">Stop Preview</button>

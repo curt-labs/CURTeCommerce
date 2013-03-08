@@ -22,6 +22,8 @@ namespace Admin.Controllers {
                 ViewBag.hide_modules = false;
             } catch (Exception) { }
 
+            ViewBag.timezones = UDF.GetTimeZones();
+
             ViewBag.ulist = true;
             ViewBag.failed = failed;
             return View("Profile");

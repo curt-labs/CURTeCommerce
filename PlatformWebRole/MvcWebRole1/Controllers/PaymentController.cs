@@ -126,9 +126,6 @@ namespace EcommercePlatform.Controllers {
                 customer.Cart = new_cart;
                 customer.Cart.BindAddresses();
 
-                EDI edi = new EDI();
-                edi.CreatePurchaseOrder(cartid); 
-
                 return RedirectToAction("Complete", new { id = cartid });
             } else {
                 return RedirectToAction("Index", new { message = response.Message });
@@ -286,8 +283,6 @@ namespace EcommercePlatform.Controllers {
                 customer.Cart = new_cart;
                 customer.Cart.BindAddresses();
 
-                EDI edi = new EDI();
-                edi.CreatePurchaseOrder(cartid); 
                 return RedirectToAction("Complete", new { id = cartid });
             } else {
                 return RedirectToAction("Index", new { message = "Your PayPal Transaction Could not be processed. Try Again." });

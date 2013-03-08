@@ -23,8 +23,8 @@ namespace Admin.Models {
                         int linecount = 1;
                         // linecount is just for the PO section and doesn't include the head or tail
                         // next two lines are head
-                        edicontent += "ISA*00*          *00*          *12*" + settings.Get("EDIPhone") + "     *01*809988975      *" + String.Format("{0:yyMMdd}*{0:hhmm}", DateTime.Now) + "*U*00401*" + order.payment_id.ToString("000000000") + "*0*P*>~" + Environment.NewLine;
-                        edicontent += "GS*PO*" + settings.Get("EDIPhone") + "*809988975*" + String.Format("{0:yyyyMMdd}*{0:hhmm}", DateTime.Now) + "*" + order.payment_id.ToString("000000000") + "*X*004010~" + Environment.NewLine;
+                        edicontent += "ISA*00*          *00*          *12*" + settings.Get("EDIPhone") + "     *01*809988975      *" + String.Format("{0:yyMMdd}*{0:hhmm}", order.Payment.created) + "*U*00401*" + order.payment_id.ToString("000000000") + "*0*P*>~" + Environment.NewLine;
+                        edicontent += "GS*PO*" + settings.Get("EDIPhone") + "*809988975*" + String.Format("{0:yyyyMMdd}*{0:hhmm}", order.Payment.created) + "*" + order.payment_id.ToString("000000000") + "*X*004010~" + Environment.NewLine;
                         // begin PO section
                         edicontent += "ST*850*000000001~" + Environment.NewLine;
                         linecount++;
@@ -72,10 +72,17 @@ namespace Admin.Models {
                         DiscountBlobContainer blobcontainer = BlobManagement.GetContainer("edi");
                         BlobContainerPermissions perms = new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob };
                         blobcontainer.Container.SetPermissions(perms);
-                        blob = blobcontainer.Container.GetBlockBlobReference(string.Format("out\\PO{0}_{1}.txt", String.Format("{0:yyyyMMdd}", DateTime.Now), String.Format("{0:HHmmss}", DateTime.Now)));
+                        string filename = "PO" + String.Format("{0:yyyyMMdd}_{0:HHmmss}", order.Payment.created) + ".txt";
+                        blob = blobcontainer.Container.GetBlockBlobReference("out\\" + filename);
                         byte[] edibytes = Encoding.ASCII.GetBytes(edicontent);
                         MemoryStream edistream = new MemoryStream(edibytes);
                         blob.UploadFromStream(edistream);
+                        OrderEDI orderedi = new OrderEDI {
+                            orderID = order.ID,
+                            editext = edicontent,
+                            filename = filename
+                        };
+                        orderedi.Save();
                     }
                 } catch { };
             }

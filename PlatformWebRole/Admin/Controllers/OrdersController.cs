@@ -341,8 +341,6 @@ namespace Admin.Controllers {
         public ActionResult Step6(int id = 0) {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             ViewBag.orderID = db.Carts.Where(x => x.ID.Equals(id)).Select(x => x.payment_id).First();
-            EDI edi = new EDI();
-            edi.CreatePurchaseOrder(id);
             return View("Confirmation");
         }
         [NoValidation]

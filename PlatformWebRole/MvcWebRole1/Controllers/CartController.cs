@@ -25,11 +25,6 @@ namespace EcommercePlatform.Controllers {
             return View();
         }
 
-        public void CreatePO(int id = 0) {
-            EDI edi = new EDI();
-            edi.CreatePurchaseOrder(id);
-        }
-
         [RequireHttps]
         public ActionResult Checkout() {
             // start checkout process here

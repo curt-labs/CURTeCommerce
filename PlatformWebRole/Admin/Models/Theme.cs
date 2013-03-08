@@ -69,6 +69,8 @@ namespace Admin {
                 theme.active = true;
                 db.SubmitChanges();
 
+                ClearThemeSession(theme.ID);
+
                 // adjust cookies so theme shows up immediately
                 HttpCookie activeTheme = new HttpCookie("activetheme");
                 activeTheme = new HttpCookie("activetheme");
@@ -85,6 +87,7 @@ namespace Admin {
             Theme theme = db.Themes.Where(x => x.ID.Equals(id)).FirstOrDefault();
             if (theme != null && theme.ID > 0) {
                 // adjust cookies so theme shows up immediately
+                ClearThemeSession(theme.ID);
                 HttpCookie activeTheme = new HttpCookie("activetheme");
                 activeTheme = new HttpCookie("activetheme");
                 activeTheme.Value = theme.ID.ToString();
@@ -100,6 +103,15 @@ namespace Admin {
             activeTheme.Expires = DateTime.Now.AddDays(-1);
             HttpContext.Current.Response.Cookies.Add(activeTheme);
             return true;
+        }
+
+        public void ClearThemeSession(int themeID) {
+            List<ThemeArea> areas = new ThemeArea().GetAll();
+            HttpContext.Current.Session.Remove(themeID + "basefiles");
+            foreach (ThemeArea area in areas) {
+                string keyname = themeID + area.controller + "files";
+                HttpContext.Current.Session.Remove(keyname);
+            }
         }
 
         public Theme Duplicate(int id) {

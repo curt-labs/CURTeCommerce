@@ -14,5 +14,11 @@ namespace EcommercePlatform.Controllers {
             edi.Read();
             return "done";
         }
+
+        public string Write() {
+            EDI edi = new EDI();
+            edi.Write();
+            return "done";
+        }
     }
 }
