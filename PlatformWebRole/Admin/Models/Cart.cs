@@ -348,5 +348,20 @@ namespace Admin
                 return new List<Cart>();
             }
         }
+
+        public static List<Cart> GetLongUnsubmittedOrders() {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            List<Cart> orders = new List<Cart>();
+            orders = db.Carts.Where(x => x.payment_id > 0 && x.OrderEDI == null && x.Payment.created < DateTime.UtcNow.AddHours(-2)).ToList();
+            return orders;
+        }
+
+        public static List<Cart> GetUnacknowledgedOrders() {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            List<Cart> orders = new List<Cart>();
+            orders = db.Carts.Where(x => x.payment_id > 0 && x.OrderEDI != null && x.OrderEDI.dateGenerated < DateTime.UtcNow.AddHours(-2) && x.OrderEDI.dateAcknowledged == null).ToList();
+            return orders;
+        }
+
     }
 }

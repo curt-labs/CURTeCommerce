@@ -80,7 +80,7 @@
             <li class="ligallery" id="folder_@(UDF.getBlobFileName(g.uri))">
                 <a class="gallery" href="/Admin/FileManager/FileBrowser?@((qstring != "") ? qstring + "&" : qstring)name=@UDF.getFolderPath(g.uri)">
                     <span class="folder contextmenu"></span>
-                    <span class="galleryname"><strong>@UDF.getBlobFileName(g.uri)</strong> @((g.SubContainers != null) ? g.SubContainers.Count() : 0) subfolders; @g.BlobCount files</span>
+                    <span class="galleryname"><strong>@UDF.getBlobFileName(g.uri)</strong> @g.SubCount subfolders; @g.BlobCount files</span>
                 </a>
                 @if(can_edit && g.BlobCount == 0 && ((profile.username.Equals(g.Container.Name) || !usernames.Contains(g.Container.Name)))) {
                     <ul class="menu">

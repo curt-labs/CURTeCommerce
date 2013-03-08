@@ -15,7 +15,6 @@
     <p class="void">VOID</p>
 } else {
     <a class="button" href="/Admin/Orders/Void/@order.payment_id" id="void">Void Order</a>
-    <a class="button" href="/Admin/Orders/RegeneratePO/@order.payment_id">Regenerate Purchase Order</a>
 }
 <ul class="tabs">
     <li>
@@ -29,6 +28,9 @@
     </li>
     <li>
         <a href="#payment">Payment</a>
+    </li>
+    <li>
+        <a href="#edi">CURT Status</a>
     </li>
 </ul>
 <div class="tab_container">
@@ -189,7 +191,24 @@
         <label>
             Postal Code
             <input type="text" value="@order.Billing.postal_code" readonly />
-        </label>    </div>
+        </label>
+    </div>
+    <div class="tab_content admin_form" id="edi">
+        <h3>CURT Order Status</h3>
+        <label>
+            EDI Generated
+            <input type="text" value="@((order.OrderEDI != null) ? String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.OrderEDI.dateGenerated, tz)) + " " + UDF.ShortTZ(tz, order.OrderEDI.dateGenerated) : "Not Generated Yet")" readonly />
+        </label>
+        <label>
+            Received By CURT
+            <input type="text" value="@((order.OrderEDI != null && order.OrderEDI.dateAcknowledged != null) ? String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.OrderEDI.dateAcknowledged.Value, tz)) + " " + UDF.ShortTZ(tz, order.OrderEDI.dateAcknowledged.Value) : "Not Acknowledged Yet")" readonly />
+        </label>
+        <label>
+            EDI Filename
+            <input type="text" value="@((order.OrderEDI != null) ? order.OrderEDI.filename : "")" readonly />
+        </label>
+        <a class="button" href="/Admin/Orders/RegeneratePO/@order.payment_id">Generate Purchase Order</a>
+    </div>
 </div>
 
 <script>

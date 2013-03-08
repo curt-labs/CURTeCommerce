@@ -82,6 +82,7 @@ namespace Admin.Controllers {
                     }
                 }
 
+                ViewBag.notifications = Notification.GetNotifications();
                 
                 ViewBag.profile = p;
             } catch (Exception) { // We ran into issues validating, require the users to log back in

@@ -2,6 +2,7 @@
     Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
     List<Admin.Models.GroupedModule> modules = ViewBag.modules ?? new List<Admin.Models.GroupedModule>();
     string active_path = ViewBag.active_path ?? "";
+    List<Admin.Models.Notification> notifications = ViewBag.notifications ?? new List<Admin.Models.Notification>();
 }
 
 <!doctype html>
@@ -53,6 +54,15 @@
     <a href="/Admin" title='Home' class='title'>@ViewBag.settings.Get("SiteName") Administrative Console</a>
     <div class="global_features">
         <div class="global_links">
+            <div id="notifications" @((notifications.Count > 0) ? "class=alerts" : "")>@notifications.Count
+                @if(notifications.Count > 0) {
+                <ul class="notices">
+                    @foreach (Admin.Models.Notification notice in notifications) {
+                        <li><a href="/Admin/Orders/Items/@notice.orderID#edi">@notice.message</a></li>
+                    }
+                </ul>
+                }
+            </div>
             <a href="/Admin/Profile" title="Manage Profile">
                 @if (profile.image != null && profile.image.Length > 0) {
                     <span class="container">

@@ -13,6 +13,7 @@ namespace Admin.Models {
         public string PaymentMethod { get; set; }
         public string status { get; set; }
         public decimal total { get; set; }
+        public OrderEDI edi { get; set; }
 
         public List<Orders> GetAll() {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
@@ -26,7 +27,8 @@ namespace Admin.Models {
                           orderDate = c.Payment.created,
                           PaymentMethod = c.Payment.PaymentTypes.name,
                           status = ((c.voided) ? "Void" : c.Payment.status),
-                          total = c.getTotal()
+                          total = c.getTotal(),
+                          edi = c.OrderEDI
                       }).ToList<Orders>();
 
             return orders;
@@ -45,10 +47,21 @@ namespace Admin.Models {
                           orderDate = c.Payment.created,
                           PaymentMethod = c.Payment.PaymentTypes.name,
                           status = ((c.voided) ? "Void" : c.Payment.status),
-                          total = c.getTotal()
+                          total = c.getTotal(),
+                          edi = c.OrderEDI
                       }).Skip(perpage * (page - 1)).Take(perpage).ToList<Orders>();
 
             return orders;
+        }
+
+        public string GetCurtStatus() {
+            if (this.edi == null) {
+                return "Not Sent Yet";
+            } else if (this.edi.dateAcknowledged == null) {
+                return "Awaiting Response";
+            } else {
+                return "Received";
+            }
         }
 
         internal int Count() {
@@ -71,11 +84,13 @@ namespace Admin.Models {
                               orderDate = c.Payment.created,
                               PaymentMethod = c.Payment.PaymentTypes.name,
                               status = ((c.voided) ? "Void" : c.Payment.status),
-                              total = c.getTotal()
+                              total = c.getTotal(),
+                              edi = c.OrderEDI
                           }).ToList<Orders>();
             }
             return Newtonsoft.Json.JsonConvert.SerializeObject(orders);
         }
+
     }
 
 }

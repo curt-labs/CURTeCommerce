@@ -407,7 +407,6 @@ header a.title:hover{
 header div.global_features{
     float:right;
     height:30px;
-    overflow:hidden;
     max-width: 550px;
 }
 
@@ -794,6 +793,60 @@ input.protocolnone:after {
     width: auto;
     display: block;
     margin: auto;
+}
+
+#notifications {
+    background-color: #414040;
+    font-size: 16px;
+    color: #8A8A8A;
+    padding: 6px 10px;
+    border-radius: 5px;
+    float: left;
+    margin: 2px 10px;
+    cursor: pointer;
+    position: relative;
+}
+
+#notifications.alerts {
+    background-color: #bf3504;
+    color: #fff;
+}
+
+#notifications ul {
+    display: none;
+    position: absolute;
+    top: 29px;
+    right: 0px;
+    background-color: #f1f1f1;
+    box-shadow: 3px 3px 5px rgba(0,0,0,0.4);
+    list-style: none;
+    padding: 5px;
+    margin: 0;
+    white-space: nowrap;
+}
+
+#notifications:hover ul {
+    display: block;
+}
+
+#notifications:hover ul li {
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+#notifications:hover ul li a {
+    display: block;
+    color: #000;
+    font-weight: bold;
+    margin: 0;
+    font-size: 12px;
+    padding: 0 10px;
+}
+
+#notifications:hover ul li a:hover {
+    background-color: #bf3504;
+    color: #fff;
 }
 
 /* ==|== media queries ======================================================

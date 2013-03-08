@@ -152,9 +152,10 @@ namespace Admin.Models {
             DiscountBlobContainer container = new DiscountBlobContainer {
                 Container = con.Container,
                 parent = con.Parent ?? null,
-                BlobCount = (con.ListBlobs() == null) ? 0 : con.ListBlobs().Count(),
+                BlobCount = (con.ListBlobs() == null) ? 0 : con.ListBlobs().Where(x => x.GetType() != typeof(CloudBlobContainer)).Count(),
                 uri = con.Uri,
-                SubContainers = GetSubContainers(name)
+                SubContainers = GetSubContainers(name),
+                SubCount = (con.ListBlobs() == null) ? 0 : con.ListBlobs().Where(x => x.GetType() == typeof(CloudBlobContainer)).Count(),
             };
             return container;
         }
@@ -293,8 +294,9 @@ namespace Admin.Models {
                         BlobCount = blobs.Count,
                         Container = con,
                         uri = con.Uri,
-                        SubContainers = GetSubContainers(con.Name)
+                        SubContainers = GetSubContainers(con.Name),
                     };
+                    discountContainer.SubCount = discountContainer.SubContainers.Count;
                     foreach (IListBlobItem blob in blobs) {
                         if (!blob.GetType().Equals(typeof(CloudBlobDirectory))) {
                             BlobFile bf = new BlobFile {
@@ -327,18 +329,20 @@ namespace Admin.Models {
                     CloudBlobDirectory container = parentContainer.GetDirectoryReference(GetDirectoryFromPath(parent));
                     foreach (CloudBlobDirectory sub_dir in container.ListBlobs().OfType<CloudBlobDirectory>()) {
                         DiscountBlobContainer sub = new DiscountBlobContainer {
-                            BlobCount = sub_dir.ListBlobs().Count(),
+                            BlobCount = sub_dir.ListBlobs().Where(x => x.GetType() != typeof(CloudBlobDirectory)).Count(),
                             Container = sub_dir.Container,
-                            uri = sub_dir.Uri
+                            uri = sub_dir.Uri,
+                            SubCount = sub_dir.ListBlobs().Where(x => x.GetType() == typeof(CloudBlobDirectory)).Count(),
                         };
                         subs.Add(sub);
                     }
                 } else {
                     foreach (CloudBlobDirectory sub_dir in parentContainer.ListBlobs().OfType<CloudBlobDirectory>()) {
                         DiscountBlobContainer sub = new DiscountBlobContainer {
-                            BlobCount = sub_dir.ListBlobs().Count(),
+                            BlobCount = sub_dir.ListBlobs().Where(x => x.GetType() != typeof(CloudBlobDirectory)).Count(),
                             Container = sub_dir.Container,
-                            uri = sub_dir.Uri
+                            uri = sub_dir.Uri,
+                            SubCount = sub_dir.ListBlobs().Where(x => x.GetType() == typeof(CloudBlobDirectory)).Count(),
                         };
                         subs.Add(sub);
                     }
@@ -364,7 +368,7 @@ namespace Admin.Models {
             CloudBlobContainer container = client.GetContainerReference(containerName);
 
             List<IListBlobItem> blobs = new List<IListBlobItem>();
-            blobs = container.ListBlobs().Where(x => x.GetType() != typeof(CloudBlobDirectory)).ToList<IListBlobItem>();
+            blobs = container.ListBlobs().Where(x => x.GetType() != typeof(CloudBlobDirectory)).ToList();
 
             return blobs;
         }
@@ -550,6 +554,7 @@ namespace Admin.Models {
         public CloudBlobContainer Container { get; set; }
         public CloudBlobDirectory parent { get; set; }
         public int BlobCount { get; set; }
+        public int SubCount { get; set; }
         public Uri uri { get; set; }
         public List<DiscountBlobContainer> SubContainers { get; set; }
         public List<BlobFile> files { get; set; }
