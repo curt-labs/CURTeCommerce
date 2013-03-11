@@ -16,9 +16,6 @@
     </Endpoints>
     <ConfigurationSettings>
       <Setting name="StorageConnectionString" />
-      <Setting name="AccountKey" />
-      <Setting name="AccountName" />
-      <Setting name="ProviderName" />
       <Setting name="Mode" />
       <Setting name="BaseUri" />
       <Setting name="UseHttps" />
@@ -60,9 +57,6 @@
       <InternalEndpoint name="Endpoint1" protocol="tcp" />
     </Endpoints>
     <ConfigurationSettings>
-      <Setting name="ProviderName" />
-      <Setting name="AccountKey" />
-      <Setting name="AccountName" />
       <Setting name="StorageConnectionString" />
     </ConfigurationSettings>
   </WorkerRole>

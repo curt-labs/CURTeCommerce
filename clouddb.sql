@@ -1032,3 +1032,55 @@ CREATE TABLE InvoiceAddress (
 	country varchar(100) NULL
 )
 GO
+
+CREATE TABLE Theme (
+	ID int IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	name varchar(255) NULL,
+	active bit NOT NULL,
+	screenshot varchar(255) NULL,
+	dateAdded datetime NOT NULL
+)
+GO
+
+CREATE TABLE ThemeFileType (
+	ID int IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	name varchar(100) NOT NULL,
+	extension varchar(10) NOT NULL,
+	mimetype varchar(50) NOT NULL,
+	structure varchar(255) NULL
+)
+GO
+
+CREATE TABLE ThemeArea (
+	ID int IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	name varchar(100) NOT NULL,
+	controller varchar(100) NOT NULL
+)
+GO
+
+CREATE INDEX IX_ThemeArea ON ThemeArea(controller)
+GO
+
+CREATE TABLE ThemeFile (
+	ID int IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	themeID int NOT NULL FOREIGN KEY REFERENCES Theme(ID),
+	ThemeFileTypeID int NOT NULL FOREIGN KEY REFERENCES ThemeFileType(ID),
+	themeAreaID int NOT NULL FOREIGN KEY REFERENCES ThemeArea(id),
+	filePath varchar(255) NOT NULL,
+	renderOrder int NOT NULL,
+	dateAdded datetime NOT NULL,
+	lastModified datetime NOT NULL
+)
+GO
+
+CREATE TABLE OrderEDI (
+	ID int IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	orderID int NOT NULL FOREIGN KEY REFERENCES Cart(ID),
+	dateGenerated datetime NOT NULL,
+	editext text NULL,
+	filename varchar(255) NOT NULL,
+	dateAcknowledged datetime NULL
+)
+GO
+
+CREATE INDEX IX_OrderEDI_Cart ON OrderEDI(orderID);

@@ -63,6 +63,9 @@ insert into Modules (name,path,parentID,alt_text,inMenu) VALUES ('Details','/Adm
 INSERT INTO Modules (name,path,parentID,alt_text,inMenu) VALUES ('List Invoices','/Admin/Invoice/List',21,'View Invoices By Date',0);
 INSERT INTO Modules (name,path,parentID,alt_text,inMenu) VALUES ('Print Invoices','/Admin/Invoice/Print',21,'Print Invoices By Date',0);
 INSERT INTO Modules (name,path,parentID,alt_text,inMenu) VALUES ('Save Rate','/Admin/Regions/SaveRate',22,'Save Tax Rate',0);
+INSERT INTO Modules (name,path,parentID,alt_text,inMenu) VALUES ('Add Theme','/Admin/Themes/Add',23,'Add Theme',1);
+INSERT INTO Modules (name,path,parentID,alt_text,inMenu) VALUES ('Edit Theme','/Admin/Themes/Edit',23,'Edit Theme',0);
+INSERT INTO Modules (name,path,parentID,alt_text,inMenu) VALUES ('Theme Files','/Admin/Themes/Files',23,'Manage Theme Files',0);
 GO
 
 insert into Profile (username,password,email,first,last,date_added) VALUES ('admin','','admin@changeme.com','administrator','administrator',Getdate());
@@ -248,3 +251,27 @@ GO
 
 INSERT INTO FTPFirewall (ipaddress) VALUES ('12.188.248.192'),('12.188.248.197'),('127.0.0.1');
 GO
+
+INSERT INTO ThemeArea (name,controller) VALUES
+('Account Section','Account'),
+('Authentication Pages','Authenticate'),
+('Blog','Blog'),
+('Shopping Cart','Cart'),
+('Part Categories','Categories'),
+('Contact Us','Contact'),
+('Global Styles','Base'),
+('FAQ','FAQ'),
+('Homepage','Index'),
+('Locations','Locations'),
+('Content Pages','Page'),
+('Newsletter','Newsletter'),
+('Part Details','Part'),
+('Payment Pages','Payment'),
+('Review Form','Review'),
+('Search Pages','Search'),
+('Share Form','Share'),
+('Testimonials','Testimonials');
+
+INSERT INTO ThemeFileType (name,extension,mimetype,structure) VALUES
+('Style Sheet','.css','text/css','<link href="[path]" rel="stylesheet" type="text/css">'),
+('Javascript','.js','application/javascript','<script defer src="[path]"></script>');

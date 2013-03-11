@@ -1,0 +1,42 @@
+Changelog for Platform Release in March of 2013
+
+Large Scale Framework changes
+
+1. Migrated to Azure OS Family 3 (Windows Server 2012)
+2. Upgraded to MVC4
+3. Switched to .NET 4.5 Framework
+4. Upgraded to Azure SDK from October 2012
+5. Project now requires Visual Studio 2012 or later due to latest Azure SDK
+6. Significant changes to Blob Storage API resulted in large changes to AzureFtpServer project
+7. Significant changes to Blob Storage API resulted in large changes to the Admin File Manager classes
+8. Updated all Nuget packages to their latest versions
+
+Changes to database structure are detailed in the update-2013-3-11/db_changes_2013-3-11.sql file
+
+Bug Fixes
+
+1. Changed Locations functionality to allow for non-US based postal codes
+2. Updated Geocoding of shipping addresses to eliminate issues with very specific addresses that couldn't be properly geocoded which had been causing errors getting the nearest distribution center
+
+EDI Changes
+
+1. Added OrderEDI database table to track EDI processes better
+2. Removed EDI Order PO generation from customer checkout process
+3. Added Process to sweep orders that haven't yet had EDI POs generated
+4. Added notification system to Admin to notify users that orders have been sent to Curt or haven't been acknowledged yet
+5. Added support for EDI 997 Acknowledgement file processing
+
+New Features / Changes
+
+1. Added TimeZone to the Profile settings in the admin
+2. Added API calls to retrieve time zone information based on GeoLocated IP address on front end for certain areas
+3. Added Site Themeing system
+4. Eliminated need to sign in to check out
+5. Revamped checkout process to put all address forms on one page
+6. Added ability to hide or show states/provinces in the admin.
+7. Removed all unnecessary folders and files from the project
+8. Removed binary and compiled files from repository tracking to eliminate issues with conflicts on merge
+9. Updated all references to time to ensure they are stored in UTC
+10. Removed all references to former Team Foundation Server source control
+11. Built out Customer management in the admin. Now allows for full address management, password changes, and phone number visibility.
+12. Cleaned up all configuration files. Removed unnecessary settings and connection strings.
