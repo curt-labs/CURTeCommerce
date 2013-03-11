@@ -9,7 +9,7 @@ Getting Started
 ===============
 
 Step 1 - Visual Studio:
-If you don't already have Microsoft Visual Studio 2010 or later, download and install it from http://www.microsoft.com/visualstudio/eng/
+If you don't already have Microsoft Visual Studio 2012 or later, download and install it from http://www.microsoft.com/visualstudio/eng/
 
 Step 2 - Azure SDK:
 Use the Microsoft Web Platform Installer to download the latest Azure Software Developer Kit (SDK).

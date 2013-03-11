@@ -178,7 +178,7 @@ namespace Admin.Controllers {
                     Container = null,
                     parent = null,
                     uri = null,
-                    SubContainers = BlobManagement.GetContainers().Where(x => !hiddenContainers.Contains(x.Container.Name)).ToList<DiscountBlobContainer>()
+                    SubContainers = BlobManagement.GetContainersForSerialization().Where(x => !hiddenContainers.Contains(x.Container.Name)).ToList<DiscountBlobContainer>()
                 };
             }
             List<BlobFile> files = new List<BlobFile>();

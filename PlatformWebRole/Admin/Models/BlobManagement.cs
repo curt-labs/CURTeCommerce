@@ -315,6 +315,33 @@ namespace Admin.Models {
             }
         }
 
+        internal static List<DiscountBlobContainer> GetContainersForSerialization() {
+            try {
+                // Retrieve storage account from connection string
+                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue("StorageConnectionString"));
+
+                // Create the blobl client
+                CloudBlobClient client = storageAccount.CreateCloudBlobClient();
+
+                List<CloudBlobContainer> cloudContainers = new List<CloudBlobContainer>();
+                List<DiscountBlobContainer> containers = new List<DiscountBlobContainer>();
+                cloudContainers = client.ListContainers().ToList<CloudBlobContainer>();
+
+                foreach (CloudBlobContainer con in cloudContainers) {
+                    DiscountBlobContainer discountContainer = new DiscountBlobContainer {
+                        BlobCount = 0,
+                        Container = con,
+                        uri = con.Uri,
+                    };
+                    containers.Add(discountContainer);
+                }
+
+                return containers;
+            } catch (Exception) {
+                return new List<DiscountBlobContainer>();
+            }
+        }
+
         public static List<DiscountBlobContainer> GetSubContainers(string parent = "") {
             try {
                 // Retrieve storage account from connection string

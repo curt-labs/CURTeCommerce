@@ -97,7 +97,8 @@ namespace EcommercePlatform.Models {
             List<int> orders = (from c in db.Carts
                                 join e in db.OrderEDIs on c.ID equals e.orderID into edijoin
                                 from ej in edijoin.DefaultIfEmpty()
-                                where c.payment_id > 0 && ej.orderID == null
+                                join p in db.Payments on c.payment_id equals p.ID
+                                where p.status.Trim().ToLower().Equals("complete") && ej.orderID == null
                                 select c.ID).ToList();
             foreach (int order in orders) {
                 CreatePurchaseOrder(order);
@@ -164,17 +165,17 @@ namespace EcommercePlatform.Models {
 
 
             Dictionary<string, string> itdcodes = new Dictionary<string, string>();
-            itdcodes.Add("01","Basic");
-            itdcodes.Add("02","End of Month");
-            itdcodes.Add("03","Fixed Date");
-            itdcodes.Add("04","Def. or installment");
-            itdcodes.Add("05","Discount N/A");
-            itdcodes.Add("08","Basic disc. offered");
-            itdcodes.Add("09","Proximo");
-            itdcodes.Add("12","10 days after EOM");
-            itdcodes.Add("14","Previously agreed");
-            itdcodes.Add("17","Terms N/A");
-            itdcodes.Add("ZZ","Mutually Defined");
+            itdcodes.Add("01", "Basic");
+            itdcodes.Add("02", "End of Month");
+            itdcodes.Add("03", "Fixed Date");
+            itdcodes.Add("04", "Def. or installment");
+            itdcodes.Add("05", "Discount N/A");
+            itdcodes.Add("08", "Basic disc. offered");
+            itdcodes.Add("09", "Proximo");
+            itdcodes.Add("12", "10 days after EOM");
+            itdcodes.Add("14", "Previously agreed");
+            itdcodes.Add("17", "Terms N/A");
+            itdcodes.Add("ZZ", "Mutually Defined");
 
             Invoice inv = new Invoice();
             InvoiceAddress address = new InvoiceAddress();
@@ -191,7 +192,7 @@ namespace EcommercePlatform.Models {
                         break;
                     case "BIG":
                         // Beginning statement
-                        string dt = lineelements[1].Substring(4,2) + "-" + lineelements[1].Substring(6,2) + "-" + lineelements[1].Substring(0,4);
+                        string dt = lineelements[1].Substring(4, 2) + "-" + lineelements[1].Substring(6, 2) + "-" + lineelements[1].Substring(0, 4);
                         inv.dateAdded = Convert.ToDateTime(dt);
                         inv.number = lineelements[2];
                         inv.orderID = lineelements[4];
@@ -261,14 +262,16 @@ namespace EcommercePlatform.Models {
                             inv.billTo = address.ID;
                         else
                             inv.shipTo = address.ID;
-                            break;
+                        break;
                     case "ITD":
                         // invoice due statement
                         inv.termsType = itdcodes[lineelements[1]];
                         inv.discountPercent = Convert.ToDecimal(lineelements[3]);
-                        inv.discountDueDate = Convert.ToDateTime(lineelements[4].Substring(4, 2) + "-" + lineelements[4].Substring(6, 2) + "-2" + lineelements[4].Substring(1, 3));
+                        if (lineelements[4].Length == 8) {
+                            inv.discountDueDate = Convert.ToDateTime(lineelements[4].Substring(4, 2) + "-" + lineelements[4].Substring(6, 2) + "-2" + lineelements[4].Substring(1, 3));
+                        }
                         inv.discountDueDays = Convert.ToInt32(lineelements[5]);
-                        inv.netDueDate = Convert.ToDateTime(lineelements[6].Substring(4,2) + "-" + lineelements[6].Substring(6,2) + "-2" + lineelements[6].Substring(1,3));
+                        inv.netDueDate = Convert.ToDateTime(lineelements[6].Substring(4, 2) + "-" + lineelements[6].Substring(6, 2) + "-2" + lineelements[6].Substring(1, 3));
                         inv.netDueDays = Convert.ToInt32(lineelements[7]);
                         inv.termsDescription = lineelements[12];
                         break;
@@ -280,7 +283,7 @@ namespace EcommercePlatform.Models {
                         } catch {
                             i.quantity = 0;
                         }
-                        i.price = Convert.ToDecimal(lineelements[4]);
+                        i.price = (lineelements[4].Length > 0) ? Convert.ToDecimal(lineelements[4]) : 0;
                         i.partID = lineelements[9];
                         i.description = lineelements[15];
                         /*InvoiceItem i = new InvoiceItem {
@@ -320,7 +323,7 @@ namespace EcommercePlatform.Models {
                         break;
                     case "SE":
                         // End of Invoice
-                        inv.Save(items,codes);
+                        inv.Save(items, codes);
                         break;
                 }
             }

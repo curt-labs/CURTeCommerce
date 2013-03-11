@@ -128,7 +128,9 @@ $(function () {
             }
             $('#filemanagerfiles').append(folder);
             $(response.SubContainers).each(function (i, cont) {
-                var path = cont.uri.replace('http://', '');
+                var path = cont.uri.replace('https://', '');
+                var path = path.replace('http://', '');
+
                 path = path.substring(path.indexOf('/') + 1);
                 if (path.indexOf('/') > -1) {
                     path = path.substring(0, path.length - 1);
