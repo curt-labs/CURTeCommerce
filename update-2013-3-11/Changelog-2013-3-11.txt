@@ -17,6 +17,7 @@ Bug Fixes
 
 1. Changed Locations functionality to allow for non-US based postal codes
 2. Updated Geocoding of shipping addresses to eliminate issues with very specific addresses that couldn't be properly geocoded which had been causing errors getting the nearest distribution center
+3. Fixed primedatabase sql script references to stateIDs in the DistributionCenters area
 
 EDI Changes
 
