@@ -16,10 +16,6 @@
     </Endpoints>
     <ConfigurationSettings>
       <Setting name="StorageConnectionString" />
-      <Setting name="Mode" />
-      <Setting name="BaseUri" />
-      <Setting name="UseHttps" />
-      <Setting name="UseAsyncMethods" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="CurtSSL" storeLocation="LocalMachine" storeName="CA" />

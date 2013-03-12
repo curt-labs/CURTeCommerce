@@ -612,6 +612,9 @@
     <Content Include="Views\Shared\_Header.cshtml" />
     <Content Include="Views\Shared\_LeftCol.cshtml" />
     <Content Include="Views\Shared\_FooterScripts.cshtml" />
+    <Content Include="Scripts\custom\category_parts.min.js.map">
+      <DependentUpon>category_parts.js</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

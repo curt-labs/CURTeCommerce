@@ -4,10 +4,6 @@
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="StorageConnectionString" value="DefaultEndpointsProtocol=https;AccountName=curtplatform;AccountKey=0rAk0pTnb2/zOto3yugtlpfGhrTVVwkdFXas++1xWxuhylrh7ZAK1CheInjI/7nMy+fMuKklodm7wXLaMzsLBw==" />
-      <Setting name="Mode" value="Live" />
-      <Setting name="BaseUri" value="" />
-      <Setting name="UseHttps" value="true" />
-      <Setting name="UseAsyncMethods" value="true" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="CurtSSL" thumbprint="797A081B4358517D85394806BE31BA67767BEDDB" thumbprintAlgorithm="sha1" />

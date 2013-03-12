@@ -80,6 +80,7 @@ INSERT INTO ThemeArea (name,controller) VALUES
 ('Review Form','Review'),
 ('Search Pages','Search'),
 ('Share Form','Share'),
+('Lookup Landing Pages','Lookup'),
 ('Testimonials','Testimonials');
 
 /* Populate Theme File Types */
