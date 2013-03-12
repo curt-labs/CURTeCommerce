@@ -270,6 +270,7 @@ INSERT INTO ThemeArea (name,controller) VALUES
 ('Review Form','Review'),
 ('Search Pages','Search'),
 ('Share Form','Share'),
+('Lookup Landing Page','Lookup'),
 ('Testimonials','Testimonials');
 
 INSERT INTO ThemeFileType (name,extension,mimetype,structure) VALUES

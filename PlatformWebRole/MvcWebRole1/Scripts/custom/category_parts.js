@@ -3,7 +3,7 @@ var ids = [];
 var view_more_trigger = 0;
 var page = 1;
 var perpage = 10;
-var endless_load = true;
+var endless_load = false;
 var generateHTML;
 var getMore;
 var loadInstallSheet, loadImages, imagesort;
