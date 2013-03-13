@@ -79,7 +79,7 @@ Step 15 - Run the project:
 To Run the project, click on the "eCommercePlatform" object in the Solution Explorer.  It's the one with all the roles in it and has a cloud icon.  Control + F5 will run the project and start the azure emulator.
 
 Step 16 - Run FirstUse method:
-You'll have the project start up in your browser at http://127.0.0.1:81. Open a new browser window an go to https://127.0.0.1/Auth/FirstUse.  This will run the script to populate the admin account password.
+You'll have the project start up in your browser at http://127.0.0.1:81. Open a new browser window an go to https://127.0.0.1/Admin/Auth/FirstUse.  This will run the script to populate the admin account password.
 
 Step 17 - Log in to the Admin:
 Once the FirstUse method finishes, Navigate to https://127.0.0.1/admin.  The initial credentials are username: admin password: admin.  That should get you into the admin panel and to actually get started setting things up
