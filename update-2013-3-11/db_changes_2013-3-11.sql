@@ -18,6 +18,8 @@ INSERT INTO Modules (name,path,parentID,alt_text,inMenu,image) VALUES ('Themes',
 INSERT INTO Modules (name,path,parentID,alt_text,inMenu) VALUES ('Add Theme','/Admin/Themes/Add',63,'Add Theme',1);
 INSERT INTO Modules (name,path,parentID,alt_text,inMenu) VALUES ('Edit Theme','/Admin/Themes/Edit',63,'Edit Theme',0);
 INSERT INTO Modules (name,path,parentID,alt_text,inMenu) VALUES ('Theme Files','/Admin/Themes/Files',63,'Manage Theme Files',0);
+INSERT INTO Modules (name,path,parentID,alt_text,inMenu) VALUES ('Add Theme File','/Admin/Themes/AddFile',63,'Add Theme File',0);
+INSERT INTO Modules (name,path,parentID,alt_text,inMenu) VALUES ('Edit Theme File','/Admin/Themes/EditFile',63,'Edit Theme File',0);
 
 /* Creation of themes data structures */
 CREATE TABLE Theme (
