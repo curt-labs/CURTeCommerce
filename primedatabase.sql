@@ -213,7 +213,7 @@ INSERT INTO States (state,abbr,countryID,taxRate,hide) VALUES ('Utah','UT',1,0,0
 INSERT INTO States (state,abbr,countryID,taxRate,hide) VALUES ('Vermont','VT',1,0,0);
 INSERT INTO States (state,abbr,countryID,taxRate,hide) VALUES ('Virgin Islands','VI',1,0,0);
 INSERT INTO States (state,abbr,countryID,taxRate,hide) VALUES ('Virginia','VA',1,0,0);
-INSERT INTO States (state,abbr,countryID,taxRate,hide) VALUES ('Washington','WA',1,0);
+INSERT INTO States (state,abbr,countryID,taxRate,hide) VALUES ('Washington','WA',1,0,0);
 INSERT INTO States (state,abbr,countryID,taxRate,hide) VALUES ('West Virginia','WV',1,0,0);
 INSERT INTO States (state,abbr,countryID,taxRate,hide) VALUES ('Wisconsin','WI',1,0,0);
 INSERT INTO States (state,abbr,countryID,taxRate,hide) VALUES ('Wyoming','WY',1,0,0);
