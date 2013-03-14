@@ -56,7 +56,8 @@ CREATE TABLE ThemeFile (
 	filePath varchar(255) NOT NULL,
 	renderOrder int NOT NULL,
 	dateAdded datetime NOT NULL,
-	lastModified datetime NOT NULL
+	lastModified datetime NOT NULL,
+	externalFile bit NOT NULL
 )
 GO
 /* END Creation of themes data structures */
