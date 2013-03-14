@@ -146,7 +146,7 @@ namespace Admin {
             // check if file exists already
             string localpath = "/themes/" + themeID + "/" + areaID + "/" + filename;
             if (db.ThemeFiles.Any(x => x.themeID.Equals(themeID) && x.ThemeFileTypeID.Equals(typeID) && x.themeAreaID.Equals(areaID) && x.filePath.ToLower().Contains(localpath.ToLower()))) {
-                return file;
+                file = db.ThemeFiles.Where(x => x.themeID.Equals(themeID) && x.ThemeFileTypeID.Equals(typeID) && x.themeAreaID.Equals(areaID) && x.filePath.ToLower().Contains(localpath.ToLower())).FirstOrDefault();
             }
 
             // get blob from blob store
@@ -158,20 +158,24 @@ namespace Admin {
             blob.SetProperties();
             string fullpath = blob.Uri.ToString();
 
-            // create new file
-            file = new ThemeFile {
-                dateAdded = DateTime.UtcNow,
-                lastModified = DateTime.UtcNow,
-                filePath = fullpath,
-                themeID = themeID,
-                themeAreaID = areaID,
-                ThemeFileTypeID = typeID,
-                renderOrder = (db.ThemeFiles.Where(x => x.themeID.Equals(themeID) && x.themeAreaID.Equals(areaID) && x.ThemeFileTypeID.Equals(typeID)).OrderByDescending(x => x.renderOrder).Select(x => x.renderOrder).FirstOrDefault() + 1),
-                externalFile = false
-            };
-            db.ThemeFiles.InsertOnSubmit(file);
+            if (file.ID == 0) {
+                // create new file
+                file = new ThemeFile {
+                    dateAdded = DateTime.UtcNow,
+                    lastModified = DateTime.UtcNow,
+                    filePath = fullpath,
+                    themeID = themeID,
+                    themeAreaID = areaID,
+                    ThemeFileTypeID = typeID,
+                    renderOrder = (db.ThemeFiles.Where(x => x.themeID.Equals(themeID) && x.themeAreaID.Equals(areaID) && x.ThemeFileTypeID.Equals(typeID)).OrderByDescending(x => x.renderOrder).Select(x => x.renderOrder).FirstOrDefault() + 1),
+                    externalFile = false
+                };
+                db.ThemeFiles.InsertOnSubmit(file);
+            } else {
+                file.lastModified = DateTime.UtcNow;
+                file.filePath = fullpath;
+            }
             db.SubmitChanges();
-
             return file;
         }
 
