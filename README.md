@@ -64,6 +64,9 @@ Now we need to adjust all the Roles to have the correct reference to the proper 
 	d: eCommercePlatform/Roles/TaskScheduler/Settings - In the StorageConnectionString setting, replace the AccountName and AccountKey with with your credentials.
 
 Step 14 - SSL Certificate:
+
+DO NOT SKIP THIS STEP. If you do, your deployment will fail.
+
 In order to view the admin and other portions of the page, you'll need an SSL certificate.  During development, you can use a self generated one, but once the website is in production, you'll need an official one from a certificate provider.
 	a: Make a certificate request in IIS
 

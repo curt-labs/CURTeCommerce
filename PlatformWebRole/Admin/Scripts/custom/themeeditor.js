@@ -1,4 +1,4 @@
-﻿var tab, matchIndent, fillGutter, filecontent;
+﻿var tab, matchIndent, fillGutter, filecontent, saveFile;
 $(function () {
     filecontent = $('#preeditor').html();
     //SyntaxHighlighter.all()
@@ -13,39 +13,18 @@ $(function () {
                 e.preventDefault();
                 matchIndent();
                 break;
+            case 83:
+                if (e.ctrlKey) {
+                    e.preventDefault();
+                    saveFile(e);
+                    break;
+                }
         }
         fillGutter()
     });
     $('.editor pre').on('keyup', fillGutter);
     fillGutter();
-    $('.save').on('click', function (e) {
-        $('.ajax-loader').show();
-        e.preventDefault();
-        var fileID = $(this).data('fileid');
-        var themeID = $(this).data('themeid');
-        var areaID = $(this).data('areaid');
-        var typeID = $(this).data('typeid');
-        var name = $('#filename').val();
-        var content = $('#preeditor').html();
-        if ($.trim(name) == "") {
-            showMessage('File Name is required');
-            $('#filename').focus();
-            return;
-        }
-        $.post('/Admin/Themes/SaveFile', { fileID: fileID, themeID: themeID, areaID: areaID, typeID: typeID, content: content, name: name }, function (data) {
-            $('.ajax-loader').hide();
-            filecontent = content;
-            if (fileID == "" || fileID == 0) {
-                if (data.ID > 0) {
-                    window.location = "/Admin/Themes/EditFile/" + data.ID;
-                } else {
-                    showMessage('There was a problem saving this file. It may be a duplicate file name. Please try again.');
-                }
-            } else {
-                showMessage('File saved successfully');
-            }
-        }, 'json');
-    });
+    $('.save').on('click', saveFile);
 
     $('.cancel').on('click', function (e) {
         var href = $(this).attr('href');
@@ -109,3 +88,32 @@ fillGutter = function () {
         $('.gutter').append('<span class="line"></span>');
     }
 };
+
+saveFile = function (e) {
+    $('.ajax-loader').show();
+    e.preventDefault();
+    var fileID = $('.save').data('fileid');
+    var themeID = $('.save').data('themeid');
+    var areaID = $('.save').data('areaid');
+    var typeID = $('.save').data('typeid');
+    var name = $('#filename').val();
+    var content = $('#preeditor').html();
+    if ($.trim(name) == "") {
+        showMessage('File Name is required');
+        $('#filename').focus();
+        return;
+    }
+    $.post('/Admin/Themes/SaveFile', { fileID: fileID, themeID: themeID, areaID: areaID, typeID: typeID, content: content, name: name }, function (data) {
+        $('.ajax-loader').hide();
+        filecontent = content;
+        if (fileID == "" || fileID == 0) {
+            if (data.ID > 0) {
+                window.location = "/Admin/Themes/EditFile/" + data.ID;
+            } else {
+                showMessage('There was a problem saving this file. It may be a duplicate file name. Please try again.');
+            }
+        } else {
+            showMessage('File saved successfully');
+        }
+    }, 'json');
+}
