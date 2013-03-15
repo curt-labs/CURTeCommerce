@@ -102,6 +102,7 @@
         @if (!hide_modules) {
             <div class="module_box">
                 <ul>
+                    <li>Select All <input type="checkbox" id="checkall" value="checkall" /></li>
                     @foreach (Admin.Models.GroupedModule m in listed_modules) {
                         <li>
                             -<input type="checkbox" name="mod" id="@m.id" value="@m.id" @((user_modules != null && user_modules.Where(x => x.id.Equals(m.id) && x.hasAccess.Equals(1)).Count() > 0) ? "checked=checked" : "") />

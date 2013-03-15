@@ -14,6 +14,14 @@ $(function () {
         $('.admin_form label[for=p1],.admin_form label[for=p2]').show();
     }
 
+    $(document).on('click', '#checkall', function () {
+        if ($(this).is(':checked')) {
+            $('.module_box input[type=checkbox]').prop('checked', true);
+        } else {
+            $('.module_box input[type=checkbox]').prop('checked', false);
+        }
+    });
+
     $('.change_pass').live('click', function (e) {
         e.preventDefault();
         $('a.change_pass,span.change_pass_note').remove();
