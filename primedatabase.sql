@@ -66,6 +66,8 @@ INSERT INTO Modules (name,path,parentID,alt_text,inMenu) VALUES ('Save Rate','/A
 INSERT INTO Modules (name,path,parentID,alt_text,inMenu) VALUES ('Add Theme','/Admin/Themes/Add',23,'Add Theme',1);
 INSERT INTO Modules (name,path,parentID,alt_text,inMenu) VALUES ('Edit Theme','/Admin/Themes/Edit',23,'Edit Theme',0);
 INSERT INTO Modules (name,path,parentID,alt_text,inMenu) VALUES ('Theme Files','/Admin/Themes/Files',23,'Manage Theme Files',0);
+INSERT INTO Modules (name,path,parentID,alt_text,inMenu) VALUES ('Add Theme File','/Admin/Themes/AddFile',23,'Add Theme File',0);
+INSERT INTO Modules (name,path,parentID,alt_text,inMenu) VALUES ('Edit Theme File','/Admin/Themes/EditFile',23,'Edit Theme File',0);
 GO
 
 insert into Profile (username,password,email,first,last,date_added) VALUES ('admin','','admin@changeme.com','administrator','administrator',Getdate());
