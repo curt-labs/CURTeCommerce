@@ -10,8 +10,11 @@ namespace EcommercePlatform.Controllers {
         //
         // GET: /Index/
         public string Read() {
-            EDI edi = new EDI();
-            edi.Read();
+            Settings settings = new Settings();
+            if (settings.Get("EDIOrderProcessing") == "true") {
+                EDI edi = new EDI();
+                edi.Read();
+            }
             return "done";
         }
 

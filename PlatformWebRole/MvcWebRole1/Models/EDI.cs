@@ -90,7 +90,27 @@ namespace EcommercePlatform.Models {
                 } catch { };
         }
 
+        internal void CreateEDIHistory(int id = 0) {
+            // if EDI processing is off, this ensures that if it ever gets turned on again,
+            // it doesn't attempt to write PO files for every order prior to EDI being available
+            try {
+                Settings settings = new Settings();
+                Cart order = new Cart().Get(id);
+                if (order.CartItems.Count > 0) {
+                    OrderEDI orderedi = new OrderEDI {
+                        orderID = order.ID,
+                        editext = "",
+                        filename = "",
+                        dateAcknowledged = DateTime.UtcNow,
+                        dateGenerated = DateTime.UtcNow,
+                    };
+                    orderedi.Save();
+                }
+            } catch { };
+        }
+
         internal void Write() {
+
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
 
             // get all orders with no edi history
@@ -101,7 +121,12 @@ namespace EcommercePlatform.Models {
                                 where p.status.Trim().ToLower().Equals("complete") && ej.orderID == null
                                 select c.ID).ToList();
             foreach (int order in orders) {
-                CreatePurchaseOrder(order);
+                Settings settings = new Settings();
+                if (settings.Get("EDIOrderProcessing") == "true") {
+                    CreatePurchaseOrder(order);
+                } else {
+                    CreateEDIHistory(order);
+                }
             }
         }
 

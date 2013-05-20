@@ -114,6 +114,7 @@ namespace EcommercePlatform.Controllers {
             if (response.Approved) {
                 customer.Cart.AddPayment("credit card",response.AuthorizationCode,"Complete");
                 customer.Cart.SendConfirmation();
+                customer.Cart.SendInternalOrderEmail();
                 int cartid = customer.Cart.ID;
                 
                 Cart new_cart = new Cart().Save();
@@ -271,6 +272,7 @@ namespace EcommercePlatform.Controllers {
             if (confirmationKey == "Success") {
                 customer.Cart.AddPayment("PayPal", token, "Complete");
                 customer.Cart.SendConfirmation();
+                customer.Cart.SendInternalOrderEmail();
                 int cartid = customer.Cart.ID;
 
                 Cart new_cart = new Cart().Save();

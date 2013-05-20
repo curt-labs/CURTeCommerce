@@ -12,6 +12,7 @@ using GCheckout.AutoGen;
 using Admin.Models;
 using AuthorizeNet;
 using AuthorizeNet.Helpers;
+using Newtonsoft.Json;
 
 namespace Admin.Controllers {
     public class OrdersController : BaseController {
@@ -49,11 +50,41 @@ namespace Admin.Controllers {
         }
 
         [NoValidation]
-        public ActionResult RegeneratePO(int id = 0) {
-            EDI edi = new EDI();
+        public string SendShippingNotification(int id = 0) {
             Cart order = new Cart();
             order = order.GetByPayment(id);
-            edi.CreatePurchaseOrder(order.ID);
+            order.SendShippingNotification();
+            return "";
+        }
+
+        [NoValidation]
+        public string AddShipment(int id, string trackingnum) {
+            Cart order = new Cart();
+            order = order.GetByPayment(id);
+            Shipment shipment = order.AddShipment(trackingnum);
+            string trackingcodes = order.Shipments.Select(x => x.tracking_number).Aggregate((i, j) => i + "," + j);
+            return trackingcodes;
+        }
+
+        [NoValidation]
+        public string ClearShipments(int id) {
+            Cart order = new Cart();
+            order = order.GetByPayment(id);
+            bool success = order.ClearShipments();
+            return JsonConvert.SerializeObject(success);
+        }
+
+
+        [NoValidation]
+        public ActionResult RegeneratePO(int id = 0) {
+            Settings settings = new Settings();
+            if (settings.Get("EDIOrderProcessing") == "true") {
+
+                EDI edi = new EDI();
+                Cart order = new Cart();
+                order = order.GetByPayment(id);
+                edi.CreatePurchaseOrder(order.ID);
+            }
             return RedirectToAction("Items", new { id = id });
         }
 
@@ -329,6 +360,7 @@ namespace Admin.Controllers {
             if (response.Approved) {
                 currentCart.AddPayment("credit card", response.AuthorizationCode,"Complete");
                 currentCart.SendConfirmation();
+                currentCart.SendInternalOrderEmail();
                 int cartid = currentCart.ID;
                 return RedirectToAction("Step6", new { id = cartid });
             } else {

@@ -29,9 +29,11 @@
     <li>
         <a href="#payment">Payment</a>
     </li>
+    @if(ViewBag.settings.Get("EDIOrderProcessing") == "true") {
     <li>
         <a href="#edi">CURT Status</a>
     </li>
+    }
 </ul>
 <div class="tab_container">
     <div class="tab_content admin_form" id="order">
@@ -103,7 +105,7 @@
         }
         <label>
             Tracking Codes
-            <input type="text" value="@trackingcodes" readonly />
+            <input type="text" id="trackingcodes" value="@trackingcodes" readonly />
         </label>
         @if (order.Shipments.Count > 0 && order.Shipments[0].dateShipped != null) {
             <label>
@@ -111,6 +113,9 @@
                 <input type="text" value="@String.Format("{0: M/d/yyyy}", order.Shipments[0].dateShipped)" readonly />
             </label>
         }
+        <a class="button" href="#" data-id="@order.payment_id" id="shipnotice">Send Notification</a>
+        <a class="button" href="#" data-id="@order.payment_id" id="addshipment">Add Shipment</a>
+        <a class="button" href="#" data-id="@order.payment_id" id="clearshipments">Clear All</a>
         <h3>Shipping Address</h3>
         <label>
             Name
@@ -193,6 +198,7 @@
             <input type="text" value="@order.Billing.postal_code" readonly />
         </label>
     </div>
+    @if (ViewBag.settings.Get("EDIOrderProcessing") == "true") {
     <div class="tab_content admin_form" id="edi">
         <h3>CURT Order Status</h3>
         <label>
@@ -209,13 +215,74 @@
         </label>
         <a class="button" href="/Admin/Orders/RegeneratePO/@order.payment_id">Generate Purchase Order</a>
     </div>
+    }
 </div>
 
 <script>
-    $(document).on("click", "#void", function (event) {
-        event.preventDefault();
-        if (confirm("Are you sure you want to void this order?")) {
-            window.location = $(this).attr('href');
-        };
-    });
+    $(function () {
+        $(document).on('click', '#addshipment', function (event) {
+            event.preventDefault();
+            // add a new shipment
+            var orderID = $(this).data('id');
+            var html = '<div><input type="text" id="trackingcode" data-id="' + orderID + '" placeholder="Tracking Code" /><span class="clearfix"></span><button class="btn" id="submitshipment">Add</button><button class="btn btn-danger right" id="cancelshipment">Cancel</button></div>';
+            $.modal(html, {
+                containerCss: {
+                    backgroundColor: '#ffffff',
+                    borderColor: '#ffffff',
+                    padding: '10px',
+                    height: '70px',
+                }, overlayCss: {
+                    backgroundColor: 'black'
+                }, onClose: function (dialog) {
+                    $('div.simplemodal-container').fadeOut(400, function () {
+                        $('div.simplemodal-overlay').hide();
+                        $('div.simplemodal-container').hide();
+                    });
+                    $.modal.close();
+                }
+            });
+
+        });
+        $(document).on('click', '#submitshipment', function (event) {
+            var tracking = $('#trackingcode').val();
+            var orderID = $('#trackingcode').data('id');
+            $.get("/Admin/Orders/AddShipment", { id: orderID, trackingnum: tracking }, function (data) {
+                $('#trackingcodes').val(data);
+                $.modal.close();
+            },"text");
+        });
+
+        $(document).on('click', '#cancelshipment', function (event) {
+            $.modal.close();
+        });
+        $(document).on('click', '#shipnotice', function (event) {
+            // send shipping notification
+            event.preventDefault();
+            var orderID = $(this).data('id');
+            if (confirm("Send email to customer with shipping details?")) {
+                $.getJSON("/Admin/Orders/SendShippingNotification/" + orderID,function(data) {
+                    showMessage("Shipping notification sent");
+                });
+            }
+        });
+
+        $(document).on('click', '#clearshipments', function (event) {
+            event.preventDefault();
+            var orderID = $(this).data('id');
+            if (confirm("Clear all shipment tracking code information?")) {
+                $.getJSON("/Admin/Orders/ClearShipments/" + orderID, function (data) {
+                    if (data) {
+                        $('#trackingcodes').val("");
+                    }
+                });
+            }
+        });
+
+        $(document).on("click", "#void", function (event) {
+            event.preventDefault();
+            if (confirm("Are you sure you want to void this order?")) {
+                window.location = $(this).attr('href');
+            };
+        });
+    })
 </script>

@@ -248,6 +248,30 @@ namespace Admin
             this._payment_id = p.ID;
         }
 
+        internal Shipment AddShipment(string trackingnum) {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Shipment shipment = new Shipment {
+                order_id = this.ID,
+                tracking_number = trackingnum,
+                dateShipped = DateTime.UtcNow,
+            };
+            db.Shipments.InsertOnSubmit(shipment);
+            db.SubmitChanges();
+            return shipment;
+        }
+
+        internal bool ClearShipments() {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            try {
+                List<Shipment> shipments = db.Shipments.Where(x => x.order_id.Equals(this.ID)).ToList();
+                db.Shipments.DeleteAllOnSubmit(shipments);
+                db.SubmitChanges();
+            } catch {
+                return false;
+            }
+            return true;
+        }
+
         internal Payment getPayment() {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             Payment p = new Payment();
@@ -300,6 +324,84 @@ namespace Admin
             sb.Append("<p style='font-size:11px'>If you have any questions, or if you did not place this order, please <a href='" + settings.Get("SiteURL") + "contact'>contact us</a>.</p>");
             sb.Append("</body></html>");
             UDF.SendEmail(tos, settings.Get("SiteName") + " Order Confirmation", true, sb.ToString());
+        }
+
+        internal void SendInternalOrderEmail() {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Payment payment = this.getPayment();
+
+            StringBuilder sb = new StringBuilder();
+            TextInfo myTI = new CultureInfo("en-US", false).TextInfo;
+            Settings settings = new Settings();
+            string supportemail = settings.Get("SupportEmail");
+
+            List<string> tolist = new List<string>();
+            if (settings.Get("EDIOrderProcessing") != "true") {
+                tolist.Add("dataentry@curtmfg.com");
+            }
+            tolist.Add(supportemail);
+            string[] tos = tolist.ToArray();
+            decimal total = 0;
+            sb.Append("<html><body style=\"font-family: arial, helvetica,sans-serif;\">");
+            sb.Append("<a href=\"" + settings.Get("SiteURL") + "\"><img src=\"" + settings.Get("EmailLogo") + "\" alt=\"" + settings.Get("SiteName") + "\" /></a>");
+            sb.Append("<h2>A New Order Has Been Placed</h2>");
+            sb.Append("<hr />");
+            sb.AppendFormat("<p><strong>Customer ID:</strong> {0}<br />", settings.Get("CURTAccount"));
+            sb.AppendFormat("<p><strong>Order ID:</strong> {0}<br />", this.payment_id);
+            sb.AppendFormat("<strong>Paid By:</strong> {0} on {1}</p>", payment.PaymentTypes.name, String.Format("{0:M/d/yyyy} at {0:h:mm tt}", payment.created.ToLocalTime()));
+            sb.Append("<p style=\"font-size: 12px;\"><strong style=\"font-size: 14px;\">Billing Address:</strong><br />");
+            sb.AppendFormat("{0} {1}<br />", this.Billing.first, this.Billing.last);
+            sb.AppendFormat("{0}{1}<br />{2}, {3} {4}<br />{5}</p>", this.Billing.street1, this.Billing.street2, this.Billing.city, this.Billing.State1.abbr, this.Billing.postal_code, this.Billing.State1.Country.name);
+            sb.Append("<p style=\"font-size: 12px;\"><strong style=\"font-size: 14px;\">Shipping Address:</strong><br />");
+            sb.AppendFormat("{0} {1}<br />", this.Shipping.first, this.Shipping.last);
+            sb.AppendFormat("{0}{1}<br />{2}, {3} {4}<br />{5}</p>", this.Shipping.street1, this.Shipping.street2, this.Shipping.city, this.Shipping.State1.abbr, this.Shipping.postal_code, this.Shipping.State1.Country.name);
+            sb.Append("<table style=\"width: 100%;\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\"><thead><tr><th style=\"background-color: #343434; color: #fff;\">Item</th><th style=\"background-color: #343434; color: #fff;\">Quantity</th><th style=\"background-color: #343434; color: #fff;\">Price</th></tr></thead><tbody style=\"font-size: 12px;\">");
+            foreach (CartItem item in this.CartItems) {
+                sb.AppendFormat("<tr><td><a href=\"" + settings.Get("SiteURL") + "part/{0}\">{1}</a></td><td style=\"text-align:center;\">{2}</td><td style=\"text-align:right;\">{3}</td></tr>", item.partID, item.shortDesc, item.quantity, String.Format("{0:C}", item.price));
+                total += (item.quantity * item.price);
+            }
+            sb.Append("</tbody><tfoot style=\"font-size: 12px;\">");
+            sb.AppendFormat("<tr><td colspan=\"2\" style=\"border-top: 1px solid #222; text-align: right;\">({0}) Shipping:</td>", myTI.ToTitleCase(this.shipping_type.Replace("_", " ")));
+            sb.AppendFormat("<td style=\"border-top: 1px solid #222; text-align:right;\">{0}</td></tr>", (this.shipping_price == 0) ? "Free" : String.Format("{0:C}", this.shipping_price));
+            sb.Append("<tr><td colspan=\"2\" style=\"text-align: right;\"><strong>SubTotal:<strong></td>");
+            sb.AppendFormat("<td style=\"text-align:right;\"><strong>{0}</strong></td></tr>", String.Format("{0:C}", this.GetSubTotal()));
+            sb.Append("<tr><td colspan=\"2\" style=\"text-align: right;\">Tax:</td>");
+            sb.AppendFormat("<td style=\"text-align:right;\">{0}</td></tr>", String.Format("{0:C}", this.tax));
+            sb.Append("<tr><td colspan=\"2\" style=\"text-align: right;\"><strong>Total:<strong></td>");
+            total += this.shipping_price;
+            sb.AppendFormat("<td style=\"text-align:right;\"><strong>{0}</strong></td></tr>", String.Format("{0:C}", this.getTotal()));
+            sb.Append("</tfoot></table>");
+            sb.Append("<hr /><br />");
+            sb.Append("</body></html>");
+            UDF.SendEmail(tos, settings.Get("CURTAccount") + " Order - PO " + this.payment_id, true, sb.ToString());
+        }
+
+        internal void SendShippingNotification() {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            List<Shipment> shipments = db.Shipments.Where(x => x.order_id.Equals(this.ID)).ToList<Shipment>();
+
+            if (shipments.Count > 0) {
+                DateTime shipdate = shipments[0].dateShipped ?? DateTime.UtcNow;
+                string toemail = db.Customers.Where(x => x.ID == this.cust_id).Select(x => x.email).FirstOrDefault();
+                StringBuilder sb = new StringBuilder();
+                TextInfo myTI = new CultureInfo("en-US", false).TextInfo;
+                Settings settings = new Settings();
+
+                string[] tos = { toemail };
+                sb.Append("<html><body style=\"font-family: arial, helvetica,sans-serif;\">");
+                sb.Append("<a href=\"" + settings.Get("SiteURL") + "\"><img src=\"" + settings.Get("EmailLogo") + "\" alt=\"" + settings.Get("SiteName") + "\" /></a>");
+                sb.Append("<h2>Your Order Has Shipped!</h2>");
+                sb.Append("<hr />");
+                sb.AppendFormat("<p><strong>Order ID:</strong> {0}<br />", this.payment_id);
+                sb.Append("<p>Your order shipped on " + String.Format("{0:dddd, MMMM d, yyyy}", shipdate) + ". Your Tracking Numbers are:<br />");
+                foreach (Shipment shipment in shipments) {
+                    sb.Append("<a href=\"http://www.fedex.com/Tracking?tracknumber_list=" + shipment.tracking_number + "\">" + shipment.tracking_number + "</a><br />");
+                }
+                sb.Append("<hr /><br />");
+                sb.Append("<p style='font-size:11px'>If you have any questions, or if you did not place this order, please <a href='" + settings.Get("SiteURL") + "contact'>contact us</a>.</p>");
+                sb.Append("</body></html>");
+                UDF.SendEmail(tos, settings.Get("SiteName") + " Shipping Notification", true, sb.ToString());
+            }
         }
 
         internal void SetTax() {

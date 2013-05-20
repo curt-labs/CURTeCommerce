@@ -92,6 +92,7 @@ INSERT INTO Setting (groupID,name,isImage) VALUES (1,'CURTAccount',0);
 INSERT INTO Setting (groupID,name,isImage) VALUES (1,'CURTAPIKey',0);
 INSERT INTO Setting (groupID,name,isImage) VALUES (1,'EDIPhone',0);
 INSERT INTO Setting (groupID,name,isImage) VALUES (1,'EDIPOPreface',0);
+INSERT INTO Setting (groupID,name,value,isImage) VALUES (1,'EDIOrderProcessing','false',0);
 INSERT INTO Setting (groupID,name,value,isImage) VALUES (1,'FreeShippingAmount','100',0);
 INSERT INTO Setting (groupID,name,value,isImage) VALUES (1,'FreeShippingType','FEDEX_GROUND,GROUND_HOME_DELIVERY',0);
 INSERT INTO Setting (groupID,name,isImage) VALUES (1,'GoogleAnalyticsCode',0);

@@ -99,6 +99,7 @@ namespace EcommercePlatform.Models {
             if (order.getTotal() == chargenotification.totalchargeamount.Value) {
                 order.UpdatePayment("Complete");
                 order.SendConfirmation();
+                order.SendInternalOrderEmail();
             }
         }
 
