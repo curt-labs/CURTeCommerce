@@ -36,7 +36,7 @@ namespace EcommercePlatform {
                 orderID = this.orderID,
                 filename = this.filename,
                 editext = this.editext,
-                dateGenerated = DateTime.UtcNow
+                dateGenerated = DateTime.UtcNow,
                 dateAcknowledged = DateTime.UtcNow
             };
             db.OrderEDIs.InsertOnSubmit(edi);
