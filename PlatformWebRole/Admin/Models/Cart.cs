@@ -338,7 +338,10 @@ namespace Admin
 
             List<string> tolist = new List<string>();
             if (settings.Get("EDIOrderProcessing") != "true") {
-                tolist.Add("dataentry@curtmfg.com");
+                string curtemail = settings.Get("CurtOrderEmail");
+                if (curtemail.Trim() != "") {
+                    tolist.Add(curtemail);
+                }
             }
             tolist.Add(supportemail);
             string[] tos = tolist.ToArray();

@@ -382,7 +382,6 @@ namespace EcommercePlatform
             StringBuilder sb = new StringBuilder();
             TextInfo myTI = new CultureInfo("en-US",false).TextInfo;
             Settings settings = new Settings();
-            string supportemail = settings.Get("SupportEmail");
             
             List<string> tolist = new List<string>();
             tolist.Add(toemail);
@@ -433,7 +432,10 @@ namespace EcommercePlatform
 
             List<string> tolist = new List<string>();
             if (settings.Get("EDIOrderProcessing") != "true") {
-                tolist.Add("dataentry@curtmfg.com");
+                string curtemail = settings.Get("CurtOrderEmail");
+                if (curtemail.Trim() != "") {
+                    tolist.Add(curtemail);
+                }
             }
             tolist.Add(supportemail);
             string[] tos = tolist.ToArray();
