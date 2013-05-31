@@ -340,6 +340,11 @@ namespace EcommercePlatform.Models {
                 this._subs = value;
             }
         }
+        public string slug {
+            get {
+                return UDF.GenerateSlug(this.catTitle);
+            }
+        }
     }
 
     public class APIImage {

@@ -100,21 +100,21 @@
                         <img src="@cat.image" alt="@cat.catTitle.Trim()" />
                         <ul>
                             <li>
-                                <a href="/Category/@cat.catID/@cat.catTitle.Trim()">@cat.catTitle.Trim()</a>
+                                <a href="/Category/@cat.catID/@cat.slug">@cat.catTitle.Trim()</a>
                             </li>
                             @if (cat.sub_categories.Count > 3) {
                                 for (int i = 0; i < 3; i++) {
                                     <li>
-                                        <a href="/Category/@cat.sub_categories[i].catID/@cat.sub_categories[i].catTitle.Trim()">@cat.sub_categories[i].catTitle.Trim()</a>
+                                        <a href="/Category/@cat.sub_categories[i].catID/@cat.sub_categories[i].slug">@cat.sub_categories[i].catTitle.Trim()</a>
                                     </li>
                                 }
                                 <li>
-                                    <a href="/Category/@cat.catID/@cat.catTitle">More..</a>
+                                    <a href="/Category/@cat.catID/@cat.slug">More..</a>
                                 </li>
                             } else {
                                 foreach (EcommercePlatform.Models.APICategory sub in cat.sub_categories) {
                                     <li>
-                                        <a href="/Category/@sub.catID/@sub.catTitle.Trim()">@sub.catTitle.Trim()</a>
+                                        <a href="/Category/@sub.catID/@sub.slug">@sub.catTitle.Trim()</a>
                                     </li>
                                 }
                             }

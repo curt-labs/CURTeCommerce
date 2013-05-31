@@ -20,6 +20,7 @@
     List<EcommercePlatform.Models.APIPart> connectors = ViewBag.connectors ?? new List<EcommercePlatform.Models.APIPart>();
     bool first_image = true;
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
+    List<int> statuses = new List<int>{800,900}; 
 }
 
 @if (year.Length > 0 && make.Length > 0 && model.Length > 0 && style.Length > 0) {
@@ -36,6 +37,7 @@
 </div>
 
 <div class="purchase">
+@if (statuses.Contains(part.status)) { 
     <form method="post" id="partAddToCart" data-id="@part.partID" action="/Cart/Add/@part.partID">
         <span class="price">@part.listPrice</span>
         @if (Convert.ToDecimal(part.pricing.Where(x => x.key.ToUpper().Equals("LIST")).Select(x => x.value).FirstOrDefault<string>()) != Convert.ToDecimal(part.listPrice.Substring(1))) {
@@ -53,6 +55,9 @@
         <img src="/Content/img/cart.png" alt="Add to Cart" />
         <input type="submit" name="addCart" data-id="@part.partID" id="addCart" value="Add to Cart" />
     </form>
+} else if (part.status == 999) {
+    <span class="discontinued">Discontinued</span>
+}
     
 </div>
 <div class="clearfix"></div>
@@ -186,12 +191,16 @@
                             </div>
                         </div>
                         <div class="right_col">
+                            @if (statuses.Contains(rpart.status)) { 
                             <span class="price">@rpart.listPrice</span>
                             <a class="details" href="/Part/@rpart.partID" title="View Details for Part #@rpart.partID">View Details</a>
                             <a href="/Cart/Add/@rpart.partID" data-id="@rpart.partID" class="add_cart" title="Add to Cart">
                                 <img src="/Content/img/cart.png" alt="Add to Cart" />
                                 <span>Add to Cart</span>
                             </a>
+                            } else if (rpart.status == 999) {
+                                <span class="price">Discontinued</span>
+                            }
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -266,12 +275,16 @@
                             </div>
                         </div>
                         <div class="right_col">
+                            @if (statuses.Contains(con.status)) { 
                             <span class="price">@con.listPrice</span>
                             <a class="details" href="/Part/@con.partID" title="View Details for Part #@con.partID">View Details</a>
                             <a href="/Cart/Add/@con.partID" data-id="@con.partID" class="add_cart" title="Add to Cart">
                                 <img src="/Content/img/cart.png" alt="Add to Cart" />
                                 <span>Add to Cart</span>
                             </a>
+                            } else if (con.status == 999) {
+                                <span class="price">Discontinued</span>
+                            }
                         </div>
                         <div class="clearfix"></div>
                     </div>
