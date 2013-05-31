@@ -42,19 +42,6 @@ namespace EcommercePlatform.Controllers {
 
             ViewBag.customer = customer;
 
-            // Get all the cookies
-            HttpCookie vehicleYear = Request.Cookies.Get("vehicle_year");
-            ViewBag.year = (vehicleYear != null && vehicleYear.Value != null) ? vehicleYear.Value.ToString() : "";
-
-            HttpCookie vehicleMake = Request.Cookies.Get("vehicle_make");
-            ViewBag.make = (vehicleMake != null && vehicleMake.Value != null) ? vehicleMake.Value.ToString() : "";
-
-            HttpCookie vehicleModel = Request.Cookies.Get("vehicle_model");
-            ViewBag.model = (vehicleModel != null && vehicleModel.Value != null) ? vehicleModel.Value.ToString() : "";
-
-            HttpCookie vehicleStyle = Request.Cookies.Get("vehicle_style");
-            ViewBag.style = (vehicleStyle != null && vehicleStyle.Value != null) ? vehicleStyle.Value.ToString() : "";
-
         }
 
     }

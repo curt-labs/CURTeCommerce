@@ -7,6 +7,7 @@ using System.Text;
 using System.IO;
 using Newtonsoft.Json;
 using System.Configuration;
+using System.Threading.Tasks;
 
 namespace EcommercePlatform.Models {
     public class CURTAPI {
@@ -24,6 +25,17 @@ namespace EcommercePlatform.Models {
                 return new List<double>();
             }
         }
+
+        internal static async Task<List<double>> GetYearsAsync() {
+            WebClient wc = new WebClient();
+            wc.Proxy = null;
+            Uri targeturi = new Uri(getAPIPath() + "getyear?dataType=JSON");
+            var year_json = await wc.DownloadStringTaskAsync(targeturi);
+            List<double> years = JsonConvert.DeserializeObject<List<double>>(year_json);
+            return years;
+        }
+
+
 
         internal static List<APIPart> GetVehicleParts(string year, string make, string model, string style, int cust_id = 0) {
             try {
