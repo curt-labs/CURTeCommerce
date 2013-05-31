@@ -216,10 +216,18 @@ namespace EcommercePlatform.Controllers {
         public ActionResult Shipping(string error = "") {
 
             Customer customer = ViewBag.customer;
+            Settings settings = ViewBag.settings;
             ViewBag.error = error;
 
             // Retrieve Customer from Sessions/Cookie
             customer.GetFromStorage();
+            int shippingpad = 0;
+            if (settings.Get("ShippingPadding") != "") {
+                try {
+                    shippingpad = Convert.ToInt32(settings.Get("ShippingPadding"));
+                } catch { }
+            }
+
 
             // Get the contact ContentPage
             ContentPage page = ContentManagement.GetPageByTitle("shipping");
@@ -243,6 +251,7 @@ namespace EcommercePlatform.Controllers {
                         shippingresponse = getShipping();
                     }
                 }
+                ViewBag.shippingpadding = shippingpad;
                 ViewBag.shippingresponse = shippingresponse;
                 return View();
             } else {
@@ -501,7 +510,6 @@ namespace EcommercePlatform.Controllers {
             Customer customer = new Customer();
             Settings settings = ViewBag.settings;
             customer.GetFromStorage();
-
             FedExAuthentication auth = new FedExAuthentication {
                 AccountNumber = Convert.ToInt32(settings.Get("FedExAccount")),
                 Key = settings.Get("FedExKey"),
@@ -526,7 +534,6 @@ namespace EcommercePlatform.Controllers {
                     parts.Add(item.partID);
                 }
             }
-
             ShippingResponse response = CURTAPI.GetShipping(auth, origin, destination, parts);
 
             return response;

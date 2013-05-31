@@ -6,6 +6,7 @@
     EcommercePlatform.Customer cust = ViewBag.customer ?? new EcommercePlatform.Customer();
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
     List<string> freeshippingtypes = settings.Get("FreeShippingType").Split(',').ToList<string>();
+    int shippingpadding = ViewBag.shippingpadding ?? 0;
 
     EcommercePlatform.Models.ShippingResponse shippingresponse = ViewBag.shippingresponse ??  new EcommercePlatform.Models.ShippingResponse();
     string shipping_type = "";
@@ -59,8 +60,8 @@
                                                     <span class="rate">Free Shipping - @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rate.ServiceType.Replace("_", " ").ToLower())</span>
                                                 } else {
                                                     shipping_type = rate.ServiceType;
-                                                    <input type="radio" name="shipping_type" id="shipping_@(shipcount)" value="@rate.ServiceType|@rate.Rates.FirstOrDefault().NetCharge.Key" @((shipcount == 1) ? "checked=checked" : "") />
-                                                    <span class="rate">@String.Format("{0:C}", rate.Rates.First().NetCharge.Key) @rate.Rates.First().NetCharge.Value - @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rate.ServiceType.Replace("_", " ").ToLower())</span>
+                                                    <input type="radio" name="shipping_type" id="shipping_@(shipcount)" value="@rate.ServiceType|@(rate.Rates.FirstOrDefault().NetCharge.Key + shippingpadding)" @((shipcount == 1) ? "checked=checked" : "") />
+                                                    <span class="rate">@String.Format("{0:C}", rate.Rates.First().NetCharge.Key + shippingpadding) @rate.Rates.First().NetCharge.Value - @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rate.ServiceType.Replace("_", " ").ToLower())</span>
                                                 }
                                             </label>
                                         }
