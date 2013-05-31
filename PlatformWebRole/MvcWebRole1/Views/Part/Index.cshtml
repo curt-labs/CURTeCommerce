@@ -124,6 +124,12 @@
             Installation Instructions
         </a>
     }
+    @if (part.content.Where(x => x.key.Equals("AppGuide")).Count() > 0 && part.content.Where(x => x.key.Equals("AppGuide")).FirstOrDefault<EcommercePlatform.Models.APIAttribute>().value.Length > 0) {
+        <a href="@(part.content.Where(x => x.key.Equals("AppGuide")).FirstOrDefault<EcommercePlatform.Models.APIAttribute>().value)" target="_blank" title="Download Application Guide" class="install">
+            <img src="/Content/img/pdf.png" alt="Download Application Guide" />
+            Fit Your Vehicle - Application Guide
+        </a>
+    }
     
     @if (installVideo != null && installVideo.youTubeVideoID.Length > 0) {
         <a href="http://www.youtube.com/watch?v=@installVideo.youTubeVideoID" target="_blank" title="Install Video" class="install_link">
@@ -132,6 +138,10 @@
         </a>
     }
 </div>
+<div class="clearfix"></div>
+@if (part.content.Where(x => x.key.Equals("HTMLDescription")).Count() > 0 && part.content.Where(x => x.key.Equals("HTMLDescription")).FirstOrDefault<EcommercePlatform.Models.APIAttribute>().value.Length > 0) {
+    Html.Raw(part.content.Where(x => x.key.Equals("HTMLDescription")).FirstOrDefault<EcommercePlatform.Models.APIAttribute>().value);
+}
 <div class="clearfix"></div>
 @if (part.content.Count > 0 || vehicles.Count > 0 || related.Count > 0 || connectors.Count != 0 || part.reviews.Count != 0) {
     <div class="part_tab_container">

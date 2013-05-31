@@ -54,6 +54,29 @@ namespace EcommercePlatform.Models {
             return System.Text.Encoding.ASCII.GetString(bytes);
         }
 
+        public static void SetCookies(string year, string make, string model, string style) {
+            // Store the vehicle fields in cookies
+            HttpCookie year_cookie = new HttpCookie("vehicle_year");
+            year_cookie.Value = year;
+            year_cookie.Expires = DateTime.Now.AddDays(14);
+            HttpContext.Current.Response.Cookies.Add(year_cookie);
+
+            HttpCookie make_cookie = new HttpCookie("vehicle_make");
+            make_cookie.Value = make;
+            make_cookie.Expires = DateTime.Now.AddDays(14);
+            HttpContext.Current.Response.Cookies.Add(make_cookie);
+
+            HttpCookie model_cookie = new HttpCookie("vehicle_model");
+            model_cookie.Value = model;
+            model_cookie.Expires = DateTime.Now.AddDays(14);
+            HttpContext.Current.Response.Cookies.Add(model_cookie);
+
+            HttpCookie style_cookie = new HttpCookie("vehicle_style");
+            style_cookie.Value = style;
+            style_cookie.Expires = DateTime.Now.AddDays(14);
+            HttpContext.Current.Response.Cookies.Add(style_cookie);
+        }
+
         public static Cart ExpireCart(int cust_id) {
             Cart new_cart = new Cart().Save();
             new_cart.UpdateCart(cust_id);

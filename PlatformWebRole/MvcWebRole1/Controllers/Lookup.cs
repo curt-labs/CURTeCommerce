@@ -15,11 +15,11 @@ namespace EcommercePlatform.Controllers {
             Settings settings = ViewBag.settings;
             style = style.Replace('!', '/');
 
-            Session["year"] = year.Trim();
-            Session["make"] = make.Trim();
-            Session["model"] = model.Trim();
-            Session["style"] = style.Trim();
-            Session.Timeout = 30;
+            UDF.SetCookies(year, make, model, style);
+            ViewBag.year = year;
+            ViewBag.make = make;
+            ViewBag.model = model;
+            ViewBag.style = style;
 
             int cust_id = 0;
             try {

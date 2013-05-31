@@ -20,17 +20,17 @@ namespace EcommercePlatform.Controllers {
                 make = make.Replace('!', '/');
                 model = model.Replace('!', '/');
                 style = style.Replace('!', '/');
-                Session["year"] = year;
-                Session["make"] = make;
-                Session["model"] = model;
-                Session["style"] = style;
-                Session.Timeout = 30;
+                UDF.SetCookies(year, make, model, style);
+                ViewBag.year = year;
+                ViewBag.make = make;
+                ViewBag.model = model;
+                ViewBag.style = style;
+            } else {
+                year = ViewBag.year;
+                make = ViewBag.make;
+                model = ViewBag.model;
+                style = ViewBag.style;
             }
-            
-            ViewBag.year = year = (Session["year"] != null) ? Session["year"].ToString() : "";
-            ViewBag.make = make = (Session["make"] != null) ? Session["make"].ToString() : "";
-            ViewBag.model = model = (Session["model"] != null) ? Session["model"].ToString() : "";
-            ViewBag.style = style = (Session["style"] != null) ? Session["style"].ToString() : "";
 
             // Get the Part record
             APIPart part = CURTAPI.GetPart(id,year,make,model,style);
