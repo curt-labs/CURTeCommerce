@@ -332,7 +332,7 @@ namespace EcommercePlatform.Models {
         public string longDesc { get; set; }
         public string image { get; set; }
         public int isLifestyle { get; set; }
-        public List<APICategory> sub_categories {
+        public List<APICategory> SubCategories {
             get {
                 return this._subs;
             }

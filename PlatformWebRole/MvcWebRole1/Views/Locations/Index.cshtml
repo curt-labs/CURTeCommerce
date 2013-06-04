@@ -11,6 +11,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
+<script src="//maps.googleapis.com/maps/api/js?sensor=true"></script>
 
 @if(error != null){
     <p class="success">@error</p>

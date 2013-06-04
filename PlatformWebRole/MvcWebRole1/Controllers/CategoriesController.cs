@@ -17,14 +17,14 @@ namespace EcommercePlatform.Controllers {
                 
                 ViewBag.category = category;
 
-                if (category.sub_categories.Count == 0) { // Redirect to view the parts for this category
+                if (category.SubCategories.Count == 0) { // Redirect to view the parts for this category
                     return RedirectToAction("Parts", "Categories", new { id = category.catID });
                 }
             } else {
                 APICategory category = new APICategory();
                 category.catTitle = "Product Categories";
                 category.catID = 0;
-                category.sub_categories = CURTAPI.GetParentCategories();
+                category.SubCategories = CURTAPI.GetParentCategories();
                 ViewBag.category = category;
             }
 

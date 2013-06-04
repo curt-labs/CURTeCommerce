@@ -18,12 +18,6 @@ namespace EcommercePlatform.Controllers {
                 parents = CURTAPI.GetParentCategories();
             }
 
-            foreach (APICategory parent in parents) {
-                List<APICategory> subs = CURTAPI.GetSubCategories(parent.catID);
-                parent.sub_categories = subs;
-            }
-            ViewBag.parent_cats = parents;
-
             // We need to retrieve our recent parts from our session object
             List<APIPart> recentParts = SessionWorker.GetRecentParts();
             ViewBag.recentParts = recentParts;

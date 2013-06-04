@@ -1,5 +1,5 @@
 ﻿var map, markers, locations, infoWindow, geocoder, directionsDisplay,directionsService;
-directionsService = new google.maps.DirectionsService();
+//directionsService = new google.maps.DirectionsService();
 $(function () {
 
     var displayLoader = function () {
@@ -27,7 +27,7 @@ $(function () {
         var opts = {
             center: new google.maps.LatLng(lat, long),
             zoom: zoom,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
         };
         map = new google.maps.Map(document.getElementById('map'), opts);
         $('#map').show();
@@ -225,7 +225,7 @@ $(function () {
         promptForAddress(loc);
     });
 
-    $('#getDirections').live('click', function () {
+    /*$('#getDirections').live('click', function () {
         $.modal.close();
         var destination, from_addr, from_city, from_state, request;
         destination = $('#destination').val();
@@ -243,7 +243,7 @@ $(function () {
             }
         });
         return false;
-    });
+    });*/
 
     $('span.send_email').live('click', function (e) {
         e.preventDefault(); // Stop link from firing

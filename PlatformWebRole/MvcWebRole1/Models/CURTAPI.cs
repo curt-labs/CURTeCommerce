@@ -35,8 +35,6 @@ namespace EcommercePlatform.Models {
             return years;
         }
 
-
-
         internal static List<APIPart> GetVehicleParts(string year, string make, string model, string style, int cust_id = 0) {
             try {
                 Settings settings = new Settings();
@@ -68,7 +66,7 @@ namespace EcommercePlatform.Models {
                 wc.Proxy = null;
 
                 string url = getAPIPath();
-                url += "GetParentCategories";
+                url += "GetFullParentCategories";
                 url += "?dataType=JSON";
 
                 List<APICategory> cats = new List<APICategory>();
@@ -111,7 +109,7 @@ namespace EcommercePlatform.Models {
                 string cat_json = wc.DownloadString(url);
                 JSONAPICategory ugly_cat = JsonConvert.DeserializeObject<JSONAPICategory>(cat_json);
                 APICategory api_cat = ugly_cat.parent;
-                api_cat.sub_categories = ugly_cat.sub_categories;
+                api_cat.SubCategories = ugly_cat.sub_categories;
 
                 return api_cat;
             } catch (Exception) {
@@ -133,7 +131,7 @@ namespace EcommercePlatform.Models {
                 string cat_json = wc.DownloadString(sb.ToString());
                 JSONAPICategory ugly_cat = JsonConvert.DeserializeObject<JSONAPICategory>(cat_json);
                 APICategory api_cat = ugly_cat.parent;
-                api_cat.sub_categories = ugly_cat.sub_categories;
+                api_cat.SubCategories = ugly_cat.sub_categories;
 
                 return api_cat;
             } catch (Exception) {
