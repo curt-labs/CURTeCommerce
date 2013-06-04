@@ -1,5 +1,6 @@
-﻿var map, markers, locations, infoWindow, geocoder, directionsDisplay,directionsService;
-//directionsService = new google.maps.DirectionsService();
+﻿var map, markers, locations, infoWindow, geocoder, directionsDisplay, directionsService, mapbounds;
+directionsService = new google.maps.DirectionsService();
+mapbounds = new google.maps.LatLngBounds();
 $(function () {
 
     var displayLoader = function () {
@@ -7,45 +8,49 @@ $(function () {
         var height = $('#mid_col').height();
         $('#mid_col').css('position', 'relative');
         var loader = document.createElement('div');
-        $(loader).addClass('loader').css('background', 'white').css('z-index', '2000').css('position', 'absolute').css('top', '0').css('left', '0').css('height', height).css('width', width).css('opacity', '0.8').css('text-align', 'center');
+        $('#mid_col').append(loader);
+        $(loader).attr("id", "loader").addClass('loader').css('background', 'white').css('z-index', '2000').css('position', 'absolute').css('top', '0').css('left', '0').css('height', height).css('width', width).css('opacity', '0.8').css('text-align', 'center');
         var img = document.createElement('img');
         $(img).attr('src', '/Content/img/159.gif').css('width', '175px').css('display', 'block').css('margin', '60px auto 10px auto');
         $(loader).append(img);
         var text = document.createElement('span');
         $(text).css('font-size', '22px').text('Calculating your location...');
         $(loader).append(text);
-        $('#mid_col').append(loader);
-    }
+    };
 
     var hideLoader = function () {
-        $('div.loader').fadeOut(400, function () {
-            $(this).remove();
+        $('div#loader').fadeOut(400, function () {
+            //$(this).remove();
         });
-    }
+    };
 
-    var loadMap = function (lat, long, zoom) {
-        var opts = {
-            center: new google.maps.LatLng(lat, long),
-            zoom: zoom,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
+    var loadMap = function (lat, longitude, zoom) {
+        var options = {
+            center: new google.maps.LatLng(lat, longitude),
+            mapTypeId: google.maps.MapTypeId.TERRAIN,
+            fillOpacity: 0,
+            strokeOpacity: 0,
+            zoom: zoom
         };
-        map = new google.maps.Map(document.getElementById('map'), opts);
         $('#map').show();
+        map = new google.maps.Map(document.getElementById('map'), options);
 
-        directionsDisplay.setMap(map);
-        loadMarkers()
+        //directionsDisplay.setMap(map);
+        loadMarkers();
     };
 
     var loadMarkers = function () {
         markers = new Array();
         infoWindows = new Array();
         for (i = 0; i < locations.length; i++) {
+            var glatlong = new google.maps.LatLng(locations[i].latitude, locations[i].longitude);
             var marker = new google.maps.Marker({
-                position: new google.maps.LatLng(locations[i].latitude, locations[i].longitude),
+                position: glatlong,
                 map: map,
                 title: locations[i].name,
                 animation: google.maps.Animation.DROP
             });
+            mapbounds.extend(glatlong);
             markers[i] = marker;
             google.maps.event.addListener(marker, 'click', function () {
                 if (infoWindow) { // Check if the infoWindow has been populated
@@ -65,31 +70,33 @@ $(function () {
             });
 
         }
+        map.fitBounds(mapbounds);
     };
 
     // Create the content for the InfoWindow
     var generateInfoWindow = function (index) {
         var location = locations[index]; // Get the location we're going to pull the content from
-        if (location != undefined) {
+        var contentString = "";
+        if (location !== undefined) {
 
-            var contentString = '<div class="infoWindow">';
+            contentString = '<div class="infoWindow">';
             contentString += '<span class="title">' + location.name + '</span>';
             contentString += '<span class="directions_easy" data-address="' + location.address + ' ' + location.city + ',' + location.state + '"  data-lat="' + location.latitude + '" data-long="' + location.longitude + '">';
             contentString += '<img src="/Content/img/directions.jpg" alt="Get Directions" />';
             contentString += 'Get Directions</span>';
-            if (location.phone != undefined) {
+            if (location.phone !== undefined) {
                 contentString += '<span>';
                 contentString += '<img src="/Content/img/phone-icon.png" alt="Phone: ' + location.phone + '">';
                 contentString += 'Phone: ' + location.phone;
                 contentString += '</span>';
             }
-            if (location.fax != undefined) {
+            if (location.fax !== undefined) {
                 contentString += '<span>';
                 contentString += '<img src="/Content/img/Fax.png" alt="Fax: ' + location.fax + '">';
                 contentString += 'Fax: ' + location.fax;
                 contentString += '</span>';
             }
-            if (location.email != undefined) {
+            if (location.email !== undefined) {
                 contentString += '<span class="send_email" data-email="' + location.email + '">';
                 contentString += '<img src="/Content/img/footer/mail.png" alt="E-Mail: ' + location.email + '">';
                 contentString += 'E-Mail: ' + location.email;
@@ -100,27 +107,6 @@ $(function () {
 
         }
         return contentString;
-    };
-
-    var handleGeolocator = function (pos) {
-        displayLoader()
-
-        $.post('/Locations/GetNearest', { 'lat': pos.coords.latitude, 'lon': pos.coords.longitude }, function (resp) {
-            if (resp.length == 0) {
-                loadMap(locations[0].latitude, locations[0].longitude, 4)
-            } else {
-                $.each(resp, function (i, location) {
-                    var html = $('#' + location.locationID).clone().wrap('<div>').parent().html();
-                    $('#' + location.locationID).remove();
-                    if (i === 0) {
-                        map.panTo(new google.maps.LatLng(location.latitude, location.longitude));
-                        hideLoader();
-                        map.setZoom(9);
-                    }
-                    $('.location').last().after(html.toString()).show();
-                });
-            }
-        }, 'json');
     };
 
     var promptForAddress = function (loc) {
@@ -180,15 +166,15 @@ $(function () {
     });
 
     $('.map_easy').live('click', function () {
-        var lat, long, id, locationIndex;
+        var lat, longitude, id, locationIndex;
 
         // Get the attributes of this location
         lat = $(this).data('lat');
-        long = $(this).data('long');
+        longitude = $(this).data('long');
         id = $(this).data('id');
 
         // Pan the map to it's location
-        map.panTo(new google.maps.LatLng(lat, long));
+        map.panTo(new google.maps.LatLng(lat, longitude));
 
         // Get the location that matches this locationID
         for (i = 0; i < locations.length; i++) {
@@ -199,7 +185,7 @@ $(function () {
         }
 
         // If our infoWindow has been popualated, close that shit :)
-        if (infoWindow) { infoWindow.close() }
+        if (infoWindow) { infoWindow.close(); }
 
         // Open the info windows for the marker we are panning to
         infoWindow = new google.maps.InfoWindow({
@@ -225,7 +211,7 @@ $(function () {
         promptForAddress(loc);
     });
 
-    /*$('#getDirections').live('click', function () {
+    $('#getDirections').live('click', function () {
         $.modal.close();
         var destination, from_addr, from_city, from_state, request;
         destination = $('#destination').val();
@@ -243,7 +229,7 @@ $(function () {
             }
         });
         return false;
-    });*/
+    });
 
     $('span.send_email').live('click', function (e) {
         e.preventDefault(); // Stop link from firing
@@ -305,11 +291,6 @@ $(function () {
 
     locations = $.parseJSON($('#json').val());
 
-    if (Modernizr.geolocation) {
-        // browser supports HTML5 geolocation
-        navigator.geolocation.getCurrentPosition(handleGeolocator);
-    }
-
     // Initiate our directions object
     directionsDisplay = new google.maps.DirectionsRenderer();
 
@@ -317,10 +298,8 @@ $(function () {
     // Load the center of US
     // Latitude 38
     // Longitude -97
-    loadMap('38', '-97', 4)
+    loadMap('38', '-97', 4);
 
     // Initiate our gecoder in case we need to for geoed locations
     geocoder = new google.maps.Geocoder();
-
-
 });
