@@ -35,7 +35,7 @@ namespace Admin.Controllers {
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Save(int id = 0, string title = "", string image = "", string body = "", string link = "", int order = 0, int isVisible = 0) {
+        public ActionResult Save(int id = 0, string title = "", string image = "", string body = "", string link = "", int isVisible = 0) {
             Banner banner = new Banner();
             try {
                 banner = new Banner {
@@ -44,7 +44,6 @@ namespace Admin.Controllers {
                     image = image,
                     body = body,
                     link = link,
-                    order = order,
                     isVisible = isVisible
                 };
                 UDF.Sanitize(banner, new string[] { "body", "link" });
@@ -55,6 +54,12 @@ namespace Admin.Controllers {
                 TempData["banner"] = banner;
                 return RedirectToAction("Edit", "Banner", new { id = id, error = e.Message });
             }
+        }
+
+        [NoValidation,AcceptVerbs(HttpVerbs.Post)]
+        public void updateSort() {
+            List<string> banners = Request.QueryString["banner[]"].Split(',').ToList<string>();
+            Banner.Sort(banners);
         }
 
         [NoValidation]

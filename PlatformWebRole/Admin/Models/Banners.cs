@@ -9,7 +9,7 @@ namespace Admin {
         internal List<Banner> GetAll() {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             List<Banner> banners = new List<Banner>();
-            banners = db.Banners.ToList<Banner>();
+            banners = db.Banners.OrderBy(x => x.order).ToList<Banner>();
             return banners;
         }
 
@@ -31,14 +31,17 @@ namespace Admin {
             Banner tmp = db.Banners.Where(x => x.ID.Equals(this.ID)).FirstOrDefault<Banner>();
             if (tmp == null) {
                 tmp = new Banner();
+                int nextsort = 1;
+                if(db.Banners.Count() > 0) {
+                    nextsort = db.Banners.OrderByDescending(x => x.order).Select(x => x.order).Take(1).First() + 1;
+                }
+                tmp.order = nextsort;
             }
             tmp.image = this.image;
             tmp.title = this.title;
             tmp.body = this.body;
             tmp.link = this.link;
-            tmp.order = this.order;
             tmp.isVisible = this.isVisible;
-            //tmp.OrganizeSort();
 
             if (this.ID == 0) {
                 db.Banners.InsertOnSubmit(tmp);
@@ -55,27 +58,17 @@ namespace Admin {
             db.SubmitChanges();
         }
 
-        private void OrganizeSort() {
-            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-
-            int max_order = 0;
-            int min_order = 0;
+        public static void Sort(List<string> ids) {
             try {
-                max_order = db.Banners.Select(x => x.order).Max<int>();
-            } catch (Exception) { }
-            try {
-                min_order = db.Banners.Select(x => x.order).Min<int>();
-            } catch (Exception) { }
-            if (this.order <= max_order) {
-                // Get all the Banners with a sort higher than this one.
-                List<Banner> banners = db.Banners.Where(x => x.order >= this.order && x.ID != this.ID).ToList<Banner>();
-                foreach (Banner b in banners) {
-
-                    b.order = b.order + 1;
+                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+                int sort = 0;
+                foreach (string id in ids) {
+                    sort++;
+                    Banner b = db.Banners.Where(x => x.ID == Convert.ToInt32(id)).First();
+                    b.order = sort;
+                    db.SubmitChanges();
                 }
-                db.SubmitChanges();
-            }
-
+            } catch { }
         }
 
     }

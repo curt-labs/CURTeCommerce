@@ -206,6 +206,13 @@ namespace EcommercePlatform.Models {
             return banners;
         }
 
+        public static List<Banner> GetBanners() {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            List<Banner> banners = new List<Banner>();
+            banners = db.Banners.Where(x => x.isVisible.Equals(1)).OrderBy(x => x.order).ToList<Banner>();
+            return banners;
+        }
+
         public static List<T> Shuffle<T>(IList<T> list) {
             RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
             int n = list.Count;

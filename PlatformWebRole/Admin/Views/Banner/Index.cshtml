@@ -11,42 +11,31 @@
 <span class="title">Banner Management</span>
 <a href="/Admin/Banner/Edit/0" title="Add New Banner" class="add">Add Banner</a>
 
-<table>
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Image</th>
-            <th>Link</th>
-            <th>Visible</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (Admin.Banner banner in banners) {
-            <tr>
-                <td>@banner.title</td>
-                <td>
-                    @if (banner.image.Length > 0) {
-                        <img src="@banner.image" class="banner" alt="@banner.title" />
-                    }
-                </td>
-                <td>@banner.link</td>
-                <td>@((banner.isVisible == 1) ? "Yes" : "No")</td>
-                <td>
-                    <div class="btn-group">
-                        <a href="/Admin/Banner/Edit/@banner.ID" class="btn">Edit</a>
-                        <button class="btn dropdown-toggle" data-toggle="dropdown">
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="/Admin/Banner/Delete/@banner.ID" class="delete">Delete</a>
-                            </li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
+<p>Drag and Drop to change display order.</p>
+<ul class="banners">
+@foreach (Admin.Banner banner in banners) {
+    <li id="banner_@(banner.ID)">
+        @if (banner.image.Length > 0) {
+            <img src="@banner.image" class="banner" alt="@banner.title" />
         }
-    </tbody>
-</table>
+        <span class="bannerdetails">
+            <span class="title">@banner.title</span>
+            <span class="link"><strong>Link: </strong>@banner.link</span>
+            <span class="visible"><string>Visible: </string>@((banner.isVisible == 1) ? "Yes" : "No")</span>
+            <div class="btn-group">
+                <a href="/Admin/Banner/Edit/@banner.ID" class="btn">Edit</a>
+                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="/Admin/Banner/Delete/@banner.ID" data-id="@banner.ID" class="delete">Delete</a>
+                    </li>
+                </ul>
+            </div>
+        </span>
+        <span class="clearfix"></span>
+    </li>
+}
+</ul>
 <script src="/Admin/Scripts/custom/banner.manager.js" type="text/javascript"></script>

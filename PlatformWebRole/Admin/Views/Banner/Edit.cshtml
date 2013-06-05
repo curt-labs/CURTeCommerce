@@ -43,11 +43,6 @@
         <input type="url" name="link" id="link" value="@banner.link" placeholder="Enter the URL that banner should link to" />
     </label>
 
-    <!--label for="order">
-        Sort Order
-        <input type="number" name="order" id="order" value="@((banner.order == null)?ViewBag.banner_count:banner.order)" />
-    </label-->
-
     <label for="isVisible">
         Visible?
         <input type="radio" name="isVisible" id="isVisible_yes" value="1" @((banner.isVisible == 1)?"checked=checked":"")" />Yes

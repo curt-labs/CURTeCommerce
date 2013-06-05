@@ -23,7 +23,7 @@ namespace EcommercePlatform.Controllers {
             ViewBag.recentParts = recentParts;
 
             // We need to get 5 random banners
-            List<Banner> banners = UDF.GetRandomBanners(5);
+            List<Banner> banners = UDF.GetBanners();
             ViewBag.banners = banners;
 
             // Retrieve the homepage content

@@ -28,10 +28,45 @@ section form.admin_form label input[type=radio]{
     margin-left: 10px;
 }
 
-img.banner {
-    width: 300px;
+ul.banners {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul.banners li {
+    display: block;
+    padding: 10px;
+    border-bottom: 1px dotted #ccc;
+}
+
+ul.banners li ul li {
+    display: block;
+    padding: 0px;
+    border-bottom: none;
+}
+
+ul.banners li img.banner {
+    width: 25%;
     height: auto;
     margin: auto;
+    float: left;
+    padding: 3px 10px 3px 0;
+    cursor: move;
+}
+
+ul.banners li span.bannerdetails {
+    float: left;
+    width: 70%;
+}
+
+ul.banners li span.bannerdetails span.title {
     display: block;
-    padding: 3px 0;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+ul.banners li span.bannerdetails span.link, ul.banners li span.bannerdetails span.visible {
+    display: block;
+    padding: 2px 0;
 }
