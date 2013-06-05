@@ -15,25 +15,25 @@ namespace EcommercePlatform.Controllers {
             if (id <= 0) {
                 Response.Redirect(Request.ServerVariables["HTTP_REFERER"]);
             }
-
+            int vehicleID = 0;
             if (year.Length > 0 && make.Length > 0 && model.Length > 0 && style.Length > 0) {
-                make = make.Replace('!', '/');
-                model = model.Replace('!', '/');
-                style = style.Replace('!', '/');
-                UDF.SetCookies(year, make, model, style);
+                FullVehicle vehicle = CURTAPI.getVehicle(year, make, model, style);
+                UDF.SetCookies(year, make, model, style, vehicle.vehicleID);
                 ViewBag.year = year;
                 ViewBag.make = make;
                 ViewBag.model = model;
                 ViewBag.style = style;
+                ViewBag.vehicleID = vehicleID;
             } else {
-                year = ViewBag.year;
-                make = ViewBag.make;
-                model = ViewBag.model;
-                style = ViewBag.style;
+                year = ViewBag.year ?? "";
+                make = ViewBag.make ?? "";
+                model = ViewBag.model ?? "";
+                style = ViewBag.style ?? "";
+                vehicleID = ViewBag.vehicleID ?? 0;
             }
 
             // Get the Part record
-            APIPart part = CURTAPI.GetPart(id,year,make,model,style);
+            APIPart part = CURTAPI.GetPart(id,vehicleID);
 
             if (part == null) { // The part page does not fit the vehicle
                 // Get the part information without binding to a vehicle record
@@ -61,8 +61,8 @@ namespace EcommercePlatform.Controllers {
 
             // Validate the vehicle info
             List<APIPart> connectors = new List<APIPart>();
-            if (year.Length > 0 && make.Length > 0 && model.Length > 0 && style.Length > 0 && part.pClass.Length > 0) {
-                connectors = CURTAPI.GetConnector(year, make, model, style);
+            if (vehicleID > 0 && part.pClass.Length > 0) {
+                connectors = CURTAPI.GetConnector(vehicleID);
             }
             ViewBag.connectors = connectors;
 

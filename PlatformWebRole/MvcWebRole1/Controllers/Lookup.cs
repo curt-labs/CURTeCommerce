@@ -15,11 +15,14 @@ namespace EcommercePlatform.Controllers {
             Settings settings = ViewBag.settings;
             style = style.Replace('!', '/');
 
-            UDF.SetCookies(year, make, model, style);
+            FullVehicle vehicle = CURTAPI.getVehicle(year, make, model, style);
+
+            UDF.SetCookies(year, make, model, style, vehicle.vehicleID);
             ViewBag.year = year;
             ViewBag.make = make;
             ViewBag.model = model;
             ViewBag.style = style;
+            ViewBag.vehicleID = vehicle.vehicleID;
 
             int cust_id = 0;
             try {

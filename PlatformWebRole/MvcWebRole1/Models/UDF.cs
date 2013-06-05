@@ -54,7 +54,7 @@ namespace EcommercePlatform.Models {
             return System.Text.Encoding.ASCII.GetString(bytes);
         }
 
-        public static void SetCookies(string year, string make, string model, string style) {
+        public static void SetCookies(string year, string make, string model, string style, int vehicleID = 0) {
             // Store the vehicle fields in cookies
             HttpCookie year_cookie = new HttpCookie("vehicle_year");
             year_cookie.Value = year;
@@ -75,8 +75,39 @@ namespace EcommercePlatform.Models {
             style_cookie.Value = style;
             style_cookie.Expires = DateTime.Now.AddDays(14);
             HttpContext.Current.Response.Cookies.Add(style_cookie);
+
+            HttpCookie vehicle_cookie = new HttpCookie("vehicle_id");
+            vehicle_cookie.Value = vehicleID.ToString();
+            vehicle_cookie.Expires = DateTime.Now.AddDays(14);
+            HttpContext.Current.Response.Cookies.Add(vehicle_cookie);
         }
 
+        public static string GetYearCookie() {
+            HttpCookie vehicleYear = HttpContext.Current.Request.Cookies.Get("vehicle_year");
+            return (vehicleYear != null && vehicleYear.Value != null) ? vehicleYear.Value.ToString() : "";
+        }
+
+        public static string GetMakeCookie() {
+            HttpCookie vehicleMake = HttpContext.Current.Request.Cookies.Get("vehicle_make");
+            return (vehicleMake != null && vehicleMake.Value != null) ? vehicleMake.Value.ToString() : "";
+        }
+
+        public static string GetModelCookie() {
+            HttpCookie vehicleModel = HttpContext.Current.Request.Cookies.Get("vehicle_model");
+            return (vehicleModel != null && vehicleModel.Value != null) ? vehicleModel.Value.ToString() : "";
+
+        }
+
+        public static string GetStyleCookie() {
+            HttpCookie vehicleStyle = HttpContext.Current.Request.Cookies.Get("vehicle_style");
+            return (vehicleStyle != null && vehicleStyle.Value != null) ? vehicleStyle.Value.ToString() : "";
+        }
+
+        public static int GetVehicleCookie() {
+            HttpCookie vehicleID = HttpContext.Current.Request.Cookies.Get("vehicle_id");
+            return (vehicleID != null && vehicleID.Value != null) ? Convert.ToInt32(vehicleID.Value.ToString()) : 0;
+        }
+        
         public static Cart ExpireCart(int cust_id) {
             Cart new_cart = new Cart().Save();
             new_cart.UpdateCart(cust_id);

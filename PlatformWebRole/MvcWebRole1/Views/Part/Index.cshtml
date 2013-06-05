@@ -183,7 +183,9 @@
                             <h4>@rpart.shortDesc</h4>
                             <span class="id">Part #@rpart.partID</span>
                             <div class="left_col">
-                                <img src="https://www.curtmfg.com/CURTLibrary/@rpart.partID/images/@(rpart.partID)_100x75_a.jpg" onerror="$(this).remove()" alt="Part #@rpart.partID" />
+                                @if(rpart.images.Any(x => x.size.Equals("Tall") && x.sort.Equals('a'))) {
+                                <img src="@rpart.images.Where(x => x.size.Equals("Tall") && x.sort.Equals('a')).Select(x => x.path).FirstOrDefault()" onerror="$(this).remove()" alt="Part #@rpart.partID" />
+                                }
                             </div>
                             <div class="mid_col">
                                 @if (rpart.attributes.Count > 0) {
@@ -267,7 +269,9 @@
                             <h4>@con.shortDesc</h4>
                             <span class="id">Part #@con.partID</span>
                             <div class="left_col">
-                                <img src="https://www.curtmfg.com/CURTLibrary/@con.partID/images/@(con.partID)_100x75_a.jpg" onerror="$(this).remove()" alt="Part #@con.partID" />
+                                @if(con.images.Any(x => x.size.Equals("Tall") && x.sort.Equals('a'))) {
+                                <img src="@con.images.Where(x => x.size.Equals("Tall") && x.sort.Equals('a')).Select(x => x.path).FirstOrDefault()" onerror="$(this).remove()" alt="Part #@con.partID" />
+                                }
                             </div>
                             <div class="mid_col">
                                 @if (con.attributes.Count > 0) {

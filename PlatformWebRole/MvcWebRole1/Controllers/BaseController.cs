@@ -18,6 +18,12 @@ namespace EcommercePlatform.Controllers {
             List<double> years = CURTAPI.GetYears();
             ViewBag.years = years;
 
+            ViewBag.year = UDF.GetYearCookie();
+            ViewBag.make = UDF.GetMakeCookie();
+            ViewBag.model = UDF.GetModelCookie();
+            ViewBag.style = UDF.GetStyleCookie();
+            ViewBag.vehicleID = UDF.GetVehicleCookie();
+
             // Get the theme ID
             int themeID = new Theme().getTheme();
             ViewBag.themeID = themeID;

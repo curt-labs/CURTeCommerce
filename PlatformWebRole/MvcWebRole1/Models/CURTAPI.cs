@@ -177,7 +177,24 @@ namespace EcommercePlatform.Models {
             }
         }
 
-        internal static APIPart GetPart(int p, string year = "", string make = "", string model = "", string style = "") {
+        internal static FullVehicle getVehicle(string year, string make, string model, string style) {
+            try {
+                Settings settings = new Settings();
+                WebClient wc = new WebClient();
+                wc.Proxy = null;
+
+                string url = getAPIPath() + "/GetVehicle?year=" + year;
+                url += "&make=" + make + "&model=" + model + "&style=" + HttpUtility.UrlEncode(style);
+                url += "&dataType=JSON";
+
+                FullVehicle vehicle = JsonConvert.DeserializeObject<List<FullVehicle>>(wc.DownloadString(url)).FirstOrDefault<FullVehicle>();
+                return vehicle;
+            } catch {
+                return new FullVehicle();
+            };
+        }
+
+        internal static APIPart GetPart(int p, int vehicleID = 0) {
             try {
                 Settings settings = new Settings();
                 WebClient wc = new WebClient();
@@ -186,13 +203,8 @@ namespace EcommercePlatform.Models {
                 string url = getAPIPath();
                 url += "GetPart?dataType=JSON";
                 url += "&partID=" + p;
+                url += "&vehicleID=" + vehicleID;
                 url += "&cust_id=" + settings.Get("CURTAccount");
-                if (year.Length > 0 && make.Length > 0 && model.Length > 0 && style.Length > 0) {
-                    url += "&year=" + year;
-                    url += "&make=" + make;
-                    url += "&model=" + model;
-                    url += "&style=" + style;
-                }
 
                 return JsonConvert.DeserializeObject<APIPart>(wc.DownloadString(url));
             } catch (Exception) {
@@ -255,24 +267,22 @@ namespace EcommercePlatform.Models {
             }
         }
 
-        internal static List<APIPart> GetConnector(string year, string make, string model, string style) {
+        internal static List<APIPart> GetConnector(int vehicleID = 0) {
             try {
-                WebClient wc = new WebClient();
-                wc.Proxy = null;
+                if (vehicleID > 0) {
+                    WebClient wc = new WebClient();
+                    wc.Proxy = null;
 
-                Settings settings = new Settings();
-                StringBuilder sb = new StringBuilder();
-                sb.Append(getAPIPath());
-                sb.Append("GetConnector?dataType=JSON");
-                sb.Append("&year=" + year);
-                sb.Append("&make=" + make);
-                sb.Append("&model=" + model);
-                sb.Append("&style=" + style);
-                sb.Append("&cust_id=" + settings.Get("CURTAccount"));
-                return JsonConvert.DeserializeObject<List<APIPart>>(wc.DownloadString(sb.ToString()));
+                    string url = getAPIPath() + "/GetConnector?vehicleID=" + vehicleID + "&dataType=JSON";
+                    string part_json = wc.DownloadString(url);
+                    List<APIPart> parts = JsonConvert.DeserializeObject<List<APIPart>>(part_json);
+                    return parts;
+                } else {
+                    return new List<APIPart>();
+                }
             } catch {
                 return new List<APIPart>();
-            }
+            };
         }
 
         internal static void SubmitReview(int partID, int rating = 5, string subject = "", string review_text = "", string name = "", string email = "") {
