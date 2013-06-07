@@ -10,17 +10,18 @@ namespace EcommercePlatform.Controllers {
     public class IndexController : BaseController {
         //
         // GET: /Index/
-        public ActionResult Index() {
+        public async Task<ActionResult> Index() {
+            HttpContext ctx = System.Web.HttpContext.Current;
 
-            List<APICategory> parents = new List<APICategory>();
-            parents = ViewBag.parent_cats;
-            if (parents == null) {
-                parents = CURTAPI.GetParentCategories();
-            }
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            var rparts = SessionWorker.GetRecentParts(ctx);
+            await Task.WhenAll(new Task[] { pcats, rparts });
+            
+            ViewBag.parent_cats = await pcats;
 
             // We need to retrieve our recent parts from our session object
-            List<APIPart> recentParts = SessionWorker.GetRecentParts();
-            ViewBag.recentParts = recentParts;
+            ViewBag.recentParts = await rparts;
+            List<double> years = ViewBag.years;
 
             // We need to get 5 random banners
             List<Banner> banners = UDF.GetBanners();
@@ -29,6 +30,7 @@ namespace EcommercePlatform.Controllers {
             // Retrieve the homepage content
             ContentPage page = ContentManagement.GetPageByTitle("homepage");
             ViewBag.page = page;
+
 
             return View();
         }

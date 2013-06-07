@@ -33,6 +33,7 @@
                     <span class="title">Services</span>
                     @foreach (EcommercePlatform.Service serv in loc.Services) {
                         <span class='service'>@serv.title<span class='price'>@(String.Format("{0:C}",serv.price))@((serv.hourly == "1")?"\\hr":"")</span></span>
+                        <span class="serviceDesc">@serv.description</span>
                     }
                 </div>
             }

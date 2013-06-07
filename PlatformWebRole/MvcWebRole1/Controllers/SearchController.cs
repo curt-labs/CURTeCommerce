@@ -5,16 +5,23 @@ using System.Web;
 using System.Web.Mvc;
 using EcommercePlatform.Models;
 using System.Web.Script.Serialization;
+using System.Threading.Tasks;
 
 namespace EcommercePlatform.Controllers {
     public class SearchController : BaseController {
 
-        public ActionResult Index(string search = "", int page = 1, int per_page = 10) {
+        public async Task<ActionResult> Index(string search = "", int page = 1, int per_page = 10) {
             try {
                 ViewBag.search_term = search;
 
+                var pcats = CURTAPI.GetParentCategoriesAsync();
+                var searchtask = CURTAPI.SearchAsync(search, page, per_page);
+                var moretask = CURTAPI.SearchAsync(search, page + 1, per_page);
+                await Task.WhenAll(new Task[] { pcats, searchtask, moretask });
+                ViewBag.parent_cats = await pcats;
+
                 // Run the search term against our PowerSearch API
-                List<APIPart> parts = CURTAPI.Search(search, page, per_page);
+                List<APIPart> parts = await searchtask;
                 ViewBag.parts = parts;
 
                 Dictionary<string, List<APIPart>> ordered_parts = new Dictionary<string, List<APIPart>>();
@@ -36,7 +43,8 @@ namespace EcommercePlatform.Controllers {
                 ViewBag.parts = ordered_parts;
 
                 // We need to figure out if there are going to be more parts to display
-                int more_count = CURTAPI.Search(search, page + 1, per_page).Count;
+                List<APIPart> moreparts = await moretask;
+                int more_count = moreparts.Count;
                 ViewBag.more_count = more_count;
 
                 ViewBag.page = page;

@@ -31,7 +31,7 @@ namespace EcommercePlatform.Models {
             return captcha;
         }
 
-        public static bool ValidateCaptcha(string challenge = "", string apiresponse = "") {
+        public static bool ValidateCaptcha(HttpContext ctx, string challenge = "", string apiresponse = "") {
             bool valid = false;
             Settings settings = new Settings();
             string privatekey = settings.Get("ReCaptchaPrivateKey");
@@ -39,7 +39,7 @@ namespace EcommercePlatform.Models {
             string postdata = "privatekey=" + privatekey +
                                 "&challenge=" + challenge +
                                 "&response=" + apiresponse + 
-                                "&remoteip=" + UDF.GetIp().ToString();
+                                "&remoteip=" + UDF.GetIp(ctx).ToString();
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://www.google.com/recaptcha/api/verify");
             request.Method = "POST";

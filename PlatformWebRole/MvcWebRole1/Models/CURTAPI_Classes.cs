@@ -547,4 +547,14 @@ namespace EcommercePlatform.Models {
         public string Message { get; set; }
         public string Source { get; set; }
     }
+
+    public class BaseData {
+        public List<double> years { get; set; }
+        public List<APICategory> cats { get; set; }
+    }
+    public class CategoryPartsData {
+        public APICategory category { get; set; }
+        public List<APIPart> parts { get; set; }
+        public int morecount { get; set; }
+    }
 }

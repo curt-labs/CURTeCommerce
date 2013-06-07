@@ -9,6 +9,7 @@ using AuthorizeNet;
 using AuthorizeNet.Helpers;
 using EcommercePlatform.Models;
 using System.Xml.Linq;
+using System.Threading.Tasks;
 
 namespace EcommercePlatform.Controllers {
     public class PaymentController : BaseController {
@@ -16,19 +17,24 @@ namespace EcommercePlatform.Controllers {
         protected GCheckoutButton gButton = new GCheckoutButton();
 
         [RequireHttps]
-        public ActionResult Index(string message = "") {
+        public async Task<ActionResult> Index(string message = "") {
+            HttpContext ctx = System.Web.HttpContext.Current;
             Customer customer = new Customer();
-            ViewBag.timezone = UDF.GetTimeZone();
+            ViewBag.timezone = UDF.GetTimeZone(ctx);
+
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
 
             // Retrieve Customer from Sessions/Cookie
-            customer.GetFromStorage();
+            customer.GetFromStorage(ctx);
 
             if (!customer.Cart.Validate()) {
                 return RedirectToAction("Index", "Cart");
             }
 
             if (customer.Cart.payment_id > 0) {
-                UDF.ExpireCart(customer.ID);
+                UDF.ExpireCart(ctx, customer.ID);
                 return RedirectToAction("Index", "Cart");
             }
             // Create Cart object from customer
@@ -57,16 +63,17 @@ namespace EcommercePlatform.Controllers {
 
         [AcceptVerbs(HttpVerbs.Post),RequireHttps]
         public ActionResult Authorize() {
+            HttpContext ctx = System.Web.HttpContext.Current;
             Customer customer = new Customer();
             Settings settings = ViewBag.settings;
             // Retrieve Customer from Sessions/Cookie
-            customer.GetFromStorage();
+            customer.GetFromStorage(ctx);
             if (!customer.Cart.Validate()) {
                 return RedirectToAction("Index", "Cart");
             }
 
             if (customer.Cart.payment_id > 0) {
-                UDF.ExpireCart(customer.ID);
+                UDF.ExpireCart(ctx, customer.ID);
                 return RedirectToAction("Index", "Cart");
             }
             customer.BindAddresses();
@@ -118,7 +125,7 @@ namespace EcommercePlatform.Controllers {
                 int cartid = customer.Cart.ID;
                 
                 Cart new_cart = new Cart().Save();
-                new_cart.UpdateCart(customer.ID);
+                new_cart.UpdateCart(ctx, customer.ID);
                 DateTime cookexp = Request.Cookies["hdcart"].Expires;
                 HttpCookie cook = new HttpCookie("hdcart", new_cart.ID.ToString());
                 cook.Expires = cookexp;
@@ -135,16 +142,17 @@ namespace EcommercePlatform.Controllers {
 
         [RequireHttps]
         public ActionResult Google() {
+            HttpContext ctx = System.Web.HttpContext.Current;
 
             Customer customer = ViewBag.customer;
-            customer.GetFromStorage();
+            customer.GetFromStorage(ctx);
 
             if (!customer.Cart.Validate()) {
                 return RedirectToAction("Index", "Cart");
             }
 
             if (customer.Cart.payment_id > 0) {
-                UDF.ExpireCart(customer.ID);
+                UDF.ExpireCart(ctx, customer.ID);
                 return RedirectToAction("Index", "Cart");
             }
 
@@ -196,7 +204,7 @@ namespace EcommercePlatform.Controllers {
                 customer.Cart.AddPayment("Google Checkout", "", "Pending");
                 
                 Cart new_cart = new Cart().Save();
-                new_cart.UpdateCart(customer.ID);
+                new_cart.UpdateCart(ctx, customer.ID);
                 DateTime cookexp = Request.Cookies["hdcart"].Expires;
                 HttpCookie cook = new HttpCookie("hdcart", new_cart.ID.ToString());
                 cook.Expires = cookexp;
@@ -213,13 +221,14 @@ namespace EcommercePlatform.Controllers {
         
         [RequireHttps]
         public ActionResult PayPal() {
+            HttpContext ctx = System.Web.HttpContext.Current;
             Customer customer = ViewBag.customer;
-            customer.GetFromStorage();
+            customer.GetFromStorage(ctx);
             if (!customer.Cart.Validate()) {
                 return RedirectToAction("Index", "Cart");
             }
             if (customer.Cart.payment_id > 0) {
-                UDF.ExpireCart(customer.ID);
+                UDF.ExpireCart(ctx, customer.ID);
                 return RedirectToAction("Index", "Cart");
             }
             Paypal p = new Paypal();
@@ -238,9 +247,10 @@ namespace EcommercePlatform.Controllers {
         
         [RequireHttps]
         public ActionResult PayPalCheckout(string token = "", string payerID = "") {
+            HttpContext ctx = System.Web.HttpContext.Current;
             Customer customer = ViewBag.customer;
             // Retrieve Customer from Sessions/Cookie
-            customer.GetFromStorage();
+            customer.GetFromStorage(ctx);
 
             // Create Cart object from customer
             customer.BindAddresses();
@@ -264,8 +274,9 @@ namespace EcommercePlatform.Controllers {
 
         [RequireHttps]
         public ActionResult CompletePayPalCheckout(string token = "", string payerID = "") {
+            HttpContext ctx = System.Web.HttpContext.Current;
             Customer customer = ViewBag.customer;
-            customer.GetFromStorage();
+            customer.GetFromStorage(ctx);
             decimal total = customer.Cart.getTotal();
             Paypal p = new Paypal();
             string confirmationKey = p.ECDoExpressCheckout(token, payerID, total.ToString(), customer.Cart);
@@ -276,7 +287,7 @@ namespace EcommercePlatform.Controllers {
                 int cartid = customer.Cart.ID;
 
                 Cart new_cart = new Cart().Save();
-                new_cart.UpdateCart(customer.ID);
+                new_cart.UpdateCart(ctx, customer.ID);
                 DateTime cookexp = Request.Cookies["hdcart"].Expires;
                 HttpCookie cook = new HttpCookie("hdcart", new_cart.ID.ToString());
                 cook.Expires = cookexp;
@@ -293,12 +304,17 @@ namespace EcommercePlatform.Controllers {
         }
 
         [RequireHttps]
-        public ActionResult Complete(int id = 0) {
+        public async Task<ActionResult> Complete(int id = 0) {
+            HttpContext ctx = System.Web.HttpContext.Current;
             Customer customer = new Customer();
-            ViewBag.timezone = UDF.GetTimeZone();
+            ViewBag.timezone = UDF.GetTimeZone(ctx);
+
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
 
             // Retrieve Customer from Sessions/Cookie
-            customer.GetFromStorage();
+            customer.GetFromStorage(ctx);
             Cart order = new Cart().Get(id);
 
             order.BindAddresses();

@@ -12,6 +12,19 @@ using System.Threading.Tasks;
 namespace EcommercePlatform.Models {
     public class CURTAPI {
 
+        internal static CategoryPartsData GetCategoryPartsData(int id = 0, int page = 1, int per_page = 10) {
+            var catTask = GetCategoryAsync(id);
+            var partTask = GetCategoryPartsAsync(id, page, per_page);
+            var moreTask = GetCategoryPartsAsync(id, page + 1, per_page);
+
+            var data = new CategoryPartsData {
+                category = catTask.Result,
+                parts = partTask.Result,
+                morecount = moreTask.Result.Count
+            };
+            return data;
+        }
+
         internal static List<double> GetYears() {
             try {
                 string year_json = "";
@@ -26,14 +39,14 @@ namespace EcommercePlatform.Models {
             }
         }
 
-        internal static async Task<List<double>> GetYearsAsync() {
-            WebClient wc = new WebClient();
-            wc.Proxy = null;
-            Uri targeturi = new Uri(getAPIPath() + "getyear?dataType=JSON");
-            var year_json = await wc.DownloadStringTaskAsync(targeturi);
-            List<double> years = JsonConvert.DeserializeObject<List<double>>(year_json);
-            return years;
-        }
+    internal static async Task<List<double>> GetYearsAsync() {
+        WebClient wc = new WebClient();
+        wc.Proxy = null;
+        Uri targeturi = new Uri(getAPIPath() + "getyear?dataType=JSON");
+        var year_json = await wc.DownloadStringTaskAsync(targeturi);
+        List<double> years = JsonConvert.DeserializeObject<List<double>>(year_json);
+        return years;
+    }
 
         internal static List<APIPart> GetVehicleParts(string year, string make, string model, string style, int cust_id = 0) {
             try {
@@ -52,6 +65,29 @@ namespace EcommercePlatform.Models {
 
                 string parts_json = wc.DownloadString(url);
 
+                List<APIPart> parts = new List<APIPart>();
+                parts = JsonConvert.DeserializeObject<List<APIPart>>(parts_json);
+                return parts.OrderByDescending(x => x.pClass).ToList<APIPart>();
+            } catch (Exception) {
+                return new List<APIPart>();
+            }
+        }
+
+        internal static async Task<List<APIPart>> GetVehiclePartsAsync(string year, string make, string model, string style, int cust_id = 0) {
+            try {
+                Settings settings = new Settings();
+                WebClient wc = new WebClient();
+                wc.Proxy = null;
+                string url = getAPIPath();
+                url += "getparts?dataType=JSON";
+                url += "&cust_id=" + cust_id;
+                url += "&year=" + year;
+                url += "&make=" + make;
+                url += "&model=" + model;
+                url += "&style=" + style;
+                url += "&cust_id=" + settings.Get("CURTAccount");
+                Uri targeturi = new Uri(url);
+                var parts_json = await wc.DownloadStringTaskAsync(targeturi);
                 List<APIPart> parts = new List<APIPart>();
                 parts = JsonConvert.DeserializeObject<List<APIPart>>(parts_json);
                 return parts.OrderByDescending(x => x.pClass).ToList<APIPart>();
@@ -80,6 +116,27 @@ namespace EcommercePlatform.Models {
             }
         }
 
+    internal static async Task<List<APICategory>> GetParentCategoriesAsync() {
+        try {
+            WebClient wc = new WebClient();
+            wc.Proxy = null;
+
+            string url = getAPIPath();
+            url += "GetFullParentCategories";
+            url += "?dataType=JSON";
+
+            Uri targeturi = new Uri(url);
+            List<APICategory> cats = new List<APICategory>();
+
+            var cat_json = await wc.DownloadStringTaskAsync(targeturi).ConfigureAwait(continueOnCapturedContext: false);
+            cats = JsonConvert.DeserializeObject<List<APICategory>>(cat_json);
+
+            return cats;
+        } catch (Exception) {
+            return new List<APICategory>();
+        }
+    }
+
         internal static List<APICategory> GetSubCategories(int catID) {
             try {
                 WebClient wc = new WebClient();
@@ -96,6 +153,26 @@ namespace EcommercePlatform.Models {
             }
         }
 
+        internal static async Task<List<APICategory>> GetSubCategoriesAsync(int catID) {
+            try {
+                WebClient wc = new WebClient();
+                wc.Proxy = null;
+                ServicePointManager.MaxServicePoints = int.MaxValue;
+
+                StringBuilder sb = new StringBuilder(getAPIPath());
+                sb.Append("GetCategories?dataType=JSON");
+                sb.Append("&parentID=" + catID);
+                Uri targeturi = new Uri(sb.ToString());
+                List<APICategory> cats = new List<APICategory>();
+
+                var cat_json = await wc.DownloadStringTaskAsync(targeturi);
+
+                return JsonConvert.DeserializeObject<List<APICategory>>(cat_json);
+            } catch (Exception) {
+                return new List<APICategory>();
+            }
+        }
+
         internal static APICategory GetCategoryByName(string cat) {
             try {
                 WebClient wc = new WebClient();
@@ -107,6 +184,28 @@ namespace EcommercePlatform.Models {
                 url += "&catName="+cat;
 
                 string cat_json = wc.DownloadString(url);
+                JSONAPICategory ugly_cat = JsonConvert.DeserializeObject<JSONAPICategory>(cat_json);
+                APICategory api_cat = ugly_cat.parent;
+                api_cat.SubCategories = ugly_cat.sub_categories;
+
+                return api_cat;
+            } catch (Exception) {
+                return new APICategory();
+            }
+        }
+
+        internal static async Task<APICategory> GetCategoryByNameAsync(string cat) {
+            try {
+                WebClient wc = new WebClient();
+                wc.Proxy = null;
+
+                string url = getAPIPath();
+                url += "GetCategoryByName";
+                url += "?dataType=JSON";
+                url += "&catName=" + cat;
+                Uri targeturi = new Uri(url);
+                var cat_json = await wc.DownloadStringTaskAsync(targeturi);
+
                 JSONAPICategory ugly_cat = JsonConvert.DeserializeObject<JSONAPICategory>(cat_json);
                 APICategory api_cat = ugly_cat.parent;
                 api_cat.SubCategories = ugly_cat.sub_categories;
@@ -139,9 +238,35 @@ namespace EcommercePlatform.Models {
             }
         }
 
+        internal static async Task<APICategory> GetCategoryAsync(int id) {
+            try {
+                WebClient wc = new WebClient();
+                wc.Proxy = null;
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append(getAPIPath());
+                sb.Append("GetCategory");
+                sb.Append("?dataType=JSON");
+                sb.Append("&catID=" + id);
+
+                Uri targeturi = new Uri(sb.ToString());
+                var cat_json = await wc.DownloadStringTaskAsync(targeturi);
+                JSONAPICategory ugly_cat = JsonConvert.DeserializeObject<JSONAPICategory>(cat_json);
+                APICategory api_cat = ugly_cat.parent;
+                api_cat.SubCategories = ugly_cat.sub_categories;
+
+                return api_cat;
+            } catch (Exception) {
+                return new APICategory();
+            }
+        }
+
         internal static List<APIPart> GetCategoryParts(int id, int page = 1, int per_page = 10) {
             try {
                 Settings settings = new Settings();
+                WebClient wc = new WebClient();
+                wc.Proxy = null;
+
                 StringBuilder sb = new StringBuilder(getAPIPath());
                 sb.Append("GetCategoryParts");
                 sb.Append("?catID=" + id);
@@ -150,11 +275,31 @@ namespace EcommercePlatform.Models {
                 sb.Append("&cust_id=" + settings.Get("CURTAccount"));
                 sb.Append("&dataType=JSON");
 
-                HttpWebRequest req = WebRequest.Create(sb.ToString()) as HttpWebRequest;
-                req.Proxy = null;
+                string json = wc.DownloadString(sb.ToString());
+                List<APIPart> parts = JsonConvert.DeserializeObject<List<APIPart>>(json);
+                return parts;
+            } catch (Exception) {
+                return new List<APIPart>();
+            }
+        }
 
-                HttpWebResponse resp = req.GetResponse() as HttpWebResponse;
-                string json = new StreamReader(resp.GetResponseStream()).ReadToEnd();
+        internal static async Task<List<APIPart>> GetCategoryPartsAsync(int id, int page = 1, int per_page = 10) {
+            try {
+                Settings settings = new Settings();
+                WebClient wc = new WebClient();
+                wc.Proxy = null;
+
+                StringBuilder sb = new StringBuilder(getAPIPath());
+                sb.Append("GetCategoryParts");
+                sb.Append("?catID=" + id);
+                sb.Append("&page=" + page);
+                sb.Append("&perpage=" + per_page);
+                sb.Append("&cust_id=" + settings.Get("CURTAccount"));
+                sb.Append("&dataType=JSON");
+
+                Uri targeturi = new Uri(sb.ToString());
+                var json = await wc.DownloadStringTaskAsync(targeturi);
+
                 List<APIPart> parts = JsonConvert.DeserializeObject<List<APIPart>>(json);
                 return parts;
             } catch (Exception) {
@@ -171,6 +316,23 @@ namespace EcommercePlatform.Models {
                 url += "GetColor?partID=" + p;
 
                 APIColorCode code = JsonConvert.DeserializeObject<APIColorCode>(wc.DownloadString(url));
+                return code;
+            } catch (Exception) {
+                return new APIColorCode();
+            }
+        }
+
+        internal static async Task<APIColorCode> GetColorCodeAsync(int p) {
+            try {
+                WebClient wc = new WebClient();
+                wc.Proxy = null;
+
+                string url = getAPIPath();
+                url += "GetColor?partID=" + p;
+                Uri targeturi = new Uri(url);
+                var json = await wc.DownloadStringTaskAsync(targeturi);
+
+                APIColorCode code = JsonConvert.DeserializeObject<APIColorCode>(json);
                 return code;
             } catch (Exception) {
                 return new APIColorCode();
@@ -194,6 +356,25 @@ namespace EcommercePlatform.Models {
             };
         }
 
+        internal static async Task<FullVehicle> getVehicleAsync(string year, string make, string model, string style) {
+            try {
+                Settings settings = new Settings();
+                WebClient wc = new WebClient();
+                wc.Proxy = null;
+
+                string url = getAPIPath() + "/GetVehicle?year=" + year;
+                url += "&make=" + make + "&model=" + model + "&style=" + HttpUtility.UrlEncode(style);
+                url += "&dataType=JSON";
+                Uri targeturi = new Uri(url);
+                var json = await wc.DownloadStringTaskAsync(targeturi);
+
+                FullVehicle vehicle = JsonConvert.DeserializeObject<List<FullVehicle>>(json).FirstOrDefault<FullVehicle>();
+                return vehicle;
+            } catch {
+                return new FullVehicle();
+            }
+        }
+
         internal static APIPart GetPart(int p, int vehicleID = 0) {
             try {
                 Settings settings = new Settings();
@@ -208,6 +389,26 @@ namespace EcommercePlatform.Models {
 
                 return JsonConvert.DeserializeObject<APIPart>(wc.DownloadString(url));
             } catch (Exception) {
+                return new APIPart();
+            }
+        }
+
+        internal static async Task<APIPart> GetPartAsync(int p, int vehicleID = 0) {
+            try {
+                Settings settings = new Settings();
+                WebClient wc = new WebClient();
+                wc.Proxy = null;
+
+                string url = getAPIPath();
+                url += "GetPart?dataType=JSON";
+                url += "&partID=" + p;
+                url += "&vehicleID=" + vehicleID;
+                url += "&cust_id=" + settings.Get("CURTAccount");
+                Uri targeturi = new Uri(url);
+                var json = await wc.DownloadStringTaskAsync(targeturi);
+
+                return JsonConvert.DeserializeObject<APIPart>(json);
+            } catch {
                 return new APIPart();
             }
         }
@@ -235,6 +436,32 @@ namespace EcommercePlatform.Models {
             }
         }
 
+        internal static async Task<List<APIPart>> GetPartsByListAsync(string partlist = "", string year = "", string make = "", string model = "", string style = "") {
+            try {
+                Settings settings = new Settings();
+                WebClient wc = new WebClient();
+                wc.Proxy = null;
+
+                string url = getAPIPath();
+                url += "GetPartsByList?dataType=JSON";
+                url += "&partlist=" + partlist;
+                url += "&cust_id=" + settings.Get("CURTAccount");
+                if (year.Length > 0 && make.Length > 0 && model.Length > 0 && style.Length > 0) {
+                    url += "&year=" + year;
+                    url += "&make=" + make;
+                    url += "&model=" + model;
+                    url += "&style=" + style;
+                }
+                Uri targeturi = new Uri(url);
+                var json = await wc.DownloadStringTaskAsync(targeturi);
+
+                List<APIPart> parts = JsonConvert.DeserializeObject<List<APIPart>>(json);
+                return parts;
+            } catch {
+                return new List<APIPart>();
+            }
+        }
+
         internal static List<APIPart> GetRelatedParts(int p) {
             try {
                 Settings settings = new Settings();
@@ -248,6 +475,25 @@ namespace EcommercePlatform.Models {
 
                 return JsonConvert.DeserializeObject<List<APIPart>>(wc.DownloadString(url));
             } catch (Exception) {
+                return new List<APIPart>();
+            }
+        }
+
+        internal static async Task<List<APIPart>> GetRelatedPartsAsync(int p) {
+            try {
+                Settings settings = new Settings();
+                WebClient wc = new WebClient();
+                wc.Proxy = null;
+
+                string url = getAPIPath();
+                url += "GetRelatedParts?dataType=JSON";
+                url += "&partID=" + p;
+                url += "&cust_id=" + settings.Get("CURTAccount");
+                Uri targeturi = new Uri(url);
+                var json = await wc.DownloadStringTaskAsync(targeturi);
+
+                return JsonConvert.DeserializeObject<List<APIPart>>(json);
+            } catch {
                 return new List<APIPart>();
             }
         }
@@ -267,6 +513,23 @@ namespace EcommercePlatform.Models {
             }
         }
 
+        internal static async Task<List<FullVehicle>> GetPartVehiclesAsync(int p) {
+            try {
+                WebClient wc = new WebClient();
+                wc.Proxy = null;
+
+                string url = getAPIPath();
+                url += "GetPartVehicles?dataType=JSON";
+                url += "&partID=" + p;
+                Uri targeturi = new Uri(url);
+                var json = await wc.DownloadStringTaskAsync(targeturi);
+
+                return JsonConvert.DeserializeObject<List<FullVehicle>>(json);
+            } catch {
+                return new List<FullVehicle>();
+            }
+       }
+
         internal static List<APIPart> GetConnector(int vehicleID = 0) {
             try {
                 if (vehicleID > 0) {
@@ -283,6 +546,26 @@ namespace EcommercePlatform.Models {
             } catch {
                 return new List<APIPart>();
             };
+        }
+
+        internal static async Task<List<APIPart>> GetConnectorAsync(int vehicleID = 0) {
+            try {
+                if (vehicleID > 0) {
+                    WebClient wc = new WebClient();
+                    wc.Proxy = null;
+
+                    string url = getAPIPath() + "/GetConnector?vehicleID=" + vehicleID + "&dataType=JSON";
+                    Uri targeturi = new Uri(url);
+                    var part_json = await wc.DownloadStringTaskAsync(targeturi);
+
+                    List<APIPart> parts = JsonConvert.DeserializeObject<List<APIPart>>(part_json);
+                    return parts;
+                } else {
+                    return new List<APIPart>();
+                }
+            } catch {
+                return new List<APIPart>();
+            }
         }
 
         internal static void SubmitReview(int partID, int rating = 5, string subject = "", string review_text = "", string name = "", string email = "") {
@@ -326,6 +609,28 @@ namespace EcommercePlatform.Models {
                 sb.Append("&customerID=" + settings.Get("CURTAccount"));
 
                 return JsonConvert.DeserializeObject<List<APIPart>>(wc.DownloadString(sb.ToString())).Skip((page - 1) * per_page).Take(per_page).ToList<APIPart>();
+
+            } catch (Exception) {
+                return new List<APIPart>();
+            }
+        }
+
+        internal static async Task<List<APIPart>> SearchAsync(string term, int page = 1, int per_page = 10) {
+            try {
+                WebClient wc = new WebClient();
+                wc.Proxy = null;
+
+                Settings settings = new Settings();
+                StringBuilder sb = new StringBuilder();
+                sb.Append(getAPIPath());
+                sb.Append("PowerSearch?dataType=JSON");
+                sb.Append("&search_term=" + term);
+                sb.Append("&integrated=false");
+                sb.Append("&customerID=" + settings.Get("CURTAccount"));
+                Uri targeturi = new Uri(sb.ToString());
+                var part_json = await wc.DownloadStringTaskAsync(targeturi);
+
+                return JsonConvert.DeserializeObject<List<APIPart>>(part_json).Skip((page - 1) * per_page).Take(per_page).ToList<APIPart>();
 
             } catch (Exception) {
                 return new List<APIPart>();
@@ -385,8 +690,8 @@ namespace EcommercePlatform.Models {
             }*/
             return API;
         }
-        private static bool isSecure() {
-            return HttpContext.Current.Request.IsSecureConnection;
+        private static bool isSecure(HttpContext ctx) {
+            return ctx.Request.IsSecureConnection;
         }
     }
 }

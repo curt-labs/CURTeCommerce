@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using EcommercePlatform.Models;
@@ -12,14 +13,20 @@ namespace EcommercePlatform.Controllers {
         /// View the Newsletter
         /// </summary>
         /// <returns>HTML View</returns>
-        public ActionResult Index(string message = "") {
+        public async Task<ActionResult> Index(string message = "") {
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
             ViewBag.page = ContentManagement.GetPageByTitle("newsletter");
             ViewBag.message = message;
             return View();
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult SignUp(string name = "", string email = "") {
+        public async Task<ActionResult> SignUp(string name = "", string email = "") {
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
             bool success = false;
             string message = "We're sorry but we failed to add you to the mailing list for the Newsletter. ";
             try {

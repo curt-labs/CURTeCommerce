@@ -14,11 +14,11 @@ using Newtonsoft.Json;
 namespace EcommercePlatform.Models {
     public class TimeZone {
 
-        public static void GetTimeZone() {
-            bool checking = SessionWorker.CheckingTimeZone();
+        public static void GetTimeZone(HttpContext ctx) {
+            bool checking = SessionWorker.CheckingTimeZone(ctx);
             if (!checking) {
                 // no time zone
-                IPAddress ip = UDF.GetIp();
+                IPAddress ip = UDF.GetIp(ctx);
                 WebClient wc = new WebClient();
                 wc.Proxy = null;
                 wc.DownloadStringCompleted += new DownloadStringCompletedEventHandler(geo_DownloadStringCompleted);

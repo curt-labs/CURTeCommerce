@@ -6,14 +6,20 @@ using System.Web.Mvc;
 using EcommercePlatform.Controllers;
 using EcommercePlatform.Models;
 using System.Web.Script.Serialization;
+using System.Threading.Tasks;
 
 namespace EcommercePlatform.Controllers {
     public class CategoriesController : BaseController {
 
-        public ActionResult Index(int catID = 0) {
+        public async Task<ActionResult> Index(int catID = 0) {
+
             if (catID > 0) {
-                APICategory category = new APICategory();
-                category = CURTAPI.GetCategory(catID);
+                var pcats = CURTAPI.GetParentCategoriesAsync();
+                var cat = CURTAPI.GetCategoryAsync(catID);
+                await Task.WhenAll(new Task[] { pcats, cat });
+                ViewBag.parent_cats = await pcats;
+
+                APICategory category = await cat;
                 
                 ViewBag.category = category;
 
@@ -21,24 +27,34 @@ namespace EcommercePlatform.Controllers {
                     return RedirectToAction("Parts", "Categories", new { id = category.catID });
                 }
             } else {
+                var pcats = CURTAPI.GetParentCategoriesAsync();
+                await Task.WhenAll(new Task[] { pcats });
+                ViewBag.parent_cats = await pcats;
+
                 APICategory category = new APICategory();
                 category.catTitle = "Product Categories";
                 category.catID = 0;
-                category.SubCategories = CURTAPI.GetParentCategories();
+                category.SubCategories = ViewBag.parent_cats;
                 ViewBag.category = category;
             }
 
             return View();
         }
 
-        public ActionResult Parts(int id = 0, int page = 1, int per_page = 10) {
+        public async Task<ActionResult> Parts(int id = 0, int page = 1, int per_page = 10) {
             if (id > 0) {
                 APICategory category = new APICategory();
+                var pcats = CURTAPI.GetParentCategoriesAsync();
+                var catTask = CURTAPI.GetCategoryAsync(id);
+                var partTask = CURTAPI.GetCategoryPartsAsync(id, page, per_page);
+                var moreTask = CURTAPI.GetCategoryPartsAsync(id, page + 1, per_page);
+                await Task.WhenAll(new Task[] { pcats, catTask, partTask, moreTask });
+                ViewBag.parent_cats = await pcats;
 
-                category = CURTAPI.GetCategory(id);
+                category = await catTask;
                 ViewBag.category = category;
 
-                List<APIPart> parts = CURTAPI.GetCategoryParts(id, page, per_page);
+                List<APIPart> parts = await partTask;
 
                 Dictionary<string, List<APIPart>> ordered_parts = new Dictionary<string, List<APIPart>>();
                 foreach (APIPart part in parts) {
@@ -69,7 +85,8 @@ namespace EcommercePlatform.Controllers {
                 ViewBag.parts = ordered_parts;
 
                 // We need to figure out if there are going to be more parts to display
-                int more_count = CURTAPI.GetCategoryParts(id, page + 1, per_page).Count;
+                List<APIPart> moreparts = await moreTask;
+                int more_count = moreparts.Count;
                 ViewBag.more_count = more_count;
 
                 ViewBag.page = page;

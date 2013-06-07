@@ -6,11 +6,15 @@ using System.Web.Mvc;
 using EcommercePlatform.Models;
 using System.Web.Script.Serialization;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace EcommercePlatform.Controllers {
     public class LocationsController : BaseController {
 
-        public ActionResult Index() {
+        public async Task<ActionResult> Index() {
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
 
             List<PrettyLocation> locs = LocationModel.GetAll();
             ViewBag.locations = locs;

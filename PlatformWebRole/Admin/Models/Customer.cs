@@ -23,7 +23,7 @@ namespace Admin {
                                              created = c.dateAdded,
                                              status = (c.isSuspended == 1) ? "Suspended" : "Active",
                                              ordercount = c.Carts.Where(x => x.payment_id > 0).Count()
-                                         }).ToList<AdminCustomer>();
+                                         }).AsParallel().ToList<AdminCustomer>();
             if (custs == null) {
                 custs = new List<AdminCustomer>();
             }
@@ -44,7 +44,7 @@ namespace Admin {
                                              created = c.dateAdded,
                                              status = (c.isSuspended == 1) ? "Suspended" : "Active",
                                              ordercount = c.Carts.Where(x => x.payment_id > 0).Count()
-                                         }).Skip(perpage * (page - 1)).Take(perpage).ToList<AdminCustomer>();
+                                         }).AsParallel().Skip(perpage * (page - 1)).Take(perpage).ToList<AdminCustomer>();
             if (custs == null) {
                 custs = new List<AdminCustomer>();
             }

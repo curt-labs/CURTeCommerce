@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using EcommercePlatform.Models;
@@ -9,15 +10,22 @@ namespace EcommercePlatform.Controllers {
     public class AccountController : CustomerAuthController {
 
         [RequireHttps]
-        public ActionResult Index() {
+        public async Task<ActionResult> Index() {
+            HttpContext ctx = System.Web.HttpContext.Current;
+
+
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+
+            ViewBag.parent_cats = await pcats;
 
             // Instantiate our Customer object
             Customer cust = new Customer();
 
             // Retrieve from Session/Cookie
-            cust.GetFromStorage();
+            cust.GetFromStorage(ctx);
 
-            if (!cust.LoggedIn()) {
+            if (!cust.LoggedIn(ctx)) {
                 return RedirectToAction("Index","Authenticate");
             }
 
@@ -33,10 +41,17 @@ namespace EcommercePlatform.Controllers {
         }
 
         [RequireHttps]
-        public ActionResult Orders() {
+        public async Task<ActionResult> Orders() {
+            HttpContext ctx = System.Web.HttpContext.Current;
+
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+
+            ViewBag.parent_cats = await pcats;
+
             Customer cust = new Customer();
-            cust.GetFromStorage();
-            if (!cust.LoggedIn()) {
+            cust.GetFromStorage(ctx);
+            if (!cust.LoggedIn(ctx)) {
                 return RedirectToAction("Index", "Authenticate");
             }
             cust.BindOrders();
@@ -46,11 +61,18 @@ namespace EcommercePlatform.Controllers {
         }
 
         [RequireHttps]
-        public ActionResult Password(string message = "") {
+        public async Task<ActionResult> Password(string message = "") {
+            HttpContext ctx = System.Web.HttpContext.Current;
+
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+
+            ViewBag.parent_cats = await pcats;
+
             ViewBag.message = message;
             Customer cust = new Customer();
-            cust.GetFromStorage();
-            if (!cust.LoggedIn()) {
+            cust.GetFromStorage(ctx);
+            if (!cust.LoggedIn(ctx)) {
                 return RedirectToAction("Index", "Authenticate");
             }
             ViewBag.cust = cust;
@@ -59,9 +81,10 @@ namespace EcommercePlatform.Controllers {
 
         [RequireHttps,AcceptVerbs(HttpVerbs.Post)]
         public ActionResult ResetPassword() {
+            HttpContext ctx = System.Web.HttpContext.Current;
             Customer cust = new Customer();
-            cust.GetFromStorage();
-            if (!cust.LoggedIn()) {
+            cust.GetFromStorage(ctx);
+            if (!cust.LoggedIn(ctx)) {
                 return RedirectToAction("Index", "Authenticate");
             }
             string message = "";
@@ -87,9 +110,16 @@ namespace EcommercePlatform.Controllers {
         }
 
         [RequireHttps]
-        public ActionResult Addresses() {
+        public async Task<ActionResult> Addresses() {
+            HttpContext ctx = System.Web.HttpContext.Current;
+
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+
+            ViewBag.parent_cats = await pcats;
+
             Customer cust = ViewBag.customer;
-            if (!cust.LoggedIn()) {
+            if (!cust.LoggedIn(ctx)) {
                 return RedirectToAction("Index", "Authenticate");
             }
             List<Address> addresses = cust.GetAddresses();
@@ -102,9 +132,16 @@ namespace EcommercePlatform.Controllers {
         }
 
         [RequireHttps]
-        public ActionResult Order(int id = 0) {
+        public async Task<ActionResult> Order(int id = 0) {
+            HttpContext ctx = System.Web.HttpContext.Current;
+            
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+
+            ViewBag.parent_cats = await pcats;
+
             Customer cust = new Customer();
-            if (!cust.LoggedIn()) {
+            if (!cust.LoggedIn(ctx)) {
                 return RedirectToAction("Index", "Authenticate");
             }
             cust.ID = ViewBag.customer.ID;
@@ -120,12 +157,13 @@ namespace EcommercePlatform.Controllers {
 
         [RequireHttps]
         public ActionResult Save() {
+            HttpContext ctx = System.Web.HttpContext.Current;
 
             Customer cust = new Customer();
             try {
-                cust.GetFromStorage();
+                cust.GetFromStorage(ctx);
 
-                if (!cust.LoggedIn()) {
+                if (!cust.LoggedIn(ctx)) {
                     return RedirectToAction("Index", "Authenticate");
                 }
                 #region Basic Information
@@ -185,10 +223,11 @@ namespace EcommercePlatform.Controllers {
         [RequireHttps]
         public ActionResult AddAddress() {
             try {
+                HttpContext ctx = System.Web.HttpContext.Current;
                 // Create Customer
                 Customer customer = new Customer();
-                customer.GetFromStorage();
-                if (!customer.LoggedIn()) {
+                customer.GetFromStorage(ctx);
+                if (!customer.LoggedIn(ctx)) {
                     return RedirectToAction("Index", "Authenticate");
                 }
 
@@ -222,9 +261,10 @@ namespace EcommercePlatform.Controllers {
 
         [RequireHttps]
         public ActionResult DeleteAddress(int id = 0) {
+            HttpContext ctx = System.Web.HttpContext.Current;
             Customer cust = new Customer();
-            cust.GetFromStorage();
-            if (!cust.LoggedIn()) {
+            cust.GetFromStorage(ctx);
+            if (!cust.LoggedIn(ctx)) {
                 return RedirectToAction("Index", "Authenticate");
             }
             Address a = new Address().Get(id);
@@ -237,9 +277,10 @@ namespace EcommercePlatform.Controllers {
 
         [RequireHttps]
         public ActionResult SetBillingDefault(int id = 0) {
+            HttpContext ctx = System.Web.HttpContext.Current;
             Customer cust = new Customer();
-            cust.GetFromStorage();
-            if (!cust.LoggedIn()) {
+            cust.GetFromStorage(ctx);
+            if (!cust.LoggedIn(ctx)) {
                 return RedirectToAction("Index", "Authenticate");
             }
             Address a = new Address().Get(id);
@@ -252,9 +293,10 @@ namespace EcommercePlatform.Controllers {
 
         [RequireHttps]
         public ActionResult SetShippingDefault(int id = 0) {
+            HttpContext ctx = System.Web.HttpContext.Current;
             Customer cust = new Customer();
-            cust.GetFromStorage();
-            if (!cust.LoggedIn()) {
+            cust.GetFromStorage(ctx);
+            if (!cust.LoggedIn(ctx)) {
                 return RedirectToAction("Index", "Authenticate");
             }
             Address a = new Address().Get(id);

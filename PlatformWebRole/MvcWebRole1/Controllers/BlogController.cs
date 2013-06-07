@@ -6,14 +6,19 @@ using System.Web.Mvc;
 using EcommercePlatform.Models;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using System.Threading.Tasks;
 
 namespace EcommercePlatform.Controllers {
     public class BlogController : BaseController {
         //
 
-        public ActionResult Index(int page = 1, int pageSize = 5) {
+        public async Task<ActionResult> Index(int page = 1, int pageSize = 5) {
+            HttpContext ctx = System.Web.HttpContext.Current;
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
 
-            ViewBag.timezone = UDF.GetTimeZone();
+            ViewBag.timezone = UDF.GetTimeZone(ctx);
             List<PostWithCategories> posts = PostModel.GetAllPublished(page, pageSize);
             ViewBag.posts = posts;
 
@@ -34,10 +39,14 @@ namespace EcommercePlatform.Controllers {
             return View();
         }
 
-        public ActionResult ViewPost(string date = "", string title = "")
+        public async Task<ActionResult> ViewPost(string date = "", string title = "")
         {
+            HttpContext ctx = System.Web.HttpContext.Current;
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
 
-            ViewBag.timezone = UDF.GetTimeZone();
+            ViewBag.timezone = UDF.GetTimeZone(ctx);
             PostWithCategories post = PostModel.Get(date, title);
             ViewBag.post = post;
 
@@ -50,9 +59,13 @@ namespace EcommercePlatform.Controllers {
             return View();
         }
 
-        public ActionResult ViewCategory(string name = "", int page = 1, int pageSize = 5) {
+        public async Task<ActionResult> ViewCategory(string name = "", int page = 1, int pageSize = 5) {
+            HttpContext ctx = System.Web.HttpContext.Current;
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
 
-            ViewBag.timezone = UDF.GetTimeZone();
+            ViewBag.timezone = UDF.GetTimeZone(ctx);
             BlogCategory category = BlogCategoryModel.GetCategoryByName(name);
             ViewBag.category = category;
 
@@ -76,9 +89,13 @@ namespace EcommercePlatform.Controllers {
             return View();
         }
 
-        public ActionResult ViewArchive(string month = "", string year = "", int page = 1, int pageSize = 5) {
+        public async Task<ActionResult> ViewArchive(string month = "", string year = "", int page = 1, int pageSize = 5) {
+            HttpContext ctx = System.Web.HttpContext.Current;
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
 
-            ViewBag.timezone = UDF.GetTimeZone();
+            ViewBag.timezone = UDF.GetTimeZone(ctx);
             List<PostWithCategories> posts = PostModel.GetAllPublishedByDate(month, year, page, pageSize);
             ViewBag.posts = posts;
 
@@ -101,14 +118,18 @@ namespace EcommercePlatform.Controllers {
             return View();
         }
 
-        public ActionResult Author(string name = "") {
+        public async Task<ActionResult> Author(string name = "") {
+            HttpContext ctx = System.Web.HttpContext.Current;
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             string dname = Server.UrlDecode(name);
             string fname = dname.Split('_')[0];
             string lname = dname.Split('_')[1];
             Profile author = db.Profiles.Where(x => x.first == fname).Where(x => x.last == lname).FirstOrDefault<Profile>();
             ViewBag.author = author;
-            ViewBag.timezone = UDF.GetTimeZone();
+            ViewBag.timezone = UDF.GetTimeZone(ctx);
 
             int count = db.BlogPosts.Where(x => x.profileID == author.id).Where(x => x.active == true).Count();
             if (count == 0) {
@@ -129,7 +150,7 @@ namespace EcommercePlatform.Controllers {
             BlogPost post = PostModel.GetById(id);
             string postdate = String.Format("{0:M-d-yyyy}", post.publishedDate);
             try {
-                if (!(Models.ReCaptcha.ValidateCaptcha(Request.Form["recaptcha_challenge_field"], Request.Form["recaptcha_response_field"]))) {
+                if (!(Models.ReCaptcha.ValidateCaptcha(System.Web.HttpContext.Current, Request.Form["recaptcha_challenge_field"], Request.Form["recaptcha_response_field"]))) {
                     throw new Exception("Recaptcha Validation Failed.");
                 }
                 if (id == 0) { throw new Exception("You must be on a blog post to add a comment"); }

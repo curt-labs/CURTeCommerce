@@ -7,47 +7,40 @@ using EcommercePlatform.Models;
 using System.Web.Routing;
 using System.Security;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace EcommercePlatform.Controllers {
     public class BaseController : Controller {
 
         protected override void Initialize(System.Web.Routing.RequestContext requestContext) {
             base.Initialize(requestContext);
+            HttpContext ctx = System.Web.HttpContext.Current;
 
-            // Get the vehicle years
-            List<double> years = CURTAPI.GetYears();
-            ViewBag.years = years;
-
-            ViewBag.year = UDF.GetYearCookie();
-            ViewBag.make = UDF.GetMakeCookie();
-            ViewBag.model = UDF.GetModelCookie();
-            ViewBag.style = UDF.GetStyleCookie();
-            ViewBag.vehicleID = UDF.GetVehicleCookie();
+            ViewBag.year = UDF.GetYearCookie(ctx);
+            ViewBag.make = UDF.GetMakeCookie(ctx);
+            ViewBag.model = UDF.GetModelCookie(ctx);
+            ViewBag.style = UDF.GetStyleCookie(ctx);
+            ViewBag.vehicleID = UDF.GetVehicleCookie(ctx);
 
             // Get the theme ID
-            int themeID = new Theme().getTheme();
+            int themeID = new Theme().getTheme(ctx);
             ViewBag.themeID = themeID;
 
             if (themeID > 0) {
                 // if there is an active theme, get the files
                 string cname = this.ControllerContext.Controller.ToString();
-                Dictionary<int, List<ThemeFile>> themefiles = new Theme().getFiles(UDF.GetControllerName(cname));
+                Dictionary<int, List<ThemeFile>> themefiles = new Theme().getFiles(ctx,UDF.GetControllerName(cname));
                 ViewBag.themefiles = themefiles;
             }
 
-            // Get the parent categories
-            List<APICategory> parent_cats = CURTAPI.GetParentCategories();
-            ViewBag.parent_cats = parent_cats;
-
             // We're gonna dump our Customer Session object out
             Customer customer = new Customer();
-            customer.GetFromStorage();
+            customer.GetFromStorage(ctx);
 
             Settings settings = new Settings();
             ViewBag.settings = settings;
 
             ViewBag.customer = customer;
-
         }
 
     }

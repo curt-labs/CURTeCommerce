@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Script.Serialization;
 using System.Web.SessionState;
@@ -12,9 +13,9 @@ namespace EcommercePlatform.Models {
         /// Add a PartID to our Recently Viewed Parts Session object
         /// </summary>
         /// <param name="id">ID of the part to be added.</param>
-        internal static void AddRecentPart(int id) {
+        internal static void AddRecentPart(HttpContext ctx, int id) {
             try {
-                HttpCookie recent_cookie = HttpContext.Current.Request.Cookies.Get("recent_parts");
+                HttpCookie recent_cookie = ctx.Request.Cookies.Get("recent_parts");
                 List<int> recent_parts = new List<int>();
                 if (recent_cookie == null || recent_cookie.Value == null) {
                     recent_cookie = new HttpCookie("recent_parts");
@@ -23,7 +24,7 @@ namespace EcommercePlatform.Models {
                     recent_parts.Add(id);
 
                     recent_cookie.Value = Newtonsoft.Json.JsonConvert.SerializeObject(recent_parts);
-                    HttpContext.Current.Response.Cookies.Add(recent_cookie);
+                    ctx.Response.Cookies.Add(recent_cookie);
                 } else {
                     List<int> unique_ids = new List<int>();
                     List<int> recent_partIds = new List<int>();
@@ -39,16 +40,16 @@ namespace EcommercePlatform.Models {
                     }
                     recent_partIds = recent_partIds.Take(5).ToList<int>();
                     new_cookie.Value = Newtonsoft.Json.JsonConvert.SerializeObject(recent_partIds);
-                    HttpContext.Current.Response.Cookies.Add(new_cookie);
+                    ctx.Response.Cookies.Add(new_cookie);
                 }
             } catch (Exception) { }
         }
 
-        internal static List<APIPart> GetRecentParts() {
+        internal static async Task<List<APIPart>> GetRecentParts(HttpContext ctx) {
             try {
                 List<int> recent = new List<int>();
                 List<APIPart> parts = new List<APIPart>();
-                HttpCookie cookie = HttpContext.Current.Request.Cookies.Get("recent_parts");
+                HttpCookie cookie = ctx.Request.Cookies.Get("recent_parts");
 
                 if (cookie != null && cookie.Value != null) {
                     recent = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(cookie.Value);
@@ -60,7 +61,7 @@ namespace EcommercePlatform.Models {
                         part_list += recent[i].ToString();
                     }
                     if (part_list.Length > 0) {
-                        parts = CURTAPI.GetPartsByList(part_list);
+                        parts = await CURTAPI.GetPartsByListAsync(part_list);
                     }
                 }
                 return parts;
@@ -69,9 +70,9 @@ namespace EcommercePlatform.Models {
             }
         }
 
-        internal static bool CheckingTimeZone() {
+        internal static bool CheckingTimeZone(HttpContext ctx) {
             bool checking = false;
-            HttpSessionState session = HttpContext.Current.Session;
+            HttpSessionState session = ctx.Session;
             if (session["timezonecheck"] == null) {
                 session["timezonecheck"] = checking;
             } else if ((bool)session["timezonecheck"]) {
@@ -80,8 +81,8 @@ namespace EcommercePlatform.Models {
             return checking;
         }
 
-        internal static void SetCheckingTimeZone(bool checking) {
-            HttpContext.Current.Session["timezonecheck"] = checking;
+        internal static void SetCheckingTimeZone(HttpContext ctx, bool checking) {
+            ctx.Session["timezonecheck"] = checking;
         }
     }
 }

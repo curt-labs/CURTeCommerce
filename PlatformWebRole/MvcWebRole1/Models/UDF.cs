@@ -54,67 +54,67 @@ namespace EcommercePlatform.Models {
             return System.Text.Encoding.ASCII.GetString(bytes);
         }
 
-        public static void SetCookies(string year, string make, string model, string style, int vehicleID = 0) {
+        public static void SetCookies(HttpContext ctx, string year, string make, string model, string style, int vehicleID = 0) {
             // Store the vehicle fields in cookies
             HttpCookie year_cookie = new HttpCookie("vehicle_year");
             year_cookie.Value = year;
             year_cookie.Expires = DateTime.Now.AddDays(14);
-            HttpContext.Current.Response.Cookies.Add(year_cookie);
+            ctx.Response.Cookies.Add(year_cookie);
 
             HttpCookie make_cookie = new HttpCookie("vehicle_make");
             make_cookie.Value = make;
             make_cookie.Expires = DateTime.Now.AddDays(14);
-            HttpContext.Current.Response.Cookies.Add(make_cookie);
+            ctx.Response.Cookies.Add(make_cookie);
 
             HttpCookie model_cookie = new HttpCookie("vehicle_model");
             model_cookie.Value = model;
             model_cookie.Expires = DateTime.Now.AddDays(14);
-            HttpContext.Current.Response.Cookies.Add(model_cookie);
+            ctx.Response.Cookies.Add(model_cookie);
 
             HttpCookie style_cookie = new HttpCookie("vehicle_style");
             style_cookie.Value = style;
             style_cookie.Expires = DateTime.Now.AddDays(14);
-            HttpContext.Current.Response.Cookies.Add(style_cookie);
+            ctx.Response.Cookies.Add(style_cookie);
 
             HttpCookie vehicle_cookie = new HttpCookie("vehicle_id");
             vehicle_cookie.Value = vehicleID.ToString();
             vehicle_cookie.Expires = DateTime.Now.AddDays(14);
-            HttpContext.Current.Response.Cookies.Add(vehicle_cookie);
+            ctx.Response.Cookies.Add(vehicle_cookie);
         }
 
-        public static string GetYearCookie() {
-            HttpCookie vehicleYear = HttpContext.Current.Request.Cookies.Get("vehicle_year");
+        public static string GetYearCookie(HttpContext ctx) {
+            HttpCookie vehicleYear = ctx.Request.Cookies.Get("vehicle_year");
             return (vehicleYear != null && vehicleYear.Value != null) ? vehicleYear.Value.ToString() : "";
         }
 
-        public static string GetMakeCookie() {
-            HttpCookie vehicleMake = HttpContext.Current.Request.Cookies.Get("vehicle_make");
+        public static string GetMakeCookie(HttpContext ctx) {
+            HttpCookie vehicleMake = ctx.Request.Cookies.Get("vehicle_make");
             return (vehicleMake != null && vehicleMake.Value != null) ? vehicleMake.Value.ToString() : "";
         }
 
-        public static string GetModelCookie() {
-            HttpCookie vehicleModel = HttpContext.Current.Request.Cookies.Get("vehicle_model");
+        public static string GetModelCookie(HttpContext ctx) {
+            HttpCookie vehicleModel = ctx.Request.Cookies.Get("vehicle_model");
             return (vehicleModel != null && vehicleModel.Value != null) ? vehicleModel.Value.ToString() : "";
 
         }
 
-        public static string GetStyleCookie() {
-            HttpCookie vehicleStyle = HttpContext.Current.Request.Cookies.Get("vehicle_style");
+        public static string GetStyleCookie(HttpContext ctx) {
+            HttpCookie vehicleStyle = ctx.Request.Cookies.Get("vehicle_style");
             return (vehicleStyle != null && vehicleStyle.Value != null) ? vehicleStyle.Value.ToString() : "";
         }
 
-        public static int GetVehicleCookie() {
-            HttpCookie vehicleID = HttpContext.Current.Request.Cookies.Get("vehicle_id");
+        public static int GetVehicleCookie(HttpContext ctx) {
+            HttpCookie vehicleID = ctx.Request.Cookies.Get("vehicle_id");
             return (vehicleID != null && vehicleID.Value != null) ? Convert.ToInt32(vehicleID.Value.ToString()) : 0;
         }
         
-        public static Cart ExpireCart(int cust_id) {
+        public static Cart ExpireCart(HttpContext ctx, int cust_id) {
             Cart new_cart = new Cart().Save();
-            new_cart.UpdateCart(cust_id);
-            DateTime cookexp = HttpContext.Current.Request.Cookies["hdcart"].Expires;
+            new_cart.UpdateCart(ctx, cust_id);
+            DateTime cookexp = ctx.Request.Cookies["hdcart"].Expires;
             HttpCookie cook = new HttpCookie("hdcart", new_cart.ID.ToString());
             cook.Expires = cookexp;
-            HttpContext.Current.Response.Cookies.Add(cook);
+            ctx.Response.Cookies.Add(cook);
             return new_cart;
         }
 
@@ -260,12 +260,12 @@ namespace EcommercePlatform.Models {
             return list.ToList();
         }
 
-        public static IPAddress GetIp() {
+        public static IPAddress GetIp(HttpContext ctx) {
             string ipString;
-            if (string.IsNullOrEmpty(HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"])) {
-                ipString = HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"];
+            if (string.IsNullOrEmpty(ctx.Request.ServerVariables["HTTP_X_FORWARDED_FOR"])) {
+                ipString = ctx.Request.ServerVariables["REMOTE_ADDR"];
             } else {
-                ipString = HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"]
+                ipString = ctx.Request.ServerVariables["HTTP_X_FORWARDED_FOR"]
                    .Split(",".ToCharArray(),
                    StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
             }
@@ -278,15 +278,15 @@ namespace EcommercePlatform.Models {
             return result;
         }
 
-        public static TimeZoneInfo GetTimeZone() {
+        public static TimeZoneInfo GetTimeZone(HttpContext ctx) {
             string timezone = "UTC";
             HttpCookie zone_cookie = null;
-            zone_cookie = HttpContext.Current.Request.Cookies.Get("tzinfo");
+            zone_cookie = ctx.Request.Cookies.Get("tzinfo");
             if (zone_cookie != null && zone_cookie.Value != null && zone_cookie.Value.Length > 0) {
                 // zone cookie exists
                 timezone = zone_cookie.Value;
             } else {
-                TimeZone.GetTimeZone();
+                TimeZone.GetTimeZone(ctx);
             }
             TimeZoneInfo info = TimeZoneInfo.FindSystemTimeZoneById(timezone);
             return info;

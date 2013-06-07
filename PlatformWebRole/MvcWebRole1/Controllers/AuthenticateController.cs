@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using EcommercePlatform.Models;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace EcommercePlatform.Controllers {
     public class AuthenticateController : BaseController {
@@ -16,13 +17,21 @@ namespace EcommercePlatform.Controllers {
         /// <param name="error">Error message from login</param>
         /// <returns>View page</returns>
         [RequireHttps]
-        public ActionResult Index() {
+        public async Task<ActionResult> Index() {
+
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
             ViewBag.error = TempData["error"];
             return View();
         }
 
         [RequireHttps]
-        public ActionResult Register() {
+        public async Task<ActionResult> Register() {
+
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
 
             List<Country> countries = UDF.GetCountries();
 
@@ -49,12 +58,13 @@ namespace EcommercePlatform.Controllers {
         [RequireHttps]
         public ActionResult Login(string email = "", string password = "", int remember = 0) {
             try {
+                HttpContext ctx = System.Web.HttpContext.Current;
                 /**
                  * Store any Customer object from Session/Cookie into a tmp object
                  * We'll remove the cart from the tmp object and add it to our new Authenticated Customer
                  */
                 Customer tmp = new Customer();
-                tmp.GetFromStorage();
+                tmp.GetFromStorage(ctx);
                 Cart tmp_cart = tmp.Cart;
 
 
@@ -75,10 +85,10 @@ namespace EcommercePlatform.Controllers {
                         tmp_cart.RemoveCart();
                         tmp.Cart = cust_cart;
                     } catch {
-                        tmp_cart.UpdateCart(cust.ID);
+                        tmp_cart.UpdateCart(ctx, cust.ID);
                     }
                 } else {
-                    tmp_cart.UpdateCart(cust.ID);
+                    tmp_cart.UpdateCart(ctx, cust.ID);
                 }
                 HttpCookie cook = new HttpCookie("hdcart", tmp.Cart.ID.ToString());
                 if (remember != 0) {
@@ -258,7 +268,10 @@ namespace EcommercePlatform.Controllers {
 
         }
 
-        public ActionResult Forgot() {
+        public async Task<ActionResult> Forgot() {
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
             ViewBag.error = TempData["error"];
             return View();
         }

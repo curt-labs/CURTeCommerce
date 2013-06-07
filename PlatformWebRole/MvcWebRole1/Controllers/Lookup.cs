@@ -6,31 +6,40 @@ using System.Web.Mvc;
 using System.Net;
 using EcommercePlatform.Models;
 using System.Web.Script.Serialization;
+using System.Threading.Tasks;
 
 namespace EcommercePlatform.Controllers {
 
     public class LookupController : BaseController {
 
-        public ActionResult Index(string year = "", string make = "", string model = "", string style = "") {
+        public async Task<ActionResult> Index(string year = "", string make = "", string model = "", string style = "") {
+            HttpContext ctx = System.Web.HttpContext.Current;
             Settings settings = ViewBag.settings;
+            int cust_id = 0;
+            try {
+                cust_id = Convert.ToInt32(settings.Get("CURTAccount"));
+            } catch (Exception) { }
+
             style = style.Replace('!', '/');
 
-            FullVehicle vehicle = CURTAPI.getVehicle(year, make, model, style);
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            var vtask = CURTAPI.getVehicleAsync(year, make, model, style);
+            var parttask = CURTAPI.GetVehiclePartsAsync(year.Trim(), make.Trim(), model.Trim(), style.Trim(), cust_id);
+            await Task.WhenAll(new Task[] { pcats, vtask, parttask });
+            ViewBag.parent_cats = await pcats;
 
-            UDF.SetCookies(year, make, model, style, vehicle.vehicleID);
+            FullVehicle vehicle = await vtask;
+
+            UDF.SetCookies(ctx, year, make, model, style, vehicle.vehicleID);
             ViewBag.year = year;
             ViewBag.make = make;
             ViewBag.model = model;
             ViewBag.style = style;
             ViewBag.vehicleID = vehicle.vehicleID;
 
-            int cust_id = 0;
-            try {
-                cust_id = Convert.ToInt32(settings.Get("CURTAccount"));
-            } catch (Exception) { }
 
             // Get all the parts that match our search criteria
-            List<APIPart> parts = CURTAPI.GetVehicleParts(year.Trim(), make.Trim(), model.Trim(), style.Trim(), cust_id);
+            List<APIPart> parts = await parttask;
 
             // Get the unique classes of the returned parts
             IEnumerable<IGrouping<string,APIPart>> distinct = parts.GroupBy(x => x.pClass.Trim());

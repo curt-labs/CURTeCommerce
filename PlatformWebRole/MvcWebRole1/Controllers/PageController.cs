@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using EcommercePlatform.Models;
@@ -10,7 +11,11 @@ namespace EcommercePlatform.Controllers {
         //
         // GET: /Page/
 
-        public ActionResult Index(int id = 0, string title = "") {
+        public async Task<ActionResult> Index(int id = 0, string title = "") {
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
+
             ContentPage page = null;
             if (id > 0) {
                 page = ContentManagement.GetPage(id);

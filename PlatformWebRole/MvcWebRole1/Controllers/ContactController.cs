@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using EcommercePlatform.Models;
@@ -9,7 +10,10 @@ using Newtonsoft.Json;
 namespace EcommercePlatform.Controllers {
     public class ContactController : BaseController {
 
-        public ActionResult Index(string message = "", bool hide_layout = false) {
+        public async Task<ActionResult> Index(string message = "", bool hide_layout = false) {
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
 
             // Get all the Contact Types
             List<ContactType> types = ContactType.GetAll();
@@ -50,7 +54,7 @@ namespace EcommercePlatform.Controllers {
                     dateAdded = DateTime.UtcNow,
                     followedUp = 0
                 };
-                bool recaptchavalid = ReCaptcha.ValidateCaptcha(Request.Form["recaptcha_challenge_field"], Request.Form["recaptcha_response_field"]);
+                bool recaptchavalid = ReCaptcha.ValidateCaptcha(System.Web.HttpContext.Current, Request.Form["recaptcha_challenge_field"], Request.Form["recaptcha_response_field"]);
                 if (!recaptchavalid) throw new Exception("Captcha Incorrect!");
 
                 UDF.Sanitize(inq, new string[] { "phone", "followedUp" });
@@ -77,7 +81,7 @@ namespace EcommercePlatform.Controllers {
                     dateAdded = DateTime.UtcNow,
                     followedUp = 0
                 };
-                bool recaptchavalid = ReCaptcha.ValidateCaptcha(recaptcha_challenge_field, recaptcha_response_field);
+                bool recaptchavalid = ReCaptcha.ValidateCaptcha(System.Web.HttpContext.Current, recaptcha_challenge_field, recaptcha_response_field);
                 if (!recaptchavalid) throw new Exception("Captcha Incorrect!");
 
                 UDF.Sanitize(inq, new string[] { "phone", "contact_type", "followedUp" });

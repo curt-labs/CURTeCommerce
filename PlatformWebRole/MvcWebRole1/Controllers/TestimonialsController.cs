@@ -5,12 +5,17 @@ using System.Web;
 using System.Web.Mvc;
 using EcommercePlatform.Models;
 using System.Web.Script.Serialization;
+using System.Threading.Tasks;
 
 namespace EcommercePlatform.Controllers {
     public class TestimonialsController : BaseController {
 
-        public ActionResult Index(string message = "", int page = 1, int pageSize = 10) {
-            ViewBag.timezone = UDF.GetTimeZone();
+        public async Task<ActionResult> Index(string message = "", int page = 1, int pageSize = 10) {
+            HttpContext ctx = System.Web.HttpContext.Current;
+            ViewBag.timezone = UDF.GetTimeZone(ctx);
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
 
             List<string> errors = (List<string>)TempData["errors"];
             ViewBag.first_name = ((string)TempData["first_name"] != null) ? (string)TempData["first_name"] : "";
@@ -33,9 +38,12 @@ namespace EcommercePlatform.Controllers {
             return View();
         }
 
-        public ActionResult Add(string message = "") {
+        public async Task<ActionResult> Add(string message = "") {
             ViewBag.testimonial = (Testimonial)TempData["testimonial"] ?? new Testimonial();
             ViewBag.message = message;
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
 
             // Get the contact ContentPage
             ContentPage page = ContentManagement.GetPageByTitle("Add a Testimonial");
@@ -54,7 +62,7 @@ namespace EcommercePlatform.Controllers {
             };
             string message = "";
             try {
-                bool recaptchavalid = ReCaptcha.ValidateCaptcha(Request.Form["recaptcha_challenge_field"], Request.Form["recaptcha_response_field"]);
+                bool recaptchavalid = ReCaptcha.ValidateCaptcha(System.Web.HttpContext.Current, Request.Form["recaptcha_challenge_field"], Request.Form["recaptcha_response_field"]);
                 if (!recaptchavalid) message += "Captcha was incorrect. ";
                 if (testimonial.Trim() == "") message += "A Testimonial is required.";
 

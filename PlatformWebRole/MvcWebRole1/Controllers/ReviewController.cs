@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using EcommercePlatform.Models;
@@ -12,7 +13,11 @@ namespace EcommercePlatform.Controllers {
         }
 
         [AcceptVerbs(HttpVerbs.Get)]
-        public ActionResult New(int id = 0, bool hide_layout = false, string name = "", string email = "", string subject = "", string review = "", int rating = 5, string err = "") {
+        public async Task<ActionResult> New(int id = 0, bool hide_layout = false, string name = "", string email = "", string subject = "", string review = "", int rating = 5, string err = "") {
+
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
 
             APIPart part = CURTAPI.GetPart(id);
             ViewBag.part = part;
@@ -32,7 +37,7 @@ namespace EcommercePlatform.Controllers {
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Submit(int id = 0, string name = "", string email = "", string subject = "", int rating = 5, string review = "") {
             try {
-                if (!(ReCaptcha.ValidateCaptcha(Request.Form["recaptcha_challenge_field"], Request.Form["recaptcha_response_field"]))) {
+                if (!(ReCaptcha.ValidateCaptcha(System.Web.HttpContext.Current, Request.Form["recaptcha_challenge_field"], Request.Form["recaptcha_response_field"]))) {
                     throw new Exception("Recaptcha Validation Failed.");
                 }
                 CURTAPI.SubmitReview(id, rating, subject, review, name, email);

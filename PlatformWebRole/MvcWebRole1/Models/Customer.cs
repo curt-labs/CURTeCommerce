@@ -297,13 +297,13 @@ namespace EcommercePlatform {
             this.shippingID = id;
         }
 
-        internal void GetFromStorage() {
+        internal void GetFromStorage(HttpContext ctx) {
 
             HttpCookie cart_cookie = null;
             int cartID = 0;
             int custID = 0;
             Cart cart = new Cart();
-            cart_cookie = HttpContext.Current.Request.Cookies.Get("hdcart");
+            cart_cookie = ctx.Request.Cookies.Get("hdcart");
             if (cart_cookie != null && cart_cookie.Value != null && cart_cookie.Value.Length > 0) {
                 cartID = Convert.ToInt32(cart_cookie.Value);
             }
@@ -315,7 +315,7 @@ namespace EcommercePlatform {
                 if (this.remember) {
                     cook.Expires = DateTime.Now.AddDays(30);
                 }
-                HttpContext.Current.Response.Cookies.Add(cook);
+                ctx.Response.Cookies.Add(cook);
             } else {
                 // cookie exists
                 try {
@@ -330,7 +330,7 @@ namespace EcommercePlatform {
                     if (this.remember) {
                         cook.Expires = DateTime.Now.AddDays(30);
                     }
-                    HttpContext.Current.Response.Cookies.Add(cook);
+                    ctx.Response.Cookies.Add(cook);
                 }
             }
 
@@ -357,36 +357,6 @@ namespace EcommercePlatform {
             this.validator = customer.validator;
             this.Cart = customer.Cart;
             this.remember = customer.remember;
-        }
-
-        internal void SerializeToStorage() {
-            /*Customer serializable_customer = new Customer {
-                ID = this.ID,
-                email = this.email,
-                fname = this.fname,
-                lname = this.lname,
-                phone = this.phone,
-                dateAdded = this.dateAdded,
-                isSuspended = this.isSuspended,
-                receiveNewsletter = this.receiveNewsletter,
-                receiveOffers = this.receiveOffers,
-                billingID = this.billingID,
-                shippingID = this.shippingID,
-                validator = this.validator,
-                remember = this.remember,
-                Cart = this.Cart
-            };
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            string cust_json = JsonConvert.SerializeObject(serializable_customer, Formatting.None, settings);
-
-            HttpCookie cook = new HttpCookie("customer", cust_json);
-            if (this.remember) {
-                cook.Expires = DateTime.Now.AddDays(30);
-            }
-            HttpContext.Current.Response.Cookies.Add(cook);
-
-            //HttpContext.Current.Session.Add("customer", cust_json);*/
         }
 
         internal void SendValidation() {
@@ -432,11 +402,18 @@ namespace EcommercePlatform {
             db.SubmitChanges();
         }
 
-        public bool LoggedIn() {
-            this.GetFromStorage();
+        public bool LoggedIn(HttpContext ctx = null) {
+            if(ctx == null) {
+                if (HttpContext.Current != null) {
+                    ctx = HttpContext.Current;
+                } else {
+                    return false;
+                }
+            }
+            this.GetFromStorage(ctx);
             if (this.ID > 0) {
                 HttpCookie auth_cook = null;
-                auth_cook = HttpContext.Current.Request.Cookies.Get("authenticated");
+                auth_cook = ctx.Request.Cookies.Get("authenticated");
                 if (auth_cook != null && auth_cook.Value != null && auth_cook.Value.Length > 0 && auth_cook.Value == "1") {
                     return true;
                 }

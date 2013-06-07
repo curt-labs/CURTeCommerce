@@ -21,7 +21,7 @@ namespace EcommercePlatform
             this.voided = false;
         }
 
-        public void Add(int partID = 0, int quantity = 1) {
+        public void Add(HttpContext ctx, int partID = 0, int quantity = 1) {
             if (this.payment_id == 0) {
                 APIPart part = CURTAPI.GetPart(partID);
                 string upcval = part.attributes.Where(x => x.key.ToLower().Equals("upc")).Select(x => x.value).FirstOrDefault();
@@ -39,11 +39,11 @@ namespace EcommercePlatform
                 db.SubmitChanges();
                 clearShippingType();
             } else {
-                UDF.ExpireCart(this.cust_id);
+                UDF.ExpireCart(ctx,this.cust_id);
             }
         }
 
-        public void Update(int partID = 0, int quantity = 0) {
+        public void Update(HttpContext ctx, int partID = 0, int quantity = 0) {
             if (this.payment_id == 0) {
                 if (quantity > 0) {
                     EcommercePlatformDataContext db = new EcommercePlatformDataContext();
@@ -51,15 +51,15 @@ namespace EcommercePlatform
                     i.quantity = quantity;
                     db.SubmitChanges();
                 } else {
-                    Remove(partID);
+                    Remove(ctx, partID);
                 }
                 clearShippingType();
             } else {
-                UDF.ExpireCart(this.cust_id);
+                UDF.ExpireCart(ctx,this.cust_id);
             }
         }
 
-        public void Remove(int partID = 0) {
+        public void Remove(HttpContext ctx, int partID = 0) {
             if (this.payment_id == 0) {
                 EcommercePlatformDataContext db = new EcommercePlatformDataContext();
                 CartItem i = db.CartItems.Where(x => x.order_id == this.ID).Where(x => x.partID == partID).First<CartItem>();
@@ -67,7 +67,7 @@ namespace EcommercePlatform
                 db.SubmitChanges();
                 clearShippingType();
             } else {
-                UDF.ExpireCart(this.cust_id);
+                UDF.ExpireCart(ctx, this.cust_id);
             }
         }
 
@@ -78,7 +78,7 @@ namespace EcommercePlatform
             db.SubmitChanges();
         }
 
-        public void UpdateCart(int cust_id = 0) {
+        public void UpdateCart(HttpContext ctx, int cust_id = 0) {
             if (this.payment_id == 0) {
                 EcommercePlatformDataContext db = new EcommercePlatformDataContext();
                 Cart c = db.Carts.Where(x => x.ID.Equals(this.ID)).First<Cart>();
@@ -90,7 +90,7 @@ namespace EcommercePlatform
                 } catch { }
                 db.SubmitChanges();
             } else {
-                UDF.ExpireCart(this.cust_id);
+                UDF.ExpireCart(ctx, this.cust_id);
             }
         }
 
@@ -109,7 +109,7 @@ namespace EcommercePlatform
             return this;
         }
 
-        public void Empty() {
+        public void Empty(HttpContext ctx) {
             if (this.payment_id == 0) {
                 if (this.cust_id > 0) {
                     EcommercePlatformDataContext db = new EcommercePlatformDataContext();
@@ -125,7 +125,7 @@ namespace EcommercePlatform
                 }
                 clearShippingType();
             } else {
-                UDF.ExpireCart(this.cust_id);
+                UDF.ExpireCart(ctx, this.cust_id);
             }
         }
 

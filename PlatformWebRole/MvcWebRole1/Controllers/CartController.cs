@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using EcommercePlatform.Models;
@@ -9,12 +10,17 @@ using Newtonsoft.Json;
 namespace EcommercePlatform.Controllers {
     public class CartController : BaseController {
 
-        public ActionResult Index() {
+        public async Task<ActionResult> Index() {
+            HttpContext ctx = System.Web.HttpContext.Current;
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
+
             // Create Customer
             Customer customer = new Customer();
 
             // Retrieve Customer from Sessions/Cookie
-            customer.GetFromStorage();
+            customer.GetFromStorage(ctx);
 
             // Create Cart object from customer
             Cart cart = customer.Cart;
@@ -26,22 +32,28 @@ namespace EcommercePlatform.Controllers {
         }
 
         [RequireHttps]
-        public ActionResult Checkout() {
+        public async Task<ActionResult> Checkout() {
+            HttpContext ctx = System.Web.HttpContext.Current;
+
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
+
             // start checkout process here
             // one page checkout form followed by shipping type
             Customer customer = ViewBag.customer;
-            customer.GetFromStorage();
+            customer.GetFromStorage(ctx);
             if (customer.Cart.payment_id != 0) {
                 // cart gets expired
-                UDF.ExpireCart(customer.ID);
+                UDF.ExpireCart(ctx,customer.ID);
                 return RedirectToAction("Index");
             }
             bool same = true;
 
             Address billing = new Address();
             Address shipping = new Address();
-            
-            if (customer.LoggedIn()) {
+
+            if (customer.LoggedIn(ctx)) {
                 customer.BindAddresses();
                 billing = (customer.billingID != 0) ? customer.Address : new Address();
                 shipping = (customer.shippingID != 0) ? customer.Address1 : new Address();
@@ -69,8 +81,9 @@ namespace EcommercePlatform.Controllers {
 
         [RequireHttps]
         public ActionResult Proceed() {
+            HttpContext ctx = System.Web.HttpContext.Current;
             Customer cust = ViewBag.customer;
-            cust.GetFromStorage();
+            cust.GetFromStorage(ctx);
             Cart cart = cust.Cart;
 
             Settings settings = ViewBag.settings;
@@ -101,7 +114,7 @@ namespace EcommercePlatform.Controllers {
                     UDF.Sanitize(cust, nullables);
                     cust.Save();
                 }
-                cart.UpdateCart(cust.ID);
+                cart.UpdateCart(ctx, cust.ID);
                 #endregion
 
                 #region Address Initialization
@@ -185,7 +198,12 @@ namespace EcommercePlatform.Controllers {
         }
 
         [RequireHttps]
-        public ActionResult Billing() {
+        public async Task<ActionResult> Billing() {
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
+
+            HttpContext ctx = System.Web.HttpContext.Current;
             // Create Customer
             Customer customer = ViewBag.customer;
 
@@ -194,7 +212,7 @@ namespace EcommercePlatform.Controllers {
             ViewBag.page = page;
 
             // Retrieve Customer from Sessions/Cookie
-            customer.GetFromStorage();
+            customer.GetFromStorage(ctx);
 
             if (customer.Cart.payment_id == 0) {
                 customer.BindAddresses();
@@ -206,21 +224,26 @@ namespace EcommercePlatform.Controllers {
 
                 return View();
             } else {
-                UDF.ExpireCart(customer.ID);
+                UDF.ExpireCart(ctx, customer.ID);
                 return RedirectToAction("Index");
             }
         }
 
 
         [RequireHttps]
-        public ActionResult Shipping(string error = "") {
+        public async Task<ActionResult> Shipping(string error = "") {
+            HttpContext ctx = System.Web.HttpContext.Current;
+
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
 
             Customer customer = ViewBag.customer;
             Settings settings = ViewBag.settings;
             ViewBag.error = error;
 
             // Retrieve Customer from Sessions/Cookie
-            customer.GetFromStorage();
+            customer.GetFromStorage(ctx);
             int shippingpad = 0;
             if (settings.Get("ShippingPadding") != "") {
                 try {
@@ -255,7 +278,7 @@ namespace EcommercePlatform.Controllers {
                 ViewBag.shippingresponse = shippingresponse;
                 return View();
             } else {
-                UDF.ExpireCart(customer.ID);
+                UDF.ExpireCart(ctx,customer.ID);
                 return RedirectToAction("Index");
             }
         }
@@ -263,32 +286,34 @@ namespace EcommercePlatform.Controllers {
         public ActionResult Add(int id = 0, int qty = 1) {
             // Create Customer
             Customer customer = new Customer();
+            HttpContext ctx = System.Web.HttpContext.Current;
 
             // Retrieve Customer from Sessions/Cookie
-            customer.GetFromStorage();
+            customer.GetFromStorage(ctx);
 
             // Add the item to the cart
             if (customer.Cart.payment_id == 0) {
-                customer.Cart.Add(id,qty);
+                customer.Cart.Add(ctx,id, qty);
 
                 // Serialize the Customer back to where it came from
                 return RedirectToAction("Index");
             } else {
-                UDF.ExpireCart(customer.ID);
+                UDF.ExpireCart(ctx,customer.ID);
                 return RedirectToAction("Index");
             }
         }
 
         public string AddAjax(int id = 0, int qty = 0) {
+            HttpContext ctx = System.Web.HttpContext.Current;
             // Create Customer
             Customer customer = new Customer();
 
             // Retrieve Customer from Sessions/Cookie
-            customer.GetFromStorage();
+            customer.GetFromStorage(ctx);
             if (customer.Cart.payment_id == 0) {
-                customer.Cart.Add(id, qty);
+                customer.Cart.Add(ctx,id, qty);
             } else {
-                UDF.ExpireCart(customer.ID);
+                UDF.ExpireCart(ctx,customer.ID);
             }
 
             return getCart();
@@ -298,14 +323,15 @@ namespace EcommercePlatform.Controllers {
             try {
                 // Create Customer
                 Customer customer = new Customer();
+                HttpContext ctx = System.Web.HttpContext.Current;
 
                 // Retrieve Customer from Sessions/Cookie
-                customer.GetFromStorage();
+                customer.GetFromStorage(ctx);
 
                 if (customer.Cart.payment_id == 0) {
-                    customer.Cart.Update(id, qty);
+                    customer.Cart.Update(ctx, id, qty);
                 } else {
-                    UDF.ExpireCart(customer.ID);
+                    UDF.ExpireCart(ctx, customer.ID);
                 }
             } catch (Exception e) {
                 if (e.Message.ToLower().Contains("a potentially dangerous")) {
@@ -318,14 +344,15 @@ namespace EcommercePlatform.Controllers {
         public ActionResult Remove(int id = 0) {
             // Create Customer
             Customer customer = new Customer();
+            HttpContext ctx = System.Web.HttpContext.Current;
 
             // Retrieve Customer from Sessions/Cookie
-            customer.GetFromStorage();
+            customer.GetFromStorage(ctx);
 
             if (customer.Cart.payment_id == 0) {
-                customer.Cart.Remove(id);
+                customer.Cart.Remove(ctx, id);
             } else {
-                UDF.ExpireCart(customer.ID);
+                UDF.ExpireCart(ctx, customer.ID);
             }
             return RedirectToAction("Index");
         }
@@ -333,14 +360,15 @@ namespace EcommercePlatform.Controllers {
         public string RemoveAjax(int id = 0) {
             // Create Customer
             Customer customer = new Customer();
+            HttpContext ctx = System.Web.HttpContext.Current;
 
             // Retrieve Customer from Sessions/Cookie
-            customer.GetFromStorage();
+            customer.GetFromStorage(ctx);
 
             if (customer.Cart.payment_id == 0) {
-                customer.Cart.Remove(id);
+                customer.Cart.Remove(ctx, id);
             } else {
-                UDF.ExpireCart(customer.ID);
+                UDF.ExpireCart(ctx, customer.ID);
             }
 
             return Response.Cookies["cart"].Value;
@@ -348,9 +376,10 @@ namespace EcommercePlatform.Controllers {
 
         public string getCart() {
             Customer customer = new Customer();
+            HttpContext ctx = System.Web.HttpContext.Current;
 
             // Retrieve Customer from Sessions/Cookie
-            customer.GetFromStorage();
+            customer.GetFromStorage(ctx);
             Cart cart = customer.Cart;
             Newtonsoft.Json.JsonSerializerSettings settings = new Newtonsoft.Json.JsonSerializerSettings();
             settings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
@@ -363,9 +392,10 @@ namespace EcommercePlatform.Controllers {
         public ActionResult ChooseBilling(int id = 0) {
             // Create Customer
             Customer customer = new Customer();
+            HttpContext ctx = System.Web.HttpContext.Current;
 
             // Retrieve Customer from Sessions/Cookie
-            customer.GetFromStorage();
+            customer.GetFromStorage(ctx);
 
             if (customer.Cart.payment_id == 0) {
                 if (customer.billingID == 0) {
@@ -375,7 +405,7 @@ namespace EcommercePlatform.Controllers {
 
                 return RedirectToAction("billing");
             } else {
-                UDF.ExpireCart(customer.ID);
+                UDF.ExpireCart(ctx, customer.ID);
                 return RedirectToAction("index");
             }
         }
@@ -385,7 +415,8 @@ namespace EcommercePlatform.Controllers {
             try {
                 // Create Customer
                 Customer customer = new Customer();
-                customer.GetFromStorage();
+                HttpContext ctx = System.Web.HttpContext.Current;
+                customer.GetFromStorage(ctx);
 
                 if (customer.Cart.payment_id == 0) {
                     Address billing = new Address();
@@ -420,7 +451,7 @@ namespace EcommercePlatform.Controllers {
                         customer.Cart.SetShipping(billing.ID);
                     }
                 } else {
-                    UDF.ExpireCart(customer.ID);
+                    UDF.ExpireCart(ctx, customer.ID);
                     return RedirectToAction("index");
                 }
             } catch { }
@@ -432,9 +463,10 @@ namespace EcommercePlatform.Controllers {
         public ActionResult ChooseShipping(int id = 0) {
             // Create Customer
             Customer customer = new Customer();
+            HttpContext ctx = System.Web.HttpContext.Current;
 
             // Retrieve Customer from Sessions/Cookie
-            customer.GetFromStorage();
+            customer.GetFromStorage(ctx);
             if (customer.Cart.payment_id == 0) {
                 if (customer.shippingID == 0) {
                     customer.SetShippingDefaultAddress(id);
@@ -443,7 +475,7 @@ namespace EcommercePlatform.Controllers {
 
                 return RedirectToAction("Shipping");
             } else {
-                UDF.ExpireCart(customer.ID);
+                UDF.ExpireCart(ctx, customer.ID);
                 return RedirectToAction("index");
             }
         }
@@ -454,7 +486,8 @@ namespace EcommercePlatform.Controllers {
             try {
                 // Create Customer
                 Customer customer = new Customer();
-                customer.GetFromStorage();
+                HttpContext ctx = System.Web.HttpContext.Current;
+                customer.GetFromStorage(ctx);
 
                 Address shipping = new Address();
                 // Build out our Billing object
@@ -495,9 +528,10 @@ namespace EcommercePlatform.Controllers {
                 RateDetail rate = details.Rates.FirstOrDefault<RateDetail>();
 
                 Customer customer = new Customer();
+                HttpContext ctx = System.Web.HttpContext.Current;
 
                 // Retrieve Customer from Sessions/Cookie
-                customer.GetFromStorage();
+                customer.GetFromStorage(ctx);
                 decimal shipping_price = Convert.ToDecimal(rate.NetCharge.Key);
                 string shipping_type = details.ServiceType;
                 customer.Cart.setShippingType(shipping_type, shipping_price);
@@ -509,7 +543,8 @@ namespace EcommercePlatform.Controllers {
         public ShippingResponse getShipping() {
             Customer customer = new Customer();
             Settings settings = ViewBag.settings;
-            customer.GetFromStorage();
+            HttpContext ctx = System.Web.HttpContext.Current;
+            customer.GetFromStorage(ctx);
             FedExAuthentication auth = new FedExAuthentication {
                 AccountNumber = Convert.ToInt32(settings.Get("FedExAccount")),
                 Key = settings.Get("FedExKey"),
@@ -543,7 +578,8 @@ namespace EcommercePlatform.Controllers {
             Customer customer = new Customer();
 
             // Retrieve Customer from Sessions/Cookie
-            customer.GetFromStorage();
+            HttpContext ctx = System.Web.HttpContext.Current;
+            customer.GetFromStorage(ctx);
             if (customer.Cart.payment_id == 0) {
 
                 decimal shipping_price = 0;
@@ -568,7 +604,7 @@ namespace EcommercePlatform.Controllers {
                     return RedirectToAction("Checkout", "Cart");
                 }
             } else {
-                UDF.ExpireCart(customer.ID);
+                UDF.ExpireCart(ctx, customer.ID);
                 return RedirectToAction("Index");
             }
         }

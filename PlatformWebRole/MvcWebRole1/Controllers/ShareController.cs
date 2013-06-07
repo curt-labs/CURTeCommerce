@@ -8,11 +8,15 @@ using System.Net.Mail;
 using System.Text;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace EcommercePlatform.Controllers {
     public class ShareController : BaseController {
 
-        public ActionResult Index(string type = "", int partID = 0, bool layout = true, string error = "") {
+        public async Task<ActionResult> Index(string type = "", int partID = 0, bool layout = true, string error = "") {
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
 
             ViewBag.part = new APIPart();
             ViewBag.type = type;

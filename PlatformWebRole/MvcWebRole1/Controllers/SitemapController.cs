@@ -7,16 +7,16 @@ using System.Web.Mvc;
 using EcommercePlatform.Models;
 
 namespace EcommercePlatform.Controllers {
-    public class RepairController : BaseController {
-
+    public class SitemapController : BaseController {
+        //
+        // GET: /Index/
         public async Task<ActionResult> Index() {
-
             var pcats = CURTAPI.GetParentCategoriesAsync();
             await Task.WhenAll(new Task[] { pcats });
             ViewBag.parent_cats = await pcats;
 
-            // Get the content page for Trailer Repair
-            ContentPage page = ContentManagement.GetPageByTitle("Trailer Repair");
+            // Retrieve the homepage content
+            ContentPage page = ContentManagement.GetPageByTitle("sitemap");
             ViewBag.page = page;
 
             return View();
