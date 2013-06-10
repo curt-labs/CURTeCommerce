@@ -14,20 +14,25 @@ namespace EcommercePlatform.Controllers {
         public async Task<ActionResult> Index(int catID = 0, int page = 1, int per_page = 10) {
 
             APICategory category = new APICategory();
+            APIColorCode color_code = new APIColorCode();
             List<APIPart> catparts = new List<APIPart>();
             List<APIPart> moreparts = new List<APIPart>();
             Task<List<APICategory>> pcats = CURTAPI.GetParentCategoriesAsync();
             Task<APICategory> cat = null;
             Task<List<APIPart>> parts = null;
             Task<List<APIPart>> moreTask = null;
+            Task<APIColorCode> codetask = null;
             List<Task> tasks = new List<Task> { pcats };
 
             if (catID > 0) {
                 cat = CURTAPI.GetCategoryAsync(catID);
                 parts = CURTAPI.GetCategoryPartsAsync(catID, page, per_page);
                 moreTask = CURTAPI.GetCategoryPartsAsync(catID, page + 1, per_page);
+                codetask = CURTAPI.GetCategoryColorCodeAsync(catID);
+                tasks.Add(cat);
                 tasks.Add(parts);
                 tasks.Add(moreTask);
+                tasks.Add(codetask);
             } else {
                 category.catTitle = "Product Categories";
                 category.catID = 0;
@@ -37,6 +42,7 @@ namespace EcommercePlatform.Controllers {
             ViewBag.parent_cats = await pcats;
             if (catID > 0) {
                 category = await cat;
+                color_code = await codetask;
             }
             ViewBag.category = category;
             if (parts != null) {
@@ -45,7 +51,6 @@ namespace EcommercePlatform.Controllers {
                 if (catparts.Count > 0) {
                     Dictionary<string, List<APIPart>> ordered_parts = new Dictionary<string, List<APIPart>>();
                     foreach (APIPart part in catparts) {
-                        APIColorCode color_code = CURTAPI.GetColorCode(part.partID);
                         part.colorCode = color_code.code;
                         if (part.pClass.Length > 0) {
                             if (ordered_parts.Keys.Contains(part.pClass)) { // Already added to dictionary

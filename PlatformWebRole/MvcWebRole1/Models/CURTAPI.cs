@@ -326,6 +326,38 @@ namespace EcommercePlatform.Models {
             }
         }
 
+        internal static APIColorCode GetCategoryColorCode(int catID) {
+            try {
+                WebClient wc = new WebClient();
+                wc.Proxy = null;
+
+                string url = getAPIPath();
+                url += "GetCategoryColor?catID=" + catID;
+
+                APIColorCode code = JsonConvert.DeserializeObject<APIColorCode>(wc.DownloadString(url));
+                return code;
+            } catch (Exception) {
+                return new APIColorCode();
+            }
+        }
+
+        internal static async Task<APIColorCode> GetCategoryColorCodeAsync(int catID) {
+            try {
+                WebClient wc = new WebClient();
+                wc.Proxy = null;
+
+                string url = getAPIPath();
+                url += "GetCategoryColor?catID=" + catID;
+                Uri targeturi = new Uri(url);
+                var json = await wc.DownloadStringTaskAsync(targeturi);
+
+                APIColorCode code = JsonConvert.DeserializeObject<APIColorCode>(json);
+                return code;
+            } catch (Exception) {
+                return new APIColorCode();
+            }
+        }
+
         internal static FullVehicle getVehicle(string year, string make, string model, string style) {
             try {
                 Settings settings = new Settings();
