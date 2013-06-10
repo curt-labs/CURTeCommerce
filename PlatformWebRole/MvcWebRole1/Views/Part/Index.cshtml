@@ -16,7 +16,11 @@
     string make = ViewBag.make ?? "";
     string model = ViewBag.model ?? "";
     string style = ViewBag.style ?? "";
-
+    string htmlcontent = part.content.Where(x => x.key.Equals("HTMLDescription")).Select(x => x.value.Trim()).FirstOrDefault() ?? "";
+    List<EcommercePlatform.Models.APIAttribute> bullets = part.content.Where(x => x.key.Equals("Bullet") || x.key.Equals("Note")).OrderBy(x => x.key).ToList();
+    bool showMore = htmlcontent.Length > 0 || bullets.Count > 3;
+    int maxbullet = (bullets.Count > 3) ? 3 : bullets.Count;
+    
     List<EcommercePlatform.Models.APIPart> connectors = ViewBag.connectors ?? new List<EcommercePlatform.Models.APIPart>();
     bool first_image = true;
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
@@ -118,6 +122,15 @@
 
 <!-- Part Specs and Purchasing -->
 <div class="right_col">
+    <p><strong>Product Details</strong></p>
+    <ul>
+    @for(int i = 0; i < maxbullet; i++) {
+        <li>@bullets[i].value</li>
+    }
+    @if(showMore) {
+        <li><a href="#info" id="readmore">Read More...</a></li>
+    }
+    </ul>
     <table>
         <tbody>
             @foreach (EcommercePlatform.Models.APIAttribute attr in part.attributes.OrderBy(x => x.key)) {
@@ -148,10 +161,6 @@
         </a>
     }
 </div>
-<div class="clearfix"></div>
-@if (part.content.Where(x => x.key.Equals("HTMLDescription")).Count() > 0 && part.content.Where(x => x.key.Equals("HTMLDescription")).FirstOrDefault<EcommercePlatform.Models.APIAttribute>().value.Length > 0) {
-    Html.Raw(part.content.Where(x => x.key.Equals("HTMLDescription")).FirstOrDefault<EcommercePlatform.Models.APIAttribute>().value);
-}
 <div class="clearfix"></div>
 @if (part.content.Count > 0 || vehicles.Count > 0 || related.Count > 0 || connectors.Count != 0 || part.reviews.Count != 0) {
     <div class="part_tab_container">
@@ -233,10 +242,13 @@
         @if (part.content.Count > 0) {
             <div class="part_content" id="info">
                 <ul>
-                    @foreach (EcommercePlatform.Models.APIAttribute content_piece in part.content.Where(x => !x.key.Equals("installationSheet")).OrderBy(x => x.key)) {
-                        <li>@content_piece.value</li>
+                    @foreach (EcommercePlatform.Models.APIAttribute bullet in bullets) {
+                        <li>@bullet.value</li>
                     }
                 </ul>
+                @if(htmlcontent.Length > 0) {
+                    Html.Raw(htmlcontent);
+                }
                 <div class="clearfix"></div>
             </div>
         }

@@ -61,8 +61,11 @@
                             </div>
                         </div>
                         <div class="mid_col">
+                            @if (part.content.Any(x => x.key.ToLower().Equals("listdescription"))) {
+                                <p>@part.content.Where(x => x.key.ToLower().Equals("listdescription")).Select(x => x.value).FirstOrDefault()</p>
+                            }
                             <ul>
-                                @foreach (EcommercePlatform.Models.APIAttribute content_piece in part.content.Where(x => !x.key.Equals("installVideo") && !x.key.Equals("installationSheet")).ToList<EcommercePlatform.Models.APIAttribute>()) {
+                                @foreach (EcommercePlatform.Models.APIAttribute content_piece in part.content.Where(x => x.key.Equals("Bullet") || x.key.Equals("Note")).OrderBy(x => x.key).ToList<EcommercePlatform.Models.APIAttribute>()) {
                                     <li class="@content_piece.key">@content_piece.value</li>
                                 }
                             </ul>
@@ -70,7 +73,7 @@
                         <div class="right_col">
                             <span class="price">@part.listPrice</span>
                             <a href="/Part/@part.partID" class="details" title="View Details">
-                                See Accessories
+                                See More
                             </a>
                             <a href="/Cart/Add/@part.partID" class="add_cart" data-id="@part.partID" title="Add to Cart">
                                 <img src="/Content/img/cart.png" alt="Add to Cart" />

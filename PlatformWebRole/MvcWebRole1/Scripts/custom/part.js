@@ -1,9 +1,11 @@
 ﻿/*global Shadowbox */
 var content_height = 0;
 var max_height = 0;
+var changeHashNoScroll;
 
 function changePartTab(id) {
     if (id.length > 0) {
+        var atab = $('.part_tab_container ul li a.active');
         $('.part_tab_container ul li a').removeClass('active');
 
         $('.part_content').fadeOut();
@@ -52,6 +54,17 @@ $(function () {
         window.location.href = window.location.protocol + '//' + window.location.host + '/Lookup/' + encodeURIComponent(year) + '/' + encodeURIComponent(make) + '/' + encodeURIComponent(model) + '/' + encodeURIComponent(style.replace(/\//g, '!'));
     });
 
+    $(document).on('click', '#readmore', function (e) {
+        e.preventDefault();
+        var infotab = $('#info');
+        changeHashNoScroll("info");
+        $('html, body').animate({
+            scrollTop: $("#info").offset().top - Math.floor($(window).height() / 2.5) + 'px'
+        }, 'fast');
+    });
+
+
+
     /**** 
     *  USE JQUERY-BBQ to handle hashing and back button nav 
     *******/
@@ -84,3 +97,8 @@ $(function () {
     *******/
 
 });
+
+changeHashNoScroll = function (hashval) {
+    window.location.hash = "info";
+    return false;
+};
