@@ -196,6 +196,7 @@
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\SitemapController.cs" />
+    <Compile Include="Models\Banner.cs" />
     <Compile Include="Models\OrderEDI.cs" />
     <Compile Include="Models\ThemeFile.cs" />
     <Compile Include="Models\Theme.cs" />
@@ -624,6 +625,7 @@
     <Content Include="Scripts\custom\locations.min.js.map">
       <DependentUpon>locations.js</DependentUpon>
     </Content>
+    <Content Include="Views\Sitemap\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

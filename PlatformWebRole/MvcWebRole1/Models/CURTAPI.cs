@@ -294,6 +294,92 @@ namespace EcommercePlatform.Models {
             }
         }
 
+        public static List<APICategory> GetBreadcrumbs(int catId = 0) {
+            try {
+                WebClient wc = new WebClient();
+                wc.Proxy = null;
+
+                string url = getAPIPath();
+                url += "/GetCategoryBreadCrumbs";
+                url += "?dataType=JSON";
+                url += "&catId=" + catId;
+
+                List<APICategory> cats = new List<APICategory>();
+
+                string cat_json = wc.DownloadString(url);
+                cats = JsonConvert.DeserializeObject<List<APICategory>>(cat_json);
+
+                return cats;
+            } catch (Exception) {
+                return new List<APICategory>();
+            }
+        }
+
+        public static async Task<List<APICategory>> GetBreadcrumbsAsync(int catId = 0) {
+            try {
+                WebClient wc = new WebClient();
+                wc.Proxy = null;
+
+                string url = getAPIPath();
+                url += "/GetCategoryBreadCrumbs";
+                url += "?dataType=JSON";
+                url += "&catId=" + catId;
+
+                List<APICategory> cats = new List<APICategory>();
+
+                Uri targeturi = new Uri(url);
+                var json = await wc.DownloadStringTaskAsync(targeturi);
+
+                cats = JsonConvert.DeserializeObject<List<APICategory>>(json);
+
+                return cats;
+            } catch (Exception) {
+                return new List<APICategory>();
+            }
+        }
+
+        public static List<APICategory> GetPartBreadcrumbs(int partID = 0, int catId = 0) {
+            try {
+                WebClient wc = new WebClient();
+                wc.Proxy = null;
+
+                string url = getAPIPath();
+                url += "/GetPartBreadCrumbs?partID=" + partID;
+                url += "&catId=" + catId + "&dataType=JSON";
+
+                List<APICategory> cats = new List<APICategory>();
+
+                string cat_json = wc.DownloadString(url);
+                cats = JsonConvert.DeserializeObject<List<APICategory>>(cat_json);
+
+                return cats;
+            } catch (Exception) {
+                return new List<APICategory>();
+            }
+        }
+
+        public static async Task<List<APICategory>> GetPartBreadcrumbsAsync(int partID = 0, int catId = 0) {
+            try {
+                WebClient wc = new WebClient();
+                wc.Proxy = null;
+
+                string url = getAPIPath();
+                url += "/GetPartBreadCrumbs?partID=" + partID;
+                url += "&catId=" + catId + "&dataType=JSON";
+
+                List<APICategory> cats = new List<APICategory>();
+
+                Uri targeturi = new Uri(url);
+                var json = await wc.DownloadStringTaskAsync(targeturi);
+
+                cats = JsonConvert.DeserializeObject<List<APICategory>>(json);
+
+                return cats;
+            } catch (Exception) {
+                return new List<APICategory>();
+            }
+        }
+
         internal static APIColorCode GetColorCode(int p) {
             try {
                 WebClient wc = new WebClient();

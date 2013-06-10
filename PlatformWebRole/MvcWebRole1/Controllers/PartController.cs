@@ -14,6 +14,7 @@ namespace EcommercePlatform.Controllers {
         [AcceptVerbs(HttpVerbs.Get)]
         public async Task<ActionResult> Index(int id = 0, bool ajax = false, string year = "", string make = "", string model = "", string style = "") {
             HttpContext ctx = System.Web.HttpContext.Current;
+            int lastCatID = UDF.GetCategoryCookie(ctx);
             if (id <= 0) {
                 Response.Redirect(Request.ServerVariables["HTTP_REFERER"]);
             }
@@ -35,11 +36,12 @@ namespace EcommercePlatform.Controllers {
             }
 
             var pcats = CURTAPI.GetParentCategoriesAsync();
+            var crumbs = CURTAPI.GetPartBreadcrumbsAsync(id,lastCatID);
             var ptask = CURTAPI.GetPartAsync(id, vehicleID);
             var connectortask = CURTAPI.GetConnectorAsync(vehicleID);
             var vehicletask = CURTAPI.GetPartVehiclesAsync(id);
             var relatedtask = CURTAPI.GetRelatedPartsAsync(id);
-            Task[] tasks = { pcats, ptask, connectortask, vehicletask, relatedtask };
+            Task[] tasks = { pcats, ptask, connectortask, vehicletask, relatedtask, crumbs };
             await Task.WhenAll(tasks);
             ViewBag.parent_cats = await pcats;
 
@@ -60,6 +62,9 @@ namespace EcommercePlatform.Controllers {
             if (part.pClass.Length > 0) {
                 part.attributes.Add(new APIAttribute { key = "Class", value = part.pClass });
             }
+
+            List<APICategory> breadcrumbs = await crumbs;
+            ViewBag.breadcrumbs = breadcrumbs;
 
             // We need to push this partID into the recent parts Session object
             SessionWorker.AddRecentPart(ctx, part.partID);

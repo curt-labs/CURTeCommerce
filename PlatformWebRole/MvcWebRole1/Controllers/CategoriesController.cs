@@ -12,27 +12,33 @@ namespace EcommercePlatform.Controllers {
     public class CategoriesController : BaseController {
 
         public async Task<ActionResult> Index(int catID = 0, int page = 1, int per_page = 10) {
+            HttpContext ctx = System.Web.HttpContext.Current;
 
             APICategory category = new APICategory();
             APIColorCode color_code = new APIColorCode();
             List<APIPart> catparts = new List<APIPart>();
             List<APIPart> moreparts = new List<APIPart>();
             Task<List<APICategory>> pcats = CURTAPI.GetParentCategoriesAsync();
+            Task<List<APICategory>> crumbs = null;
             Task<APICategory> cat = null;
             Task<List<APIPart>> parts = null;
             Task<List<APIPart>> moreTask = null;
             Task<APIColorCode> codetask = null;
+            List<APICategory> breadcrumbs = new List<APICategory>();
             List<Task> tasks = new List<Task> { pcats };
 
             if (catID > 0) {
+                UDF.SetCategoryCookie(ctx, catID);
                 cat = CURTAPI.GetCategoryAsync(catID);
                 parts = CURTAPI.GetCategoryPartsAsync(catID, page, per_page);
                 moreTask = CURTAPI.GetCategoryPartsAsync(catID, page + 1, per_page);
                 codetask = CURTAPI.GetCategoryColorCodeAsync(catID);
+                crumbs = CURTAPI.GetBreadcrumbsAsync(catID);
                 tasks.Add(cat);
                 tasks.Add(parts);
                 tasks.Add(moreTask);
                 tasks.Add(codetask);
+                tasks.Add(crumbs);
             } else {
                 category.catTitle = "Product Categories";
                 category.catID = 0;
@@ -45,6 +51,8 @@ namespace EcommercePlatform.Controllers {
                 color_code = await codetask;
             }
             ViewBag.category = category;
+            breadcrumbs = await crumbs;
+            ViewBag.breadcrumbs = breadcrumbs;
             if (parts != null) {
                 catparts = await parts;
                 moreparts = await moreTask;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace EcommercePlatform.Models {
@@ -54,6 +55,19 @@ namespace EcommercePlatform.Models {
             }
         }
 
+        internal static List<ContentPage> GetSitemap() {
+            List<ContentPage> pages = new List<ContentPage>();
+            try {
+                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+                pages = db.ContentPages.Where(x => x.visible.Equals(true)).AsParallel().OrderBy(x => x.Title).ToList();
+            } catch { };
+            return pages;
+        }
+
+        internal static async Task<ContentPage> GetPageByTitleAsync(string title) {
+            var task = Task.Factory.StartNew(() => GetPageByTitle(title));
+            return await task;
+        }
     }
 
 }

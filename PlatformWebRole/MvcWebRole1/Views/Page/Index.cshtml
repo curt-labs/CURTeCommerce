@@ -8,14 +8,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if (crumbs.Count > 0) {
-    <div class="breadcrumbs">
-        @foreach (EcommercePlatform.ContentPage crumb in crumbs.Reverse<EcommercePlatform.ContentPage>()) {
-            <a href="/page/@crumb.Title">@crumb.Title.Trim()</a> <span>&gt;</span>
-        }
-        @page.Title.Trim()
-    </div>
-}
+<div class="breadcrumbs">
+    <a href="/">Home</a> <span>&gt;</span>
+    @foreach (EcommercePlatform.ContentPage crumb in crumbs.Reverse<EcommercePlatform.ContentPage>()) {
+        <a href="/page/@crumb.Title">@crumb.Title.Trim()</a> <span>&gt;</span>
+    }
+    @page.Title.Trim()
+</div>
 <span class="heading">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(page.Title)</span>
 
 <div class="content">

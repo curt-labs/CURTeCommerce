@@ -1,0 +1,38 @@
+﻿@{
+    List<EcommercePlatform.Models.APICategory> parent_cats = ViewBag.parent_cats ?? new List<EcommercePlatform.Models.APICategory>();
+    List<EcommercePlatform.ContentPage> contents = ViewBag.contents ?? new List<EcommercePlatform.ContentPage>();
+    ViewBag.Title = "Sitemap";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<string> excluded = new List<string> { "About Us", "Contact", "Faq", "Homepage", "Privacy Policy", "Newsletter" };
+}
+
+<div class="breadcrumbs">
+    <a href="/">Home</a> <span>&gt;</span>
+    Sitemap
+</div>
+<span class="heading">Sitemap</span>
+
+<div class="content">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/Testimonials">Testimonials</a></li>
+        <li><a href="/Blog">Blog</a></li>
+        <li><a href="/Locations">Locations</a></li>
+        <li><a href="/FAQ">FAQ</a></li>
+        <li><a href="/Contact">Contact Us</a></li>
+        <li><a href="/Privacy Policy">Privacy Policy</a></li>
+        @foreach (EcommercePlatform.Models.APICategory cat in parent_cats) {
+            <li><a href="/Category/@cat.catID/@cat.slug">@cat.catTitle</a>
+                <ul>
+                @foreach (EcommercePlatform.Models.APICategory subcat in cat.SubCategories) {
+                    <li><a href="/Category/@subcat.catID/@subcat.slug">@subcat.catTitle</a></li>
+                }
+                </ul>
+            </li>
+        }
+        @foreach (EcommercePlatform.ContentPage page in contents) {
+            <li><a href="/page/@page.Title">@page.Title.Trim()</a></li>
+        }
+    </ul>
+</div>
+<div class="clearfix"></div>

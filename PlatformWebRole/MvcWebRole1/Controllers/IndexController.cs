@@ -15,20 +15,21 @@ namespace EcommercePlatform.Controllers {
 
             var pcats = CURTAPI.GetParentCategoriesAsync();
             var rparts = SessionWorker.GetRecentParts(ctx);
-            await Task.WhenAll(new Task[] { pcats, rparts });
+            var bannertask = Banner.GetBannersAsync();
+            var contenttask = ContentManagement.GetPageByTitleAsync("homepage");
+            await Task.WhenAll(new Task[] { pcats, rparts, bannertask, contenttask });
             
             ViewBag.parent_cats = await pcats;
 
             // We need to retrieve our recent parts from our session object
             ViewBag.recentParts = await rparts;
-            List<double> years = ViewBag.years;
 
             // We need to get 5 random banners
-            List<Banner> banners = UDF.GetBanners();
+            List<Banner> banners = await bannertask;
             ViewBag.banners = banners;
 
             // Retrieve the homepage content
-            ContentPage page = ContentManagement.GetPageByTitle("homepage");
+            ContentPage page = await contenttask;
             ViewBag.page = page;
 
 

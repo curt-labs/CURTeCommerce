@@ -20,7 +20,17 @@
     List<EcommercePlatform.Models.APIPart> connectors = ViewBag.connectors ?? new List<EcommercePlatform.Models.APIPart>();
     bool first_image = true;
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
-    List<int> statuses = new List<int>{800,900}; 
+    List<int> statuses = new List<int>{800,900};
+    List<EcommercePlatform.Models.APICategory> breadcrumbs = ViewBag.breadcrumbs ?? new List<EcommercePlatform.Models.APICategory>();
+}
+@if (breadcrumbs.Count > 0) {
+    <div class="breadcrumbs">
+        <a href="/">Home</a> <span>&gt;</span>
+        @for (int i = breadcrumbs.Count() - 1; i >= 0; i--) {
+            <a href="@Url.RouteUrl("CategoryByID", new { catID = breadcrumbs[i].catID, cat = breadcrumbs[i].slug })">@breadcrumbs[i].catTitle</a> <span>&gt;</span>
+        }
+        Part @part.partID
+    </div>
 }
 
 @if (year.Length > 0 && make.Length > 0 && model.Length > 0 && style.Length > 0) {
@@ -33,7 +43,7 @@
 <div class="titles">
     <!-- Part Title -->
     <span class="shortDesc">@part.shortDesc</span>
-    <span class="partNum">Part #@part.partID</span>
+    <span class="partNum">Part @part.partID</span>
 </div>
 
 <div class="purchase">
@@ -67,15 +77,15 @@
     @foreach (EcommercePlatform.Models.APIImage img in part.images.Where(x => x.size.Equals("Venti")).OrderBy(x => x.sort)) {
         if(first_image){
             if (part.images.Where(x => x.size.Equals("Grande") && x.sort.Equals(img.sort)).Count() > 0) { 
-                <a href="@img.path" target="_blank" title="Part #@part.partID" class="main" rel="Shadowbox[part]">
-                    <img src="@(part.images.Where(x => x.size.Equals("Grande") && x.sort.Equals(img.sort)).FirstOrDefault<EcommercePlatform.Models.APIImage>().path)" alt="Part #@part.partID" onerror="$(this).parent().remove()" />
+                <a href="@img.path" target="_blank" title="Part @part.partID" class="main" rel="Shadowbox[part]">
+                    <img src="@(part.images.Where(x => x.size.Equals("Grande") && x.sort.Equals(img.sort)).FirstOrDefault<EcommercePlatform.Models.APIImage>().path)" alt="Part @part.partID" onerror="$(this).parent().remove()" />
                 </a>
             }
             first_image = false;
         }else{
             if (part.images.Where(x => x.size.Equals("Tall") && x.sort.Equals(img.sort)).Count() > 0) { 
-                <a href="@img.path" target="_blank" title="Part #@part.partID" class="sub" rel="Shadowbox[part]">
-                    <img src="@(part.images.Where(x => x.size.Equals("Tall") && x.sort.Equals(img.sort)).FirstOrDefault<EcommercePlatform.Models.APIImage>().path)" alt="Part #@part.partID" onerror="$(this).parent().remove()" />
+                <a href="@img.path" target="_blank" title="Part @part.partID" class="sub" rel="Shadowbox[part]">
+                    <img src="@(part.images.Where(x => x.size.Equals("Tall") && x.sort.Equals(img.sort)).FirstOrDefault<EcommercePlatform.Models.APIImage>().path)" alt="Part @part.partID" onerror="$(this).parent().remove()" />
                 </a>
             }
         }
@@ -181,10 +191,10 @@
                     <div class="part_listing" id="@rpart.partID">
                         <div class="part_info">
                             <h4>@rpart.shortDesc</h4>
-                            <span class="id">Part #@rpart.partID</span>
+                            <span class="id">Part @rpart.partID</span>
                             <div class="left_col">
                                 @if(rpart.images.Any(x => x.size.Equals("Tall") && x.sort.Equals('a'))) {
-                                <img src="@rpart.images.Where(x => x.size.Equals("Tall") && x.sort.Equals('a')).Select(x => x.path).FirstOrDefault()" onerror="$(this).remove()" alt="Part #@rpart.partID" />
+                                <img src="@rpart.images.Where(x => x.size.Equals("Tall") && x.sort.Equals('a')).Select(x => x.path).FirstOrDefault()" onerror="$(this).remove()" alt="Part @rpart.partID" />
                                 }
                             </div>
                             <div class="mid_col">
@@ -205,7 +215,7 @@
                         <div class="right_col">
                             @if (statuses.Contains(rpart.status)) { 
                             <span class="price">@rpart.listPrice</span>
-                            <a class="details" href="/Part/@rpart.partID" title="View Details for Part #@rpart.partID">View Details</a>
+                            <a class="details" href="/Part/@rpart.partID" title="View Details for Part @rpart.partID">View Details</a>
                             <a href="/Cart/Add/@rpart.partID" data-id="@rpart.partID" class="add_cart" title="Add to Cart">
                                 <img src="/Content/img/cart.png" alt="Add to Cart" />
                                 <span>Add to Cart</span>
@@ -267,10 +277,10 @@
                     <div class="part_listing" id="@con.partID">
                         <div class="part_info">
                             <h4>@con.shortDesc</h4>
-                            <span class="id">Part #@con.partID</span>
+                            <span class="id">Part @con.partID</span>
                             <div class="left_col">
                                 @if(con.images.Any(x => x.size.Equals("Tall") && x.sort.Equals('a'))) {
-                                <img src="@con.images.Where(x => x.size.Equals("Tall") && x.sort.Equals('a')).Select(x => x.path).FirstOrDefault()" onerror="$(this).remove()" alt="Part #@con.partID" />
+                                <img src="@con.images.Where(x => x.size.Equals("Tall") && x.sort.Equals('a')).Select(x => x.path).FirstOrDefault()" onerror="$(this).remove()" alt="Part @con.partID" />
                                 }
                             </div>
                             <div class="mid_col">
@@ -291,7 +301,7 @@
                         <div class="right_col">
                             @if (statuses.Contains(con.status)) { 
                             <span class="price">@con.listPrice</span>
-                            <a class="details" href="/Part/@con.partID" title="View Details for Part #@con.partID">View Details</a>
+                            <a class="details" href="/Part/@con.partID" title="View Details for Part @con.partID">View Details</a>
                             <a href="/Cart/Add/@con.partID" data-id="@con.partID" class="add_cart" title="Add to Cart">
                                 <img src="/Content/img/cart.png" alt="Add to Cart" />
                                 <span>Add to Cart</span>

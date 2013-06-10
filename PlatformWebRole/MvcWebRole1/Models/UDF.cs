@@ -82,6 +82,13 @@ namespace EcommercePlatform.Models {
             ctx.Response.Cookies.Add(vehicle_cookie);
         }
 
+        public static void SetCategoryCookie(HttpContext ctx, int catID) {
+            HttpCookie category_cookie = new HttpCookie("last_category");
+            category_cookie.Value = catID.ToString();
+            category_cookie.Expires = DateTime.Now.AddDays(14);
+            ctx.Response.Cookies.Add(category_cookie);
+        }
+
         public static string GetYearCookie(HttpContext ctx) {
             HttpCookie vehicleYear = ctx.Request.Cookies.Get("vehicle_year");
             return (vehicleYear != null && vehicleYear.Value != null) ? vehicleYear.Value.ToString() : "";
@@ -107,7 +114,12 @@ namespace EcommercePlatform.Models {
             HttpCookie vehicleID = ctx.Request.Cookies.Get("vehicle_id");
             return (vehicleID != null && vehicleID.Value != null) ? Convert.ToInt32(vehicleID.Value.ToString()) : 0;
         }
-        
+
+        public static int GetCategoryCookie(HttpContext ctx) {
+            HttpCookie catID = ctx.Request.Cookies.Get("last_category");
+            return (catID != null && catID.Value != null) ? Convert.ToInt32(catID.Value.ToString()) : 0;
+        }
+
         public static Cart ExpireCart(HttpContext ctx, int cust_id) {
             Cart new_cart = new Cart().Save();
             new_cart.UpdateCart(ctx, cust_id);
@@ -226,22 +238,6 @@ namespace EcommercePlatform.Models {
             } catch (Exception e) {
                 throw new Exception(e.Message);
             }
-        }
-
-        public static List<Banner> GetRandomBanners(int count = 5) {
-            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-            List<Banner> banners = new List<Banner>();
-            banners = db.Banners.Where(x => x.isVisible.Equals(1)).ToList<Banner>();
-            banners = Shuffle<Banner>(banners);
-            banners = banners.Take(count).ToList<Banner>();
-            return banners;
-        }
-
-        public static List<Banner> GetBanners() {
-            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-            List<Banner> banners = new List<Banner>();
-            banners = db.Banners.Where(x => x.isVisible.Equals(1)).OrderBy(x => x.order).ToList<Banner>();
-            return banners;
         }
 
         public static List<T> Shuffle<T>(IList<T> list) {
