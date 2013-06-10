@@ -43,6 +43,10 @@
                 <input type="text" value="@(cust.fname + " " + cust.lname)" readonly="readonly" />
             </label>
             <label>
+                Customer Phone
+                <input type="text" value="@cust.phone" readonly="readonly" />
+            </label>
+            <label>
                 Date Created
                 <input type="text" value="@String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.Payment.created, tz)) @UDF.ShortTZ(tz, order.Payment.created)" readonly="readonly" />
             </label>
