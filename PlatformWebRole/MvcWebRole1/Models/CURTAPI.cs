@@ -12,19 +12,6 @@ using System.Threading.Tasks;
 namespace EcommercePlatform.Models {
     public class CURTAPI {
 
-        internal static CategoryPartsData GetCategoryPartsData(int id = 0, int page = 1, int per_page = 10) {
-            var catTask = GetCategoryAsync(id);
-            var partTask = GetCategoryPartsAsync(id, page, per_page);
-            var moreTask = GetCategoryPartsAsync(id, page + 1, per_page);
-
-            var data = new CategoryPartsData {
-                category = catTask.Result,
-                parts = partTask.Result,
-                morecount = moreTask.Result.Count
-            };
-            return data;
-        }
-
         internal static List<double> GetYears() {
             try {
                 string year_json = "";

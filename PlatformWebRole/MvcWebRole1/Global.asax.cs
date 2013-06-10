@@ -37,8 +37,8 @@ namespace MvcWebRole1 {
 
             routes.MapRoute(
                 "CategoryByID",
-                "Category/{catID}/{*cat}",
-                new { controller = "Categories", action = "Index", catID = "",cat = "" }
+                "Category/{catID}/{cat}/{page}/{per_page}",
+                new { controller = "Categories", action = "Index", catID = "", cat = "", page = UrlParameter.Optional, per_page = UrlParameter.Optional }
             );
 
             routes.MapRoute(
