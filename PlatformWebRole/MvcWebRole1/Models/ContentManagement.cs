@@ -57,9 +57,10 @@ namespace EcommercePlatform.Models {
 
         internal static List<ContentPage> GetSitemap() {
             List<ContentPage> pages = new List<ContentPage>();
+            List<string> excluded = new List<string> { "about us", "contact", "faq", "homepage", "privacy policy", "newsletter", "sitemap" };
             try {
                 EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-                pages = db.ContentPages.Where(x => x.visible.Equals(true)).AsParallel().OrderBy(x => x.Title).ToList();
+                pages = db.ContentPages.Where(x => x.visible.Equals(true) && !excluded.Contains(x.Title.Trim().ToLower())).AsParallel().OrderBy(x => x.Title).ToList();
             } catch { };
             return pages;
         }

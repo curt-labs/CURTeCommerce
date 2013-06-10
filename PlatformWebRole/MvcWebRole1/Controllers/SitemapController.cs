@@ -15,11 +15,20 @@ namespace EcommercePlatform.Controllers {
             await Task.WhenAll(new Task[] { pcats });
             ViewBag.parent_cats = await pcats;
 
+            // Get all the content pages
             List<ContentPage> contents = new List<ContentPage>();
             contents = ContentManagement.GetSitemap();
             ViewBag.contents = contents;
 
-            // Retrieve the homepage content
+            // Get all the FaqTopics
+            List<FaqTopic> topics = FaqTopic.GetAll();
+            ViewBag.faqtopics = topics;
+
+            // all the blog posts
+            List<PostWithCategories> posts = PostModel.GetSitemap();
+            ViewBag.posts = posts;
+            
+            // Retrieve the sitemap page content
             ContentPage page = ContentManagement.GetPageByTitle("sitemap");
             ViewBag.page = page;
 

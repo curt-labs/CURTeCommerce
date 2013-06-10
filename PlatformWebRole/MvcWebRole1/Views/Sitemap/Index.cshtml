@@ -1,9 +1,10 @@
 ﻿@{
     List<EcommercePlatform.Models.APICategory> parent_cats = ViewBag.parent_cats ?? new List<EcommercePlatform.Models.APICategory>();
     List<EcommercePlatform.ContentPage> contents = ViewBag.contents ?? new List<EcommercePlatform.ContentPage>();
+    List<EcommercePlatform.FaqTopic> faqtopics = ViewBag.faqtopics ?? new List<EcommercePlatform.FaqTopic>();
+    List<EcommercePlatform.Models.PostWithCategories> posts = ViewBag.posts ?? new List<EcommercePlatform.Models.PostWithCategories>();
     ViewBag.Title = "Sitemap";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    List<string> excluded = new List<string> { "About Us", "Contact", "Faq", "Homepage", "Privacy Policy", "Newsletter" };
 }
 
 <div class="breadcrumbs">
@@ -16,11 +17,29 @@
     <ul>
         <li><a href="/">Home</a></li>
         <li><a href="/Testimonials">Testimonials</a></li>
-        <li><a href="/Blog">Blog</a></li>
+        <li>
+            <a href="/Blog">Blog</a>
+            <ul>
+                @foreach (EcommercePlatform.Models.PostWithCategories post in posts) {
+                    <li><a href="/Blog/Post/@String.Format("{0:M-dd-yyyy}", post.publishedDate)/@post.slug">@post.post_title</a></li>
+                }
+            </ul>
+        </li>
         <li><a href="/Locations">Locations</a></li>
-        <li><a href="/FAQ">FAQ</a></li>
+        <li>
+            <a href="/FAQ">FAQ</a>
+            <ul>
+                @foreach (EcommercePlatform.FaqTopic faq in faqtopics) {
+                    <li><a href="/FAQ/@faq.topic" title="@faq.topic">@faq.topic</a></li>
+                }
+            </ul>
+        </li>
         <li><a href="/Contact">Contact Us</a></li>
         <li><a href="/Privacy Policy">Privacy Policy</a></li>
+        <li><a href="/info">Hitches 101</a></li>
+        @foreach (EcommercePlatform.ContentPage page in contents) {
+            <li><a href="/page/@page.Title">@page.Title.Trim()</a></li>
+        }
         @foreach (EcommercePlatform.Models.APICategory cat in parent_cats) {
             <li><a href="/Category/@cat.catID/@cat.slug">@cat.catTitle</a>
                 <ul>
@@ -29,9 +48,6 @@
                 }
                 </ul>
             </li>
-        }
-        @foreach (EcommercePlatform.ContentPage page in contents) {
-            <li><a href="/page/@page.Title">@page.Title.Trim()</a></li>
         }
     </ul>
 </div>

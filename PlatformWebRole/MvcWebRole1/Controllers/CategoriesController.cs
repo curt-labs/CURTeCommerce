@@ -42,16 +42,19 @@ namespace EcommercePlatform.Controllers {
             } else {
                 category.catTitle = "Product Categories";
                 category.catID = 0;
-                category.SubCategories = ViewBag.parent_cats;
             }
             await Task.WhenAll( tasks.ToArray() );
             ViewBag.parent_cats = await pcats;
             if (catID > 0) {
                 category = await cat;
                 color_code = await codetask;
+            } else {
+                category.SubCategories = ViewBag.parent_cats;
             }
             ViewBag.category = category;
-            breadcrumbs = await crumbs;
+            if (crumbs != null) {
+                breadcrumbs = await crumbs;
+            }
             ViewBag.breadcrumbs = breadcrumbs;
             if (parts != null) {
                 catparts = await parts;
