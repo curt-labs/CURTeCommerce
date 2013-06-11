@@ -26,6 +26,24 @@ section a.button{
     line-height:45px;
 }
 
+section a.smallbutton{
+    display:inline-block;
+    width: 200px;
+    height: 45px;
+    background:#bf3504;
+    margin: 0px 25px 40px 25px;
+    -moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+    text-align:center;
+    color: white;
+    text-decoration:none;
+    font-size: 24px;
+    font-weight:600;
+    line-height:45px;
+}
+
+
 table tbody tr td img{
     width: 20px;
     margin:auto;
@@ -62,15 +80,19 @@ a.modalClose{
     padding: 4px;
 }
 
-#order span.subdata {
+#order span.subdata, #order span.itemdata {
     display:block;
     text-align:right;
 }
-
-#order span.subdata span {
+#order span.itemdata {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+#order span.subdata span, #order span.itemdata span {
     float: left;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: bold;
+    padding-right: 30px;
 }
 
 #order span.last {
@@ -243,4 +265,20 @@ table#cart tfoot td:first-child {
     border-radius: 8px;
     text-align: center;
     padding: 5px;
+}
+table.orderdetails tbody tr td:first-child {
+    font-weight: bold;
+    padding-right: 20px;
+}
+
+table.orderdetails tbody tr td:last-child{
+    text-align: left;
+}
+
+h4 {
+    padding-top: 10px;
+}
+
+div.left a.btn {
+    color: #fff;
 }

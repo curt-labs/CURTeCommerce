@@ -5,6 +5,12 @@
     Admin.Cart order = ViewBag.order ?? new Admin.Cart();
     Admin.Customer cust = ViewBag.customer ?? new Admin.Customer();
     string trackingcodes = "";
+    for (int i = 0; i < order.Shipments.Count; i++) {
+        if (i > 0) {
+            trackingcodes += ", ";
+        }
+        trackingcodes += order.Shipments[i].tracking_number;
+    }
 
     ViewBag.Title = "Items";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -16,51 +22,78 @@
 } else {
     <a class="button" href="/Admin/Orders/Void/@order.payment_id" id="void">Void Order</a>
 }
-<ul class="tabs">
-    <li>
-        <a href="#order">Summary</a>
-    </li>
-    <li>
-        <a href="#items">Items</a>
-    </li>
-    <li>
-        <a href="#shipping">Shipping</a>
-    </li>
-    <li>
-        <a href="#payment">Payment</a>
-    </li>
-    @if(ViewBag.settings.Get("EDIOrderProcessing") == "true") {
-    <li>
-        <a href="#edi">CURT Status</a>
-    </li>
-    }
-</ul>
-<div class="tab_container">
-    <div class="tab_content admin_form" id="order">
+    <div class=" admin_form" id="order">
         <div class="left">
-            <label>
-                Customer
-                <input type="text" value="@(cust.fname + " " + cust.lname)" readonly="readonly" />
-            </label>
-            <label>
-                Customer Phone
-                <input type="text" value="@cust.phone" readonly="readonly" />
-            </label>
-            <label>
-                Date Created
-                <input type="text" value="@String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.Payment.created, tz)) @UDF.ShortTZ(tz, order.Payment.created)" readonly="readonly" />
-            </label>
-            <label>
-                Payment Method
-                <input type="text" value="@order.Payment.PaymentTypes.name" readonly />
-            </label>
-            <label>
-                Status
-                <input type="text" value="@order.Payment.status" readonly />
-            </label>
+            <h4>Order Date</h4>
+            <p>@String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.Payment.created, tz)) @UDF.ShortTZ(tz, order.Payment.created)</p>
+            <h4>Status</h4>
+            <p>@order.Payment.status</p>
+            <h4>Payment Details</h4>
+            <table class="orderdetails">
+                <tr><td>Type</td><td>@order.Payment.PaymentTypes.name</td></tr>
+                <tr><td>Date</td><td>@String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.Payment.created, tz)) @UDF.ShortTZ(tz, order.Payment.created)</td></tr>
+                <tr><td>Amount</td><td>@String.Format("{0:C}", order.getTotal())</td></tr>
+                <tr><td>Confirmation Code</td><td>@order.Payment.confirmationKey</td></tr>
+            </table>
+            <h4>Customer</h4>
+            <table class="orderdetails">
+                <tr><td>Name</td><td>@cust.fname @cust.lname</td></tr>
+                <tr><td>Phone</td><td>@cust.phone</td></tr>
+                <tr><td>Email</td><td><a href="mailto:@cust.email">@cust.email</a></td></tr>
+                <tr>
+                    <td>Billing Address</td>
+                    <td>@order.Billing.first @order.Billing.last<br />
+                    @order.Billing.street1<br />
+                    @if (order.Billing.street2.Trim() != "") {
+                    @order.Billing.street2<br />
+                    }
+                    @order.Billing.city<text>, </text>@order.Billing.State1.abbr @order.Billing.postal_code<br />
+                    @order.Billing.State1.Country.abbr
+                    </td>
+                </tr>
+                <tr>
+                    <td>Shipping Address</td>
+                    <td>@order.Shipping.first @order.Shipping.last<br />
+                    @order.Shipping.street1<br />
+                    @if (order.Shipping.street2.Trim() != "") {
+                    @order.Shipping.street2<br />
+                    }
+                    @order.Shipping.city<text>, </text>@order.Shipping.State1.abbr @order.Shipping.postal_code<br />
+                    @order.Shipping.State1.Country.abbr
+                    </td>
+                </tr>
+            </table>
+            <h4>Shipping Details</h4>
+            <table class="orderdetails">
+                <tr><td>Type</td><td>@((order.shipping_type != null) ? order.shipping_type.Replace("_", " ").ToLower() : "")</td></tr>
+                <tr><td>Price</td><td>@String.Format("{0:C}", order.shipping_price)</td></tr>
+                <tr><td>Tracking Codes</td><td><p id="trackingcodes">@trackingcodes</p></td></tr>
+                @if (order.Shipments.Count > 0 && order.Shipments[0].dateShipped != null) {
+                    <tr><td>Shipping Date</td><td>@String.Format("{0: M/d/yyyy}", order.Shipments[0].dateShipped)</td></tr>
+                }
+            </table>
+            <br />
+            <a class="btn btn-danger" href="#" data-id="@order.payment_id" id="shipnotice">Send Notification</a>
+            <a class="btn btn-danger" href="#" data-id="@order.payment_id" id="addshipment">Add Shipment</a>
+            <a class="btn btn-danger" href="#" data-id="@order.payment_id" id="clearshipments">Clear All</a>
+            @if (ViewBag.settings.Get("EDIOrderProcessing") == "true") {
+                <h4>CURT Order Status (EDI)</h4>
+                <table class="orderdetails">
+                    <tr><td>EDI Generated</td><td>@((order.OrderEDI != null) ? String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.OrderEDI.dateGenerated, tz)) + " " + UDF.ShortTZ(tz, order.OrderEDI.dateGenerated) : "Not Generated Yet")</td></tr>
+                    <tr><td>Received By CURT</td><td>@((order.OrderEDI != null && order.OrderEDI.dateAcknowledged != null) ? String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.OrderEDI.dateAcknowledged.Value, tz)) + " " + UDF.ShortTZ(tz, order.OrderEDI.dateAcknowledged.Value) : "Not Acknowledged Yet")</td></tr>
+                    <tr><td>EDI Filename</td><td>@((order.OrderEDI != null) ? order.OrderEDI.filename : "")</td></tr>
+                </table>
+                <br />
+                <a class="btn btn-danger" href="/Admin/Orders/RegeneratePO/@order.payment_id">Generate Purchase Order</a>
+            }
         </div>
-        <div class="left">
-            <span class="title">Order Total</span>
+        <div class="right">
+            <span class="title">Order Details</span>
+            @foreach (Admin.CartItem item in order.CartItems) {
+                for (int i = 0; i < item.quantity; i++) {
+                <span class="itemdata@((item == order.CartItems.Last() && i == item.quantity - 1) ? " last" : "")"><span><a href="/Part/@item.partID" target="_blank" title="View Part">@item.shortDesc</a></span>@String.Format("{0:C}", item.price)</span>
+                }
+            }
             <span class="subdata"><span>Subtotal</span>@String.Format("{0:C}", order.GetSubTotal())</span>
             <span class="subdata"><span>Shipping</span>@String.Format("{0:C}", order.shipping_price)</span>
             <span class="subdata last"><span>Tax</span>@String.Format("{0:C}", order.tax)</span>
@@ -68,158 +101,13 @@
 
             <span class="title">Number of Items</span>
             <span class="data">@order.getCount()</span>
+
+            <span class="title">Order Notes</span>
+            <textarea id="notes" rows="5">@order.notes</textarea>
+            <a class="btn" id="savenotes" data-id="@order.payment_id">Save</a>
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="tab_content" id="items">
-        @foreach (Admin.CartItem item in order.CartItems) {
-            <article>
-                <div class="image">
-                    <img src="@item.GetImage()" onerror="$(this).remove()" />
-                </div>
-                <div class="info">
-                    <p>@item.shortDesc</p>
-                    <a href="/Part/@item.partID" target="_blank" title="View Part">View CURT Part #@item.partID</a>
-                </div>
-                <div class="pricing">
-                    <span class="price">@String.Format("{0:C}", item.price)</span>
-                    <span class="qty">x&nbsp;@item.quantity</span>
-                    <span class="total">@String.Format("{0:C}", item.price * item.quantity)</span>
-                </div>
-            </article>
-        }
-    </div>
-    <div class="tab_content admin_form" id="shipping">
-        <h3>Shipping Info</h3>
-        <label>
-            Type
-            <input type="text" value="@((order.shipping_type != null) ? order.shipping_type.Replace("_", " ").ToLower() : "")" readonly />
-        </label>
-        <label>
-            Price
-            <input type="text" value="@String.Format("{0:C}", order.shipping_price)" readonly />
-        </label>
-        @{
-            for (int i = 0; i < order.Shipments.Count; i++) {
-                if (i > 0) {
-                    trackingcodes += ", ";
-                }
-                trackingcodes += order.Shipments[i].tracking_number;
-            }
-        }
-        <label>
-            Tracking Codes
-            <input type="text" id="trackingcodes" value="@trackingcodes" readonly />
-        </label>
-        @if (order.Shipments.Count > 0 && order.Shipments[0].dateShipped != null) {
-            <label>
-                Shipping Date
-                <input type="text" value="@String.Format("{0: M/d/yyyy}", order.Shipments[0].dateShipped)" readonly />
-            </label>
-        }
-        <a class="button" href="#" data-id="@order.payment_id" id="shipnotice">Send Notification</a>
-        <a class="button" href="#" data-id="@order.payment_id" id="addshipment">Add Shipment</a>
-        <a class="button" href="#" data-id="@order.payment_id" id="clearshipments">Clear All</a>
-        <h3>Shipping Address</h3>
-        <label>
-            Name
-            <input type="text" value="@(order.Shipping.first + " " + order.Shipping.last)" readonly />
-        </label>
-        <label>
-            Street
-            <input type="text" value="@order.Shipping.street1" readonly />
-        </label>
-        <label>
-            Street 2
-            <input type="text" value="@order.Shipping.street2" readonly />
-        </label>
-        <label>
-            City
-            <input type="text" value="@order.Shipping.city" readonly />
-        </label>
-        <label>
-            State/Province
-            <input type="text" value="@(order.Shipping.State1.abbr + " - " + order.Shipping.State1.state1)" readonly />
-        </label>
-        <label>
-            Country
-            <input type="text" value="@(order.Shipping.State1.Country.abbr + " - " + order.Shipping.State1.Country.name)" readonly />
-        </label>
-        <label>
-            Postal Code
-            <input type="text" value="@order.Shipping.postal_code" readonly />
-        </label>
-    </div>
-    <div class="tab_content admin_form" id="payment">
-        <h3>Payment Info</h3>
-        <label>
-            Type
-            <input type="text" value="@order.Payment.PaymentTypes.name" readonly />
-        </label>
-        <label>
-            Payment Date
-            <input type="text" value="@String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.Payment.created, tz)) @UDF.ShortTZ(tz, order.Payment.created)" readonly />
-        </label>
-        <label>
-            Amount
-            <input type="text" value="@String.Format("{0:C}", order.getTotal())" readonly />
-        </label>
-        <label>
-            Confirmation Code
-            <input type="text" value="@order.Payment.confirmationKey" readonly />
-        </label>
-        <label>
-            Status
-            <input type="text" value="@order.Payment.status" readonly />
-        </label>
-        <h3>Billing Address</h3>
-        <label>
-            Name
-            <input type="text" value="@(order.Billing.first + " " + order.Billing.last)" readonly />
-        </label>
-        <label>
-            Street
-            <input type="text" value="@order.Billing.street1" readonly />
-        </label>
-        <label>
-            Street 2
-            <input type="text" value="@order.Billing.street2" readonly />
-        </label>
-        <label>
-            City
-            <input type="text" value="@order.Billing.city" readonly />
-        </label>
-        <label>
-            State/Province
-            <input type="text" value="@(order.Billing.State1.abbr + " - " + order.Billing.State1.state1)" readonly />
-        </label>
-        <label>
-            Country
-            <input type="text" value="@(order.Billing.State1.Country.abbr + " - " + order.Billing.State1.Country.name)" readonly />
-        </label>
-        <label>
-            Postal Code
-            <input type="text" value="@order.Billing.postal_code" readonly />
-        </label>
-    </div>
-    @if (ViewBag.settings.Get("EDIOrderProcessing") == "true") {
-    <div class="tab_content admin_form" id="edi">
-        <h3>CURT Order Status</h3>
-        <label>
-            EDI Generated
-            <input type="text" value="@((order.OrderEDI != null) ? String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.OrderEDI.dateGenerated, tz)) + " " + UDF.ShortTZ(tz, order.OrderEDI.dateGenerated) : "Not Generated Yet")" readonly />
-        </label>
-        <label>
-            Received By CURT
-            <input type="text" value="@((order.OrderEDI != null && order.OrderEDI.dateAcknowledged != null) ? String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.OrderEDI.dateAcknowledged.Value, tz)) + " " + UDF.ShortTZ(tz, order.OrderEDI.dateAcknowledged.Value) : "Not Acknowledged Yet")" readonly />
-        </label>
-        <label>
-            EDI Filename
-            <input type="text" value="@((order.OrderEDI != null) ? order.OrderEDI.filename : "")" readonly />
-        </label>
-        <a class="button" href="/Admin/Orders/RegeneratePO/@order.payment_id">Generate Purchase Order</a>
-    </div>
-    }
 </div>
 
 <script>
@@ -251,9 +139,22 @@
             var tracking = $('#trackingcode').val();
             var orderID = $('#trackingcode').data('id');
             $.get("/Admin/Orders/AddShipment", { id: orderID, trackingnum: tracking }, function (data) {
-                $('#trackingcodes').val(data);
+                $('#trackingcodes').html(data);
                 $.modal.close();
             },"text");
+        });
+
+        $(document).on('click', '#savenotes', function () {
+            var notes = $('#notes').val();
+            var cartID = $(this).data('id');
+            $.getJSON("/Admin/Orders/SaveNotes", { cartID: cartID, notes: notes }, function (success) {
+                console.log(success);
+                if (success) {
+                    showMessage("Notes saved successfully.");
+                } else {
+                    showMessage("Problem saving notes.");
+                }
+            });
         });
 
         $(document).on('click', '#cancelshipment', function (event) {
@@ -276,7 +177,7 @@
             if (confirm("Clear all shipment tracking code information?")) {
                 $.getJSON("/Admin/Orders/ClearShipments/" + orderID, function (data) {
                     if (data) {
-                        $('#trackingcodes').val("");
+                        $('#trackingcodes').html("");
                     }
                 });
             }

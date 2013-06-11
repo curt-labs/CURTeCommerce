@@ -28,6 +28,9 @@ $(function () {
     setPrice = (function (partID, row) {
         var price, index;
         price = prompt('Please enter the new price.');
+        if (price == "") {
+            return;
+        }
         if (price === undefined || price === 0) {
             showMessage('Invalid price.');
         } else if (partID === undefined || partID === 0) {

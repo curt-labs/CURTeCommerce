@@ -1984,6 +1984,8 @@ namespace Admin
 		
 		private bool _voided;
 		
+		private string _notes;
+		
 		private EntitySet<CartItem> _CartItems;
 		
 		private EntitySet<Shipment> _Shipments;
@@ -2026,6 +2028,8 @@ namespace Admin
     partial void Ontracking_numberChanged();
     partial void OnvoidedChanging(bool value);
     partial void OnvoidedChanged();
+    partial void OnnotesChanging(string value);
+    partial void OnnotesChanged();
     #endregion
 		
 		public Cart()
@@ -2292,6 +2296,26 @@ namespace Admin
 					this._voided = value;
 					this.SendPropertyChanged("voided");
 					this.OnvoidedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_notes", CanBeNull=false)]
+		public string notes
+		{
+			get
+			{
+				return this._notes;
+			}
+			set
+			{
+				if ((this._notes != value))
+				{
+					this.OnnotesChanging(value);
+					this.SendPropertyChanging();
+					this._notes = value;
+					this.SendPropertyChanged("notes");
+					this.OnnotesChanged();
 				}
 			}
 		}

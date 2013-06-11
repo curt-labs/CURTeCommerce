@@ -500,5 +500,13 @@ namespace Admin.Controllers {
             c.Remove(partID);
         }
 
+        [NoValidation]
+        public string SaveNotes(int cartID = 0, string notes = "") {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Cart c = db.Carts.Where(x => x.payment_id == cartID).First<Cart>();
+            c.SaveNotes(notes);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(true);
+        }
+
     }
 }

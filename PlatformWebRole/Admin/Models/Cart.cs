@@ -91,6 +91,13 @@ namespace Admin
             return this;
         }
 
+        public void SaveNotes(string notes = "") {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            Cart c = db.Carts.Where(x => x.ID == this.ID).First<Cart>();
+            c.notes = notes;
+            db.SubmitChanges();
+        }
+
         public void Empty() {
             if (this.cust_id > 0) {
                 EcommercePlatformDataContext db = new EcommercePlatformDataContext();
