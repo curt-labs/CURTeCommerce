@@ -182,7 +182,7 @@ namespace MvcWebRole1 {
             RegisterRoutes(RouteTable.Routes);
         }
 
-        protected void Application_Error(object sender, EventArgs e) {
+        /*protected void Application_Error(object sender, EventArgs e) {
             var app = (MvcApplication)sender;
             var context = app.Context;
             var ex = app.Server.GetLastError();
@@ -213,6 +213,6 @@ namespace MvcWebRole1 {
             }
             IController controller = new EcommercePlatform.Controllers._404Controller();
             controller.Execute(new RequestContext(new HttpContextWrapper(context), routeData));
-        }
+        }*/
     }
 }

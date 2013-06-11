@@ -205,12 +205,25 @@ namespace Admin
                 c.ship_to = id;
                 db.SubmitChanges();
                 this._ship_to = id;
+                setHandlingFee();
             } catch (Exception) { }
+        }
+
+        public void setHandlingFee() {
+            if (this.cust_id > 0) {
+                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+                try {
+                    Cart cart = db.Carts.Where(x => x.ID == this.ID).First<Cart>();
+                    cart.handling_fee = cart.Shipping.State1.handlingFee;
+                    this.handling_fee = cart.handling_fee;
+                    db.SubmitChanges();
+                } catch { }
+            }
         }
 
         public bool HasFreeShipping() {
             try {
-                List<int> excludedStates = new List<int> { 2, 15 };
+                List<int> excludedStates = new State().GetExcludedStates().Select(x => x.stateID).ToList();
                 if (this.Shipping != null && excludedStates.Contains(this.Shipping.state)) {
                     return false;
                 }

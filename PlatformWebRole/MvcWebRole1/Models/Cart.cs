@@ -173,17 +173,21 @@ namespace EcommercePlatform
         }
 
         public void setHandlingFee() {
+            decimal fee = 0;
             if (this.cust_id > 0) {
                 EcommercePlatformDataContext db = new EcommercePlatformDataContext();
                 try {
                     Cart cart = db.Carts.Where(x => x.ID == this.ID).First<Cart>();
-                    cart.BindAddresses();
-                    cart.handling_fee = cart.Shipping.State1.handlingFee;
+                    Address shipping = db.Addresses.Where(x => x.ID.Equals(this.ship_to)).FirstOrDefault<Address>();
+                    //cart.BindAddresses();
+                    if (shipping != null && shipping.State1 != null) {
+                        fee = shipping.State1.handlingFee;
+                    }
+                    cart.handling_fee = fee;
                     db.SubmitChanges();
                 } catch { }
             }
-            this.shipping_type = shipping_type;
-            this.shipping_price = shipping_price;
+            this.handling_fee = fee;
         }
 
         public void setShippingType(string shipping_type, decimal shipping_price) {

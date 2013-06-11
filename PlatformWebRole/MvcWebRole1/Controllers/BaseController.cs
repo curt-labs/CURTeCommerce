@@ -37,6 +37,7 @@ namespace EcommercePlatform.Controllers {
             Customer customer = new Customer();
             customer.GetFromStorage(ctx);
 
+
             Settings settings = new Settings();
             ViewBag.settings = settings;
 

@@ -65,8 +65,8 @@
             </tr>
             @if(order.handling_fee > 0) {
                 <tr>
-                    <td colspan="3">Handling:</td>
-                    <td class="price"><strong>@String.Format("{0:C}", order.handling_fee)</strong></td>
+                    <td colspan="2">Handling:</td>
+                    <td class="price">@String.Format("{0:C}", order.handling_fee)</td>
                 </tr>
             }
             <tr>

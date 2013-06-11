@@ -233,24 +233,20 @@ namespace EcommercePlatform.Controllers {
         [RequireHttps]
         public async Task<ActionResult> Shipping(string error = "") {
             HttpContext ctx = System.Web.HttpContext.Current;
-
-            var pcats = CURTAPI.GetParentCategoriesAsync();
-            await Task.WhenAll(new Task[] { pcats });
-            ViewBag.parent_cats = await pcats;
-
             Customer customer = ViewBag.customer;
             Settings settings = ViewBag.settings;
             ViewBag.error = error;
 
             // Retrieve Customer from Sessions/Cookie
-            customer.GetFromStorage(ctx);
             int shippingpad = 0;
             if (settings.Get("ShippingPadding") != "") {
                 try {
                     shippingpad = Convert.ToInt32(settings.Get("ShippingPadding"));
                 } catch { }
             }
-
+            var pcats = CURTAPI.GetParentCategoriesAsync();
+            await Task.WhenAll(new Task[] { pcats });
+            ViewBag.parent_cats = await pcats;
 
             // Get the contact ContentPage
             ContentPage page = ContentManagement.GetPageByTitle("shipping");
@@ -271,7 +267,7 @@ namespace EcommercePlatform.Controllers {
                         if (customer.Cart.shipping_type != null) {
                             type = customer.Cart.shipping_type;
                         }
-                        shippingresponse = getShipping();
+                        shippingresponse = getShipping(ctx);
                     }
                 }
                 ViewBag.shippingpadding = shippingpad;
@@ -522,13 +518,13 @@ namespace EcommercePlatform.Controllers {
         }
 
         public ActionResult UpgradeShipping(string type = ""){
-            ShippingResponse resp = getShipping();
+            HttpContext ctx = System.Web.HttpContext.Current;
+            ShippingResponse resp = getShipping(ctx);
             if (resp.Status_Description == "OK") {
                 ShipmentRateDetails details = resp.Result.FirstOrDefault<ShipmentRateDetails>();
                 RateDetail rate = details.Rates.FirstOrDefault<RateDetail>();
 
                 Customer customer = new Customer();
-                HttpContext ctx = System.Web.HttpContext.Current;
 
                 // Retrieve Customer from Sessions/Cookie
                 customer.GetFromStorage(ctx);
@@ -540,10 +536,9 @@ namespace EcommercePlatform.Controllers {
             return RedirectToAction("shipping");
         }
 
-        public ShippingResponse getShipping() {
+        public ShippingResponse getShipping(HttpContext ctx) {
             Customer customer = new Customer();
             Settings settings = ViewBag.settings;
-            HttpContext ctx = System.Web.HttpContext.Current;
             customer.GetFromStorage(ctx);
             FedExAuthentication auth = new FedExAuthentication {
                 AccountNumber = Convert.ToInt32(settings.Get("FedExAccount")),
