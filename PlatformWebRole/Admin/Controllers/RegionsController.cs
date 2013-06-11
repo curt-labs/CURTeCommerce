@@ -17,10 +17,10 @@ namespace Admin.Controllers {
             return View();
         }
 
-        public string SaveRate(int stateID, decimal rate, bool hide) {
+        public string SaveRate(int stateID, decimal rate, decimal fee, bool hide) {
             try {
                 State state = new State().Get(stateID);
-                state.SaveState(rate, hide);
+                state.SaveState(rate, fee, hide);
                 return "";
             } catch {
                 return "There was a problem saving the region. Try again later.";

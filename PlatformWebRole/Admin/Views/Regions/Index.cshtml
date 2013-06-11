@@ -12,13 +12,14 @@
     <h2>@country.name</h2>
     <table class="taxProvinces">
         <thead>
-            <tr><th>State / Province</th><th>Tax Rate (%)</th><th>Hide from Shipping</th><th></th></tr>
+            <tr><th>State / Province</th><th>Tax Rate (%)</th><th>Handling Fee ($)</th><th>Hide from Shipping</th><th></th></tr>
         </thead>
         <tbody>
         @foreach (Admin.State state in country.getProvinces()) {
             <tr id="state-@state.stateID">
                 <td>@state.state1</td>
                 <td><input type="number" id="staterate-@state.stateID" data-id="@state.stateID" step=".1" value="@state.taxRate" /></td>
+                <td><input type="number" id="statefee-@state.stateID" data-id="@state.stateID" step=".01" value="@state.handlingFee" /></td>
                 <td><input type="checkbox" id="statehidden-@state.stateID" data-id="@state.stateID" value="true" @((state.hide) ? "checked=checked" : "" ) /></td>
                 <td><button type="button" class="setStateRate" data-id="@state.stateID">Save</button></td>
             </tr>

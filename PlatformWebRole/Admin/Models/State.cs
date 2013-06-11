@@ -17,11 +17,12 @@ namespace Admin {
             return state;
         }
 
-        public void SaveState(decimal taxRate, bool hide) {
+        public void SaveState(decimal taxRate, decimal fee, bool hide) {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             State state = db.States.Where(x => x.stateID.Equals(this.stateID)).First<State>();
             state.taxRate = taxRate;
             state.hide = hide;
+            state.handlingFee = fee;
             db.SubmitChanges();
         }
 

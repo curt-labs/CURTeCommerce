@@ -96,6 +96,9 @@
             }
             <span class="subdata"><span>Subtotal</span>@String.Format("{0:C}", order.GetSubTotal())</span>
             <span class="subdata"><span>Shipping</span>@String.Format("{0:C}", order.shipping_price)</span>
+            @if(order.handling_fee > 0) {
+            <span class="subdata"><span>Handling</span>@String.Format("{0:C}", order.handling_fee)</span>
+            }
             <span class="subdata last"><span>Tax</span>@String.Format("{0:C}", order.tax)</span>
             <span class="data">@String.Format("{0:C}", order.getTotal())</span>
 

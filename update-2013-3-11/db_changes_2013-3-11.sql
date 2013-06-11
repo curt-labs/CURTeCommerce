@@ -5,7 +5,7 @@ alter table Profile add timezone varchar(100) NOT NULL DEFAULT ('UTC')
 alter table States add hide bit NOT NULL DEFAULT (0);
 
 /* Alter Locations to allow for non US postal codes */
-alter table Location alter column zip varchar(20) NULL;
+alter table Locations alter column zip varchar(20) NULL;
 
 /* Before running the next 2 queries, check to see if your database has the Regions module visible already.
 This query is only necessary if the Regions / Taxes area is not visible */

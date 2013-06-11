@@ -74,10 +74,14 @@
                 </article>
             }
             <article class="totals">
-                <span class="label">SubTotal</span>
-                <span class="value">@String.Format("{0:C}", order.GetSubTotal())</span>
                 <span class="label">Shipping</span>
                 <span class="value">@String.Format("{0:C}", order.shipping_price)</span>
+                @if(order.handling_fee > 0) {
+                <span class="label">Handling</span>
+                <span class="value">@String.Format("{0:C}", order.handling_fee)</span>
+                }
+                <span class="label">SubTotal</span>
+                <span class="value">@String.Format("{0:C}", order.GetSubTotal())</span>
                 <span class="label">Tax</span>
                 <span class="value">@String.Format("{0:C}", order.tax)</span>
                 <hr />

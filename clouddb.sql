@@ -23,8 +23,9 @@ CREATE TABLE [dbo].[States](
 	[state] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[abbr] [varchar](3) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[countryID] [int] NOT NULL,
-	[taxRate] [decimal](18, 2) NOT NULL,
+	[taxRate] [decimal](18, 2) NOT NULL DEFAULT(0),
 	[hide] [bit] NOT NULL DEFAULT(0),
+	[handlingFee] [decimal](18, 2) NOT NULL DEFAULT(0),
  CONSTRAINT [PK_States] PRIMARY KEY CLUSTERED 
 (
 	[stateID] ASC

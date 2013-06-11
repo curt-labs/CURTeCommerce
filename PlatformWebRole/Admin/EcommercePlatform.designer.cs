@@ -1986,6 +1986,8 @@ namespace Admin
 		
 		private string _notes;
 		
+		private decimal _handling_fee;
+		
 		private EntitySet<CartItem> _CartItems;
 		
 		private EntitySet<Shipment> _Shipments;
@@ -2030,6 +2032,8 @@ namespace Admin
     partial void OnvoidedChanged();
     partial void OnnotesChanging(string value);
     partial void OnnotesChanged();
+    partial void Onhandling_feeChanging(decimal value);
+    partial void Onhandling_feeChanged();
     #endregion
 		
 		public Cart()
@@ -2300,7 +2304,7 @@ namespace Admin
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_notes", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_notes", DbType="VarChar(MAX) NULL")]
 		public string notes
 		{
 			get
@@ -2316,6 +2320,26 @@ namespace Admin
 					this._notes = value;
 					this.SendPropertyChanged("notes");
 					this.OnnotesChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_handling_fee", DbType="Decimal(18,2) NOT NULL")]
+		public decimal handling_fee
+		{
+			get
+			{
+				return this._handling_fee;
+			}
+			set
+			{
+				if ((this._handling_fee != value))
+				{
+					this.Onhandling_feeChanging(value);
+					this.SendPropertyChanging();
+					this._handling_fee = value;
+					this.SendPropertyChanged("handling_fee");
+					this.Onhandling_feeChanged();
 				}
 			}
 		}
@@ -7033,6 +7057,8 @@ namespace Admin
 		
 		private bool _hide;
 		
+		private decimal _handlingFee;
+		
 		private EntitySet<Address> _Addresses;
 		
 		private EntitySet<DistributionCenter> _DistributionCenters;
@@ -7057,6 +7083,8 @@ namespace Admin
     partial void OntaxRateChanged();
     partial void OnhideChanging(bool value);
     partial void OnhideChanged();
+    partial void OnhandlingFeeChanging(decimal value);
+    partial void OnhandlingFeeChanged();
     #endregion
 		
 		public State()
@@ -7192,6 +7220,26 @@ namespace Admin
 					this._hide = value;
 					this.SendPropertyChanged("hide");
 					this.OnhideChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_handlingFee", DbType="Decimal(18,2) NOT NULL")]
+		public decimal handlingFee
+		{
+			get
+			{
+				return this._handlingFee;
+			}
+			set
+			{
+				if ((this._handlingFee != value))
+				{
+					this.OnhandlingFeeChanging(value);
+					this.SendPropertyChanging();
+					this._handlingFee = value;
+					this.SendPropertyChanged("handlingFee");
+					this.OnhandlingFeeChanged();
 				}
 			}
 		}

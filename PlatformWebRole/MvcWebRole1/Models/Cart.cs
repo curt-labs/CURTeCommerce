@@ -157,6 +157,7 @@ namespace EcommercePlatform
                 total += (item.quantity * item.price);
             }
             total += this.shipping_price;
+            total += this.handling_fee;
             total += this.tax;
             return total;
         }
@@ -167,7 +168,22 @@ namespace EcommercePlatform
                 total += (item.quantity * item.price);
             }
             total += this.shipping_price;
+            total += this.handling_fee;
             return total;
+        }
+
+        public void setHandlingFee() {
+            if (this.cust_id > 0) {
+                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+                try {
+                    Cart cart = db.Carts.Where(x => x.ID == this.ID).First<Cart>();
+                    cart.BindAddresses();
+                    cart.handling_fee = cart.Shipping.State1.handlingFee;
+                    db.SubmitChanges();
+                } catch { }
+            }
+            this.shipping_type = shipping_type;
+            this.shipping_price = shipping_price;
         }
 
         public void setShippingType(string shipping_type, decimal shipping_price) {
@@ -240,13 +256,14 @@ namespace EcommercePlatform
                 c.ship_to = id;
                 db.SubmitChanges();
                 this._ship_to = id;
+                setHandlingFee();
             } catch (Exception) { }
             GetShipping();
         }
 
         public bool HasFreeShipping() {
             try {
-                List<int> excludedStates = new List<int> { 2, 15 };
+                List<int> excludedStates = new State().GetExcludedStates().Select(x => x.stateID).ToList();
                 BindAddresses();
                 if (excludedStates.Contains(this.Shipping.state)) {
                     return false;
@@ -407,6 +424,9 @@ namespace EcommercePlatform
             sb.Append("</tbody><tfoot style=\"font-size: 12px;\">");
             sb.AppendFormat("<tr><td colspan=\"2\" style=\"border-top: 1px solid #222; text-align: right;\">({0}) Shipping:</td>", myTI.ToTitleCase(this.shipping_type.Replace("_", " ")));
             sb.AppendFormat("<td style=\"border-top: 1px solid #222; text-align:right;\">{0}</td></tr>", (this.shipping_price == 0) ? "Free" : String.Format("{0:C}", this.shipping_price));
+            if (this.handling_fee > 0) {
+                sb.AppendFormat("<tr><td colspan=\"2\" style=\"text-align: right;\">Handling:</td><td style=\"text-align:right;\">{0}</td></tr>", String.Format("{0:C}", this.handling_fee));
+            }
             sb.Append("<tr><td colspan=\"2\" style=\"text-align: right;\"><strong>SubTotal:<strong></td>");
             sb.AppendFormat("<td style=\"text-align:right;\"><strong>{0}</strong></td></tr>", String.Format("{0:C}", this.GetSubTotal()));
             sb.Append("<tr><td colspan=\"2\" style=\"text-align: right;\">Tax:</td>");
@@ -462,6 +482,9 @@ namespace EcommercePlatform
             sb.Append("</tbody><tfoot style=\"font-size: 12px;\">");
             sb.AppendFormat("<tr><td colspan=\"2\" style=\"border-top: 1px solid #222; text-align: right;\">({0}) Shipping:</td>", myTI.ToTitleCase(this.shipping_type.Replace("_", " ")));
             sb.AppendFormat("<td style=\"border-top: 1px solid #222; text-align:right;\">{0}</td></tr>", (this.shipping_price == 0) ? "Free" : String.Format("{0:C}", this.shipping_price));
+            if (this.handling_fee > 0) {
+                sb.AppendFormat("<tr><td colspan=\"2\" style=\"text-align: right;\">Handling:</td><td style=\"text-align:right;\">{0}</td></tr>", String.Format("{0:C}", this.handling_fee));
+            }
             sb.Append("<tr><td colspan=\"2\" style=\"text-align: right;\"><strong>SubTotal:<strong></td>");
             sb.AppendFormat("<td style=\"text-align:right;\"><strong>{0}</strong></td></tr>", String.Format("{0:C}", this.GetSubTotal()));
             sb.Append("<tr><td colspan=\"2\" style=\"text-align: right;\">Tax:</td>");

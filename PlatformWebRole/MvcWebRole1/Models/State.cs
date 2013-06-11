@@ -17,6 +17,12 @@ namespace EcommercePlatform {
             return state.stateID;
         }
 
+        public List<State> GetExcludedStates() {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            List<State> states = db.States.Where(x => x.hide.Equals(true)).ToList();
+            return states;
+        }
+
     }
 
 }

@@ -82,6 +82,7 @@
       <Column Name="tax" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
       <Column Name="tracking_number" Type="System.String" DbType="VarChar(300)" CanBeNull="true" />
       <Column Name="voided" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" UpdateCheck="Always" />
+      <Column Name="handling_fee" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" UpdateCheck="Always" />
       <Association Name="Cart_CartItem" Member="CartItems" ThisKey="ID" OtherKey="order_id" Type="CartItem" />
       <Association Name="Cart_Shipment" Member="Shipments" ThisKey="ID" OtherKey="order_id" Type="Shipment" />
       <Association Name="Cart_OrderEDI" Member="OrderEDI" ThisKey="ID" OtherKey="orderID" Type="OrderEDI" Cardinality="One" />
@@ -274,6 +275,7 @@
       <Column Name="countryID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="taxRate" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
       <Column Name="hide" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="handlingFee" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
       <Association Name="State_Address" Member="Addresses" AccessModifier="Internal" ThisKey="stateID" OtherKey="state" Type="Address" />
       <Association Name="State_DistributionCenter" Member="DistributionCenters" AccessModifier="Internal" ThisKey="stateID" OtherKey="State" Type="DistributionCenter" />
       <Association Name="Country_State" Member="Country" ThisKey="countryID" OtherKey="ID" Type="Country" IsForeignKey="true" />

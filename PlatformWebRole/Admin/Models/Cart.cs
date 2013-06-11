@@ -155,6 +155,7 @@ namespace Admin
             decimal total = 0;
             total += GetSubTotal();
             total += this.shipping_price;
+            total += this.handling_fee;
             total += this.tax;
             return total;
         }
@@ -321,6 +322,9 @@ namespace Admin
             sb.AppendFormat("<td style=\"border-top: 1px solid #222; text-align:right;\"><strong>{0}</strong></td></tr>", String.Format("{0:C}", this.GetSubTotal()));
             sb.AppendFormat("<tr><td colspan=\"2\" style=\"text-align: right;\">({0}) Shipping:</td>", myTI.ToTitleCase(this.shipping_type.Replace("_", " ")));
             sb.AppendFormat("<td style=\"text-align:right;\">{0}</td></tr>", (this.shipping_price == 0) ? "Free" : String.Format("{0:C}", this.shipping_price));
+            if (this.handling_fee > 0) {
+                sb.AppendFormat("<tr><td colspan=\"2\" style=\"text-align: right;\">Handling:</td><td style=\"text-align:right;\">{0}</td></tr>", String.Format("{0:C}", this.handling_fee));
+            }
             sb.Append("<tr><td colspan=\"2\" style=\"text-align: right;\">Tax:</td>");
             sb.AppendFormat("<td style=\"text-align:right;\">{0}</td></tr>", String.Format("{0:C}", this.tax));
             sb.Append("<tr><td colspan=\"2\" style=\"text-align: right;\"><strong>Total:<strong></td>");
@@ -375,6 +379,9 @@ namespace Admin
             sb.Append("</tbody><tfoot style=\"font-size: 12px;\">");
             sb.AppendFormat("<tr><td colspan=\"2\" style=\"border-top: 1px solid #222; text-align: right;\">({0}) Shipping:</td>", myTI.ToTitleCase(this.shipping_type.Replace("_", " ")));
             sb.AppendFormat("<td style=\"border-top: 1px solid #222; text-align:right;\">{0}</td></tr>", (this.shipping_price == 0) ? "Free" : String.Format("{0:C}", this.shipping_price));
+            if (this.handling_fee > 0) {
+                sb.AppendFormat("<tr><td colspan=\"2\" style=\"text-align: right;\">Handling:</td><td style=\"text-align:right;\">{0}</td></tr>", String.Format("{0:C}", this.handling_fee));
+            }
             sb.Append("<tr><td colspan=\"2\" style=\"text-align: right;\"><strong>SubTotal:<strong></td>");
             sb.AppendFormat("<td style=\"text-align:right;\"><strong>{0}</strong></td></tr>", String.Format("{0:C}", this.GetSubTotal()));
             sb.Append("<tr><td colspan=\"2\" style=\"text-align: right;\">Tax:</td>");

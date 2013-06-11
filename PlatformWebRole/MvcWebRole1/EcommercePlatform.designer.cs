@@ -1921,6 +1921,8 @@ namespace EcommercePlatform
 		
 		private bool _voided;
 		
+		private decimal _handling_fee;
+		
 		private EntitySet<CartItem> _CartItems;
 		
 		private EntitySet<Shipment> _Shipments;
@@ -1959,6 +1961,8 @@ namespace EcommercePlatform
     partial void Ontracking_numberChanged();
     partial void OnvoidedChanging(bool value);
     partial void OnvoidedChanged();
+    partial void Onhandling_feeChanging(decimal value);
+    partial void Onhandling_feeChanged();
     #endregion
 		
 		public Cart()
@@ -2215,6 +2219,26 @@ namespace EcommercePlatform
 					this._voided = value;
 					this.SendPropertyChanged("voided");
 					this.OnvoidedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_handling_fee", DbType="Decimal(18,2) NOT NULL")]
+		public decimal handling_fee
+		{
+			get
+			{
+				return this._handling_fee;
+			}
+			set
+			{
+				if ((this._handling_fee != value))
+				{
+					this.Onhandling_feeChanging(value);
+					this.SendPropertyChanging();
+					this._handling_fee = value;
+					this.SendPropertyChanged("handling_fee");
+					this.Onhandling_feeChanged();
 				}
 			}
 		}
@@ -5906,6 +5930,8 @@ namespace EcommercePlatform
 		
 		private bool _hide;
 		
+		private decimal _handlingFee;
+		
 		private EntitySet<Address> _Addresses;
 		
 		private EntitySet<DistributionCenter> _DistributionCenters;
@@ -5928,6 +5954,8 @@ namespace EcommercePlatform
     partial void OntaxRateChanged();
     partial void OnhideChanging(bool value);
     partial void OnhideChanged();
+    partial void OnhandlingFeeChanging(decimal value);
+    partial void OnhandlingFeeChanged();
     #endregion
 		
 		public State()
@@ -6058,6 +6086,26 @@ namespace EcommercePlatform
 					this._hide = value;
 					this.SendPropertyChanged("hide");
 					this.OnhideChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_handlingFee", DbType="Decimal(18,2) NOT NULL")]
+		public decimal handlingFee
+		{
+			get
+			{
+				return this._handlingFee;
+			}
+			set
+			{
+				if ((this._handlingFee != value))
+				{
+					this.OnhandlingFeeChanging(value);
+					this.SendPropertyChanging();
+					this._handlingFee = value;
+					this.SendPropertyChanged("handlingFee");
+					this.OnhandlingFeeChanged();
 				}
 			}
 		}
