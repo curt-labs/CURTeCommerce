@@ -232,6 +232,7 @@ CREATE TABLE [dbo].[Cart](
 	[tax] [decimal](18, 2) NOT NULL,
 	[tracking_number] [varchar](300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[voided] [bit] NOT NULL,
+	[notes] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PrimaryKey_c2647f75-8256-45e1-8349-e2115d3bc7f4] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
