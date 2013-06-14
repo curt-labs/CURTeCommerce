@@ -78,6 +78,34 @@ namespace EcommercePlatform
             db.SubmitChanges();
         }
 
+        public void SetStatus(int statusID) {
+            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            OrderHistory status = new OrderHistory {
+                dateAdded = DateTime.UtcNow,
+                changedBy = "System",
+                orderID = this.ID,
+                statusID = statusID
+            };
+            status.Save();
+        }
+
+        public OrderHistory GetStatus() {
+            OrderHistory history = new OrderHistory();
+            try {
+                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+                history = db.OrderHistories.Where(x => x.orderID.Equals(this.ID)).OrderByDescending(x => x.dateAdded).First();
+            } catch {
+                history = new OrderHistory {
+                    statusID = 0,
+                    OrderStatus = new OrderStatus {
+                        status = "Unknown",
+                        ID = 0
+                    },
+                };
+            }
+            return history;
+        }
+
         public void UpdateCart(HttpContext ctx, int cust_id = 0) {
             if (this.payment_id == 0) {
                 EcommercePlatformDataContext db = new EcommercePlatformDataContext();

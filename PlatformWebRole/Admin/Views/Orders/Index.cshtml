@@ -11,6 +11,7 @@
     string evenodd = "even";
     Admin.Profile profile = ViewBag.profile ?? new Admin.Profile();
     TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
+    List<Admin.OrderStatus> statuses = ViewBag.statuses ?? new List<Admin.OrderStatus>();
 
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -64,7 +65,14 @@
                     <td>@order.itemcount</td>
                     <td>@String.Format("{0:M/d/yyyy h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.orderDate, tz)) @UDF.ShortTZ(tz, order.orderDate)</td>
                     <td>@order.PaymentMethod</td>
-                    <td>@order.status</td>
+                    <td>
+                        <select class="orderStatus" data-id="@order.orderID" data-status="@order.GetStatusID()" >
+                            <option value="0">Unknown</option>
+                            @foreach (Admin.OrderStatus status in statuses) {
+                                <option value="@status.ID" @((status.ID == order.GetStatusID()) ? "selected=selected" : "")>@status.status</option>
+                            }
+                        </select>
+                    </td>
                     <td>@order.GetCurtStatus()</td>
                     <td>@String.Format("{0:C}", order.total)</td>
                     <td>

@@ -35,7 +35,7 @@
         <div class="tab_content" id="order">
             <p><strong>Order ID:</strong> @order.payment_id</p>
             <p><strong>Paid by:</strong> @payment.PaymentTypes.name on @String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(payment.created, tz)) @UDF.ShortTZ(tz, payment.created)</p>
-            <p><strong>Payment Status:</strong> @payment.status</p>
+            <p><strong>Order Status:</strong> @order.GetStatus().OrderStatus.status</p>
             <div class="address">
                 <span>Billing Address</span>
                 @order.Billing.first @order.Billing.last<br />

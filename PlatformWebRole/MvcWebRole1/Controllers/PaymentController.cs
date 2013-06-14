@@ -115,6 +115,7 @@ namespace EcommercePlatform.Controllers {
             }
 
             Gateway gate = new Gateway(settings.Get("AuthorizeNetLoginKey"), settings.Get("AuthorizeNetTransactionKey"), testmode);
+            customer.Cart.SetStatus((int)OrderStatuses.PaymentPending);
 
             //step 3 - make some money
             IGatewayResponse response = gate.Send(request);
@@ -123,6 +124,7 @@ namespace EcommercePlatform.Controllers {
                 customer.Cart.SendConfirmation();
                 customer.Cart.SendInternalOrderEmail();
                 int cartid = customer.Cart.ID;
+                customer.Cart.SetStatus((int)OrderStatuses.PaymentComplete);
                 
                 Cart new_cart = new Cart().Save();
                 new_cart.UpdateCart(ctx, customer.ID);
@@ -136,6 +138,7 @@ namespace EcommercePlatform.Controllers {
 
                 return RedirectToAction("Complete", new { id = cartid });
             } else {
+                customer.Cart.SetStatus((int)OrderStatuses.PaymentDeclined);
                 return RedirectToAction("Index", new { message = response.Message });
             }
         }
@@ -202,6 +205,7 @@ namespace EcommercePlatform.Controllers {
             GCheckoutResponse resp = req.Send();
             if (resp.IsGood) {
                 customer.Cart.AddPayment("Google Checkout", "", "Pending");
+                customer.Cart.SetStatus((int)OrderStatuses.PaymentPending);
                 
                 Cart new_cart = new Cart().Save();
                 new_cart.UpdateCart(ctx, customer.ID);
@@ -234,6 +238,7 @@ namespace EcommercePlatform.Controllers {
             Paypal p = new Paypal();
             string token = p.ECSetExpressCheckout(customer.Cart);
             if (!token.ToLower().Contains("failure")) {
+                customer.Cart.SetStatus((int)OrderStatuses.PaymentPending);
                 customer.Cart.paypalToken = token;
                 if (Request.Url.Host.Contains("127.0.0") || Request.Url.Host.Contains("localhost")) {
                     return Redirect("https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=" + token);
@@ -282,6 +287,7 @@ namespace EcommercePlatform.Controllers {
             string confirmationKey = p.ECDoExpressCheckout(token, payerID, total.ToString(), customer.Cart);
             if (confirmationKey == "Success") {
                 customer.Cart.AddPayment("PayPal", token, "Complete");
+                customer.Cart.SetStatus((int)OrderStatuses.PaymentComplete);
                 customer.Cart.SendConfirmation();
                 customer.Cart.SendInternalOrderEmail();
                 int cartid = customer.Cart.ID;

@@ -66,11 +66,35 @@ namespace Admin
             }
         }
 
-        public void Void() {
+        public OrderHistory GetStatus() {
+            OrderHistory history = new OrderHistory();
+            try {
+                history = this.OrderHistories.OrderByDescending(x => x.dateAdded).First();
+            } catch {
+                history = new OrderHistory {
+                    statusID = 0,
+                    OrderStatus = new OrderStatus {
+                        status = "Unknown",
+                        ID = 0
+                    },
+                };
+            }
+            return history;
+        }
+
+        public void SetStatus(int statusID, string name) {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-            Cart c = db.Carts.Where(x => x.ID == this.ID).First<Cart>();
-            c.voided = true;
-            db.SubmitChanges();
+            OrderHistory status = new OrderHistory {
+                dateAdded = DateTime.UtcNow,
+                changedBy = name,
+                orderID = this.ID,
+                statusID = statusID
+            };
+            status.Save();
+        }
+
+        public void Void(string name) {
+            SetStatus((int)OrderStatuses.Void, name);
         }
 
         public Cart Save(int cust_id = 0) {

@@ -11,7 +11,7 @@ namespace Admin.Models {
         public int itemcount { get; set; }
         public DateTime orderDate { get; set; }
         public string PaymentMethod { get; set; }
-        public string status { get; set; }
+        public List<OrderHistory> history { get; set; }
         public decimal total { get; set; }
         public OrderEDI edi { get; set; }
 
@@ -26,7 +26,7 @@ namespace Admin.Models {
                           itemcount = c.CartItems.Count,
                           orderDate = c.Payment.created,
                           PaymentMethod = c.Payment.PaymentTypes.name,
-                          status = ((c.voided) ? "Void" : c.Payment.status),
+                          history = c.OrderHistories.ToList(),
                           total = c.getTotal(),
                           edi = c.OrderEDI
                       }).ToList<Orders>();
@@ -46,12 +46,34 @@ namespace Admin.Models {
                           itemcount = c.CartItems.Count,
                           orderDate = c.Payment.created,
                           PaymentMethod = c.Payment.PaymentTypes.name,
-                          status = ((c.voided) ? "Void" : c.Payment.status),
+                          history = c.OrderHistories.ToList(),
                           total = c.getTotal(),
                           edi = c.OrderEDI
                       }).Skip(perpage * (page - 1)).Take(perpage).ToList<Orders>();
 
             return orders;
+        }
+
+        public OrderHistory GetStatus() {
+            OrderHistory history = new OrderHistory();
+            try {
+                history = this.history.OrderByDescending(x => x.dateAdded).First();
+            } catch {
+                history = new OrderHistory {
+                    OrderStatus = new OrderStatus {
+                        status = "Unknown"
+                    },
+                };
+            }
+            return history;
+        }
+
+        public int GetStatusID() {
+            int statusID = 0;
+            try {
+                statusID = this.history.OrderByDescending(x => x.dateAdded).First().statusID;
+            } catch {}
+            return statusID;
         }
 
         public string GetCurtStatus() {
@@ -83,7 +105,7 @@ namespace Admin.Models {
                               itemcount = c.CartItems.Count,
                               orderDate = c.Payment.created,
                               PaymentMethod = c.Payment.PaymentTypes.name,
-                              status = ((c.voided) ? "Void" : c.Payment.status),
+                              history = c.OrderHistories.ToList(),
                               total = c.getTotal(),
                               edi = c.OrderEDI
                           }).ToList<Orders>();

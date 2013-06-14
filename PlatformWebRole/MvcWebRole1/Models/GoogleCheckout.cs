@@ -98,6 +98,7 @@ namespace EcommercePlatform.Models {
             Cart order = new Cart().GetByPayment(googleOrderID);
             if (order.getTotal() == chargenotification.totalchargeamount.Value) {
                 order.UpdatePayment("Complete");
+                order.SetStatus((int)OrderStatuses.PaymentComplete);
                 order.SendConfirmation();
                 order.SendInternalOrderEmail();
             }

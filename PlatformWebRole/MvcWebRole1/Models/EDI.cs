@@ -404,6 +404,7 @@ namespace EcommercePlatform.Models {
                         // End of Invoice
                         try {
                             order = new Cart().GetByPaymentID(Convert.ToInt32(purchaseOrderID));
+                            order.SetStatus((int)OrderStatuses.Shipped);
                             foreach (Shipment s in shipments) {
                                 s.order_id = order.ID;
                                 s.dateShipped = shipdate;
@@ -442,6 +443,7 @@ namespace EcommercePlatform.Models {
             if (!String.IsNullOrWhiteSpace(purchaseOrderID)) {
                 try {
                     order = new Cart().GetByPaymentID(Convert.ToInt32(purchaseOrderID));
+                    order.SetStatus((int)OrderStatuses.Processed);
                     OrderEDI edi = new OrderEDI().GetByOrderID(order.ID);
                     if (edi != null && edi.ID > 0) {
                         edi.SetAcknowledged();

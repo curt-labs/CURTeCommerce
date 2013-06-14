@@ -11,13 +11,14 @@
         }
         trackingcodes += order.Shipments[i].tracking_number;
     }
+    List<Admin.OrderStatus> statuses = ViewBag.statuses ?? new List<Admin.OrderStatus>();
 
     ViewBag.Title = "Items";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link href="/Admin/Content/css/order.manager.css" rel="stylesheet" type="text/css" />
 <span class="title">Order #@order.payment_id</span>
-@if (order.voided) {
+@if (order.GetStatus().statusID == (int)Admin.OrderStatuses.Void) {
     <p class="void">VOID</p>
 } else {
     <a class="button" href="/Admin/Orders/Void/@order.payment_id" id="void">Void Order</a>
@@ -27,12 +28,18 @@
             <h4>Order Date</h4>
             <p>@String.Format("{0:M/dd/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.Payment.created, tz)) @UDF.ShortTZ(tz, order.Payment.created)</p>
             <h4>Status</h4>
-            <p>@order.Payment.status</p>
+            <select class="orderStatus" data-status="@order.GetStatus().statusID" data-id="@order.payment_id">
+                <option value="0">Unknown</option>
+                @foreach (Admin.OrderStatus status in statuses) {
+                    <option value="@status.ID" @((status.ID == order.GetStatus().statusID) ? "selected=selected" : "")>@status.status</option>
+                }
+            </select>
             <h4>Payment Details</h4>
             <table class="orderdetails">
                 <tr><td>Type</td><td>@order.Payment.PaymentTypes.name</td></tr>
                 <tr><td>Date</td><td>@String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(order.Payment.created, tz)) @UDF.ShortTZ(tz, order.Payment.created)</td></tr>
                 <tr><td>Amount</td><td>@String.Format("{0:C}", order.getTotal())</td></tr>
+                <tr><td>Payment Status</td><td>@order.Payment.status</td></tr>
                 <tr><td>Confirmation Code</td><td>@order.Payment.confirmationKey</td></tr>
             </table>
             <h4>Customer</h4>
@@ -105,6 +112,14 @@
             <span class="title">Number of Items</span>
             <span class="data">@order.getCount()</span>
 
+            <span class="title">Order History</span>
+            <div id="orderhistory">
+            @foreach (Admin.OrderHistory history in order.OrderHistories) {
+                <span class="history"><span>@history.OrderStatus.status</span> @String.Format("{0:M/d/yyyy} {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(history.dateAdded, tz)) - @history.changedBy</span>
+            }
+            </div>
+            <span class="data"></span>
+
             <span class="title">Order Notes</span>
             <textarea id="notes" rows="5">@order.notes</textarea>
             <a class="btn" id="savenotes" data-id="@order.payment_id">Save</a>
@@ -114,6 +129,7 @@
 </div>
 
 <script>
+    var updateHistory;
     $(function () {
         $(document).on('click', '#addshipment', function (event) {
             event.preventDefault();
@@ -192,5 +208,30 @@
                 window.location = $(this).attr('href');
             };
         });
+        $(document).on('change', '.orderStatus', function () {
+            var selbox = $(this);
+            var prevStatus = $(this).data('status');
+            var orderID = $(this).data('id');
+            var newID = $(this).val();
+            var status = $(this).find("option:selected").text();
+            if (confirm("Change the order status to " + status + "?")) {
+                $.getJSON('/Admin/Orders/ChangeStatus', { id: orderID, statusID: newID }, function (data) {
+                    $(selbox).effect("highlight", {}, 1000);
+                    updateHistory(orderID);
+                });
+            } else {
+                $(this).val(prevStatus);
+            }
+        });
     })
+
+    updateHistory = function (id) {
+        $.getJSON('/Admin/Orders/GetHistory/' + id, function (data) {
+            $('#orderhistory').empty();
+            $(data).each(function (i, obj) {
+                var hist = '<span class="history"><span>' + obj.OrderStatus.status + '</span> ' + obj.added + ' - ' + obj.changedBy + '</span>';
+                $('#orderhistory').append(hist);
+            });
+        });
+    };
 </script>

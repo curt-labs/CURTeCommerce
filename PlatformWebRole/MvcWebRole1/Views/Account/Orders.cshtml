@@ -41,6 +41,7 @@
                 <tr class="header">
                     <th class="title">Order #</th>
                     <th>Date Created</th>
+                    <th>Status</th>
                     <th class="total">Order Total</th>
                 </tr>
                 <tr><td colspan="3">&nbsp;</td></tr>
@@ -51,6 +52,7 @@
                 <tr class="order" data-id="@order.payment_id">
                     <td class="title">Order #@(order.payment_id)</td>
                     <td class="date">@String.Format("{0:MMMM d, yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(payment.created, tz)) @UDF.ShortTZ(tz, payment.created)</td>
+                    <td>@order.GetStatus().OrderStatus.status</td>
                     <td class="total">@String.Format("{0:C}", order.getTotal())</td>
                 </tr>
             }

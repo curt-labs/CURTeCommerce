@@ -59,6 +59,10 @@ table tbody tr td:first-child a{
     display: inline-block;
 }
 
+.orderTable tbody tr td:nth-child(3) {
+    text-align: center;
+}
+
 table tbody tr td:last-child{
     text-align:center;
 }
@@ -80,7 +84,7 @@ a.modalClose{
     padding: 4px;
 }
 
-#order span.subdata, #order span.itemdata {
+#order span.subdata, #order span.itemdata, #order span.history {
     display:block;
     text-align:right;
 }
@@ -88,7 +92,12 @@ a.modalClose{
     padding-top: 5px;
     padding-bottom: 5px;
 }
-#order span.subdata span, #order span.itemdata span {
+
+#order span.history {
+    font-size: 11px;
+}
+
+#order span.subdata span, #order span.itemdata span, #order span.history span {
     float: left;
     font-size: 12px;
     font-weight: bold;
@@ -100,7 +109,7 @@ a.modalClose{
 }
 
 #order span.data {
-    margin-bottom: 50px;
+    margin-bottom: 20px;
     display:block;
     text-align:right;
 }

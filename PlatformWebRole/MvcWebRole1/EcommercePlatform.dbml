@@ -86,6 +86,7 @@
       <Association Name="Cart_CartItem" Member="CartItems" ThisKey="ID" OtherKey="order_id" Type="CartItem" />
       <Association Name="Cart_Shipment" Member="Shipments" ThisKey="ID" OtherKey="order_id" Type="Shipment" />
       <Association Name="Cart_OrderEDI" Member="OrderEDI" ThisKey="ID" OtherKey="orderID" Type="OrderEDI" Cardinality="One" />
+      <Association Name="Cart_OrderHistory" Member="OrderHistories" AccessModifier="Internal" ThisKey="ID" OtherKey="orderID" Type="OrderHistory" />
       <Association Name="Address_Cart" Member="Billing" ThisKey="bill_to" OtherKey="ID" Type="Address" IsForeignKey="true" />
       <Association Name="Address_Cart1" Member="Shipping" ThisKey="ship_to" OtherKey="ID" Type="Address" IsForeignKey="true" />
     </Type>
@@ -461,6 +462,24 @@
       <Column Name="filename" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="dateAcknowledged" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Association Name="Cart_OrderEDI" Member="Cart" AccessModifier="Internal" ThisKey="orderID" OtherKey="ID" Type="Cart" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OrderHistory" Member="OrderHistories">
+    <Type Name="OrderHistory">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="orderID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="statusID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="dateAdded" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="changedBy" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="Cart_OrderHistory" Member="Cart" AccessModifier="Internal" ThisKey="orderID" OtherKey="ID" Type="Cart" IsForeignKey="true" />
+      <Association Name="OrderStatus_OrderHistory" Member="OrderStatus" ThisKey="statusID" OtherKey="ID" Type="OrderStatus" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OrderStatus" Member="OrderStatus">
+    <Type Name="OrderStatus">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="status" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="OrderStatus_OrderHistory" Member="OrderHistories" AccessModifier="Internal" ThisKey="ID" OtherKey="statusID" Type="OrderHistory" />
     </Type>
   </Table>
 </Database>

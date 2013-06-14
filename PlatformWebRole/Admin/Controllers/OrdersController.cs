@@ -27,6 +27,7 @@ namespace Admin.Controllers {
             if (page > 0) {
                 orders = new Orders().GetOrdersByPage(page, perpage);
             }
+            ViewBag.statuses = new OrderStatus().GetAll();
             ViewBag.orders = orders;
             ViewBag.page = page;
             ViewBag.pages = pages;
@@ -43,10 +44,42 @@ namespace Admin.Controllers {
                 customer.Get();
                 ViewBag.customer = customer;
                 ViewBag.order = order;
+                ViewBag.statuses = new OrderStatus().GetAll();
             } catch (Exception) {
                 return RedirectToAction("Index");
             }
             return View();
+        }
+
+        [NoValidation]
+        public string ChangeStatus(int id = 0, int statusID = 0) {
+            Profile p = ViewBag.profile;
+            Cart order = new Cart();
+            order = order.GetByPayment(id);
+            order.SetStatus(statusID, p.first + " " + p.last);
+            return "success";
+        }
+
+        [NoValidation]
+        public string GetHistory(int id = 0) {
+            Profile profile = ViewBag.profile ?? new Profile();
+            TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById(profile.timezone ?? "UTC");
+            Cart order = new Cart();
+            order = order.GetByPayment(id);
+            List<OrderHistoryJSON> histories = new List<OrderHistoryJSON>();
+            foreach (OrderHistory history in order.OrderHistories) {
+                OrderHistoryJSON jhist = new OrderHistoryJSON {
+                    ID = history.ID,
+                    statusID = history.statusID,
+                    orderID = history.orderID,
+                    dateAdded = history.dateAdded,
+                    added = String.Format("{0:M/d/yyyy} {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(history.dateAdded, tz)),
+                    changedBy = history.changedBy,
+                    OrderStatus = history.OrderStatus
+                };
+                histories.Add(jhist);
+            }
+            return JsonConvert.SerializeObject(histories);
         }
 
         [NoValidation]
@@ -89,9 +122,10 @@ namespace Admin.Controllers {
         }
 
         public ActionResult Void(int id = 0) {
+            Profile p = ViewBag.profile;
             Cart order = new Cart();
             order = order.GetByPayment(id);
-            order.Void();
+            order.Void(p.first + " " + p.last);
             return RedirectToAction("Items", new { id = id });
         }
 
@@ -354,16 +388,19 @@ namespace Admin.Controllers {
             }
 
             Gateway gate = new Gateway(settings.Get("AuthorizeNetLoginKey"), settings.Get("AuthorizeNetTransactionKey"), testmode);
+            currentCart.SetStatus((int)OrderStatuses.PaymentPending, "System");
 
             //step 3 - make some money
             IGatewayResponse response = gate.Send(request);
             if (response.Approved) {
+                currentCart.SetStatus((int)OrderStatuses.PaymentComplete, "System");
                 currentCart.AddPayment("credit card", response.AuthorizationCode,"Complete");
                 currentCart.SendConfirmation();
                 currentCart.SendInternalOrderEmail();
                 int cartid = currentCart.ID;
                 return RedirectToAction("Step6", new { id = cartid });
             } else {
+                currentCart.SetStatus((int)OrderStatuses.PaymentDeclined, "System");
                 TempData["message"] = response.Message;
                 return RedirectToAction("Step5", new { id = c.ID });
             }

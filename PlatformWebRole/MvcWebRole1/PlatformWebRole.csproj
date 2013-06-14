@@ -197,6 +197,8 @@
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\SitemapController.cs" />
     <Compile Include="Models\Banner.cs" />
+    <Compile Include="Models\OrderHistory.cs" />
+    <Compile Include="Models\OrderStatus.cs" />
     <Compile Include="Models\OrderEDI.cs" />
     <Compile Include="Models\ThemeFile.cs" />
     <Compile Include="Models\Theme.cs" />

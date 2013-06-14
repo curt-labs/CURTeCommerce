@@ -4,6 +4,20 @@ $(function () {
     $(document).on('change', '#tableperpage', function () {
         $('#formperpage').submit();
     });
+    $(document).on('change', '.orderStatus', function () {
+        var selbox = $(this);
+        var prevStatus = $(this).data('status');
+        var orderID = $(this).data('id');
+        var newID = $(this).val();
+        var status = $(this).find("option:selected").text();
+        if (confirm("Change order #" + orderID + " status to " + status + "?")) {
+            $.getJSON('/Admin/Orders/ChangeStatus', { id: orderID, statusID: newID }, function (data) {
+                $(selbox).effect("highlight", {}, 1000);
+            });
+        } else {
+            $(this).val(prevStatus);
+        }
+    });
 
     $("#tablesearch").autocomplete({
         source: function (request, response) {
