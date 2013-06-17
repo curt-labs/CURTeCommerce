@@ -18,19 +18,23 @@ CREATE TABLE OrderHistory (
 )
 GO
 
-INSERT INTO OrderStatus (status) VALUES
-('Payment Pending'),
-('Payment Complete'),
-('Payment Declined'),
-('Processed'),
-('Refunded'),
-('Back Order'),
-('Check Notes'),
-('Message Sent'),
-('Awaiting Tracking'),
-('Shipped'),
-('Awaiting Cancellation'),
-('Cancelled'),
-('Fraudulent'),
-('Void'),
-('Complete');
+SET IDENTITY_INSERT OrderStatus ON;
+
+INSERT INTO OrderStatus (ID,status) VALUES
+(1,'Payment Pending'),
+(2,'Payment Complete'),
+(3,'Payment Declined'),
+(4,'Processed'),
+(5,'Refunded'),
+(6,'Back Order'),
+(7,'Check Notes'),
+(8,'Message Sent'),
+(9,'Awaiting Tracking'),
+(10,'Shipped'),
+(11,'Awaiting Cancellation'),
+(12,'Cancelled'),
+(13,'Fraudulent'),
+(14,'Void'),
+(15,'Complete');
+
+SET IDENTITY_INSERT OrderStatus OFF;

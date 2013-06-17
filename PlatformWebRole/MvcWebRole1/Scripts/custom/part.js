@@ -8,19 +8,19 @@ function changePartTab(id) {
         var atab = $('.part_tab_container ul li a.active');
         $('.part_tab_container ul li a').removeClass('active');
 
-        $('.part_content').fadeOut();
+        $('.part_content').fadeOut('fast');
         if (id.indexOf('#') === -1) {
             id = '#' + id;
         }
         $('a[href=' + id + ']').addClass('active');
-        $(id).fadeIn();
+        $(id).fadeIn('fast');
         $('.part_container').css('height', $(id).height() + 30);
     } else {
         $('.part_tab_container ul li a').removeClass('active');
         $('.part_tab_container ul li a:first').addClass('active');
         if ($('.part_content:first').css('display') !== 'block') {
-            $('.part_content').fadeOut();
-            $('.part_content:first').fadeIn();
+            $('.part_content').fadeOut('fast');
+            $('.part_content:first').fadeIn('fast');
             $('.part_container').css('height', $('.part_content:first').height() + 30);
         }
     }
@@ -44,7 +44,7 @@ $(function () {
         $(this).css('cursor', 'pointer');
     });
 
-    $('#vehicles table tbody tr').live('click', function () {
+    $(document).on('click', '#vehicles table tbody tr', function () {
         var year, make, model, style = 0;
         year = $(this).find('td:nth-child(1)').html();
         make = $(this).find('td:nth-child(2)').html();
@@ -59,7 +59,7 @@ $(function () {
         var infotab = $('#info');
         changeHashNoScroll("info");
         $('html, body').animate({
-            scrollTop: $("#info").offset().top - Math.floor($(window).height() / 2.5) + 'px'
+            scrollTop: $(".part_container").offset().top - Math.floor($(window).height() / 2.75) + 'px'
         }, 'fast');
     });
 
@@ -101,4 +101,4 @@ $(function () {
 changeHashNoScroll = function (hashval) {
     window.location.hash = "info";
     return false;
-};
+}
