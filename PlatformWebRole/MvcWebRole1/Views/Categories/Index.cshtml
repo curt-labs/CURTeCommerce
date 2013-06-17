@@ -8,18 +8,20 @@
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
     List<EcommercePlatform.Models.APICategory> breadcrumbs = ViewBag.breadcrumbs ?? new List<EcommercePlatform.Models.APICategory>();
 }
-@if (breadcrumbs.Count > 0) {
-    <div class="breadcrumbs">
-        <a href="/">Home</a> <span>&gt;</span>
-        @for (int i = breadcrumbs.Count() - 1; i >= 0; i--) {
-            if (i != 0) {
+<div class="breadcrumbs">
+    <a href="/">Home</a> <span>&gt;</span>
+    @if(breadcrumbs.Count > 0) {
+        for (int i = breadcrumbs.Count() - 1; i >= 0; i--) {
+            if(i != 0) {
                 <a href="@Url.RouteUrl("CategoryByID", new { catID = breadcrumbs[i].catID, cat = breadcrumbs[i].slug })">@breadcrumbs[i].catTitle</a> <span>&gt;</span>
             } else {
                 @breadcrumbs[i].catTitle
             }
         }
-    </div>
-}
+    } else {
+        <text>Product Categories</text>
+    }
+</div>
 
 <span class="title">@cat.catTitle</span>
 
