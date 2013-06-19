@@ -118,9 +118,8 @@ namespace EcommercePlatform.Models {
             List<int> orders = (from c in db.Carts
                                 join e in db.OrderEDIs on c.ID equals e.orderID into edijoin
                                 from ej in edijoin.DefaultIfEmpty()
-                                join h in db.OrderHistories on c.ID equals h.orderID
                                 join p in db.Payments on c.payment_id equals p.ID
-                                where !statuses.Contains(h.statusID) && ej.orderID == null
+                                where !statuses.Contains(c.OrderHistories.OrderByDescending(x => x.dateAdded).Select(x => x.statusID).FirstOrDefault()) && ej.orderID == null
                                 select c.ID).ToList();
             foreach (int order in orders) {
                 Settings settings = new Settings();
