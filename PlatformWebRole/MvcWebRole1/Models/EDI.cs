@@ -112,13 +112,15 @@ namespace EcommercePlatform.Models {
         internal void Write() {
 
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            List<int> statuses = new List<int> { (int)OrderStatuses.Void, (int)OrderStatuses.Cancelled, (int)OrderStatuses.AwaitingCancellation, (int)OrderStatuses.Fraudulent, (int)OrderStatuses.PaymentDeclined, (int)OrderStatuses.PaymentPending };
 
             // get all orders with no edi history
             List<int> orders = (from c in db.Carts
                                 join e in db.OrderEDIs on c.ID equals e.orderID into edijoin
                                 from ej in edijoin.DefaultIfEmpty()
+                                join h in db.OrderHistories on c.ID equals h.orderID
                                 join p in db.Payments on c.payment_id equals p.ID
-                                where p.status.Trim().ToLower().Equals("complete") && ej.orderID == null
+                                where !statuses.Contains(h.statusID) && ej.orderID == null
                                 select c.ID).ToList();
             foreach (int order in orders) {
                 Settings settings = new Settings();
