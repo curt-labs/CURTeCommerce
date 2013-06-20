@@ -49,7 +49,7 @@
                         <div class="left_col">
                             <p>Part #@part.partID</p>
                             <div class="image_array">
-                                @foreach (EcommercePlatform.Models.APIImage img in part.images.Where(x => x.size.Equals("Venti")).OrderBy(x => x.sort)) { // Get the Venti images
+                                @foreach (EcommercePlatform.Models.APIImage img in part.images.Where(x => x.size.Equals("Venti")).OrderBy(x => x.sort).Take(5)) { // Get the Venti images
                                     // Now make sure we have the Grande size to display
                                     if(part.images.Where(x => x.size.Equals("Grande") && x.sort.Equals(img.sort)).Count() > 0){
                                         <a href="@img.path" rel="Shadowbox[parts@(item_count)]" target="_blank" title="Click to enlarge" @((first)?"class=main":"class=sub")>
