@@ -18,12 +18,13 @@ namespace EcommercePlatform {
         public static List<BasicCountry> GetBasic() {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             List<BasicCountry> countries = (from c in db.Countries
+                                            orderby c.name
                                             select new BasicCountry {
                                                 ID = c.ID,
                                                 name = c.name,
                                                 abbr = c.abbr,
-                                                states = (from s in db.States
-                                                            where s.countryID.Equals(c.ID)
+                                                states = (from s in c.States
+                                                            orderby s.abbr
                                                             select new BasicState {
                                                                 stateID = s.stateID,
                                                                 state = s.state1,

@@ -2,6 +2,7 @@
     ViewBag.defaultcss = new List<string> { "/Content/css/locations.css" };
     ViewBag.defaultjs = new List<string> { "//maps.googleapis.com/maps/api/js?sensor=false", "/Scripts/custom/locations.js" };
     List<EcommercePlatform.Models.PrettyLocation> locs = ViewBag.locations ?? new List<EcommercePlatform.Models.PrettyLocation>();
+    List<EcommercePlatform.BasicCountry> countries = ViewBag.countries ?? new List<EcommercePlatform.BasicCountry>();
     string json = ViewBag.locations_json ?? "";
     string error = ViewBag.error;
 
@@ -114,4 +115,37 @@
         <div class="clearfix"></div>
         <input type="submit" name="btnContact" id="btnContact" value="Submit" />
     </form>
+</div>
+<div id="directions_modal" style="display:none;">
+    <link href="/Content/css/share-email.css" media="all" rel="stylesheet" />
+    <div id="directions_map"></div>
+    <div id="directionsformcont">
+        <span class="share-heading">Enter your address for a start location.</span>
+        <form class="share-form">
+            <input type="hidden" id="dir_destination" value="" />
+            <input type="hidden" id="dir_name" value="" />
+            <input type="hidden" id="dir_lat" value="" />
+            <input type="hidden" id="dir_long" value="" />
+            <label for="directAddr">Address
+            <input type="text" id="directAddr" placeholder="Enter your address..." /></label>
+            <label for="city">City
+            <input type="text" id="city" placeholder="Enter your city..." /></label>
+            <label for="state">State
+            <select id="state">
+                @foreach(EcommercePlatform.BasicCountry country in countries) {
+                    <optgroup label="@country.name">
+                        @foreach(EcommercePlatform.BasicState state in country.states) {
+                            <option value="@state.abbr">@state.state</option>
+                        }
+                    </optgroup>
+                }
+            </select>
+            </label>
+            <div class="clearfix"></div>
+            <input type="submit" id="getDirections" value="Get Directions" style="display:inline-block" />
+            <a href="javascript:$.modal.close()" title="Close" style="margin-left:10px;vertical-align:bottom;">Close</a>
+        </form>
+    </div>
+    <input type="button" id="changeDirections" class="button" value="Change Address" style="display: none;" />
+    <div id="directionsPanel"></div>
 </div>

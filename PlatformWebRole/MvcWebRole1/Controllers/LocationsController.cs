@@ -16,6 +16,9 @@ namespace EcommercePlatform.Controllers {
             await Task.WhenAll(new Task[] { pcats });
             ViewBag.parent_cats = await pcats;
 
+            List<BasicCountry> countries = Country.GetBasic();
+            ViewBag.countries = countries;
+
             List<PrettyLocation> locs = LocationModel.GetAll();
             ViewBag.locations = locs;
             

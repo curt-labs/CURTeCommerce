@@ -1,4 +1,4 @@
-﻿var map, markers, locations, infoWindow, geocoder, directionsDisplay, directionsService, mapbounds;
+﻿var map, markers, locations, infoWindow, geocoder, directionsService, mapbounds, removeDirections, loadDirections, directionsmap, directionsmarker, loadDirectionsMap;
 directionsService = new google.maps.DirectionsService();
 mapbounds = new google.maps.LatLngBounds();
 $(function () {
@@ -24,6 +24,48 @@ $(function () {
         });
     };
 
+    var removeDirections = function () {
+        $('#site_overlay').remove();
+        $('#site_overlay_container').remove();
+        $('#directions').remove();
+        $('body').off('keyup');
+        $(window).off('resize');
+    };
+
+
+    var loadDirections = function () {
+        var destination, from_addr, from_city, from_state, request;
+        destination = $('#dir_destination').val();
+        from_addr = $('#directAddr').val();
+        from_city = $('#city').val();
+        from_state = $('#state').val();
+        var directionsRenderer = new google.maps.DirectionsRenderer();
+        directionsRenderer.setMap(directionsmap);
+        directionsRenderer.setPanel(document.getElementById('directionsPanel'));
+        request = {
+            origin: from_addr + ' ' + from_city + ',' + from_state,
+            destination: destination,
+            travelMode: google.maps.TravelMode.DRIVING,
+            provideRouteAlternatives: true
+        };
+        directionsService.route(request, function (response, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+                directionsRenderer.setMap(null);
+                directionsRenderer.setMap(directionsmap);
+                directionsmarker.setMap(null);
+                $('#directionsPanel').empty();
+                $('#directionsformcont').slideUp('fast', function () {
+                    $('#changeDirections').fadeIn();
+                    $('#directionsPanel').show();
+                    directionsRenderer.setDirections(response);
+                });
+            } else {
+                alert('Error: ' + status);
+            }
+        });
+    };
+    $(document).on('click', '#changeDirections', function (event) { $('#directionsformcont').slideDown(); $('#changeDirections').hide(); $('#directionsPanel').hide(); });
+
     var loadMap = function (lat, longitude, zoom) {
         var options = {
             center: new google.maps.LatLng(lat, longitude),
@@ -35,9 +77,28 @@ $(function () {
         $('#map').show();
         map = new google.maps.Map(document.getElementById('map'), options);
 
-        //directionsDisplay.setMap(map);
         loadMarkers();
     };
+
+    var loadDirectionsMap = function () {
+        var endlocation = new google.maps.LatLng($('#dir_lat').val(), $('#dir_long').val());
+        var directionsoptions = {
+            center: endlocation,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            zoom: 12
+        };
+        directionsmap = new google.maps.Map(document.getElementById('directions_map'), directionsoptions);
+        directionsmarker = new google.maps.Marker({
+            position: endlocation,
+            map: directionsmap,
+            title: $('#dir_name').val(),
+            animation: google.maps.Animation.DROP
+        });
+        dirbounds = new google.maps.LatLngBounds();
+        dirbounds.extend(endlocation);
+        directionsmap.fitBounds(dirbounds);
+        return true;
+    }
 
     var loadMarkers = function () {
         markers = new Array();
@@ -109,54 +170,26 @@ $(function () {
         return contentString;
     };
 
-    var promptForAddress = function (loc) {
-
-        $.getJSON('/GlobalFunctions/GetCountries', function (countries) {
-            if (countries !== undefined && countries.length > 0) {
-                var html;
-                html = '<link href="/Content/css/share-email.css" media="all" rel="stylesheet" />';
-                html += '<span class="share-heading">Enter your address for a start location.</span>';
-                html += '<form class="share-form">';
-                html += '<input type="hidden" id="destination" value="' + loc + '" />';
-                html += '<label for="addr">Address';
-                html += '<input type="text" id="directAddr" placeholder="Enter your address..." /></label>';
-                html += '<label for="city">City';
-                html += '<input type="text" id="city" placeholder="Enter your city..." /></label>';
-                html += '<label for="state">State';
-                html += '<select id="state">';
-                $.each(countries, function (i, country) {
-                    html += '<optgroup label="' + country.name + '">';
-                    $.each(country.states, function (i, state) {
-                        html += '<option value="' + state.abbr + '">' + state.state + '</option>';
-                    });
-                    html += '</optgroup>';
-                });
-                html += '</select>';
-                html += '</label>';
-                html += '<div class="clearfix"></div>';
-                html += '<input type="submit" id="getDirections" value="Get Directions" style="display:inline-block" />';
-                html += '<a href="javascript:$.modal.close()" title="Close" style="margin-left:10px;vertical-align:bottom;">Close</a>';
-                html += '</form>';
-                $.modal(html, {
-                    containerCss: {
-                        backgroundColor: '#ffffff',
-                        borderColor: '#ffffff',
-                        height: '500px',
-                        width: '400px',
-                        padding: '10px'
-                    }, onClose: function (dialog) {
-                        dialog.data.fadeOut('400', function () {
-                            dialog.container.hide('400', function () {
-                                dialog.overlay.slideUp('fase', function () {
-                                    $.modal.close();
-                                });
-                            });
+    var promptForAddress = function () {
+        $('#directions_modal').modal({
+            containerCss: {
+                backgroundColor: '#ffffff',
+                borderColor: '#ffffff',
+                height: '500px',
+                width: '800px',
+                padding: '10px'
+            }, onClose: function (dialog) {
+                dialog.data.fadeOut('400', function () {
+                    dialog.container.hide('400', function () {
+                        dialog.overlay.slideUp('fase', function () {
+                            $.modal.close();
                         });
-                    }
+                    });
                 });
             }
         });
     };
+
 
     $('.delete').click(function () {
         if (confirm('Are you sure you want to delete this location?')) {
@@ -194,7 +227,7 @@ $(function () {
         infoWindow.open(map, markers[locationIndex]);
     });
 
-    $('.map_tough').live('click', function () {
+    $(document).on('click', '.map_tough', function () {
         var addr, zip, latLng;
         addr = $(this).data('address');
         geocoder.geocode({ 'address': addr }, function (results, status) {
@@ -206,32 +239,22 @@ $(function () {
         });
     });
 
-    $('.directions_easy').live('click', function () {
-        var loc = $(this).data('address');
-        promptForAddress(loc);
+    $(document).on('click', '.directions_easy', function () {
+        var location = $(this);
+        $('#dir_destination').val($(location).data('address'));
+        $('#dir_name').val($(location).parent().parent().find('.name').html());
+        $('#dir_lat').val($(location).data('lat'));
+        $('#dir_long').val($(location).data('long'));
+        promptForAddress();
     });
 
-    $('#getDirections').live('click', function () {
-        $.modal.close();
-        var destination, from_addr, from_city, from_state, request;
-        destination = $('#destination').val();
-        from_addr = $('#directAddr').val();
-        from_city = $('#city').val();
-        from_state = $('#state').val();
-        request = {
-            origin: from_addr + ' ' + from_city + ',' + from_state,
-            destination: destination,
-            travelMode: google.maps.TravelMode.DRIVING
-        };
-        directionsService.route(request, function (response, status) {
-            if (status === google.maps.DirectionsStatus.OK) {
-                directionsDisplay.setDirections(response);
-            }
-        });
+    $(document).on('click', '#getDirections', function () {
+        loadDirectionsMap();
+        loadDirections();
         return false;
     });
 
-    $('span.send_email').live('click', function (e) {
+    $(document).on('click', 'span.send_email', function (e) {
         e.preventDefault(); // Stop link from firing
         var email = $(this).attr('data-email');
         var html = $('#content-container').html();
@@ -290,9 +313,6 @@ $(function () {
     });
 
     locations = $.parseJSON($('#json').val());
-
-    // Initiate our directions object
-    directionsDisplay = new google.maps.DirectionsRenderer();
 
     // No geo support
     // Load the center of US

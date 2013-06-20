@@ -473,6 +473,7 @@
     <Content Include="Scripts\custom\category_parts.min.js" />
     <Content Include="Scripts\custom\checkout.js" />
     <Content Include="Scripts\custom\checkout.min.js" />
+    <Content Include="Scripts\custom\payment.js" />
     <Content Include="Scripts\custom\global.js" />
     <Content Include="Scripts\custom\global.min.js" />
     <Content Include="Scripts\custom\homepage.js" />
