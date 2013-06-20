@@ -85,3 +85,27 @@ div.infoWindow span.title{
     font-size: 14px;
     font-weight:bold;   
 }
+
+#directionsformcont, #directionsPanel {
+    float: right;
+    padding-left: 15px;
+    width: 382px;
+}
+
+#directionsPanel {
+    max-height: 430px;
+    width: 365;
+    overflow: auto;
+}
+
+#directions_map {
+    position: relative;
+    float: left;
+    height: 400px;
+    width: 400px;
+}
+
+#changeDirections {
+    display: inline-block;
+    margin: 0 0 10px 15px;
+}
