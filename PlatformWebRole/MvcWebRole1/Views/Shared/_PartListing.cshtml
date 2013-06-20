@@ -85,6 +85,12 @@
                                     Installation Sheet
                                 </a>
                             }
+                            @if (part.content.Where(x => x.key.Equals("AppGuide")).Count() > 0 && part.content.Where(x => x.key.Equals("AppGuide")).FirstOrDefault<EcommercePlatform.Models.APIAttribute>().value.Length > 0) {
+                                <a href="@(part.content.Where(x => x.key.Equals("AppGuide")).FirstOrDefault<EcommercePlatform.Models.APIAttribute>().value)" target="_blank" title="Download Application Guide" class="install">
+                                    <img src="/Content/img/pdf.png" alt="Download Application Guide" />
+                                    Fit Your Vehicle
+                                </a>
+                            }
                         </div>
                         <div class="clearfix"></div>
                     </div>
