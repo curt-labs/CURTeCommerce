@@ -6,7 +6,7 @@ var perpage = 10;
 var endless_load = false;
 var generateHTML;
 var getMore;
-var loadInstallSheet, loadImages, imagesort;
+var loadInstallSheet, loadAppGuide, loadListDesc, loadBullets, loadImages, imagesort;
 var parts;
 
 $(function () {
@@ -61,13 +61,8 @@ $(function () {
         html += '</div>';
         html += '</div>';
         html += '<div class="mid_col">';
-        html += '<ul>';
-        $.each(part.content, function (i, con) {
-            if (con.key.toUpperCase() !== 'INSTALLATIONSHEET' && con.key.toUpperCase() !== 'INSTALLVIDEO') {
-                html += '<li>' + con.value + '</li>';
-            }
-        });
-        html += '</ul>';
+        html += loadListDesc(part);
+        html += loadBullets(part);
         html += '</div>';
         html += '<div class="right_col">';
         html += '<span class="price">' + part.listPrice + '</span>';
@@ -77,6 +72,7 @@ $(function () {
         html += '<span>Add to Cart</span>';
         html += '</a>';
         html += loadInstallSheet(part);
+        html += loadAppGuide(part);
         html += '</div>';
         html += '<div class="clearfix"></div>';
         html += '</div></div>';
@@ -92,6 +88,51 @@ $(function () {
                 html += '<img src="/Content/img/pdf.png" alt="Download Installation Instructions" />Installation Instructions</a>';
             }
         });
+
+        return html;
+    };
+
+    loadAppGuide = function (part) {
+        var html;
+        html = '';
+        $.each(part.content, function (i, content) {
+            if (content.key.toUpperCase() === 'APPGUIDE' && html.length === 0) {
+                html += '<a href="' + content.value + '" title="Download Application Guide" class="install">';
+                html += '<img src="/Content/img/pdf.png" alt="Download Application Guide" />Fit Your Vehicle</a>';
+            }
+        });
+
+        return html;
+    };
+
+    loadListDesc = function (part) {
+        var html;
+        html = '';
+        $.each(part.content, function (i, content) {
+            if (content.key.toUpperCase() === 'LISTDESCRIPTION' && html.length === 0) {
+                html += '<p>' + content.value + '</p>';
+            }
+        });
+
+        return html;
+    };
+
+    loadBullets = function (part) {
+        var html;
+        html = '';
+        $.each(part.content, function (i, content) {
+            if (content.key.toUpperCase() === 'BULLET' && html.length === 0) {
+                html += '<li>' + content.value + '</li>';
+            }
+        });
+        $.each(part.content, function (i, content) {
+            if (content.key.toUpperCase() === 'NOTE' && html.length === 0) {
+                html += '<li>' + content.value + '</li>';
+            }
+        });
+        if (html != "") {
+            html = "<ul>" + html + "</ul>"
+        }
 
         return html;
     };

@@ -72,10 +72,15 @@ namespace EcommercePlatform.Controllers {
                 return RedirectToAction("Index", "Cart");
             }
 
-            if (customer.Cart.payment_id > 0) {
+            if (customer.Cart.GetPaymentID() > 0) {
                 UDF.ExpireCart(ctx, customer.ID);
                 return RedirectToAction("Index", "Cart");
             }
+            if (customer.Cart.GetStatus().statusID > 0) {
+                UDF.ExpireCart(ctx, customer.ID);
+                return RedirectToAction("Index", "Cart");
+            };
+
             customer.BindAddresses();
 
             decimal amount = customer.Cart.getTotal();
@@ -154,10 +159,14 @@ namespace EcommercePlatform.Controllers {
                 return RedirectToAction("Index", "Cart");
             }
 
-            if (customer.Cart.payment_id > 0) {
+            if (customer.Cart.GetPaymentID() > 0) {
                 UDF.ExpireCart(ctx, customer.ID);
                 return RedirectToAction("Index", "Cart");
             }
+            if (customer.Cart.GetStatus().statusID > 0) {
+                UDF.ExpireCart(ctx, customer.ID);
+                return RedirectToAction("Index", "Cart");
+            };
 
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             Settings settings = ViewBag.settings;
@@ -193,7 +202,7 @@ namespace EcommercePlatform.Controllers {
             req.AddMerchantPrivateDataNode(tempNode);
 
             req.AddShippingPackage("0", customer.Cart.Shipping.city, customer.Cart.Shipping.State1.state1, customer.Cart.Shipping.postal_code);
-            req.AddFlatRateShippingMethod(customer.Cart.shipping_type, customer.Cart.shipping_price);
+            req.AddFlatRateShippingMethod(customer.Cart.shipping_type, customer.Cart.shipping_price + customer.Cart.handling_fee);
 
             Country country = db.Countries.Where(x => x.abbr.Equals("US")).FirstOrDefault();
             if(country != null) {
@@ -231,10 +240,14 @@ namespace EcommercePlatform.Controllers {
             if (!customer.Cart.Validate()) {
                 return RedirectToAction("Index", "Cart");
             }
-            if (customer.Cart.payment_id > 0) {
+            if (customer.Cart.GetPaymentID() > 0) {
                 UDF.ExpireCart(ctx, customer.ID);
                 return RedirectToAction("Index", "Cart");
             }
+            if (customer.Cart.GetStatus().statusID > 0) {
+                UDF.ExpireCart(ctx, customer.ID);
+                return RedirectToAction("Index", "Cart");
+            };
             Paypal p = new Paypal();
             string token = p.ECSetExpressCheckout(customer.Cart);
             if (!token.ToLower().Contains("failure")) {
@@ -282,6 +295,17 @@ namespace EcommercePlatform.Controllers {
             HttpContext ctx = System.Web.HttpContext.Current;
             Customer customer = ViewBag.customer;
             customer.GetFromStorage(ctx);
+            if (!customer.Cart.Validate()) {
+                return RedirectToAction("Index", "Cart");
+            }
+            if (customer.Cart.GetPaymentID() > 0) {
+                UDF.ExpireCart(ctx, customer.ID);
+                return RedirectToAction("Index", "Cart");
+            }
+            if (customer.Cart.GetStatus().statusID != (int)OrderStatuses.PaymentPending) {
+                UDF.ExpireCart(ctx, customer.ID);
+                return RedirectToAction("Index", "Cart");
+            };
             decimal total = customer.Cart.getTotal();
             Paypal p = new Paypal();
             string confirmationKey = p.ECDoExpressCheckout(token, payerID, total.ToString(), customer.Cart);

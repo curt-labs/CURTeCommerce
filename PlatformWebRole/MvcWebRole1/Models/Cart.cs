@@ -89,6 +89,15 @@ namespace EcommercePlatform
             status.Save();
         }
 
+        public int GetPaymentID() {
+            int paymentID = 0;
+            try {
+                EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+                paymentID = db.Carts.Where(x => x.ID.Equals(this.ID)).Select(x => x.payment_id).First();
+            } catch {}
+            return paymentID;
+        }
+
         public OrderHistory GetStatus() {
             OrderHistory history = new OrderHistory();
             try {
