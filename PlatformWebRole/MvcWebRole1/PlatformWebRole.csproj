@@ -197,7 +197,6 @@
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\SitemapController.cs" />
     <Compile Include="Models\Banner.cs" />
-    <Compile Include="Models\OrderHistory.cs" />
     <Compile Include="Models\OrderStatus.cs" />
     <Compile Include="Models\OrderEDI.cs" />
     <Compile Include="Models\ThemeFile.cs" />
@@ -632,6 +631,7 @@
     <Content Include="Scripts\custom\part.min.js.map">
       <DependentUpon>part.js</DependentUpon>
     </Content>
+    <Content Include="Views\Shared\_SocialSharing.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

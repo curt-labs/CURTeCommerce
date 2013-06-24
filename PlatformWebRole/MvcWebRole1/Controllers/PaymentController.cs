@@ -76,10 +76,6 @@ namespace EcommercePlatform.Controllers {
                 UDF.ExpireCart(ctx, customer.ID);
                 return RedirectToAction("Index", "Cart");
             }
-            if (customer.Cart.GetStatus().statusID > 0) {
-                UDF.ExpireCart(ctx, customer.ID);
-                return RedirectToAction("Index", "Cart");
-            };
 
             customer.BindAddresses();
 
@@ -163,10 +159,6 @@ namespace EcommercePlatform.Controllers {
                 UDF.ExpireCart(ctx, customer.ID);
                 return RedirectToAction("Index", "Cart");
             }
-            if (customer.Cart.GetStatus().statusID > 0) {
-                UDF.ExpireCart(ctx, customer.ID);
-                return RedirectToAction("Index", "Cart");
-            };
 
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             Settings settings = ViewBag.settings;
@@ -244,10 +236,6 @@ namespace EcommercePlatform.Controllers {
                 UDF.ExpireCart(ctx, customer.ID);
                 return RedirectToAction("Index", "Cart");
             }
-            if (customer.Cart.GetStatus().statusID > 0) {
-                UDF.ExpireCart(ctx, customer.ID);
-                return RedirectToAction("Index", "Cart");
-            };
             Paypal p = new Paypal();
             string token = p.ECSetExpressCheckout(customer.Cart);
             if (!token.ToLower().Contains("failure")) {
