@@ -133,27 +133,6 @@
     padding-top: 15px;
 }
 
-.left_col .share_buttons div, .left_col .share_buttons iframe {
-    vertical-align: middle !important;
-}
-
-.left_col .share_buttons a:first-child {
-    vertical-align: bottom;
-    line-height: 32px;
-}
-
-.left_col .share_buttons a.email-share{
-    background: url('../img/mail-icon.png') no-repeat;
-    height: 14px;
-    display:block; /* IE7 Hack */
-    display: inline-block;
-    width: 21px;
-    line-height: 20px;
-    vertical-align: middle;
-    margin-right: 5px;
-    margin-top:;
-}
-
 .right_col {
     float: right;
     margin: 20px 10px 20px 30px;
@@ -506,10 +485,4 @@
     font-size: 12px;
     display:block;
     margin-top: 5px;
-}
-
-.fb-like {
-	display: inline-block;
-	max-width: 46px;
-	overflow: hidden;
 }

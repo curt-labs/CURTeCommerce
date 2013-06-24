@@ -86,7 +86,8 @@ namespace EcommercePlatform
                 orderID = this.ID,
                 statusID = statusID
             };
-            status.Save();
+            db.OrderHistories.InsertOnSubmit(status);
+            db.SubmitChanges();
         }
 
         public int GetPaymentID() {

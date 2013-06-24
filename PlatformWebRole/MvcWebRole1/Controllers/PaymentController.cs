@@ -125,11 +125,11 @@ namespace EcommercePlatform.Controllers {
             //step 3 - make some money
             IGatewayResponse response = gate.Send(request);
             if (response.Approved) {
-                customer.Cart.AddPayment("credit card",response.AuthorizationCode,"Complete");
+                customer.Cart.AddPayment("credit card", response.AuthorizationCode, "Complete");
+                customer.Cart.SetStatus((int)OrderStatuses.PaymentComplete);
                 customer.Cart.SendConfirmation();
                 customer.Cart.SendInternalOrderEmail();
                 int cartid = customer.Cart.ID;
-                customer.Cart.SetStatus((int)OrderStatuses.PaymentComplete);
                 
                 Cart new_cart = new Cart().Save();
                 new_cart.UpdateCart(ctx, customer.ID);

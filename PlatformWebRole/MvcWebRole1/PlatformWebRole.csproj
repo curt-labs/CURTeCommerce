@@ -497,6 +497,8 @@
     <Content Include="Scripts\jquery-1.7.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.16.js" />
     <Content Include="Scripts\jquery-ui-1.8.16.min.js" />
+    <Content Include="Scripts\jquery.simplemodal-1.4.4.js" />
+    <Content Include="Scripts\jquery.simplemodal.1.4.4.min.js" />
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -506,8 +508,6 @@
     <Content Include="Scripts\tools\jquery.bbq.min.js" />
     <Content Include="Scripts\tools\jquery.cycle.js" />
     <Content Include="Scripts\tools\jquery.dataTables.min.js" />
-    <Content Include="Scripts\tools\jquery.simplemodal.js" />
-    <Content Include="Scripts\tools\jquery.simplemodal.min.js" />
     <Content Include="Scripts\tools\shadowbox.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

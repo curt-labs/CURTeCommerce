@@ -95,10 +95,11 @@
         }
     }
     <div class="share_buttons">
-        <a href="/Share/Index?type=part&partID=@part.partID" title="Share via E-Mail" class="email-share"></a>
+        @*<a href="/Share/Index?type=part&partID=@part.partID" title="Share via E-Mail" class="email-share"></a>
         <div class="fb-like" data-href="@settings.Get("SiteURL")part/11000" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false" data-font="arial"></div>
         <a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-via="curtmfg">Tweet</a>
-        <div class="g-plusone" data-size="medium" data-href="@Request.Url.AbsoluteUri"></div>
+        <div class="g-plusone" data-size="medium" data-href="@Request.Url.AbsoluteUri"></div>*@
+        @Html.Partial("_SocialSharing")
     </div>
     <div class="review_box">
         <div class="stars">
