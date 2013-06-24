@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.defaultcss = new List<string> { "/Content/css/locations.css" };
-    ViewBag.defaultjs = new List<string> { "//maps.googleapis.com/maps/api/js?sensor=false", "/Scripts/custom/locations.js" };
+    ViewBag.defaultjs = new List<string> { "/Scripts/custom/locations.js" };
     List<EcommercePlatform.Models.PrettyLocation> locs = ViewBag.locations ?? new List<EcommercePlatform.Models.PrettyLocation>();
     List<EcommercePlatform.BasicCountry> countries = ViewBag.countries ?? new List<EcommercePlatform.BasicCountry>();
     string json = ViewBag.locations_json ?? "";
@@ -12,7 +12,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     EcommercePlatform.Models.Settings settings = ViewBag.settings ?? new EcommercePlatform.Models.Settings();
 }
-<script src="//maps.googleapis.com/maps/api/js?sensor=true"></script>
 
 @if(error != null){
     <p class="success">@error</p>

@@ -1,7 +1,17 @@
 ﻿var map, markers, locations, infoWindow, geocoder, directionsService, mapbounds, removeDirections, loadDirections, directionsmap, directionsmarker, loadDirectionsMap;
-directionsService = new google.maps.DirectionsService();
-mapbounds = new google.maps.LatLngBounds();
+var loadScript, initialize;
 $(function () {
+
+    loadScript = function () {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "http://maps.googleapis.com/maps/api/js?sensor=true&callback=initialize";
+        document.body.appendChild(script);
+    };
+
+    initialize = function () {
+        loadMap('38', '-97', 4);
+    };
 
     var displayLoader = function () {
         var width = $('#mid_col').width();
@@ -39,6 +49,7 @@ $(function () {
         from_addr = $('#directAddr').val();
         from_city = $('#city').val();
         from_state = $('#state').val();
+        var directionsService = new google.maps.DirectionsService();
         var directionsRenderer = new google.maps.DirectionsRenderer();
         directionsRenderer.setMap(directionsmap);
         directionsRenderer.setPanel(document.getElementById('directionsPanel'));
@@ -98,10 +109,11 @@ $(function () {
         dirbounds.extend(endlocation);
         directionsmap.fitBounds(dirbounds);
         return true;
-    }
+    };
 
     var loadMarkers = function () {
         markers = new Array();
+        var mapbounds = new google.maps.LatLngBounds();
         infoWindows = new Array();
         for (i = 0; i < locations.length; i++) {
             var glatlong = new google.maps.LatLng(locations[i].latitude, locations[i].longitude);
@@ -229,6 +241,8 @@ $(function () {
 
     $(document).on('click', '.map_tough', function () {
         var addr, zip, latLng;
+        // Initiate our gecoder in case we need to for geoed locations
+        geocoder = new google.maps.Geocoder();
         addr = $(this).data('address');
         geocoder.geocode({ 'address': addr }, function (results, status) {
             if (status === google.maps.GeocoderStatus.OK) {
@@ -285,41 +299,9 @@ $(function () {
         $('div.simplemodal-container form.simple-form input#to').val(email);
         $('div.simplemodal-container form.simple-form input[type=submit]').css('display', 'inline-block').after('<a href="javascript:$.modal.close()" title="Close" style="margin-left:10px;vertical-align:bottom;">Close</a>');
 
-        /*$('div.simplemodal-container form.simple-form input[type=submit]').live('click', function (e) {
-            $('#simplemodal-container').find('span.error').remove();
-            e.preventDefault();
-            var action, opts;
-            opts = new Object();
-            action = $('div.simplemodal-container form.simple-form').attr('action');
-            opts.name = $('div.simplemodal-container form.simple-form #name').val();
-            opts.phone = $('div.simplemodal-container form.simple-form #phone').val();
-            opts.email = $('div.simplemodal-container form.simple-form #email').val();
-            opts.to = $('div.simplemodal-container form.simple-form #to').val();
-            opts.message = $('div.simplemodal-container form.simple-form #message').val();
-            opts.response_field = $('div.simplemodal-container form.simple-form #recaptcha_response_field').val();
-            opts.challenge_field = $('div.simplemodal-container form.simple-form #recaptcha_challenge_field').val();
-
-            $.post(action, opts, function (resp) {
-                if (resp.length > 0) {
-                    $('div.simplemodal-container form.simple-form span.title').after('<span class="error" style="color:red;font-size:13px;font-weight:bold">' + resp + '</span>');
-                } else {
-                    $.modal.close();
-                    alert('Thank you for the contact inqury, someone will respond to your request soon.');
-                }
-            });
-            return false;
-        });*/
         return false;
     });
 
     locations = $.parseJSON($('#json').val());
-
-    // No geo support
-    // Load the center of US
-    // Latitude 38
-    // Longitude -97
-    loadMap('38', '-97', 4);
-
-    // Initiate our gecoder in case we need to for geoed locations
-    geocoder = new google.maps.Geocoder();
+    loadScript();
 });
