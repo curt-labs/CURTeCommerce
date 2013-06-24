@@ -34,7 +34,7 @@ namespace Admin {
                     filename = this.filename,
                     editext = this.editext,
                     dateGenerated = DateTime.UtcNow,
-                    dateAcknowledged = DateTime.UtcNow
+                    dateAcknowledged = this.dateAcknowledged
                 };
                 db.OrderEDIs.InsertOnSubmit(edi);
             }
