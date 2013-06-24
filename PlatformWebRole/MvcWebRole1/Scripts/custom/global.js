@@ -42,7 +42,6 @@ $(function () {
             }
         });
         if (errCount > 0) {
-            $.modal.close();
             return false;
         }
         return true;

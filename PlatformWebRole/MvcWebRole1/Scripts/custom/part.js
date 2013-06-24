@@ -2,6 +2,7 @@
 var content_height = 0;
 var max_height = 0;
 var changeHashNoScroll;
+var addthisgenerate;
 
 function changePartTab(id) {
     if (id.length > 0) {
@@ -26,8 +27,15 @@ function changePartTab(id) {
     }
 }
 
+addthisgenerate = function () {
+    var addthisScript = document.createElement('script');
+    addthisScript.setAttribute('src', 'http://s7.addthis.com/js/300/addthis_widget.js#domready=1');
+    document.body.appendChild(addthisScript);
+};
+
 $(function () {
     Shadowbox.init();
+    addthisgenerate();
 
     $('#vehicles table').dataTable({
         'bFilter': false,

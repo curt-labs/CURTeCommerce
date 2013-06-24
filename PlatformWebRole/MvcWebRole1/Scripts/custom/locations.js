@@ -271,9 +271,7 @@ $(function () {
     $(document).on('click', 'span.send_email', function (e) {
         e.preventDefault(); // Stop link from firing
         var email = $(this).attr('data-email');
-        var html = $('#content-container').html();
-        //console.log(html);
-        $.modal(html, {
+        $('#content-container').modal({
             containerCss: {
                 backgroundColor: '#ffffff',
                 borderColor: '#ffffff',
@@ -299,7 +297,6 @@ $(function () {
         $('div.simplemodal-container form.simple-form input#to').val(email);
         $('div.simplemodal-container form.simple-form input[type=submit]').css('display', 'inline-block').after('<a href="javascript:$.modal.close()" title="Close" style="margin-left:10px;vertical-align:bottom;">Close</a>');
 
-        return false;
     });
 
     locations = $.parseJSON($('#json').val());
