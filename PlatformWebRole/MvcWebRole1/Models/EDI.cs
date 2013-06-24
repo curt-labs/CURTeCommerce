@@ -83,7 +83,8 @@ namespace EcommercePlatform.Models {
                         OrderEDI orderedi = new OrderEDI {
                             orderID = order.ID,
                             editext = edicontent,
-                            filename = filename
+                            filename = filename,
+                            dateAcknowledged = null,
                         };
                         orderedi.Save();
                     }
