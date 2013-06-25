@@ -24,24 +24,6 @@ namespace EcommercePlatform.Controllers {
                 List<APIPart> parts = await searchtask;
                 ViewBag.parts = parts;
 
-                Dictionary<string, List<APIPart>> ordered_parts = new Dictionary<string, List<APIPart>>();
-                foreach (APIPart part in parts) {
-
-                    APIColorCode color_code = CURTAPI.GetColorCode(part.partID);
-                    part.colorCode = color_code.code;
-
-                    if (ordered_parts.Keys.Contains("search")) { // Already added to dictionary
-                        List<APIPart> existing_parts = ordered_parts.Where(x => x.Key == "search").Select(x => x.Value).FirstOrDefault<List<APIPart>>();
-                        existing_parts.Add(part);
-                        ordered_parts["search"] = existing_parts;
-                    } else { // New Color Code
-                        List<APIPart> new_parts = new List<APIPart>();
-                        new_parts.Add(part);
-                        ordered_parts.Add("search", new_parts);
-                    }
-                }
-                ViewBag.parts = ordered_parts;
-
                 // We need to figure out if there are going to be more parts to display
                 List<APIPart> moreparts = await moretask;
                 int more_count = moreparts.Count;

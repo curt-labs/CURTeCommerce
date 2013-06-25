@@ -1,11 +1,7 @@
 ﻿@{
     ViewBag.defaultcss = new List<string> { "/Content/css/search.css" };
     ViewBag.defaultjs = new List<string> { "/Scripts/custom/search.js" };
-    Dictionary<string, List<EcommercePlatform.Models.APIPart>> parts = ViewBag.parts;
-    if (parts == null) {
-        parts = new Dictionary<string, List<EcommercePlatform.Models.APIPart>>();
-        parts.Values.DefaultIfEmpty<List<EcommercePlatform.Models.APIPart>>();
-    }
+    List<EcommercePlatform.Models.APIPart> parts = ViewBag.parts ?? new List<EcommercePlatform.Models.APIPart>();
     ViewBag.partCount = parts.Count;
 
     int more_count = ViewBag.more_count ?? 0;
@@ -19,7 +15,7 @@
 }
 <input type="hidden" id="searchTerm" value="@term" />
 
-<span class="search_results">Your search for "<strong>@term</strong>" returned ( @((parts.Values != null && parts.Values.FirstOrDefault() != null)?parts.Values.FirstOrDefault().Count:0) ) results</span>
+<span class="search_results">Your search for "<strong>@term</strong>" returned ( @parts.Count ) results</span>
 @{Html.RenderPartial("_PartListing");}
 
 @if (more_count > 0) {
