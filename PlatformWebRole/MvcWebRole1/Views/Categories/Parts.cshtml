@@ -31,12 +31,10 @@
 }
 <span class="title">@cat.catTitle</span>
 
-@if (cat.shortDesc != null && cat.shortDesc.Length > 0) {
-    <p>@cat.shortDesc</p>
-}
-
 @if (cat.longDesc != null && cat.longDesc.Length > 0) {
     <p>@cat.longDesc</p>
+} else if (cat.shortDesc != null && cat.shortDesc.Length > 0) {
+    <p>@cat.shortDesc</p>
 }
 <div class="clearfix"></div>
 

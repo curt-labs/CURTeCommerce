@@ -29,13 +29,12 @@
 <img src="@cat.image" alt="@cat.catTitle" onerror="$(this).remove()" class="cat_image" />
 }
 
-@if (cat.shortDesc != null && cat.shortDesc.Length > 0) {
+@if (cat.longDesc != null && cat.longDesc.Length > 0) {
+    <p>@cat.longDesc</p>
+} else if (cat.shortDesc != null && cat.shortDesc.Length > 0) {
     <p>@cat.shortDesc</p>
 }
 
-@if (cat.longDesc != null && cat.longDesc.Length > 0) {
-    <p>@cat.longDesc</p>
-}
 <div class="clearfix"></div>
 
 @foreach (EcommercePlatform.Models.APICategory sub in cat.SubCategories) {
