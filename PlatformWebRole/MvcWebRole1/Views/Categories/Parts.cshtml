@@ -4,7 +4,7 @@
     EcommercePlatform.Models.APICategory cat = ViewBag.category ?? new EcommercePlatform.Models.APICategory();
     cat.catTitle = cat.catTitle.Trim();
 
-    Dictionary<string, List<EcommercePlatform.Models.APIPart>> parts = ViewBag.parts ?? new Dictionary<string, List<EcommercePlatform.Models.APIPart>>();
+    List<EcommercePlatform.Models.APIPart> parts = ViewBag.parts ?? new List<EcommercePlatform.Models.APIPart>();
     ViewBag.partCount = parts.Count;
 
     int more_count = ViewBag.more_count ?? 0;
@@ -29,6 +29,16 @@
         }
     </div>
 }
+<span class="title">@cat.catTitle</span>
+
+@if (cat.shortDesc != null && cat.shortDesc.Length > 0) {
+    <p>@cat.shortDesc</p>
+}
+
+@if (cat.longDesc != null && cat.longDesc.Length > 0) {
+    <p>@cat.longDesc</p>
+}
+<div class="clearfix"></div>
 
 @{Html.RenderPartial("_PartListing");}
 

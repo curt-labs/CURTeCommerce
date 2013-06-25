@@ -25,7 +25,9 @@
 
 <span class="title">@cat.catTitle</span>
 
+@if (!String.IsNullOrWhiteSpace(cat.image)) {
 <img src="@cat.image" alt="@cat.catTitle" onerror="$(this).remove()" class="cat_image" />
+}
 
 @if (cat.shortDesc != null && cat.shortDesc.Length > 0) {
     <p>@cat.shortDesc</p>

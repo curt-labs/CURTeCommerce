@@ -60,32 +60,7 @@ namespace EcommercePlatform.Controllers {
                 catparts = await parts;
                 moreparts = await moreTask;
                 if (catparts.Count > 0) {
-                    Dictionary<string, List<APIPart>> ordered_parts = new Dictionary<string, List<APIPart>>();
-                    foreach (APIPart part in catparts) {
-                        part.colorCode = color_code.code;
-                        if (part.pClass.Length > 0) {
-                            if (ordered_parts.Keys.Contains(part.pClass)) { // Already added to dictionary
-                                List<APIPart> existing_parts = ordered_parts.Where(x => x.Key == part.pClass).Select(x => x.Value).FirstOrDefault<List<APIPart>>();
-                                existing_parts.Add(part);
-                                ordered_parts[part.pClass] = existing_parts;
-                            } else { // New Color Code
-                                List<APIPart> new_parts = new List<APIPart>();
-                                new_parts.Add(part);
-                                ordered_parts.Add(part.pClass, new_parts);
-                            }
-                        } else {
-                            if (ordered_parts.Keys.Contains(category.catTitle.Trim())) { // Already added to dictionary
-                                List<APIPart> existing_parts = ordered_parts.Where(x => x.Key == category.catTitle.Trim()).Select(x => x.Value).FirstOrDefault<List<APIPart>>();
-                                existing_parts.Add(part);
-                                ordered_parts[category.catTitle.Trim()] = existing_parts;
-                            } else { // New Color Code
-                                List<APIPart> new_parts = new List<APIPart>();
-                                new_parts.Add(part);
-                                ordered_parts.Add(category.catTitle.Trim(), new_parts);
-                            }
-                        }
-                    }
-                    ViewBag.parts = ordered_parts;
+                    ViewBag.parts = catparts;
                     int more_count = moreparts.Count;
                     ViewBag.more_count = more_count;
 
