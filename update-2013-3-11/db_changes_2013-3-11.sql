@@ -107,4 +107,4 @@ CREATE INDEX IX_OrderEDI_Cart ON OrderEDI(orderID);
 
 /* This last SQL query is to populate all orders prior to the OrderEDI table's existence. */
 INSERT INTO OrderEDI (orderID,dateGenerated,editext,filename,dateAcknowledged)
-(SELECT ID,GetDATE(),'','',GETDATE() FROM Cart);
+(SELECT ID,GetDATE(),'','',GETDATE() FROM Cart WHERE payment_id > 0);
