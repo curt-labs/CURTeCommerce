@@ -245,6 +245,7 @@ INSERT INTO DistributionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,
 INSERT INTO DistributionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,CountryCode,Latitude,Longitude,State) VALUES ('Phoenix Area','866.817.7189','602393.1434','4002 West Turney','Suite 1','Phoenix','85019','US',33.5015379,-112.14433,5);
 INSERT INTO DistributionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,CountryCode,Latitude,Longitude,State) VALUES ('Seattle Area','877.832.2370','253.804.3511','2108 B Street NW','Suite 120','Auburn','98001','US',47.325739,-122.231159,56);
 INSERT INTO DistributionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,CountryCode,Latitude,Longitude,State) VALUES ('Toronto Area','877.287.8634','905.569.8330','3250 Ridgeway Dr','Unit 15','Mississauga','L5l 5Y6','Canada',43.5191392,-79.6981668,60);
+INSERT INTO DistributionCenters (Name,Phone,Fax,Street1,Street2,City,PostalCode,CountryCode,Latitude,Longitude,State) VALUES ('Edmonton Area','855.852.9700','715.831.8712','12820 184th Street NW','','Edmonton','T5V 1T4','Canada',53.58409,-113.63951,68);
 GO
 
 INSERT INTO PaymentType (name) VALUES ('Credit Card');
