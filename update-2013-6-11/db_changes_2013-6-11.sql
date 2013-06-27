@@ -38,3 +38,9 @@ INSERT INTO OrderStatus (ID,status) VALUES
 (15,'Complete');
 
 SET IDENTITY_INSERT OrderStatus OFF;
+
+INSERT INTO OrderHistory (orderID,statusID,dateAdded,changedBy)
+SELECT ID,14,GETDATE(),'System' FROM Cart WHERE payment_id > 0 && voided = 1;
+
+INSERT INTO OrderHistory (orderID,statusID,dateAdded,changedBy)
+SELECT ID,15,GETDATE(),'System' FROM Cart WHERE payment_id > 0 && voided = 0;

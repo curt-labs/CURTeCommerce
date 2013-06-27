@@ -509,15 +509,17 @@ namespace Admin
 
         public static List<Cart> GetLongUnsubmittedOrders() {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            List<int> statuses = new List<int> { (int)OrderStatuses.Void, (int)OrderStatuses.Cancelled, (int)OrderStatuses.AwaitingCancellation, (int)OrderStatuses.Fraudulent, (int)OrderStatuses.PaymentDeclined, (int)OrderStatuses.PaymentPending };
             List<Cart> orders = new List<Cart>();
-            orders = db.Carts.Where(x => x.payment_id > 0 && x.OrderEDI == null && x.Payment.created < DateTime.UtcNow.AddHours(-2)).ToList();
+            orders = db.Carts.Where(x => x.payment_id > 0 && x.OrderEDI == null && x.Payment.created < DateTime.UtcNow.AddHours(-2) && !statuses.Contains(x.OrderHistories.OrderByDescending(y => y.dateAdded).Select(y => y.statusID).FirstOrDefault())).ToList();
             return orders;
         }
 
         public static List<Cart> GetUnacknowledgedOrders() {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             List<Cart> orders = new List<Cart>();
-            orders = db.Carts.Where(x => x.payment_id > 0 && x.OrderEDI != null && x.OrderEDI.dateGenerated < DateTime.UtcNow.AddHours(-2) && x.OrderEDI.dateAcknowledged == null).ToList();
+            List<int> statuses = new List<int> { (int)OrderStatuses.Void, (int)OrderStatuses.Cancelled, (int)OrderStatuses.AwaitingCancellation, (int)OrderStatuses.Fraudulent, (int)OrderStatuses.PaymentDeclined, (int)OrderStatuses.PaymentPending };
+            orders = db.Carts.Where(x => x.payment_id > 0 && x.OrderEDI != null && x.OrderEDI.dateGenerated < DateTime.UtcNow.AddHours(-2) && x.OrderEDI.dateAcknowledged == null && !statuses.Contains(x.OrderHistories.OrderByDescending(y => y.dateAdded).Select(y => y.statusID).FirstOrDefault())).ToList();
             return orders;
         }
 
