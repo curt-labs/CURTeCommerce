@@ -5,7 +5,7 @@ $(function () {
     loadScript = function () {
         var script = document.createElement("script");
         script.type = "text/javascript";
-        script.src = "http://maps.googleapis.com/maps/api/js?sensor=true&callback=initialize";
+        script.src = "//maps.googleapis.com/maps/api/js?sensor=true&callback=initialize";
         document.body.appendChild(script);
     };
 
