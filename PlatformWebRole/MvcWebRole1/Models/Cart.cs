@@ -433,9 +433,10 @@ namespace EcommercePlatform
             return valid;
         }
 
-        internal void SendConfirmation() {
+        internal void SendConfirmation(HttpContext ctx) {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
             Payment payment = this.getPayment();
+            TimeZoneInfo tz = UDF.GetTimeZone(ctx) ?? TimeZoneInfo.Utc;
 
             string toemail = db.Customers.Where(x => x.ID == this.cust_id).Select(x => x.email).FirstOrDefault();
             StringBuilder sb = new StringBuilder();
@@ -451,7 +452,7 @@ namespace EcommercePlatform
             sb.Append("<h2>Thank you for your order!</h2>");
             sb.Append("<hr />");
             sb.AppendFormat("<p><strong>Order ID:</strong> {0}<br />", this.payment_id);
-            sb.AppendFormat("<strong>Paid By:</strong> {0} on {1}</p>", payment.PaymentTypes.name, String.Format("{0:M/d/yyyy} at {0:h:mm tt}", payment.created.ToLocalTime()));
+            sb.AppendFormat("<strong>Paid By:</strong> {0} on {1} {2}</p>", payment.PaymentTypes.name, String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(payment.created, tz)),UDF.ShortTZ(tz, payment.created));
             sb.Append("<p style=\"font-size: 12px;\"><strong style=\"font-size: 14px;\">Billing Address:</strong><br />");
             sb.AppendFormat("{0} {1}<br />", this.Billing.first, this.Billing.last);
             sb.AppendFormat("{0}{1}<br />{2}, {3} {4}<br />{5}</p>", this.Billing.street1, this.Billing.street2, this.Billing.city, this.Billing.State1.abbr, this.Billing.postal_code, this.Billing.State1.Country.name);
@@ -483,8 +484,9 @@ namespace EcommercePlatform
             UDF.SendEmail(tos, settings.Get("SiteName") + " Order Confirmation", true, sb.ToString());
         }
 
-        internal void SendInternalOrderEmail() {
+        internal void SendInternalOrderEmail(HttpContext ctx) {
             EcommercePlatformDataContext db = new EcommercePlatformDataContext();
+            TimeZoneInfo tz = UDF.GetTimeZone(ctx) ?? TimeZoneInfo.Utc;
             Payment payment = this.getPayment();
             string phone = db.Customers.Where(x => x.ID == this.cust_id).Select(x => x.phone).FirstOrDefault();
             StringBuilder sb = new StringBuilder();
@@ -508,7 +510,7 @@ namespace EcommercePlatform
             sb.Append("<hr />");
             sb.AppendFormat("<p><strong>Customer ID:</strong> {0}<br />", settings.Get("CURTAccount"));
             sb.AppendFormat("<p><strong>Order ID:</strong> {0}<br />", this.payment_id);
-            sb.AppendFormat("<strong>Paid By:</strong> {0} on {1}</p>", payment.PaymentTypes.name, String.Format("{0:M/d/yyyy} at {0:h:mm tt}", payment.created.ToLocalTime()));
+            sb.AppendFormat("<strong>Paid By:</strong> {0} on {1} {2}</p>", payment.PaymentTypes.name, String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(payment.created, tz)), UDF.ShortTZ(tz, payment.created));
             sb.AppendFormat("<strong>Phone:</strong> {0}</p>", phone);
             sb.Append("<p style=\"font-size: 12px;\"><strong style=\"font-size: 14px;\">Billing Address:</strong><br />");
             sb.AppendFormat("{0} {1}<br />", this.Billing.first, this.Billing.last);

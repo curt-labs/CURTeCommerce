@@ -1,4 +1,5 @@
-﻿@{
+﻿@using EcommercePlatform.Models;
+@{
     ViewBag.defaultcss = new List<string> { "/Content/css/cart.css" };
     EcommercePlatform.ContentPage page = ViewBag.page ?? new EcommercePlatform.ContentPage();
     
@@ -8,6 +9,7 @@
 
     EcommercePlatform.Cart order = ViewBag.order;
     EcommercePlatform.Payment payment = ViewBag.payment;
+    TimeZoneInfo tz = ViewBag.timezone ?? TimeZoneInfo.Utc;
 
     decimal total = order.shipping_price;
     
@@ -19,7 +21,7 @@
     @Html.Raw(page.content)
     <p>You can print this page for your records.</p>
     <p><strong>Order ID:</strong> @order.payment_id</p>
-    <p><strong>Paid by:</strong> @payment.PaymentTypes.name on @String.Format("{0:M/d/yyyy} at {0:h:mm tt}", payment.created.ToLocalTime())</p>
+    <p><strong>Paid by:</strong> @payment.PaymentTypes.name on @String.Format("{0:M/d/yyyy} at {0:h:mm tt}", TimeZoneInfo.ConvertTimeFromUtc(payment.created, tz)) @UDF.ShortTZ(tz, payment.created)</p>
     <div class="address">
         <span>Billing Address</span>
         @order.Billing.first @order.Billing.last<br />

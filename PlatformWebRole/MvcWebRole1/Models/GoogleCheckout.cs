@@ -94,13 +94,14 @@ namespace EcommercePlatform.Models {
         }
 
         public static void HandleChargeAmountNotification(GCheckout.AutoGen.ChargeAmountNotification chargenotification) {
+            HttpContext ctx = HttpContext.Current;
             string googleOrderID = chargenotification.googleordernumber;
             Cart order = new Cart().GetByPayment(googleOrderID);
             if (order.getTotal() == chargenotification.totalchargeamount.Value) {
                 order.UpdatePayment("Complete");
                 order.SetStatus((int)OrderStatuses.PaymentComplete);
-                order.SendConfirmation();
-                order.SendInternalOrderEmail();
+                order.SendConfirmation(ctx);
+                order.SendInternalOrderEmail(ctx);
             }
         }
 
