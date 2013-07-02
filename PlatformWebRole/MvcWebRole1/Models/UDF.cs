@@ -191,7 +191,7 @@ namespace EcommercePlatform.Models {
             return obj;
         }
 
-        internal static void SendEmail(string[] to, string subject = "", bool isHTML = true, string message = "", bool suppressErrors = false) {
+        internal static void SendEmail(string[] to, string subject = "", bool isHTML = true, string message = "", bool suppressErrors = true) {
             Settings settings = new Settings();
             SmtpClient client = null;
             try {
