@@ -241,7 +241,6 @@
     <Compile Include="Models\InvoiceAddress.cs" />
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\State.cs" />
-    <Compile Include="Models\GoogleCheckout.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\CURTAPI.cs" />

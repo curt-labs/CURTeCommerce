@@ -145,86 +145,6 @@ namespace EcommercePlatform.Controllers {
         }
 
         [RequireHttps]
-        public ActionResult Google() {
-            HttpContext ctx = System.Web.HttpContext.Current;
-
-            Customer customer = ViewBag.customer;
-            customer.GetFromStorage(ctx);
-
-            if (!customer.Cart.Validate()) {
-                return RedirectToAction("Index", "Cart");
-            }
-
-            if (customer.Cart.GetPaymentID() > 0) {
-                UDF.ExpireCart(ctx, customer.ID);
-                return RedirectToAction("Index", "Cart");
-            }
-
-            EcommercePlatformDataContext db = new EcommercePlatformDataContext();
-            Settings settings = ViewBag.settings;
-            CheckoutShoppingCartRequest req = gButton.CreateRequest();
-            if (Request.Url.Host.Contains("127.0.0") || Request.Url.Host.Contains("localhost") || settings.Get("GoogleCheckoutEnv") == "override") {
-                req.MerchantID = settings.Get("GoogleDevMerchantId");
-                req.MerchantKey = settings.Get("GoogleDevMerchantKey");
-                req.Environment = GCheckout.EnvironmentType.Sandbox;
-            } else {
-                req.MerchantID = settings.Get("GoogleMerchantId");
-                req.MerchantKey = settings.Get("GoogleMerchantKey");
-                req.Environment = GCheckout.EnvironmentType.Production;
-            }
-            if (settings.Get("GoogleAnalyticsCode") != "") {
-                req.AnalyticsData = Request.Form["analyticsdata"];
-            }
-            req.ContinueShoppingUrl = Request.Url.Scheme + "://" + Request.Url.Host;
-            //req.EditCartUrl = Request.Url.Host + "/Cart";
-
-            foreach (CartItem item in customer.Cart.CartItems) {
-                ShoppingCartItem sitem = new ShoppingCartItem {
-                    Name = "CURT Part #" + item.partID,
-                    Description = item.shortDesc,
-                    Price = item.price,
-                    Quantity = item.quantity,
-                    Weight = Convert.ToDouble(item.weight)
-                };
-                req.AddItem(sitem);
-            }
-            System.Xml.XmlDocument tempDoc = new System.Xml.XmlDocument();
-            System.Xml.XmlNode tempNode = tempDoc.CreateElement("OrderNumber");
-            tempNode.InnerText = customer.Cart.ID.ToString();
-            req.AddMerchantPrivateDataNode(tempNode);
-
-            req.AddShippingPackage("0", customer.Cart.Shipping.city, customer.Cart.Shipping.State1.state1, customer.Cart.Shipping.postal_code);
-            req.AddFlatRateShippingMethod(customer.Cart.shipping_type, customer.Cart.shipping_price + customer.Cart.handling_fee);
-
-            Country country = db.Countries.Where(x => x.abbr.Equals("US")).FirstOrDefault();
-            if(country != null) {
-                foreach(State state in country.States) {
-                    req.AddStateTaxRule(state.abbr, Convert.ToDouble(state.taxRate / 100), true);
-                }
-            }
-            
-            GCheckoutResponse resp = req.Send();
-            if (resp.IsGood) {
-                customer.Cart.AddPayment("Google Checkout", "", "Pending");
-                customer.Cart.SetStatus((int)OrderStatuses.PaymentPending);
-                
-                Cart new_cart = new Cart().Save();
-                new_cart.UpdateCart(ctx, customer.ID);
-                DateTime cookexp = Request.Cookies["hdcart"].Expires;
-                HttpCookie cook = new HttpCookie("hdcart", new_cart.ID.ToString());
-                cook.Expires = cookexp;
-                Response.Cookies.Add(cook);
-                
-                customer.Cart = new_cart;
-                customer.Cart.BindAddresses();
-
-                return Redirect(resp.RedirectUrl);
-            } else {
-                return RedirectToAction("Index", new { message = resp.ErrorMessage });
-            }
-        }
-        
-        [RequireHttps]
         public ActionResult PayPal() {
             HttpContext ctx = System.Web.HttpContext.Current;
             Customer customer = ViewBag.customer;
@@ -342,16 +262,6 @@ namespace EcommercePlatform.Controllers {
             ViewBag.payment = payment;
 
             return View();
-        }
-
-        [AcceptVerbs(HttpVerbs.Post)]
-        public void GoogleNotification() {
-            string serial = Request.Form["serial-number"] ?? "";
-            
-            string resp = "<notification-acknowledgment xmlns=\"http://checkout.google.com/schema/2\" serial-number=\"" + serial + "\" />";
-            Response.Write(resp);
-            Response.End();
-            GoogleCheckout.getNotification(serial);
         }
 
     }

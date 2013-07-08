@@ -114,11 +114,6 @@ INSERT INTO Setting (groupID,name,value,isImage) VALUES (1,'RequireCustomerActiv
 INSERT INTO Setting (groupID,name,isImage) VALUES (2,'AuthorizeNetGatewayID',0);
 INSERT INTO Setting (groupID,name,isImage) VALUES (2,'AuthorizeNetLoginKey',0);
 INSERT INTO Setting (groupID,name,isImage) VALUES (2,'AuthorizeNetTransactionKey',0);
-INSERT INTO Setting (groupID,name,isImage) VALUES (2,'GoogleCheckoutEnv',0);
-INSERT INTO Setting (groupID,name,isImage) VALUES (2,'GoogleDevMerchantId',0);
-INSERT INTO Setting (groupID,name,isImage) VALUES (2,'GoogleDevMerchantKey',0);
-INSERT INTO Setting (groupID,name,isImage) VALUES (2,'GoogleMerchantId',0);
-INSERT INTO Setting (groupID,name,isImage) VALUES (2,'GoogleMerchantKey',0);
 INSERT INTO Setting (groupID,name,isImage) VALUES (2,'PayPalAPIDevPassword',0);
 INSERT INTO Setting (groupID,name,isImage) VALUES (2,'PayPalAPIDevSignature',0);
 INSERT INTO Setting (groupID,name,isImage) VALUES (2,'PayPalAPIDevUserName',0);
