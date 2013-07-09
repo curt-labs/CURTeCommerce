@@ -424,7 +424,7 @@ namespace EcommercePlatform.Models {
         }
 
         internal void ReadAcknowledgement(string editext) {
-            string purchaseOrderID = "";
+            List<string> purchaseOrderIDs = new List<string>();
             Cart order = new Cart();
             Settings settings = new Settings();
             string EDIPOPreface = settings.Get("EDIPOPreface");
@@ -435,22 +435,27 @@ namespace EcommercePlatform.Models {
                 switch (lineelements[0]) {
                     case "AK1":
                         // Original Shipment Number from Shipper
-                        purchaseOrderID = lineelements[2];
+                        string purchaseOrderID = lineelements[2];
                         if (EDIPOPreface != "") {
                             purchaseOrderID = purchaseOrderID.Replace(EDIPOPreface, "");
+                        }
+                        if(!String.IsNullOrWhiteSpace(purchaseOrderID)) {
+                            purchaseOrderIDs.Add(purchaseOrderID);
                         }
                         break;
                 }
             }
-            if (!String.IsNullOrWhiteSpace(purchaseOrderID)) {
-                try {
-                    order = new Cart().GetByPaymentID(Convert.ToInt32(purchaseOrderID));
-                    order.SetStatus((int)OrderStatuses.Processed);
-                    OrderEDI edi = new OrderEDI().GetByOrderID(order.ID);
-                    if (edi != null && edi.ID > 0) {
-                        edi.SetAcknowledged();
-                    }
-                } catch { }
+            foreach(string purchaseOrderID in purchaseOrderIDs) {
+                if (!String.IsNullOrWhiteSpace(purchaseOrderID)) {
+                    try {
+                        order = new Cart().GetByPaymentID(Convert.ToInt32(purchaseOrderID));
+                        order.SetStatus((int)OrderStatuses.Processed);
+                        OrderEDI edi = new OrderEDI().GetByOrderID(order.ID);
+                        if (edi != null && edi.ID > 0) {
+                            edi.SetAcknowledged();
+                        }
+                    } catch { }
+                }
             }
         }
     }
