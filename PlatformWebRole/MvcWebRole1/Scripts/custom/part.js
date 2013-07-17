@@ -2,6 +2,7 @@
 var content_height = 0;
 var max_height = 0;
 var changeHashNoScroll;
+var addthisgenerate;
 
 function changePartTab(id) {
     if (id.length > 0) {
@@ -26,8 +27,17 @@ function changePartTab(id) {
     }
 }
 
+addthisgenerate = function () {
+    var addthisScript = document.createElement('script');
+    addthisScript.setAttribute('src', '//s7.addthis.com/js/300/addthis_widget.js#domready=1');
+    document.body.appendChild(addthisScript);
+};
+
 $(function () {
     Shadowbox.init();
+    if (!($('html').hasClass('ie8') || $('html').hasClass('ie7') || $('html').hasClass('ie6'))) {
+        addthisgenerate();
+    }
 
     $('#vehicles table').dataTable({
         'bFilter': false,
@@ -62,7 +72,6 @@ $(function () {
             scrollTop: $(".part_container").offset().top - Math.floor($(window).height() / 2.75) + 'px'
         }, 'fast');
     });
-
 
 
     /**** 
